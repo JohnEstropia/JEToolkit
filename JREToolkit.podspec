@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "git@bitbucket.org:erurainon/jretoolkit.git",
                      :tag => "#{s.version}" }
   s.platform     = :ios, '7.0'
-  s.source_files = '#{s.name}/**/*.{h,m}'
+  s.source_files = "#{s.name}/**/*.{h,m}"
   s.frameworks = 'Foundation', 'UIKit'
   s.requires_arc = true
   s.dependency 'CocoaLumberjack', '~> 1.6.2'
