@@ -21,24 +21,36 @@
     return string;
 }
 
+- (NSString *)L8NInStringsFile:(NSString *)stringsFile
+{
+	NSString *string = (stringsFile
+                        ? NSLocalizedStringFromTable(self, stringsFile, nil)
+                        : NSLocalizedString(self, nil));
+    NSCAssert(![self isEqualToString:string],
+              @"\"%@\" not found in %@.strings",
+              self,
+              (stringsFile ?: @"Localizable"));
+    return string;
+}
+
 #pragma mark Paths
 
-+ (NSString *)pathToDocumentsDirectory
++ (NSString *)documentsDirectory
 {
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
 }
 
-+ (NSString *)pathToTemporaryDirectory
++ (NSString *)temporaryDirectory
 {
     return NSTemporaryDirectory();
 }
 
-+ (NSString *)pathToCachesDirectory
++ (NSString *)cachesDirectory
 {
     return [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
 }
 
-+ (NSString *)pathToAppSupportDirectory
++ (NSString *)appSupportDirectory
 {
     return [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject];
 }
@@ -52,29 +64,45 @@
 
 #pragma mark Validation
 
-+ (NSString *)stringFromValue:(id)value
++ (BOOL)isNilOrEmptyString:(id)valueOrNil
 {
-    if (value)
+    return (![valueOrNil isKindOfClass:self]
+            || [[(NSString *)valueOrNil trimmedString] length] <= 0);
+}
+
++ (NSString *)nonEmptyStringOrNil:(id)valueOrNil
+{
+    if (![valueOrNil isKindOfClass:self])
     {
-        if ([value isKindOfClass:[NSString class]])
+        return nil;
+    }
+    
+    NSString *trimmedString = [(NSString *)valueOrNil trimmedString];
+    return ([trimmedString length] > 0 ? trimmedString : nil);
+}
+
+#pragma mark Conversion
+
++ (NSString *)stringFromValue:(id)valueOrNil
+{
+    if (valueOrNil)
+    {
+        if ([valueOrNil isKindOfClass:self])
         {
-            return value;
+            return valueOrNil;
         }
-        if ([value isKindOfClass:[NSNumber class]])
+        if ([valueOrNil isKindOfClass:[NSNumber class]])
         {
-            return [(NSNumber *)value stringValue];
+            return [(NSNumber *)valueOrNil stringValue];
         }
-        if ([value isKindOfClass:[NSData class]])
+        if ([valueOrNil isKindOfClass:[NSData class]])
         {
-            return [[NSString alloc] initWithData:value encoding:NSUTF8StringEncoding];
+            return [[self alloc] initWithData:valueOrNil encoding:NSUTF8StringEncoding];
         }
     }
     return nil;
 }
 
-- (BOOL)isEmpty
-{
-    return ([[self trimmedString] length] <= 0);
-}
+
 
 @end

@@ -16,7 +16,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        calendar = [NSCalendar currentCalendar];
+        calendar = [self currentCalendar];
         
     });
     return calendar;
@@ -28,7 +28,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        calendar = [[self alloc] initWithCalendarIdentifier:NSGregorianCalendar];
         
     });
     return calendar;

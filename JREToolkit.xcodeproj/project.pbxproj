@@ -10,10 +10,8 @@
 		2F6D775017E0CFEA00D3735D /* NSDateFormatter+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D774F17E0CFEA00D3735D /* NSDateFormatter+JREToolkit.m */; };
 		2F8FC86417B65DB500C3C0F3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC86317B65DB500C3C0F3 /* Foundation.framework */; };
 		2F8FC86917B65DB500C3C0F3 /* JREToolkit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F8FC86817B65DB500C3C0F3 /* JREToolkit.h */; };
-		2F8FC86B17B65DB500C3C0F3 /* JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC86A17B65DB500C3C0F3 /* JREToolkit.m */; };
 		2F8FC87217B65DB500C3C0F3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC87117B65DB500C3C0F3 /* XCTest.framework */; };
 		2F8FC87317B65DB500C3C0F3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC86317B65DB500C3C0F3 /* Foundation.framework */; };
-		2F8FC87517B65DB500C3C0F3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC87417B65DB500C3C0F3 /* UIKit.framework */; };
 		2F8FC87817B65DB500C3C0F3 /* libJREToolkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC86017B65DB500C3C0F3 /* libJREToolkit.a */; };
 		2F8FC87E17B65DB500C3C0F3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F8FC87C17B65DB500C3C0F3 /* InfoPlist.strings */; };
 		2F8FC88017B65DB500C3C0F3 /* JREToolkitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC87F17B65DB500C3C0F3 /* JREToolkitTests.m */; };
@@ -22,6 +20,12 @@
 		2F8FC89317B6638800C3C0F3 /* NSCalendar+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC89217B6638800C3C0F3 /* NSCalendar+JREToolkit.m */; };
 		2F8FC89617B6660500C3C0F3 /* JREDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC89517B6660500C3C0F3 /* JREDispatcher.m */; };
 		2F8FC89917B669DE00C3C0F3 /* NSString+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC89817B669DE00C3C0F3 /* NSString+JREToolkit.m */; };
+		2FA7B82C17E498AC00D41011 /* NSArray+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7B82B17E498AC00D41011 /* NSArray+JREToolkit.m */; };
+		2FA7B82F17E49C3300D41011 /* NSDate+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7B82E17E49C3300D41011 /* NSDate+JREToolkit.m */; };
+		2FA7B83217E5E99800D41011 /* NSNumber+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7B83117E5E99700D41011 /* NSNumber+JREToolkit.m */; };
+		2FA7B83517E5EFCC00D41011 /* NSCache+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7B83417E5EFCC00D41011 /* NSCache+JREToolkit.m */; };
+		2FA7B83817E5F7DB00D41011 /* NSMutableArray+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7B83717E5F7DB00D41011 /* NSMutableArray+JREToolkit.m */; };
+		2FA7B83B17E5FCC400D41011 /* UIColor+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7B83A17E5FCC400D41011 /* UIColor+JREToolkit.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,10 +58,8 @@
 		2F8FC86317B65DB500C3C0F3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2F8FC86717B65DB500C3C0F3 /* JREToolkit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JREToolkit-Prefix.pch"; sourceTree = "<group>"; };
 		2F8FC86817B65DB500C3C0F3 /* JREToolkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JREToolkit.h; sourceTree = "<group>"; };
-		2F8FC86A17B65DB500C3C0F3 /* JREToolkit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JREToolkit.m; sourceTree = "<group>"; };
 		2F8FC87017B65DB500C3C0F3 /* JREToolkitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JREToolkitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F8FC87117B65DB500C3C0F3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		2F8FC87417B65DB500C3C0F3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		2F8FC87B17B65DB500C3C0F3 /* JREToolkitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JREToolkitTests-Info.plist"; sourceTree = "<group>"; };
 		2F8FC87D17B65DB500C3C0F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2F8FC87F17B65DB500C3C0F3 /* JREToolkitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JREToolkitTests.m; sourceTree = "<group>"; };
@@ -70,6 +72,18 @@
 		2F8FC89517B6660500C3C0F3 /* JREDispatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JREDispatcher.m; sourceTree = "<group>"; };
 		2F8FC89717B669DE00C3C0F3 /* NSString+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JREToolkit.h"; sourceTree = "<group>"; };
 		2F8FC89817B669DE00C3C0F3 /* NSString+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JREToolkit.m"; sourceTree = "<group>"; };
+		2FA7B82A17E498AC00D41011 /* NSArray+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+JREToolkit.h"; sourceTree = "<group>"; };
+		2FA7B82B17E498AC00D41011 /* NSArray+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+JREToolkit.m"; sourceTree = "<group>"; };
+		2FA7B82D17E49C3300D41011 /* NSDate+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+JREToolkit.h"; sourceTree = "<group>"; };
+		2FA7B82E17E49C3300D41011 /* NSDate+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+JREToolkit.m"; sourceTree = "<group>"; };
+		2FA7B83017E5E99700D41011 /* NSNumber+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+JREToolkit.h"; sourceTree = "<group>"; };
+		2FA7B83117E5E99700D41011 /* NSNumber+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+JREToolkit.m"; sourceTree = "<group>"; };
+		2FA7B83317E5EFCC00D41011 /* NSCache+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCache+JREToolkit.h"; sourceTree = "<group>"; };
+		2FA7B83417E5EFCC00D41011 /* NSCache+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCache+JREToolkit.m"; sourceTree = "<group>"; };
+		2FA7B83617E5F7DB00D41011 /* NSMutableArray+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+JREToolkit.h"; sourceTree = "<group>"; };
+		2FA7B83717E5F7DB00D41011 /* NSMutableArray+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+JREToolkit.m"; sourceTree = "<group>"; };
+		2FA7B83917E5FCC400D41011 /* UIColor+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+JREToolkit.h"; sourceTree = "<group>"; };
+		2FA7B83A17E5FCC400D41011 /* UIColor+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+JREToolkit.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,7 +102,6 @@
 			files = (
 				2F8FC87817B65DB500C3C0F3 /* libJREToolkit.a in Frameworks */,
 				2F8FC87217B65DB500C3C0F3 /* XCTest.framework in Frameworks */,
-				2F8FC87517B65DB500C3C0F3 /* UIKit.framework in Frameworks */,
 				2F8FC87317B65DB500C3C0F3 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -121,7 +134,6 @@
 				2F8FC88F17B660C300C3C0F3 /* UIKit.framework */,
 				2F8FC86317B65DB500C3C0F3 /* Foundation.framework */,
 				2F8FC87117B65DB500C3C0F3 /* XCTest.framework */,
-				2F8FC87417B65DB500C3C0F3 /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -130,7 +142,6 @@
 			isa = PBXGroup;
 			children = (
 				2F8FC86817B65DB500C3C0F3 /* JREToolkit.h */,
-				2F8FC86A17B65DB500C3C0F3 /* JREToolkit.m */,
 				2F8FC86617B65DB500C3C0F3 /* Supporting Files */,
 				2F8FC88B17B65F2D00C3C0F3 /* Classes */,
 				2F8FC88A17B65F2D00C3C0F3 /* Categories */,
@@ -167,14 +178,26 @@
 		2F8FC88A17B65F2D00C3C0F3 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				2F8FC88C17B6608400C3C0F3 /* UIImage+JREToolkit.h */,
-				2F8FC88D17B6608400C3C0F3 /* UIImage+JREToolkit.m */,
+				2FA7B82A17E498AC00D41011 /* NSArray+JREToolkit.h */,
+				2FA7B82B17E498AC00D41011 /* NSArray+JREToolkit.m */,
+				2FA7B83317E5EFCC00D41011 /* NSCache+JREToolkit.h */,
+				2FA7B83417E5EFCC00D41011 /* NSCache+JREToolkit.m */,
 				2F8FC89117B6638800C3C0F3 /* NSCalendar+JREToolkit.h */,
 				2F8FC89217B6638800C3C0F3 /* NSCalendar+JREToolkit.m */,
-				2F8FC89717B669DE00C3C0F3 /* NSString+JREToolkit.h */,
-				2F8FC89817B669DE00C3C0F3 /* NSString+JREToolkit.m */,
+				2FA7B82D17E49C3300D41011 /* NSDate+JREToolkit.h */,
+				2FA7B82E17E49C3300D41011 /* NSDate+JREToolkit.m */,
 				2F6D774E17E0CFEA00D3735D /* NSDateFormatter+JREToolkit.h */,
 				2F6D774F17E0CFEA00D3735D /* NSDateFormatter+JREToolkit.m */,
+				2FA7B83617E5F7DB00D41011 /* NSMutableArray+JREToolkit.h */,
+				2FA7B83717E5F7DB00D41011 /* NSMutableArray+JREToolkit.m */,
+				2FA7B83017E5E99700D41011 /* NSNumber+JREToolkit.h */,
+				2FA7B83117E5E99700D41011 /* NSNumber+JREToolkit.m */,
+				2F8FC89717B669DE00C3C0F3 /* NSString+JREToolkit.h */,
+				2F8FC89817B669DE00C3C0F3 /* NSString+JREToolkit.m */,
+				2FA7B83917E5FCC400D41011 /* UIColor+JREToolkit.h */,
+				2FA7B83A17E5FCC400D41011 /* UIColor+JREToolkit.m */,
+				2F8FC88C17B6608400C3C0F3 /* UIImage+JREToolkit.h */,
+				2F8FC88D17B6608400C3C0F3 /* UIImage+JREToolkit.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -269,9 +292,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FA7B83B17E5FCC400D41011 /* UIColor+JREToolkit.m in Sources */,
+				2FA7B82F17E49C3300D41011 /* NSDate+JREToolkit.m in Sources */,
 				2F8FC88E17B6608400C3C0F3 /* UIImage+JREToolkit.m in Sources */,
-				2F8FC86B17B65DB500C3C0F3 /* JREToolkit.m in Sources */,
+				2FA7B83817E5F7DB00D41011 /* NSMutableArray+JREToolkit.m in Sources */,
+				2FA7B82C17E498AC00D41011 /* NSArray+JREToolkit.m in Sources */,
+				2FA7B83517E5EFCC00D41011 /* NSCache+JREToolkit.m in Sources */,
 				2F6D775017E0CFEA00D3735D /* NSDateFormatter+JREToolkit.m in Sources */,
+				2FA7B83217E5E99800D41011 /* NSNumber+JREToolkit.m in Sources */,
 				2F8FC89617B6660500C3C0F3 /* JREDispatcher.m in Sources */,
 				2F8FC89917B669DE00C3C0F3 /* NSString+JREToolkit.m in Sources */,
 				2F8FC89317B6638800C3C0F3 /* NSCalendar+JREToolkit.m in Sources */,
@@ -312,6 +340,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -351,8 +380,9 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 			};
@@ -362,6 +392,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -395,7 +426,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_LDFLAGS = "-ObjC";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -408,7 +440,6 @@
 				DSTROOT = /tmp/JREToolkit.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JREToolkit/JREToolkit-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -420,7 +451,6 @@
 				DSTROOT = /tmp/JREToolkit.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JREToolkit/JREToolkit-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

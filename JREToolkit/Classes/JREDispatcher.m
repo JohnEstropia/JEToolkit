@@ -47,8 +47,8 @@
 {
     NSCParameterAssert(bundle);
     
-    NSString *queueLabel = [[self alloc] initWithFormat:@"%@.queue.%@",
-                            [bundle bundleIdentifier],
+    NSString *queueLabel = [[NSString alloc] initWithFormat:@"%@.queue.%@",
+                            [(bundle ?: [NSBundle mainBundle]) bundleIdentifier],
                             (queueName ?: [[NSString alloc] initWithFormat:@"unnamed_%@", [NSUUID UUID]])];
     return dispatch_queue_create([queueLabel UTF8String],
                                  (concurrent
@@ -81,7 +81,7 @@
         return NO;
     }
     
-    __block BOOL exists = NO;
+    BOOL __block exists = NO;
     dispatch_sync([self dispatchIDManagementQueue], ^{
         
         NSMutableSet *dispatchIDs = [self dispatchIDs];
@@ -95,10 +95,10 @@
     return exists;
 }
 
-+ (NSUUID *)queueAsyncBlock:(void(^)(void))block
-                    toQueue:(dispatch_queue_t)queue
-                      delay:(NSTimeInterval)delay
-                cancellable:(BOOL)cancellable
++ (NSUUID *)queueBlock:(void(^)(void))block
+               toQueue:(dispatch_queue_t)queue
+                 delay:(NSTimeInterval)delay
+           cancellable:(BOOL)cancellable
 {
     NSCParameterAssert(block);
     
@@ -117,10 +117,11 @@
         
         dispatchBlock = [^{
             
-            if ([self popDispatchID:dispatchID])
+            if ([self isBlockRunning:dispatchID])
             {
                 block();
             }
+            [self popDispatchID:dispatchID];
             
         } copy];
     }
@@ -168,115 +169,132 @@
 
 #pragma mark Common block dispatching
 
-+ (void)queueAsyncBlock:(void(^)(void))block
++ (void)queueConcurrentBlock:(void(^)(void))block
 {
     NSCParameterAssert(block);
     
-    [self queueAsyncBlock:block
-                  toQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-                    delay:0.0
-              cancellable:NO];
+    [self queueWithDelay:0.0 concurrentBlock:block];
 }
 
-+ (void)queueAsyncBlock:(void(^)(void))block
-                  delay:(NSTimeInterval)delay
++ (NSUUID *)queueCancellableConcurrentBlock:(void(^)(void))block
 {
     NSCParameterAssert(block);
-    NSCParameterAssert(delay >= 0.0);
     
-    [self queueAsyncBlock:block
-                  toQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-                    delay:delay
-              cancellable:NO];
+    return [self queueWithDelay:0.0 cancellableConcurrentBlock:block];
 }
 
 + (void)queueUIBlock:(void(^)(void))block
 {
     NSCParameterAssert(block);
     
-    [self queueAsyncBlock:block
-                  toQueue:dispatch_get_main_queue()
-                    delay:0.0
-              cancellable:NO];
-}
-
-+ (void)queueUIBlock:(void(^)(void))block
-               delay:(NSTimeInterval)delay
-{
-    NSCParameterAssert(block);
-    NSCParameterAssert(delay >= 0.0);
-    
-    [self queueAsyncBlock:block
-                  toQueue:dispatch_get_main_queue()
-                    delay:delay
-              cancellable:NO];
-}
-
-+ (void)queueBlock:(void(^)(void))block
-           toQueue:(dispatch_queue_t)queue
-{
-    NSCParameterAssert(block);
-    NSCParameterAssert(queue);
-    
-    [self queueAsyncBlock:block
-                  toQueue:queue
-                    delay:0.0
-              cancellable:NO];
-}
-
-+ (void)queueBlock:(void(^)(void))block
-           toQueue:(dispatch_queue_t)queue
-             delay:(NSTimeInterval)delay
-{
-    NSCParameterAssert(block);
-    NSCParameterAssert(queue);
-    NSCParameterAssert(delay >= 0.0);
-    
-    [self queueAsyncBlock:block
-                  toQueue:queue
-                    delay:delay
-              cancellable:NO];
-}
-
-#pragma mark Cancellable block dispatching
-
-+ (NSUUID *)queueCancellableAsyncBlock:(void(^)(void))block
-                                 delay:(NSTimeInterval)delay
-{
-    NSCParameterAssert(block);
-    NSCParameterAssert(delay >= 0.0);
-    
-    return [self queueAsyncBlock:block
-                         toQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-                           delay:delay
-                     cancellable:YES];
+    [self queueWithDelay:0.0 UIBlock:block];
 }
 
 + (NSUUID *)queueCancellableUIBlock:(void(^)(void))block
-                              delay:(NSTimeInterval)delay
+{
+    NSCParameterAssert(block);
+    
+    return [self queueWithDelay:0.0 cancellableUIBlock:block];
+}
+
++ (void)queueTo:(dispatch_queue_t)queue
+          block:(void(^)(void))block
+{
+    NSCParameterAssert(block);
+    NSCParameterAssert(queue);
+    
+    [self queueWithDelay:0.0 toQueue:queue block:block];
+}
+
++ (NSUUID *)queueTo:(dispatch_queue_t)queue
+   cancellableBlock:(void(^)(void))block
+{
+    NSCParameterAssert(block);
+    NSCParameterAssert(queue);
+    
+    return [self queueWithDelay:0.0 toQueue:queue cancellableBlock:block];
+}
+
+
+#pragma mark Delayed block dispatching
+
++ (void)queueWithDelay:(NSTimeInterval)delay
+       concurrentBlock:(void(^)(void))block
 {
     NSCParameterAssert(block);
     NSCParameterAssert(delay >= 0.0);
     
-    return [self queueAsyncBlock:block
-                         toQueue:dispatch_get_main_queue()
-                           delay:delay
-                     cancellable:YES];
+    [self queueBlock:block
+             toQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+               delay:delay
+         cancellable:NO];
 }
 
-+ (NSUUID *)queueCancellableBlock:(void(^)(void))block
-                            toQueue:(dispatch_queue_t)queue
-                              delay:(NSTimeInterval)delay
++ (NSUUID *)queueWithDelay:(NSTimeInterval)delay
+cancellableConcurrentBlock:(void(^)(void))block
+{
+    NSCParameterAssert(block);
+    NSCParameterAssert(delay >= 0.0);
+    
+    return [self queueBlock:block
+                    toQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+                      delay:delay
+                cancellable:YES];
+}
+
++ (void)queueWithDelay:(NSTimeInterval)delay
+               UIBlock:(void(^)(void))block
+{
+    NSCParameterAssert(block);
+    NSCParameterAssert(delay >= 0.0);
+    
+    [self queueBlock:block
+             toQueue:dispatch_get_main_queue()
+               delay:delay
+         cancellable:NO];
+}
+
++ (NSUUID *)queueWithDelay:(NSTimeInterval)delay
+        cancellableUIBlock:(void(^)(void))block
+{
+    NSCParameterAssert(block);
+    NSCParameterAssert(delay >= 0.0);
+    
+    return [self queueBlock:block
+                    toQueue:dispatch_get_main_queue()
+                      delay:delay
+                cancellable:YES];
+}
+
++ (void)queueWithDelay:(NSTimeInterval)delay
+               toQueue:(dispatch_queue_t)queue
+                 block:(void(^)(void))block
 {
     NSCParameterAssert(block);
     NSCParameterAssert(queue);
     NSCParameterAssert(delay >= 0.0);
     
-    return [self queueAsyncBlock:block
-                         toQueue:queue
-                           delay:delay
-                     cancellable:YES];
+    [self queueBlock:block
+             toQueue:queue
+               delay:delay
+         cancellable:NO];
 }
+
++ (NSUUID *)queueWithDelay:(NSTimeInterval)delay
+                   toQueue:(dispatch_queue_t)queue
+          cancellableBlock:(void(^)(void))block
+{
+    NSCParameterAssert(block);
+    NSCParameterAssert(queue);
+    NSCParameterAssert(delay >= 0.0);
+    
+    return [self queueBlock:block
+                    toQueue:queue
+                      delay:delay
+                cancellable:YES];
+}
+
+#pragma mark Cancellable block handling
 
 + (void)cancelBlockWithID:(NSUUID *)dispatchID
 {
@@ -288,6 +306,24 @@
     }
     
     [self popDispatchID:dispatchID];
+}
+
++ (BOOL)isBlockRunning:(NSUUID *)dispatchID
+{
+    NSCParameterAssert(dispatchID);
+    
+    if (!dispatchID)
+    {
+        return YES;
+    }
+    
+    BOOL __block exists = NO;
+    dispatch_sync([self dispatchIDManagementQueue], ^{
+        
+        exists = [[self dispatchIDs] containsObject:dispatchID];
+        
+    });
+    return exists;
 }
 
 

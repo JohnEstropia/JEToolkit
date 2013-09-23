@@ -20,7 +20,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        NSDateFormatter *formatter = [NSDateFormatter new];
+        NSDateFormatter *formatter = [[self alloc] init];
         [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         [formatter setCalendar:[NSCalendar gregorianCalendar]];
@@ -40,7 +40,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        NSDateFormatter *formatter = [NSDateFormatter new];
+        NSDateFormatter *formatter = [[self alloc] init];
         [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         [formatter setCalendar:[NSCalendar gregorianCalendar]];
@@ -54,14 +54,5 @@
     return EXIFDateFormatter;
 }
 
-- (NSDate *)dateFromValue:(id)value
-{
-    NSString *string = [NSString stringFromValue:value];
-    if (string)
-    {
-        return [self dateFromString:string];
-    }
-    return nil;
-}
 
 @end

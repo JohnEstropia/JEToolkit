@@ -6,8 +6,20 @@
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#pragma mark - Categories
 
-@interface JREToolkit : NSObject
+#import "NSArray+JREToolkit.h"
+#import "NSCache+JREToolkit.h"
+#import "NSCalendar+JREToolkit.h"
+#import "NSDate+JREToolkit.h"
+#import "NSDateFormatter+JREToolkit.h"
+#import "NSMutableArray+JREToolkit.h"
+#import "NSNumber+JREToolkit.h"
+#import "NSString+JREToolkit.h"
+#import "UIColor+JREToolkit.h"
+#import "UIImage+JREToolkit.h"
 
-@end
+
+#pragma mark - Classes
+
+#import "JREDispatcher.h"
