@@ -8,15 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+#import "JREToolkitDefines.h"
+
+
 @interface UIColor (JREToolkit)
 
 + (UIColor *)colorWithObject:(id)objectOrNil;
 
-+ (UIColor *)colorWithHexString:(NSString *)hexString;
++ (UIColor *)colorWithHexString:(NSString *)hexString JRE_NONNULL_ALL;
 
 + (UIColor *)colorWithInt:(NSUInteger)RGBInt alpha:(CGFloat)alpha;
 
-+ (UIColor *)colorWithComponents:(NSArray *)components;
++ (UIColor *)colorWithComponents:(NSArray *)components JRE_NONNULL_ALL;
 
 
 @end

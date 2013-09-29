@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+#import "JREToolkitDefines.h"
+
+
 @interface UIImage (JREToolkit)
 
 /*! Creates a UIImage filled with the specified color
@@ -15,6 +18,6 @@
  @param size The size of the image
  @return A UIImage filled with the specified color and size
  */
-+ (UIImage *)imageFromColor:(UIColor *)color size:(CGSize)size;
++ (UIImage *)imageFromColor:(UIColor *)color size:(CGSize)size JRE_NONNULL(1);
 
 @end

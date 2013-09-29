@@ -8,16 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+#import "JREToolkitDefines.h"
+
+
 /*! NSCalendar category for caching calendars, as creating NSCalendar objects is not very performant.
  */
 @interface NSCalendar (JREToolkit)
 
 /*! Create and caches the NSCalendar returned from [NSCalendar currentCalendar].
  */
-+ (NSCalendar *)cachedCalendar;
++ (NSCalendar *)cachedCalendar JRE_CONST;
 
 /*! Create and caches the NSCalendar created with NSGregorianCalendar identifier.
  */
-+ (NSCalendar *)gregorianCalendar;
++ (NSCalendar *)gregorianCalendar JRE_CONST;
 
 @end

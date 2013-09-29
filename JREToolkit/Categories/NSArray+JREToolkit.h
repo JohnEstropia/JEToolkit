@@ -12,19 +12,9 @@
 
 #pragma mark - Container Tools
 
-/*! Returns the first object if it exists, or nil otherwise
- */
-- (id)firstObject;
-
 /*! Returns a new array with shuffled objects from the receiver
  */
 - (NSArray *)shuffledArray;
-
-
-#pragma mark - Parser Outputs
-
-+ (NSArray *)rowsFromTSVFile:(NSString *)path
-                       error:(NSError * __autoreleasing *)error;
 
 
 @end

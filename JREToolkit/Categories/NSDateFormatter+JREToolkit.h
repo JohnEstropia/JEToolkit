@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#import "JREToolkitDefines.h"
+
+
 /*! NSDateFormatter category for caching date formatters, as creating NSDateFormatter objects is not very performant.
  */
 @interface NSDateFormatter (JREToolkit)
@@ -16,11 +19,11 @@
 
 /*! NSDateFormatter for dates in ISO 8601 UTC date format (ex: 2013-03-20T15:30:20Z). Note: only supports UTC
  */
-+ (NSDateFormatter *)ISO8601UTCDateFormatter;
++ (NSDateFormatter *)ISO8601UTCDateFormatter JRE_CONST;
 
 /*! NSDateFormatter for dates in EXIF date format (ex: 2013-03-20 15:30:20). Note: only supports UTC
  */
-+ (NSDateFormatter *)EXIFDateFormatter;
++ (NSDateFormatter *)EXIFDateFormatter JRE_CONST;
 
 
 @end

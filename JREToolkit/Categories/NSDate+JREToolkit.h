@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#import "JREToolkitDefines.h"
+
+
 @interface NSDate (JREToolkit)
 
 #pragma mark - Conversion
@@ -16,7 +19,7 @@
 
 /*! Returns an NSDate from an ISO 8601 UTC formatted date (ex: 2013-03-20T15:30:20Z), or nil if conversion fails. Note: only supports UTC
  */
-+ (NSDate *)dateWithISO8601String:(NSString *)ISO8601String;
++ (NSDate *)dateWithISO8601String:(NSString *)ISO8601String JRE_NONNULL_ALL;
 
 /*! Returns the ISO 8601 UTC date format (ex: 2013-03-20T15:30:20Z) for the receiver
  */

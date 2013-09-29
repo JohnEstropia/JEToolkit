@@ -8,14 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+#import "JREToolkitDefines.h"
+
+
 @interface NSCache (JREToolkit)
 
 /*! Allows key subscripting with NSCache. Equivalent to -[NSCache objectForKey:]
  */
-- (id)objectForKeyedSubscript:(id)key;
+- (id)objectForKeyedSubscript:(id)key JRE_NONNULL_ALL;
 
 /*! Allows key subscripting with NSCache. Equivalent to -[NSCache setObject:forKey:]
  */
-- (void)setObject:(id)obj forKeyedSubscript:(id)key;
+- (void)setObject:(id)obj forKeyedSubscript:(id)key JRE_NONNULL_ALL;
+
 
 @end

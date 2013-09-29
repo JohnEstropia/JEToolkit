@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#import "JREToolkitDefines.h"
+
+
 @interface NSString (JREToolkit)
 
 #pragma mark - Localization
@@ -28,19 +31,19 @@
 
 /*! Convenience method to get the app Documents path
  */
-+ (NSString *)documentsDirectory;
++ (NSString *)documentsDirectory JRE_CONST;
 
 /*! Convenience method to get the app Temporary path
  */
-+ (NSString *)temporaryDirectory;
++ (NSString *)temporaryDirectory JRE_CONST;
 
 /*! Convenience method to get the app Caches path
  */
-+ (NSString *)cachesDirectory;
++ (NSString *)cachesDirectory JRE_CONST;
 
 /*! Convenience method to get the app Application Support path
  */
-+ (NSString *)appSupportDirectory;
++ (NSString *)appSupportDirectory JRE_CONST;
 
 
 #pragma mark - String Manipulation

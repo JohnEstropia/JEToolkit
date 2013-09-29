@@ -11,6 +11,5 @@ Pod::Spec.new do |s|
   s.source_files = "#{s.name}/**/*.{h,m}"
   s.frameworks = 'Foundation', 'UIKit'
   s.requires_arc = true
-  s.dependency 'CocoaLumberjack', '~> 1.6.2'
   s.dependency 'AFNetworking', '~> 2.0.0-RC2'
 end

@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
+#pragma mark - Headers
+
+
 #pragma mark - Categories
 
 #import "NSArray+JREToolkit.h"
@@ -22,4 +25,5 @@
 
 #pragma mark - Classes
 
-#import "JREDispatcher.h"
+#import "JREDispatch.h"
+#import "JREDebugging.h"
