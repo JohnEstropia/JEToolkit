@@ -52,6 +52,10 @@
  */
 - (NSString *)trimmedString;
 
+/*! Gets the array of characters from the receiver
+ */
+- (NSArray *)charactersArray;
+
 
 #pragma mark - Validation
 
@@ -63,15 +67,28 @@
  */
 + (NSString *)nonEmptyStringOrNil:(id)valueOrNil;
 
+- (BOOL)containsSubstring:(NSString *)substring JRE_NONNULL_ALL;
+
+- (BOOL)containsSubstring:(NSString *)substring
+                  options:(NSStringCompareOptions)options JRE_NONNULL(1);
+
 
 #pragma mark - Conversion
 
 /*! Extracts a string from the given value.
- @param value The object to extract string from
- @return value if it is an NSString, the numerical string if value is an NSNumber, the UTF-8 string value of an NSData, or nil otherwise.
+ @param valueOrNil The object to extract string from. Accepts nil, NSString, NSNumber, or UTF-8 NSData
+ @return valueOrNil if it is an NSString, the numerical string if valueOrNil is an NSNumber, the UTF-8 string value of an NSData, or nil otherwise.
  */
 + (NSString *)stringFromValue:(id)valueOrNil;
 
+/*! Returns the shorthand display string for a file size
+ @param fileSize The number of bytes to represent as a string
+ */
++ (NSString *)stringFromFileSize:(int64_t)fileSize;
+
+/*! Returns a canonical string suitable for optimizing string queries and other string-based indexing
+ */
+- (NSString *)canonicalString;
 
 
 @end

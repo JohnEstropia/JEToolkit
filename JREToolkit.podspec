@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
                      :tag => "#{s.version}" }
   s.platform     = :ios, '7.0'
   s.source_files = "#{s.name}/**/*.{h,m}"
-  s.frameworks = 'Foundation', 'UIKit'
+  s.frameworks = 'Foundation', 'MobileCoreServices', 'UIKit'
   s.requires_arc = true
   s.dependency 'AFNetworking', '~> 2.0.0-RC2'
 end

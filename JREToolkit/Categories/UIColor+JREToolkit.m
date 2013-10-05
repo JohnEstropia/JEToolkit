@@ -12,28 +12,28 @@
 
 #pragma mark - public
 
-+ (UIColor *)colorWithObject:(id)objectOrNil
++ (UIColor *)colorWithValue:(id)valueOrNil
 {
-    if (!objectOrNil)
+    if (!valueOrNil)
     {
         return nil;
     }
     
-    if ([objectOrNil isKindOfClass:self])
+    if ([valueOrNil isKindOfClass:[UIColor class]])
     {
-        return objectOrNil;
+        return valueOrNil;
     }
-    if ([objectOrNil isKindOfClass:[NSNumber class]])
+    if ([valueOrNil isKindOfClass:[NSNumber class]])
     {
-        return [self colorWithInt:[(NSNumber *)objectOrNil unsignedIntegerValue] alpha:1.0f];
+        return [self colorWithInt:[(NSNumber *)valueOrNil unsignedIntegerValue] alpha:1.0f];
     }
-    if ([objectOrNil isKindOfClass:[NSString class]])
+    if ([valueOrNil isKindOfClass:[NSString class]])
     {
-        return [self colorWithHexString:objectOrNil];
+        return [self colorWithHexString:valueOrNil];
     }
-    if ([objectOrNil isKindOfClass:[NSArray class]])
+    if ([valueOrNil isKindOfClass:[NSArray class]])
     {
-        return [self colorWithComponents:objectOrNil];
+        return [self colorWithComponents:valueOrNil];
     }
     
     return nil;

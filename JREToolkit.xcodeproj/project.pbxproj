@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F1DCF7E17FF115700AFD8C7 /* NSObject+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DCF7D17FF115700AFD8C7 /* NSObject+JREToolkit.m */; };
+		2F1DCF8117FF186E00AFD8C7 /* NSIndexSet+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DCF8017FF186E00AFD8C7 /* NSIndexSet+JREToolkit.m */; };
+		2F1DCF8417FF1CCA00AFD8C7 /* NSURL+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DCF8317FF1CCA00AFD8C7 /* NSURL+JREToolkit.m */; };
+		2F1DCF8617FF1D4D00AFD8C7 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1DCF8517FF1D4D00AFD8C7 /* MobileCoreServices.framework */; };
+		2F1DCF8C180030FD00AFD8C7 /* UIView+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DCF8B180030FD00AFD8C7 /* UIView+JREToolkit.m */; };
+		2F1DCF8F1800341000AFD8C7 /* UIViewController+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DCF8E1800341000AFD8C7 /* UIViewController+JREToolkit.m */; };
 		2F27A69617F69A5500CE0230 /* JREDispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F27A69417F69A5500CE0230 /* JREDispatch.m */; };
 		2F27A69917F69BBB00CE0230 /* JREDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F27A69817F69BBB00CE0230 /* JREDebugging.m */; };
 		2F6D775017E0CFEA00D3735D /* NSDateFormatter+JREToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D774F17E0CFEA00D3735D /* NSDateFormatter+JREToolkit.m */; };
@@ -53,6 +59,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2F1DCF7C17FF115700AFD8C7 /* NSObject+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+JREToolkit.h"; sourceTree = "<group>"; };
+		2F1DCF7D17FF115700AFD8C7 /* NSObject+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JREToolkit.m"; sourceTree = "<group>"; };
+		2F1DCF7F17FF186E00AFD8C7 /* NSIndexSet+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+JREToolkit.h"; sourceTree = "<group>"; };
+		2F1DCF8017FF186E00AFD8C7 /* NSIndexSet+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+JREToolkit.m"; sourceTree = "<group>"; };
+		2F1DCF8217FF1CCA00AFD8C7 /* NSURL+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+JREToolkit.h"; sourceTree = "<group>"; };
+		2F1DCF8317FF1CCA00AFD8C7 /* NSURL+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+JREToolkit.m"; sourceTree = "<group>"; };
+		2F1DCF8517FF1D4D00AFD8C7 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		2F1DCF8A180030FD00AFD8C7 /* UIView+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+JREToolkit.h"; sourceTree = "<group>"; };
+		2F1DCF8B180030FD00AFD8C7 /* UIView+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+JREToolkit.m"; sourceTree = "<group>"; };
+		2F1DCF8D1800341000AFD8C7 /* UIViewController+JREToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JREToolkit.h"; sourceTree = "<group>"; };
+		2F1DCF8E1800341000AFD8C7 /* UIViewController+JREToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JREToolkit.m"; sourceTree = "<group>"; };
 		2F27A69417F69A5500CE0230 /* JREDispatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JREDispatch.m; sourceTree = "<group>"; };
 		2F27A69517F69A5500CE0230 /* JREDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JREDispatch.h; sourceTree = "<group>"; };
 		2F27A69717F69BBB00CE0230 /* JREDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JREDebugging.h; sourceTree = "<group>"; };
@@ -97,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F1DCF8617FF1D4D00AFD8C7 /* MobileCoreServices.framework in Frameworks */,
 				2F8FC89017B660C300C3C0F3 /* UIKit.framework in Frameworks */,
 				2F8FC86417B65DB500C3C0F3 /* Foundation.framework in Frameworks */,
 			);
@@ -145,6 +163,7 @@
 		2F8FC86217B65DB500C3C0F3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2F1DCF8517FF1D4D00AFD8C7 /* MobileCoreServices.framework */,
 				2F8FC88F17B660C300C3C0F3 /* UIKit.framework */,
 				2F8FC86317B65DB500C3C0F3 /* Foundation.framework */,
 				2F8FC87117B65DB500C3C0F3 /* XCTest.framework */,
@@ -205,16 +224,26 @@
 				2FA7B82E17E49C3300D41011 /* NSDate+JREToolkit.m */,
 				2F6D774E17E0CFEA00D3735D /* NSDateFormatter+JREToolkit.h */,
 				2F6D774F17E0CFEA00D3735D /* NSDateFormatter+JREToolkit.m */,
+				2F1DCF7F17FF186E00AFD8C7 /* NSIndexSet+JREToolkit.h */,
+				2F1DCF8017FF186E00AFD8C7 /* NSIndexSet+JREToolkit.m */,
 				2FA7B83617E5F7DB00D41011 /* NSMutableArray+JREToolkit.h */,
 				2FA7B83717E5F7DB00D41011 /* NSMutableArray+JREToolkit.m */,
 				2FA7B83017E5E99700D41011 /* NSNumber+JREToolkit.h */,
 				2FA7B83117E5E99700D41011 /* NSNumber+JREToolkit.m */,
+				2F1DCF7C17FF115700AFD8C7 /* NSObject+JREToolkit.h */,
+				2F1DCF7D17FF115700AFD8C7 /* NSObject+JREToolkit.m */,
 				2F8FC89717B669DE00C3C0F3 /* NSString+JREToolkit.h */,
 				2F8FC89817B669DE00C3C0F3 /* NSString+JREToolkit.m */,
+				2F1DCF8217FF1CCA00AFD8C7 /* NSURL+JREToolkit.h */,
+				2F1DCF8317FF1CCA00AFD8C7 /* NSURL+JREToolkit.m */,
 				2FA7B83917E5FCC400D41011 /* UIColor+JREToolkit.h */,
 				2FA7B83A17E5FCC400D41011 /* UIColor+JREToolkit.m */,
 				2F8FC88C17B6608400C3C0F3 /* UIImage+JREToolkit.h */,
 				2F8FC88D17B6608400C3C0F3 /* UIImage+JREToolkit.m */,
+				2F1DCF8A180030FD00AFD8C7 /* UIView+JREToolkit.h */,
+				2F1DCF8B180030FD00AFD8C7 /* UIView+JREToolkit.m */,
+				2F1DCF8D1800341000AFD8C7 /* UIViewController+JREToolkit.h */,
+				2F1DCF8E1800341000AFD8C7 /* UIViewController+JREToolkit.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -311,15 +340,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F1DCF7E17FF115700AFD8C7 /* NSObject+JREToolkit.m in Sources */,
 				2FA7B83B17E5FCC400D41011 /* UIColor+JREToolkit.m in Sources */,
 				2FA7B82F17E49C3300D41011 /* NSDate+JREToolkit.m in Sources */,
 				2F8FC88E17B6608400C3C0F3 /* UIImage+JREToolkit.m in Sources */,
 				2FA7B83817E5F7DB00D41011 /* NSMutableArray+JREToolkit.m in Sources */,
+				2F1DCF8117FF186E00AFD8C7 /* NSIndexSet+JREToolkit.m in Sources */,
 				2FA7B82C17E498AC00D41011 /* NSArray+JREToolkit.m in Sources */,
 				2FA7B83517E5EFCC00D41011 /* NSCache+JREToolkit.m in Sources */,
 				2F27A69917F69BBB00CE0230 /* JREDebugging.m in Sources */,
+				2F1DCF8C180030FD00AFD8C7 /* UIView+JREToolkit.m in Sources */,
+				2F1DCF8417FF1CCA00AFD8C7 /* NSURL+JREToolkit.m in Sources */,
 				2F6D775017E0CFEA00D3735D /* NSDateFormatter+JREToolkit.m in Sources */,
 				2FA7B83217E5E99800D41011 /* NSNumber+JREToolkit.m in Sources */,
+				2F1DCF8F1800341000AFD8C7 /* UIViewController+JREToolkit.m in Sources */,
 				2F27A69617F69A5500CE0230 /* JREDispatch.m in Sources */,
 				2F8FC89917B669DE00C3C0F3 /* NSString+JREToolkit.m in Sources */,
 				2F8FC89317B6638800C3C0F3 /* NSCalendar+JREToolkit.m in Sources */,

@@ -11,31 +11,27 @@
 #import "JREToolkitDefines.h"
 
 
-/*! Equivalent to dqqqqqspatch_queue_create().
- @param queueName An optional label for the queue. The actual label will be in the format " <bundleIdentifier>.queue.<queueName>" if queueName is non-nil, or "<bundleIdentifier>.queue.unnamed_<random UUID>" otherwise.
- @param concurrent YES if concurrent, NO if the queue should be serial.
- @return A new dispatch_queue_t object
+/*! Dispatches a block to a concurrent global queue. Convenience method equivalent to calling dispatch_async() with dispatch_get_global_queue()
  */
 JRE_EXTERN_INLINE JRE_NONNULL_ALL
 void JREDispatchConcurrent(dispatch_block_t block);
 
-
-/*! Equivalent to dispatch_queue_create().
- @param queueName An optional label for the queue. The actual label will be in the format " <bundleIdentifier>.queue.<queueName>" if queueName is non-nil, or "<bundleIdentifier>.queue.unnamed_<random UUID>" otherwise.
- @param concurrent YES if concurrent, NO if the queue should be serial.
- @return A new dispatch_queue_t object
+/*! Dispatches a block to a concurrent global queue after a delay. Convenience method equivalent to calling dispatch_after() with dispatch_get_global_queue()
  */
 JRE_EXTERN_INLINE JRE_NONNULL(2)
 void JREDispatchConcurrentAfter(NSTimeInterval delay, dispatch_block_t block);
 
-
+/*! Dispatches a block to the main queue. Convenience method equivalent to calling dispatch_async() with dispatch_get_main_queue()
+ */
 JRE_EXTERN_INLINE JRE_NONNULL_ALL
 void JREDispatchUI(dispatch_block_t block);
 
-
+/*! Dispatches a block to the main queue after a delay. Convenience method equivalent to calling dispatch_after() with dispatch_get_main_queue()
+ */
 JRE_EXTERN_INLINE JRE_NONNULL(2)
 void JREDispatchUIAfter(NSTimeInterval delay, dispatch_block_t block);
 
-
+/*! Dispatches a block to a serial queue unique to an owning instance object. Each owner can only have one serial queue. Call JREDispatchSerial with the same owner each time to dispatch blocks to the same queue.
+ */
 JRE_EXTERN JRE_NONNULL_ALL
 void JREDispatchSerial(id owner, dispatch_block_t block);

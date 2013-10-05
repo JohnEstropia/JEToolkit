@@ -147,9 +147,18 @@ NSString *_JREGetStringFromObjCType(const char *objCType,
             const id dereferencedValue = (id)(* (__unsafe_unretained id *)value);
             if (valueString)
             {
-                outValueString = (dereferencedValue
-                                  ? [NSString stringWithFormat:@"%@", [dereferencedValue debugDescription]]
-                                  : @"nil");
+                if (!dereferencedValue)
+                {
+                    outValueString = @"nil";
+                }
+                else if ([dereferencedValue isKindOfClass:[NSError class]])
+                {
+                    outValueString = [NSString stringWithFormat:@"%@", [(NSError *)dereferencedValue userInfo]];
+                }
+                else
+                {
+                    outValueString = [NSString stringWithFormat:@"%@", [dereferencedValue debugDescription]];
+                }
             }
             outTypeName = (dereferencedValue
                            ? [NSString stringWithFormat:@"%@ *", [dereferencedValue class]]
@@ -390,13 +399,13 @@ NSString *_JREGetStringFromObjCType(const char *objCType,
 
 #pragma mark - public
 
-void _JREDump(const char *filePath,
-              int line,
-              const char *functionName,
-              const char *objectName,
-              const void *value,
-              const char *objCType,
-              size_t sizePerElement)
+void _JRELogObject(const char *filePath,
+                   int line,
+                   const char *functionName,
+                   const char *objectName,
+                   const void *value,
+                   const char *objCType,
+                   size_t sizePerElement)
 {
     @autoreleasepool {
         
@@ -406,7 +415,7 @@ void _JREDump(const char *filePath,
                                                        sizePerElement,
                                                        0,
                                                        &valueString);
-        NSLog(@"\n%s:%d : %s\n\t\"%s\" = (%@) %@\n\n",
+        NSLog(@"\n%s:%d : %s\n>\t\"%s\" = (%@) %@\n\n",
               ((strrchr(filePath, '/') ?: filePath - 1) + 1),
               line,
               functionName,
@@ -417,14 +426,14 @@ void _JREDump(const char *filePath,
     }
 }
 
-void _JRELog(const char *filePath,
-             int line,
-             const char *functionName,
-             NSString *format, ...)
+void _JRELogFormat(const char *filePath,
+                   int line,
+                   const char *functionName,
+                   NSString *format, ...)
 {
     va_list arguments;
     va_start(arguments, format);
-	NSLog(@"\n%s:%d : %s\n\t\%@\n",
+	NSLog(@"\n%s:%d : %s\n>\t\%@\n",
           ((strrchr(filePath, '/') ?: filePath - 1) + 1),
           line,
           functionName,

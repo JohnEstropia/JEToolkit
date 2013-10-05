@@ -17,7 +17,7 @@
 
 /*! Create and caches the NSCalendar returned from [NSCalendar currentCalendar].
  */
-+ (NSCalendar *)cachedCalendar JRE_CONST;
++ (NSCalendar *)cachedLocalizedCalendar JRE_CONST;
 
 /*! Create and caches the NSCalendar created with NSGregorianCalendar identifier.
  */

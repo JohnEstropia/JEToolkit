@@ -34,7 +34,7 @@
 {
     if (valueOrNil)
     {
-        if ([valueOrNil isKindOfClass:self])
+        if ([valueOrNil isKindOfClass:[NSNumber class]])
         {
             return valueOrNil;
         }

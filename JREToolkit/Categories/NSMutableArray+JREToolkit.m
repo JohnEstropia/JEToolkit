@@ -16,8 +16,9 @@
 {
     for (NSInteger idx = ((NSInteger)[self count] - 1); idx > 0; --idx)
     {
-        [self exchangeObjectAtIndex:arc4random_uniform((u_int32_t)idx + 1)
-                  withObjectAtIndex:idx];
+        [self
+         exchangeObjectAtIndex:arc4random_uniform((u_int32_t)idx + 1)
+         withObjectAtIndex:idx];
     }
 }
 

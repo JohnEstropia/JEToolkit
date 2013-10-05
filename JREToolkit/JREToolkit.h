@@ -16,11 +16,16 @@
 #import "NSCalendar+JREToolkit.h"
 #import "NSDate+JREToolkit.h"
 #import "NSDateFormatter+JREToolkit.h"
+#import "NSIndexSet+JREToolkit.h"
 #import "NSMutableArray+JREToolkit.h"
 #import "NSNumber+JREToolkit.h"
+#import "NSObject+JREToolkit.h"
 #import "NSString+JREToolkit.h"
+#import "NSURL+JREToolkit.h"
 #import "UIColor+JREToolkit.h"
 #import "UIImage+JREToolkit.h"
+#import "UIView+JREToolkit.h"
+#import "UIViewController+JREToolkit.h"
 
 
 #pragma mark - Classes

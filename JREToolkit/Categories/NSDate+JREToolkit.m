@@ -18,23 +18,23 @@
 
 #pragma mark Conversion
 
-+ (NSDate *)dateWithObject:(id)objectOrNil
++ (NSDate *)dateWithValue:(id)valueOrNil;
 {
-    if (!objectOrNil)
+    if (!valueOrNil)
     {
         return nil;
     }
-    if ([objectOrNil isKindOfClass:self])
+    if ([valueOrNil isKindOfClass:[NSDate class]])
     {
-        return objectOrNil;
+        return valueOrNil;
     }
-    if ([objectOrNil isKindOfClass:[NSNumber class]])
+    if ([valueOrNil isKindOfClass:[NSNumber class]])
     {
-        return [self dateWithTimeIntervalSince1970:[(NSNumber *)objectOrNil doubleValue]];
+        return [self dateWithTimeIntervalSince1970:[(NSNumber *)valueOrNil doubleValue]];
     }
-    if ([objectOrNil isKindOfClass:[NSString class]])
+    if ([valueOrNil isKindOfClass:[NSString class]])
     {
-        return [self dateWithISO8601String:objectOrNil];
+        return [self dateWithISO8601String:valueOrNil];
     }
     return nil;
 }

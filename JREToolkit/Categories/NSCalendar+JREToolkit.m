@@ -10,7 +10,7 @@
 
 @implementation NSCalendar (JREToolkit)
 
-+ (NSCalendar *)cachedCalendar
++ (NSCalendar *)cachedLocalizedCalendar
 {
     static NSCalendar *calendar;
     static dispatch_once_t onceToken;
