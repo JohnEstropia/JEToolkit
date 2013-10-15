@@ -67,8 +67,8 @@
     
     switch ([hexString length])
     {
-        case 6: return [self colorWithInt:hexInt alpha:1.0f];
-        case 8: return [self colorWithInt:(hexInt >> 8) alpha:(((CGFloat)(hexInt & 0xFF)) / 255.0f)];
+        case 6: return [self colorWithInt:(NSUInteger)hexInt alpha:1.0f];
+        case 8: return [self colorWithInt:(NSUInteger)(hexInt >> 8) alpha:(((CGFloat)(hexInt & 0xFF)) / 255.0f)];
     }
     return nil;
 }

@@ -8,6 +8,9 @@
 
 #pragma mark - Headers
 
+#import "JREToolkitDefines.h"
+#import "JRESafetyMacros.h"
+
 
 #pragma mark - Categories
 

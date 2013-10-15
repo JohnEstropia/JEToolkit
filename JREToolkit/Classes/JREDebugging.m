@@ -329,7 +329,7 @@ NSString *_JREGetStringFromObjCType(const char *objCType,
             [scanner scanUpToString:@"\0" intoString:&subtype];
             
             const void *dereferencedValue = (* (void **)value);
-            size_t sizePerSubelement = (length / sizePerElement);
+            size_t sizePerSubelement = ((size_t)length / sizePerElement);
             if (valueString)
             {
                 NSMutableString *arrayString = [[NSMutableString alloc] init];

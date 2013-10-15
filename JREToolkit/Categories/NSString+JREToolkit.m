@@ -12,27 +12,6 @@
 
 #pragma mark - public
 
-#pragma mark Localization
-
-- (NSString *)L8N
-{
-	NSString *string = NSLocalizedString(self, nil);
-    NSCAssert(![self isEqualToString:string], @"\"%@\" not found in Localizable.strings", self);
-    return string;
-}
-
-- (NSString *)L8NInStringsFile:(NSString *)stringsFile
-{
-	NSString *string = (stringsFile
-                        ? NSLocalizedStringFromTable(self, stringsFile, nil)
-                        : NSLocalizedString(self, nil));
-    NSCAssert(![self isEqualToString:string],
-              @"\"%@\" not found in %@.strings",
-              self,
-              (stringsFile ?: @"Localizable"));
-    return string;
-}
-
 #pragma mark Paths
 
 + (NSString *)documentsDirectory

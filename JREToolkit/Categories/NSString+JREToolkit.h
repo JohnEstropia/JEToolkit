@@ -13,20 +13,6 @@
 
 @interface NSString (JREToolkit)
 
-#pragma mark - Localization
-
-/*! Convenience method for NSLocalizedString().
- @return The value for the entry in Localizable.strings specified by the receiver
- */
-- (NSString *)L8N;
-
-/*! Convenience method for NSLocalizedStringFromTable().
- @param stringsFile The filename of the .strings file without the file extension.
- @return The value for the entry in Localizable.strings specified by the receiver
- */
-- (NSString *)L8NInStringsFile:(NSString *)stringsFile;
-
-
 #pragma mark - Paths
 
 /*! Convenience method to get the app Documents path

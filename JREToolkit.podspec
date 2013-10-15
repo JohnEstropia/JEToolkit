@@ -8,8 +8,8 @@ Pod::Spec.new do |s|
   s.source       = { :git => "git@bitbucket.org:erurainon/jretoolkit.git",
                      :tag => "#{s.version}" }
   s.platform     = :ios, '7.0'
-  s.source_files = "#{s.name}/**/*.{h,m}"
-  s.frameworks = 'Foundation', 'MobileCoreServices', 'UIKit'
+  s.source_files = "#{s.name}/**/*.{h,m,c}"
+  s.ios.deployment_target = '7.0'
+  s.ios.frameworks = 'Foundation', 'MobileCoreServices', 'UIKit'
   s.requires_arc = true
-  s.dependency 'AFNetworking', '~> 2.0.0-RC2'
 end

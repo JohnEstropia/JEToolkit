@@ -20,7 +20,7 @@
                                         _JRELogObject(__FILE__, __LINE__, __PRETTY_FUNCTION__, #valueOrObject, &_valueOrObject, @encode(typeof(valueOrObject)), 0); \
                                     } while(0)
 
-/*! Dumps static arrays to the console. Also displays the source filename, line number, and method name. For all other variables, expressions, etc. ise JREDump() instead.
+/*! Dumps static arrays to the console. Also displays the source filename, line number, and method name. For all other variables, expressions, etc. use JREDump() instead.
  */
 #define JREDumpArray(staticArray)   do { \
                                         _JRELogObject(__FILE__, __LINE__, __PRETTY_FUNCTION__, #staticArray, &staticArray, @encode(typeof(staticArray)), sizeof(typeof(staticArray[0]))); \
@@ -30,6 +30,14 @@
  */
 #define JRELog(format, ...)         _JRELogFormat(__FILE__, __LINE__, __PRETTY_FUNCTION__, format, __VA_ARGS__)
 
+
+#else
+
+#define JREDump(valueOrObject)      do {} while(0)
+#define JREDumpArray(staticArray)   do {} while(0)
+#define JRELog(format, ...)         do {} while(0)
+
+#endif
 
 
 JRE_EXTERN
@@ -47,11 +55,3 @@ void _JRELogFormat(const char *filePath,
                    const char *functionName,
                    NSString *format,
                    ...);
-
-#else
-
-#define JREDump(valueOrObject)      do {} while(0)
-#define JREDumpArray(staticArray)   do {} while(0)
-#define JRELog(format, ...)         do {} while(0)
-
-#endif
