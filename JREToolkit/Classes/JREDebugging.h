@@ -13,28 +13,28 @@
 
 #if DEBUG
 
-/*! Dumps any variable, expression, etc. to the console. Also displays the source filename, line number, and method name. For static arrays, use JREDumpArray() instead.
+/*! Dumps any variable, expression, etc. to the console. Also displays the source filename, line number, and method name.
  */
-#define JREDump(valueOrObject)      do { \
-                                        typeof(valueOrObject) _valueOrObject = (valueOrObject); \
-                                        _JRELogObject(__FILE__, __LINE__, __PRETTY_FUNCTION__, #valueOrObject, &_valueOrObject, @encode(typeof(valueOrObject)), 0); \
-                                    } while(0)
-
-/*! Dumps static arrays to the console. Also displays the source filename, line number, and method name. For all other variables, expressions, etc. use JREDump() instead.
- */
-#define JREDumpArray(staticArray)   do { \
-                                        _JRELogObject(__FILE__, __LINE__, __PRETTY_FUNCTION__, #staticArray, &staticArray, @encode(typeof(staticArray)), sizeof(typeof(staticArray[0]))); \
-                                    } while(0)
+#define JREDump(...)        do { \
+                                const char *objCType = @encode(typeof(__VA_ARGS__)); \
+                                const void *(^pointerize)(const void *) = ^const void *(const void *_valueOrObject){ \
+                                    return (objCType[0] == '[' ? (*(void **)_valueOrObject) : _valueOrObject); \
+                                }; \
+                                _Pragma("clang diagnostic push") \
+                                _Pragma("clang diagnostic ignored \"-Wmissing-braces\"") \
+                                _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
+                                _JRELogObject(__FILE__, __LINE__, __PRETTY_FUNCTION__, #__VA_ARGS__, pointerize((typeof(__VA_ARGS__)[]){(__VA_ARGS__)}), objCType); \
+                                _Pragma("clang diagnostic pop") \
+                            } while(0)
 
 /*! Logs a format string to the console. Also displays the source filename, line number, and method name.
  */
-#define JRELog(format, ...)         _JRELogFormat(__FILE__, __LINE__, __PRETTY_FUNCTION__, format, __VA_ARGS__)
+#define JRELog(format, ...) _JRELogFormat(__FILE__, __LINE__, __PRETTY_FUNCTION__, format, __VA_ARGS__)
 
 
 #else
 
-#define JREDump(valueOrObject)      do {} while(0)
-#define JREDumpArray(staticArray)   do {} while(0)
+#define JREDump(...)                do {} while(0)
 #define JRELog(format, ...)         do {} while(0)
 
 #endif
@@ -46,8 +46,7 @@ void _JRELogObject(const char *filePath,
                    const char *functionName,
                    const char *objectName,
                    const void *value,
-                   const char *objCType,
-                   size_t sizePerElement);
+                   const char *objCType);
 
 JRE_EXTERN_INLINE JRE_FORMAT_STRING(4,5)
 void _JRELogFormat(const char *filePath,

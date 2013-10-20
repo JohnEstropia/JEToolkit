@@ -9,6 +9,7 @@
 #ifndef JREToolkit_JREToolkitDefines_h
 #define JREToolkit_JREToolkitDefines_h
 
+
 #pragma mark - Function attributes
 
 #define JRE_CONST               __attribute__((const))
