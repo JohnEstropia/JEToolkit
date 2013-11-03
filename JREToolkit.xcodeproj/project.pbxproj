@@ -77,6 +77,7 @@
 		2F27A69817F69BBB00CE0230 /* JREDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JREDebugging.m; sourceTree = "<group>"; };
 		2F27A69B17F69C2800CE0230 /* JREToolkitDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JREToolkitDefines.h; sourceTree = "<group>"; };
 		2F2A27C9180C01D0004064FF /* JRESafetyMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JRESafetyMacros.h; sourceTree = "<group>"; };
+		2F3259E4181BA74F0097D6F1 /* JREAssociatedObjects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JREAssociatedObjects.h; sourceTree = "<group>"; };
 		2F36590C17F0A62300794CC0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		2F36590D17F0A62300794CC0 /* JREToolkit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JREToolkit.podspec; sourceTree = SOURCE_ROOT; };
 		2F39821718122ACB007A843F /* JREOrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JREOrderedDictionary.h; sourceTree = "<group>"; };
@@ -142,6 +143,7 @@
 			children = (
 				2F27A69B17F69C2800CE0230 /* JREToolkitDefines.h */,
 				2F2A27C9180C01D0004064FF /* JRESafetyMacros.h */,
+				2F3259E4181BA74F0097D6F1 /* JREAssociatedObjects.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";

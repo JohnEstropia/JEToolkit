@@ -47,11 +47,6 @@
 
 - (instancetype)decodedImage
 {
-    if (self.images)
-    {
-        return self;
-    }
-    
     CGImageRef CGImage = self.CGImage;
     CGSize imageSize = CGSizeMake(CGImageGetWidth(CGImage), CGImageGetHeight(CGImage));
     CGRect imageRect = (CGRect){ .size = imageSize };

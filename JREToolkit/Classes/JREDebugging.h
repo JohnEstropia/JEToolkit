@@ -13,29 +13,49 @@
 
 #if DEBUG
 
-/*! Dumps any variable, expression, etc. to the console. Also displays the source filename, line number, and method name.
+/*! Dumps any variable, expression, etc. other than static arrays to the console. Also displays the source filename, line number, and method name. For static arrays use JREDumpArray() instead.
  */
-#define JREDump(...)        do { \
-                                const char *objCType = @encode(typeof(__VA_ARGS__)); \
-                                const void *(^pointerize)(const void *) = ^const void *(const void *_valueOrObject){ \
-                                    return (objCType[0] == '[' ? (*(void **)_valueOrObject) : _valueOrObject); \
-                                }; \
-                                _Pragma("clang diagnostic push") \
-                                _Pragma("clang diagnostic ignored \"-Wmissing-braces\"") \
-                                _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
-                                _JRELogObject(__FILE__, __LINE__, __PRETTY_FUNCTION__, #__VA_ARGS__, pointerize((typeof(__VA_ARGS__)[]){(__VA_ARGS__)}), objCType); \
-                                _Pragma("clang diagnostic pop") \
-                            } while(0)
+#define JREDump(...) \
+    do { \
+        _Pragma("clang diagnostic push") \
+        _Pragma("clang diagnostic ignored \"-Wmissing-braces\"") \
+        _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
+        [JREDebugging logValue:[NSValue valueWithBytes:(typeof(__VA_ARGS__)[]){(__VA_ARGS__)} \
+                                              objCType:@encode(typeof(__VA_ARGS__))] \
+                    sourceFile:__FILE__ \
+                  functionName:__PRETTY_FUNCTION__ \
+                    lineNumber:__LINE__ \
+                         label:#__VA_ARGS__]; \
+        _Pragma("clang diagnostic pop") \
+    } while(0)
+
+/*! Dumps static arrays to the console. Also displays the source filename, line number, and method name. For other variables, expressions, etc., use JREDump() instead.
+ */
+#define JREDumpArray(...) \
+    do { \
+        _Pragma("clang diagnostic push") \
+        _Pragma("clang diagnostic ignored \"-Wmissing-braces\"") \
+        _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
+        [JREDebugging logValue:[NSValue valueWithBytes:__VA_ARGS__ \
+                                              objCType:@encode(typeof(__VA_ARGS__))] \
+                    sourceFile:__FILE__ \
+                  functionName:__PRETTY_FUNCTION__ \
+                    lineNumber:__LINE__ \
+                         label:#__VA_ARGS__]; \
+        _Pragma("clang diagnostic pop") \
+    } while(0)
 
 /*! Logs a format string to the console. Also displays the source filename, line number, and method name.
  */
-#define JRELog(format, ...) _JRELogFormat(__FILE__, __LINE__, __PRETTY_FUNCTION__, format, __VA_ARGS__)
+#define JRELog(format, ...) \
+    _JRELogFormat(__FILE__, __LINE__, __PRETTY_FUNCTION__, format, __VA_ARGS__)
 
 
 #else
 
-#define JREDump(...)                do {} while(0)
-#define JRELog(format, ...)         do {} while(0)
+#define JREDump(...)        do {} while(0)
+#define JREDumpArray(...)   do {} while(0)
+#define JRELog(format, ...) do {} while(0)
 
 #endif
 
@@ -54,3 +74,19 @@ void _JRELogFormat(const char *filePath,
                    const char *functionName,
                    NSString *format,
                    ...);
+
+
+@interface JREDebugging : NSObject
+
++ (void)logValue:(NSValue *)wrappedValue
+      sourceFile:(const char *)sourceFile
+    functionName:(const char *)functionName
+      lineNumber:(NSInteger)lineNumber
+           label:(const char *)label;
+
++ (void)logFormat:(NSString *)format
+       sourceFile:(const char *)sourceFile
+     functionName:(const char *)functionName
+       lineNumber:(NSInteger)lineNumber, ... JRE_FORMAT_STRING(1,5);
+
+@end

@@ -10,6 +10,7 @@
 
 #import "JREToolkitDefines.h"
 #import "JRESafetyMacros.h"
+#import "JREAssociatedObjects.h"
 
 
 #pragma mark - Categories

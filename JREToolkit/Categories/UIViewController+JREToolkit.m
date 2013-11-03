@@ -8,6 +8,7 @@
 
 #import "UIViewController+JREToolkit.h"
 
+
 @implementation UIViewController (JREToolkit)
 
 #pragma mark - public

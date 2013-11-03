@@ -50,13 +50,13 @@ void JREDispatchSerial(id owner, dispatch_block_t block)
     NSCParameterAssert(owner);
     NSCParameterAssert(block);
     
-    static const char JRESerialQueueKey;
-    dispatch_queue_t serialQueue = objc_getAssociatedObject(owner, &JRESerialQueueKey);
+    static const void *JRESerialQueueKey = &JRESerialQueueKey;
+    dispatch_queue_t serialQueue = objc_getAssociatedObject(owner, JRESerialQueueKey);
     if (!serialQueue)
     {
         serialQueue = dispatch_queue_create(NULL, DISPATCH_QUEUE_SERIAL);
         objc_setAssociatedObject(owner,
-                                 &JRESerialQueueKey,
+                                 JRESerialQueueKey,
                                  serialQueue,
                                  OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
