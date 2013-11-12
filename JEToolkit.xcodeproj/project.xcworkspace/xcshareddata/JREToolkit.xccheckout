@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>49AC6A86-37FB-43F8-983F-808D858C03FB</string>
+	<key>IDESourceControlProjectName</key>
+	<string>JREToolkit</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C9FC9AEA-83C8-4E63-9E8D-A38524C961EE</key>
+		<string>https://bitbucket.org/erurainon/jretoolkit.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>JREToolkit.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C9FC9AEA-83C8-4E63-9E8D-A38524C961EE</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://bitbucket.org/erurainon/jretoolkit.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C9FC9AEA-83C8-4E63-9E8D-A38524C961EE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C9FC9AEA-83C8-4E63-9E8D-A38524C961EE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>JREToolkit</string>
+		</dict>
+	</array>
+</dict>
+</plist>
