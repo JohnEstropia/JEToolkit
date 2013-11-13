@@ -21,9 +21,10 @@
         _Pragma("clang diagnostic push") \
         _Pragma("clang diagnostic ignored \"-Wmissing-braces\"") \
         _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
+        const typeof(__VA_ARGS__) _objectClone = __VA_ARGS__; \
         [JEDebugging \
-         logValue:[NSValue \
-                   valueWithBytes:(typeof(__VA_ARGS__)[]){(__VA_ARGS__)} \
+         logValue:[[NSValue alloc] \
+                   initWithBytes:&_objectClone \
                    objCType:@encode(typeof(__VA_ARGS__))] \
          sourceFile:__FILE__ \
          functionName:__PRETTY_FUNCTION__ \
@@ -41,8 +42,8 @@
         _Pragma("clang diagnostic ignored \"-Wmissing-braces\"") \
         _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
         [JEDebugging \
-         logValue:[NSValue \
-                   valueWithBytes:__VA_ARGS__ \
+         logValue:[[NSValue alloc] \
+                   initWithBytes:&__VA_ARGS__[0] \
                    objCType:@encode(typeof(__VA_ARGS__))] \
          sourceFile:__FILE__ \
          functionName:__PRETTY_FUNCTION__ \

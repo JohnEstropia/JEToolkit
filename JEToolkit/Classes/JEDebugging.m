@@ -80,9 +80,90 @@
     {
         (*valueString) = [NSString stringWithFormat:@"%@", [(NSError *)idValue userInfo]];
     }
+    else if ([idValue isKindOfClass:NSClassFromString(@"NSBlock")])
+    {
+        struct _JEBlockLiteral
+        {
+            Class isa;
+            int flags;
+            int reserved;
+            void (*invoke)(void *, ...);
+            struct _JEBlockDescriptor
+            {
+                unsigned long int reserved;     // NULL
+                unsigned long int size;         // sizeof(struct _JEBlockLiteral)
+                // optional helper functions
+                const void (*copyHelper)(void *dst, void *src); // IFF (1<<25)
+                const void (*disposeHelper)(void *src);         // IFF (1<<25)
+                // required ABI.2010.3.16
+                const char *signature;                          // IFF (1<<30)
+            } *descriptor;
+        };
+        
+        typedef NS_OPTIONS(NSUInteger, _JEBlockDescriptionFlags)
+        {
+            _JEBlockDescriptionFlagsHasCopyDispose  = (1 << 25),
+            _JEBlockDescriptionFlagsHasCtor         = (1 << 26), // helpers have C++ code
+            _JEBlockDescriptionFlagsIsGlobal        = (1 << 28),
+            _JEBlockDescriptionFlagsHasStret        = (1 << 29), // IFF BLOCK_HAS_SIGNATURE
+            _JEBlockDescriptionFlagsHasSignature    = (1 << 30)
+        };
+        
+        struct _JEBlockLiteral *blockRef = (__bridge struct _JEBlockLiteral *)idValue;
+        _JEBlockDescriptionFlags blockFlags = blockRef->flags;
+        
+        NSMutableString *blockSignatureString = [[NSMutableString alloc] init];
+        if (blockFlags & _JEBlockDescriptionFlagsHasSignature)
+        {
+            const void *signatureLocation = blockRef->descriptor;
+            signatureLocation += sizeof(typeof(blockRef->descriptor->reserved));
+            signatureLocation += sizeof(typeof(blockRef->descriptor->size));
+            
+            if (blockFlags & _JEBlockDescriptionFlagsHasCopyDispose) {
+                signatureLocation += sizeof(typeof(blockRef->descriptor->copyHelper));
+                signatureLocation += sizeof(typeof(blockRef->descriptor->disposeHelper));
+            }
+            
+            const char *signature = (*(const char **)signatureLocation);
+            NSMethodSignature *blockSignature = [NSMethodSignature signatureWithObjCTypes:signature];
+            
+            NSString *argTypeName;
+            NSString *argDummyValueString;
+            [self logStringFromValue:nil
+                            objCType:[blockSignature methodReturnType]
+                         indentLevel:0
+                            typeName:&argTypeName
+                         valueString:&argDummyValueString];
+            [blockSignatureString appendFormat:@" %@(^)", argTypeName];
+            
+            NSUInteger argCount = [blockSignature numberOfArguments];
+            if (argCount <= 1)
+            {
+                [blockSignatureString appendFormat:@"(void)"];
+            }
+            else
+            {
+                NSMutableArray *argTypeNames = [[NSMutableArray alloc] initWithCapacity:(argCount - 1)];
+                for (NSUInteger i = 1; i < argCount; ++i)
+                {
+                    argTypeName = nil;
+                    argDummyValueString = nil;
+                    [self logStringFromValue:nil
+                                    objCType:[blockSignature getArgumentTypeAtIndex:i]
+                                 indentLevel:0
+                                    typeName:&argTypeName
+                                 valueString:&argDummyValueString];
+                    [argTypeNames addObject:argTypeName];
+                }
+                [blockSignatureString appendFormat:@"(%@)", [argTypeNames componentsJoinedByString:@", "]];
+            }
+        }
+        
+        (*valueString) = [NSString stringWithFormat:@"<%p>%@", idValue, blockSignatureString];
+    }
     else
     {
-        (*valueString) = [NSString stringWithFormat:@"%@", [idValue description]];
+        (*valueString) = [NSString stringWithFormat:@"%@", idValue];
     }
 }
 
@@ -299,14 +380,16 @@
         [self
          logStringFromValue:referencedValue
          objCType:objCType
-         indentLevel:(indentLevel + 1)
+         indentLevel:indentLevel
          typeName:&referencedTypeName
          valueString:&referencedValueString];
     }
     
-    (*typeName) = [NSString stringWithFormat:@"%1$@ *", referencedTypeName];
+    (*typeName) = ([referencedTypeName hasSuffix:@"*"]
+                   ? [referencedTypeName stringByAppendingString:@"*"]
+                   : [referencedTypeName stringByAppendingString:@" *"]);
     (*valueString) = (pointerValue
-                      ? [NSString stringWithFormat:@"<%p>", pointerValue]
+                      ? [NSString stringWithFormat:@"<%p> %@", pointerValue, referencedValueString]
                       : @"NULL");
 }
 

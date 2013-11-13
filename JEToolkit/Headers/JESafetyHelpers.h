@@ -18,11 +18,16 @@
 
 #if DEBUG
 
-#define je_KVC(class, property) ( ((class *)nil).property, @#property )
+#define je_KVC(type, property) \
+    ({ \
+        type _##property##_dummy; \
+        _##property##_dummy.property, @#property; \
+    })
 
 #else
 
-#define je_KVC(class, property) ( @#property )
+#define je_KVC(class, property) \
+    ( @#property )
 
 #endif
 

@@ -124,8 +124,8 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:self.dictionary forKey:je_KVC(JEOrderedDictionary, dictionary)];
-    [aCoder encodeObject:self.orderedKeys forKey:je_KVC(JEOrderedDictionary, orderedKeys)];
+    [aCoder encodeObject:self.dictionary forKey:je_KVC(typeof(self), dictionary)];
+    [aCoder encodeObject:self.orderedKeys forKey:je_KVC(typeof(self), orderedKeys)];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -136,8 +136,8 @@
         return nil;
     }
     
-    _dictionary = [aDecoder decodeObjectForKey:je_KVC(JEOrderedDictionary, dictionary)];
-    _orderedKeys = [aDecoder decodeObjectForKey:je_KVC(JEOrderedDictionary, orderedKeys)];
+    _dictionary = [aDecoder decodeObjectForKey:je_KVC(typeof(self), dictionary)];
+    _orderedKeys = [aDecoder decodeObjectForKey:je_KVC(typeof(self), orderedKeys)];
     
     return self;
 }
