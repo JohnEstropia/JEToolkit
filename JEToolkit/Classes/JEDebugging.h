@@ -13,29 +13,29 @@
 
 #if DEBUG
 
-/*! Dumps any variable, expression, etc. other than static arrays to the console. Also displays the source filename, line number, and method name. For static arrays use je_dumpArray() instead.
+/*! Dumps any variable, expression, etc. other than static arrays to the console. Also displays the source filename, line number, and method name. For static arrays use JEDumpArray() instead.
  */
-#define je_dump(...) \
+#define JEDump(nonArrayExpression...) \
     do \
     { \
         _Pragma("clang diagnostic push") \
         _Pragma("clang diagnostic ignored \"-Wmissing-braces\"") \
         _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
-        const typeof(__VA_ARGS__) _objectClone = __VA_ARGS__; \
+        const typeof(nonArrayExpression) _objectClone = nonArrayExpression; \
         [JEDebugging \
          logValue:[[NSValue alloc] \
                    initWithBytes:&_objectClone \
-                   objCType:@encode(typeof(__VA_ARGS__))] \
+                   objCType:@encode(typeof(nonArrayExpression))] \
          sourceFile:__FILE__ \
          functionName:__PRETTY_FUNCTION__ \
          lineNumber:__LINE__ \
-         label:#__VA_ARGS__]; \
+         label:#nonArrayExpression]; \
         _Pragma("clang diagnostic pop") \
     } while(0)
 
-/*! Dumps static arrays to the console. Also displays the source filename, line number, and method name. For other variables, expressions, etc., use je_dump() instead.
+/*! Dumps static arrays to the console. Also displays the source filename, line number, and method name. For other variables, expressions, etc., use JEDump() instead.
  */
-#define je_dumpArray(...) \
+#define JEDumpArray(arrayExpression...) \
     do \
     { \
         _Pragma("clang diagnostic push") \
@@ -43,18 +43,18 @@
         _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
         [JEDebugging \
          logValue:[[NSValue alloc] \
-                   initWithBytes:&__VA_ARGS__[0] \
-                   objCType:@encode(typeof(__VA_ARGS__))] \
+                   initWithBytes:&arrayExpression[0] \
+                   objCType:@encode(typeof(arrayExpression))] \
          sourceFile:__FILE__ \
          functionName:__PRETTY_FUNCTION__ \
          lineNumber:__LINE__ \
-         label:#__VA_ARGS__]; \
+         label:#arrayExpression]; \
         _Pragma("clang diagnostic pop") \
     } while(0)
 
 /*! Logs a format string to the console. Also displays the source filename, line number, and method name.
  */
-#define je_log(format, ...) \
+#define JELog(format, ...) \
     [JEDebugging \
      logFormat:format \
      sourceFile:__FILE__ \
@@ -64,9 +64,9 @@
 
 #else
 
-#define je_dump(...)        do {} while(0)
-#define je_dumpArray(...)   do {} while(0)
-#define je_log(format, ...) do {} while(0)
+#define JEDump(...)        do {} while(0)
+#define JEDumpArray(...)   do {} while(0)
+#define JELog(format, ...) do {} while(0)
 
 #endif
 

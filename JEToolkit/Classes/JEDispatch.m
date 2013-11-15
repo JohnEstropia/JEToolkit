@@ -11,14 +11,14 @@
 #import <objc/runtime.h>
 
 
-void je_dispatchConcurrent(dispatch_block_t block)
+void JEDispatchConcurrent(dispatch_block_t block)
 {
     NSCParameterAssert(block);
     
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
 }
 
-void je_dispatchConcurrentAfter(NSTimeInterval delay, dispatch_block_t block)
+void JEDispatchConcurrentAfter(NSTimeInterval delay, dispatch_block_t block)
 {
     NSCParameterAssert(delay >= 0.0f);
     NSCParameterAssert(block);
@@ -28,14 +28,14 @@ void je_dispatchConcurrentAfter(NSTimeInterval delay, dispatch_block_t block)
 				   block);
 }
 
-void je_dispatchUI(dispatch_block_t block)
+void JEDispatchUI(dispatch_block_t block)
 {
     NSCParameterAssert(block);
     
 	dispatch_async(dispatch_get_main_queue(), block);
 }
 
-void je_dispatchUIAfter(NSTimeInterval delay, dispatch_block_t block)
+void JEDispatchUIAfter(NSTimeInterval delay, dispatch_block_t block)
 {
     NSCParameterAssert(delay >= 0.0f);
     NSCParameterAssert(block);
@@ -45,7 +45,7 @@ void je_dispatchUIAfter(NSTimeInterval delay, dispatch_block_t block)
 				   block);
 }
 
-void je_dispatchSerial(id owner, dispatch_block_t block)
+void JEDispatchSerial(id owner, dispatch_block_t block)
 {
     NSCParameterAssert(owner);
     NSCParameterAssert(block);

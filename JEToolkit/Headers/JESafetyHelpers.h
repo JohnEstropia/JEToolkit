@@ -18,7 +18,7 @@
 
 #if DEBUG
 
-#define je_KVC(type, property) \
+#define KVC(type, property) \
     ({ \
         type _##property##_dummy; \
         _##property##_dummy.property, @#property; \
@@ -26,7 +26,7 @@
 
 #else
 
-#define je_KVC(class, property) \
+#define KVC(class, property) \
     ( @#property )
 
 #endif
@@ -36,7 +36,7 @@
 #pragma mark - Localizable Strings
 
 JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *je_L8N(NSString *keyString)
+NSString *L8N(NSString *keyString)
 {
 	NSString *localizedString = NSLocalizedString(keyString, nil);
     NSCAssert(keyString != localizedString,
@@ -46,7 +46,7 @@ NSString *je_L8N(NSString *keyString)
 }
 
 JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *je_L8N(NSString *keyString, NSString *stringsFile)
+NSString *L8N(NSString *keyString, NSString *stringsFile)
 {
 	NSString *localizedString = NSLocalizedStringFromTable(keyString, stringsFile, nil);
     NSCAssert(keyString != localizedString,

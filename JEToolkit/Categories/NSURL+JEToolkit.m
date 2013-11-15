@@ -46,7 +46,7 @@
           forKey:NSURLIsExcludedFromBackupKey
           error:&resourceValueError])
     {
-        je_dump(resourceValueError);
+        JEDump(resourceValueError);
         return NO;
     }
     

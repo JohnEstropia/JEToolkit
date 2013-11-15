@@ -64,6 +64,7 @@
 }
 
 + (void)logStringFromIdValue:(NSValue *)wrappedValue
+                 indentLevel:(NSUInteger)indentLevel
                     typeName:(NSString *__autoreleasing *)typeName
                  valueString:(NSString *__autoreleasing *)valueString
 {
@@ -78,7 +79,34 @@
     }
     else if ([idValue isKindOfClass:[NSError class]])
     {
-        (*valueString) = [NSString stringWithFormat:@"%@", [(NSError *)idValue userInfo]];
+        NSMutableString *userInfoString;
+        @autoreleasepool {
+            
+            NSString *indentString = [[NSString string]
+                                      stringByPaddingToLength:(indentLevel + 1)
+                                      withString:@"\t"
+                                      startingAtIndex:0];
+            userInfoString = [[NSMutableString alloc] initWithString:[[(NSError *)idValue userInfo] description]];
+            [userInfoString
+             replaceOccurrencesOfString:@"\n"
+             withString:[@"\n" stringByAppendingString:indentString]
+             options:(NSCaseInsensitiveSearch | NSLiteralSearch)
+             range:(NSRange){ .location = 0, .length = [userInfoString length] }];
+            
+        }
+        (*valueString) = [NSString stringWithFormat:@"<%p> %@", idValue, userInfoString];
+    }
+    else if ([idValue isKindOfClass:[NSValue class]])
+    {
+        NSString *valueTypeName;
+        NSString *valueValueString;
+        [self logStringFromValue:idValue
+                        objCType:[(NSValue *)idValue objCType]
+                     indentLevel:indentLevel
+                        typeName:&valueTypeName
+                     valueString:&valueValueString];
+        
+        (*valueString) = [NSString stringWithFormat:@"<%p> (%@) %@", idValue, valueTypeName, valueValueString];
     }
     else if ([idValue isKindOfClass:NSClassFromString(@"NSBlock")])
     {
@@ -127,14 +155,18 @@
             const char *signature = (*(const char **)signatureLocation);
             NSMethodSignature *blockSignature = [NSMethodSignature signatureWithObjCTypes:signature];
             
-            NSString *argTypeName;
-            NSString *argDummyValueString;
-            [self logStringFromValue:nil
-                            objCType:[blockSignature methodReturnType]
-                         indentLevel:0
-                            typeName:&argTypeName
-                         valueString:&argDummyValueString];
-            [blockSignatureString appendFormat:@" %@(^)", argTypeName];
+            @autoreleasepool {
+                
+                NSString *argTypeName;
+                NSString *argDummyValueString;
+                [self logStringFromValue:nil
+                                objCType:[blockSignature methodReturnType]
+                             indentLevel:0
+                                typeName:&argTypeName
+                             valueString:&argDummyValueString];
+                [blockSignatureString appendFormat:@" %@(^)", argTypeName];
+                
+            }
             
             NSUInteger argCount = [blockSignature numberOfArguments];
             if (argCount <= 1)
@@ -146,14 +178,18 @@
                 NSMutableArray *argTypeNames = [[NSMutableArray alloc] initWithCapacity:(argCount - 1)];
                 for (NSUInteger i = 1; i < argCount; ++i)
                 {
-                    argTypeName = nil;
-                    argDummyValueString = nil;
-                    [self logStringFromValue:nil
-                                    objCType:[blockSignature getArgumentTypeAtIndex:i]
-                                 indentLevel:0
-                                    typeName:&argTypeName
-                                 valueString:&argDummyValueString];
-                    [argTypeNames addObject:argTypeName];
+                    @autoreleasepool {
+                        
+                        NSString *argTypeName;
+                        NSString *argDummyValueString;
+                        [self logStringFromValue:nil
+                                        objCType:[blockSignature getArgumentTypeAtIndex:i]
+                                     indentLevel:indentLevel
+                                        typeName:&argTypeName
+                                     valueString:&argDummyValueString];
+                        [argTypeNames addObject:argTypeName];
+                        
+                    }
                 }
                 [blockSignatureString appendFormat:@"(%@)", [argTypeNames componentsJoinedByString:@", "]];
             }
@@ -312,7 +348,7 @@
                           typeName:(NSString *__autoreleasing *)typeName
                        valueString:(NSString *__autoreleasing *)valueString
 {
-#warning TODO: NSValue cannot be created from struct containing bitfields
+    // https://developer.apple.com/library/ios/DOCUMENTATION/Cocoa/Conceptual/Archiving/Articles/codingctypes.html
     unsigned long long bitFieldValue = 0;
     [wrappedValue getValue:&bitFieldValue];
     
@@ -442,36 +478,38 @@
     [wrappedValue getValue:arrayValue];
     
     NSMutableString *arrayValueString = [[NSMutableString alloc] init];
+    NSString *indentString = [[NSString string]
+                              stringByPaddingToLength:(indentLevel + 1)
+                              withString:@"\t"
+                              startingAtIndex:0];
     for (unsigned long long i = 0; i < count; ++i)
     {
         if (i == 0)
         {
             [arrayValueString appendString:@"\n"];
-            
-            for (NSUInteger indent = 0; indent <= indentLevel; ++indent)
-            {
-                [arrayValueString appendString:@"\t"];
-            }
+            [arrayValueString appendString:indentString];
         }
         
         NSValue *itemValue = [[NSValue alloc]
                               initWithBytes:(arrayValue + (i * sizePerSubelement))
                               objCType:objCSubType];
-        NSString *itemTypeName;
-        NSString *itemValueString;
-        [self
-         logStringFromValue:itemValue
-         objCType:objCSubType
-         indentLevel:(indentLevel + 1)
-         typeName:&itemTypeName
-         valueString:&itemValueString];
         
-        [arrayValueString appendFormat:@"\t[%llu]: (%@) %@,\n", i, itemTypeName, itemValueString];
-        
-        for (NSUInteger indent = 0; indent <= indentLevel; ++indent)
-        {
-            [arrayValueString appendString:@"\t"];
+        @autoreleasepool {
+            
+            NSString *itemTypeName;
+            NSString *itemValueString;
+            [self
+             logStringFromValue:itemValue
+             objCType:objCSubType
+             indentLevel:(indentLevel + 1)
+             typeName:&itemTypeName
+             valueString:&itemValueString];
+            
+            [arrayValueString appendFormat:@"\t[%llu]: (%@) %@,\n", i, itemTypeName, itemValueString];
+            
         }
+        
+        [arrayValueString appendString:indentString];
     }
     
     NSString *itemTypeName;
@@ -620,6 +658,7 @@
         case _C_ID:
             [self
              logStringFromIdValue:wrappedValue
+             indentLevel:indentLevel
              typeName:typeName
              valueString:valueString];
             break;
@@ -819,7 +858,7 @@
                         typeName:&typeName
                      valueString:&valueString];
         
-        printf("[%s](%s:%ld) %s\n>\t\"%s\" = (%s) %s\n\n",
+        printf("[%s](%s:%ld) %s\n→\t\"%s\"\n=\t(%s) %s\n\n",
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
                dispatch_queue_get_label(dispatch_get_current_queue()),
@@ -841,7 +880,7 @@
     va_list arguments;
     va_start(arguments, lineNumber);
     
-    printf("[%s](%s:%ld) %s\n>\t\%s\n",
+    printf("[%s](%s:%ld) %s\n→\t\%s\n",
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
            dispatch_queue_get_label(dispatch_get_current_queue()),

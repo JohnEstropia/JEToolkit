@@ -31,71 +31,118 @@
 
 - (void)testDumps
 {
-    je_dump(100);
+    JEDump(100);
     int oneHundred = 100;
-    je_dump(oneHundred);
-    je_dump(&oneHundred);
-    je_dump((50 + 50));
+    JEDump(oneHundred);
+    JEDump(&oneHundred);
+    JEDump([NSValue valueWithBytes:&oneHundred objCType:@encode(typeof(oneHundred))]);
+    JEDump((50 + 50));
     
-    je_dump("cstring");
+    JEDump(M_PI);
+    JEDump(NSIntegerMax);
+    JEDump(NSIntegerMin);
+    JEDump(CGFLOAT_MAX);
+    JEDump(CGFLOAT_MIN);
+    
+    JEDump("cstring");
     char *cstringPtr = NULL;
-    je_dump(cstringPtr);
-    je_dump(&cstringPtr);
+    JEDump(cstringPtr);
+    JEDump(&cstringPtr);
+    JEDump([NSValue valueWithBytes:&cstringPtr objCType:@encode(typeof(cstringPtr))]);
     cstringPtr = "cstring";
-    je_dump(cstringPtr);
-    je_dump(&cstringPtr);
+    JEDump(cstringPtr);
+    JEDump(&cstringPtr);
     char cstringArray[7] = "cstring";
-    je_dumpArray(cstringArray);
-    je_dump(&cstringArray);
+    JEDumpArray(cstringArray);
+    JEDump(&cstringArray);
+    JEDump([NSValue valueWithBytes:cstringArray objCType:@encode(typeof(cstringArray))]);
     
-    
-    je_dump(_cmd);
-    je_dump(@selector(viewDidAppear:));
+    JEDump(_cmd);
+    JEDump(@selector(viewDidAppear:));
     SEL selector = NULL;
-    je_dump(selector);
-    je_dump(&selector);
+    JEDump(selector);
+    JEDump(&selector);
+    JEDump([NSValue valueWithBytes:&selector objCType:@encode(typeof(selector))]);
     selector = _cmd;
-    je_dump(selector);
-    je_dump(&selector);
+    JEDump(selector);
+    JEDump(&selector);
+    JEDump([NSValue valueWithBytes:&selector objCType:@encode(typeof(selector))]);
     
-    je_dump([UIView new]);
+    JEDump([UIView new]);
     UIView *view = nil;
-    je_dump(view);
-    je_dump(&view);
+    JEDump(view);
+    JEDump(&view);
+    JEDump([NSValue valueWithBytes:&view objCType:@encode(typeof(view))]);
     view = [UIView new];
-    je_dump(view);
-    je_dump(&view);
+    JEDump(view);
+    JEDump(&view);
+    JEDump([NSValue valueWithBytes:&view objCType:@encode(typeof(view))]);
     
-    je_dump([view class]);
-    je_dump([UIView class]);
+    JEDump([view class]);
+    JEDump([UIView class]);
     Class class = Nil;
-    je_dump(class);
-    je_dump(&class);
+    JEDump(class);
+    JEDump(&class);
+    JEDump([NSValue valueWithBytes:&class objCType:@encode(typeof(class))]);
     class = [UIView class];
-    je_dump(class);
-    je_dump(&class);
+    JEDump(class);
+    JEDump(&class);
+    JEDump([NSValue valueWithBytes:&class objCType:@encode(typeof(class))]);
     
-    je_dump(CGRectZero);
-    je_dump((CGRect){{1, 2}, {3, 4}});
+    NSError *error = nil;
+    [[NSFileManager defaultManager] moveItemAtPath:@"testdir" toPath:@"testdir" error:&error];
+    JEDump(error);
+    
+    JEDump(CGRectZero);
+    JEDump((CGRect){{1, 2}, {3, 4}});
     CGRect rect = (CGRect){{1, 2}, {3, 4}};
-    je_dump(rect);
-    je_dump(&rect);
+    JEDump(rect);
+    JEDump(&rect);
+    JEDump([NSValue valueWithBytes:&rect objCType:@encode(typeof(rect))]);
     
-    je_dump(&CGImageCreate);
+    JEDump(&CGImageCreate);
     
     int intArray[2][3] = {{1, 2, 3}, {4, 5, 6}};
-    je_dumpArray(intArray);
-    je_dump(&intArray);
+    JEDumpArray(intArray);
+    JEDump(&intArray);
+    JEDump([NSValue valueWithBytes:intArray objCType:@encode(typeof(intArray))]);
     
-    je_dump(^(int intParam, id idParam, CGRect rectParam, NSError ** outErrorParam){ return intParam + 100; });
+    JEDump(^(int intParam, id idParam, CGRect rectParam, NSError ** outErrorParam){ return intParam + 100; });
     int (^block)(int intParam) = NULL;
-    je_dump(block);
-    je_dump(&block);
+    JEDump(block);
+    JEDump(&block);
+    JEDump([NSValue valueWithBytes:&block objCType:@encode(typeof(block))]);
     block = ^(int intParam){ return intParam + 100; };
-    je_dump(block);
-    je_dump(&block);
+    JEDump(block);
+    JEDump(&block);
+    JEDump([NSValue valueWithBytes:&block objCType:@encode(typeof(block))]);
     dispatch_block_t voidBlock = ^{ };
-    je_dump(voidBlock);
+    JEDump(voidBlock);
 }
+
+JESynthesizeObject(id, synthesizedId, setSynthesizedId, JESynthesizeRetainNonatomic);
+JESynthesizeObject(void(^)(void), synthesizedBlock, setSynthesizedBlock, JESynthesizeCopyNonatomic);
+JESynthesizeObject(id, synthesizedWeak, setSynthesizedWeak, JESynthesizeAssign);
+JESynthesizeScalar(CGRect, synthesizedRect, setSynthesizedRect);
+
+- (void)testSynthesized
+{
+    JEDump(self.synthesizedId);
+    self.synthesizedId = @"test";
+    JEDump(self.synthesizedId);
+    
+    JEDump(self.synthesizedBlock);
+    self.synthesizedBlock = ^{ };
+    JEDump(self.synthesizedBlock);
+    
+    JEDump(self.synthesizedWeak);
+    self.synthesizedWeak = self;
+    JEDump(self.synthesizedWeak);
+    
+    JEDump(self.synthesizedRect);
+    self.synthesizedRect = (CGRect){ {1, 2}, {3, 4} };
+    JEDump(self.synthesizedRect);
+}
+
 
 @end
