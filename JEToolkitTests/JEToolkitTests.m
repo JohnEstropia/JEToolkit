@@ -38,11 +38,24 @@
     JEDump([NSValue valueWithBytes:&oneHundred objCType:@encode(typeof(oneHundred))]);
     JEDump((50 + 50));
     
+    JEDump(12345.12345f);
+    JEDump([NSDecimalNumber numberWithFloat:12345.12345f]);
+    JEDump(12345678901234567890.0f);
+    JEDump([NSDecimalNumber numberWithFloat:12345678901234567890.0f]);
+    JEDump(12345678901234567890.0);
+    JEDump([NSDecimalNumber numberWithDouble:12345678901234567890.0]);
     JEDump(M_PI);
+    JEDump([NSDecimalNumber numberWithDouble:M_PI]);
     JEDump(NSIntegerMax);
     JEDump(NSIntegerMin);
     JEDump(CGFLOAT_MAX);
+    JEDump([NSDecimalNumber numberWithFloat:CGFLOAT_MAX]);
     JEDump(CGFLOAT_MIN);
+    JEDump([NSDecimalNumber numberWithFloat:CGFLOAT_MIN]);
+    JEDump(DBL_MAX);
+    JEDump([NSDecimalNumber numberWithDouble:DBL_MAX]);
+    JEDump(DBL_MIN);
+    JEDump([NSDecimalNumber numberWithDouble:DBL_MIN]);
     
     JEDump("cstring");
     char *cstringPtr = NULL;

@@ -22,12 +22,12 @@
     while (objCType != NULL && objCType[0] != '\0')
     {
         const char typeModifier = objCType[0];
-        if (typeModifier != 'r' // const
-            && typeModifier != 'n' // in
-            && typeModifier != 'N' // inout
-            && typeModifier != 'o' // out
-            && typeModifier != 'O' // bycopy
-            && typeModifier != 'R' // byref
+        if (typeModifier != 'r'     // const
+            && typeModifier != 'n'  // in
+            && typeModifier != 'N'  // inout
+            && typeModifier != 'o'  // out
+            && typeModifier != 'O'  // bycopy
+            && typeModifier != 'R'  // byref
             && typeModifier != 'V') // oneway
         {
             break;
@@ -43,24 +43,32 @@
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		
-		integerFormatter = [[NSNumberFormatter alloc] init];
-		[integerFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+		NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+		[formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        integerFormatter = formatter;
 		
 	});
 	return integerFormatter;
 }
 
-+ (NSNumberFormatter *)scientificFormatter
++ (NSNumberFormatter *)doubleFormatter
 {
-	static NSNumberFormatter *scientificFormatter;
+	static NSNumberFormatter *doubleFormatter;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		
-		scientificFormatter = [[NSNumberFormatter alloc] init];
-		[scientificFormatter setNumberStyle:NSNumberFormatterScientificStyle];
+		NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+		[formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        [formatter setMinimumIntegerDigits:1];
+        [formatter setMaximumIntegerDigits:309];
+        [formatter setMinimumFractionDigits:1];
+        [formatter setMaximumFractionDigits:309];
+        [formatter setUsesSignificantDigits:NO];
+        [formatter setGeneratesDecimalNumbers:YES];
+        doubleFormatter = formatter;
 		
 	});
-	return scientificFormatter;
+	return doubleFormatter;
 }
 
 + (void)logStringFromIdValue:(NSValue *)wrappedValue
@@ -100,11 +108,12 @@
     {
         NSString *valueTypeName;
         NSString *valueValueString;
-        [self logStringFromValue:idValue
-                        objCType:[(NSValue *)idValue objCType]
-                     indentLevel:indentLevel
-                        typeName:&valueTypeName
-                     valueString:&valueValueString];
+        [self
+         logStringFromValue:idValue
+         objCType:[(NSValue *)idValue objCType]
+         indentLevel:indentLevel
+         typeName:&valueTypeName
+         valueString:&valueValueString];
         
         (*valueString) = [NSString stringWithFormat:@"<%p> (%@) %@", idValue, valueTypeName, valueValueString];
     }
@@ -118,12 +127,10 @@
             void (*invoke)(void *, ...);
             struct _JEBlockDescriptor
             {
-                unsigned long int reserved;     // NULL
-                unsigned long int size;         // sizeof(struct _JEBlockLiteral)
-                // optional helper functions
+                unsigned long int reserved;
+                unsigned long int size;
                 const void (*copyHelper)(void *dst, void *src); // IFF (1<<25)
                 const void (*disposeHelper)(void *src);         // IFF (1<<25)
-                // required ABI.2010.3.16
                 const char *signature;                          // IFF (1<<30)
             } *descriptor;
         };
@@ -159,11 +166,12 @@
                 
                 NSString *argTypeName;
                 NSString *argDummyValueString;
-                [self logStringFromValue:nil
-                                objCType:[blockSignature methodReturnType]
-                             indentLevel:0
-                                typeName:&argTypeName
-                             valueString:&argDummyValueString];
+                [self
+                 logStringFromValue:nil
+                 objCType:[blockSignature methodReturnType]
+                 indentLevel:0
+                 typeName:&argTypeName
+                 valueString:&argDummyValueString];
                 [blockSignatureString appendFormat:@" %@(^)", argTypeName];
                 
             }
@@ -182,11 +190,12 @@
                         
                         NSString *argTypeName;
                         NSString *argDummyValueString;
-                        [self logStringFromValue:nil
-                                        objCType:[blockSignature getArgumentTypeAtIndex:i]
-                                     indentLevel:indentLevel
-                                        typeName:&argTypeName
-                                     valueString:&argDummyValueString];
+                        [self
+                         logStringFromValue:nil
+                         objCType:[blockSignature getArgumentTypeAtIndex:i]
+                         indentLevel:indentLevel
+                         typeName:&argTypeName
+                         valueString:&argDummyValueString];
                         [argTypeNames addObject:argTypeName];
                         
                     }
@@ -330,7 +339,7 @@
     float floatValue = 0.0f;
     [wrappedValue getValue:&floatValue];
     (*typeName) = @"float";
-    (*valueString) = [[self scientificFormatter] stringFromNumber:[[NSDecimalNumber alloc] initWithFloat:floatValue]];
+    (*valueString) = [[self doubleFormatter] stringFromNumber:[[NSDecimalNumber alloc] initWithFloat:floatValue]];
 }
 
 + (void)logStringFromDoubleValue:(NSValue *)wrappedValue
@@ -340,7 +349,7 @@
     double doubleValue = 0.0;
     [wrappedValue getValue:&doubleValue];
     (*typeName) = @"double";
-    (*valueString) = [[self scientificFormatter] stringFromNumber:[[NSDecimalNumber alloc] initWithDouble:doubleValue]];
+    (*valueString) = [[self doubleFormatter] stringFromNumber:[[NSDecimalNumber alloc] initWithDouble:doubleValue]];
 }
 
 + (void)logStringFromBitFieldValue:(NSValue *)wrappedValue
