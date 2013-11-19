@@ -10,6 +10,7 @@
 
 @interface JEOrderedDictionary : NSMutableDictionary
 
+
 - (id)firstObject;
 - (id)lastObject;
 

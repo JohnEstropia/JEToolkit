@@ -177,26 +177,24 @@
 
 - (void)enumerateIndexesAndKeysAndObjectsUsingBlock:(void (^)(NSUInteger idx, id key, id obj, BOOL *stop))block
 {
-    NSDictionary *dictionary = self.dictionary;
-    [self.orderedKeys
-     enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-         
-         block(idx, obj, [dictionary objectForKey:obj], stop);
-         
-     }];
+    NSUInteger __block idx = 0;
+    [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        
+        block(idx, obj, obj, stop);
+        ++idx;
+        
+    }];
 }
 
 - (void)enumerateIndexesAndKeysAndObjectsWithOptions:(NSEnumerationOptions)opts
                                           usingBlock:(void (^)(NSUInteger idx, id key, id obj, BOOL *stop))block
 {
-    NSDictionary *dictionary = self.dictionary;
-    [self.orderedKeys
-     enumerateObjectsWithOptions:opts
-     usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-         
-         block(idx, obj, [dictionary objectForKey:obj], stop);
-         
-     }];
+    NSOrderedSet *orderedKeys = self.orderedKeys;
+    [self enumerateKeysAndObjectsWithOptions:opts usingBlock:^(id key, id obj, BOOL *stop) {
+        
+        block([orderedKeys indexOfObject:key], obj, obj, stop);
+        
+    }];
 }
 
 - (void)enumerateIndexesAndKeysAndObjectsAtIndexes:(NSIndexSet *)s
