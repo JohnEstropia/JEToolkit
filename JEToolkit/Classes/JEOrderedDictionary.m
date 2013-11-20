@@ -165,6 +165,16 @@
     return [self.dictionary objectForKey:[self.orderedKeys objectAtIndex:idx]];
 }
 
+- (id)firstKey
+{
+    return [self.orderedKeys firstObject];
+}
+
+- (id)lastKey
+{
+    return [self.orderedKeys lastObject];
+}
+
 - (id)keyAtIndex:(NSUInteger)idx
 {
     return [self.orderedKeys objectAtIndex:idx];
@@ -177,37 +187,32 @@
 
 - (void)enumerateIndexesAndKeysAndObjectsUsingBlock:(void (^)(NSUInteger idx, id key, id obj, BOOL *stop))block
 {
-    NSUInteger __block idx = 0;
-    [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        
-        block(idx, obj, obj, stop);
-        ++idx;
-        
-    }];
+    [self
+     enumerateIndexesAndKeysAndObjectsWithOptions:kNilOptions
+     usingBlock:block];
 }
 
 - (void)enumerateIndexesAndKeysAndObjectsWithOptions:(NSEnumerationOptions)opts
                                           usingBlock:(void (^)(NSUInteger idx, id key, id obj, BOOL *stop))block
 {
-    NSOrderedSet *orderedKeys = self.orderedKeys;
-    [self enumerateKeysAndObjectsWithOptions:opts usingBlock:^(id key, id obj, BOOL *stop) {
-        
-        block([orderedKeys indexOfObject:key], obj, obj, stop);
-        
-    }];
+    [self
+     enumerateIndexesAndKeysAndObjectsAtIndexes:[[NSIndexSet alloc] initWithIndexesInRange:
+                                                 (NSRange){ .location = 0, .length = [self count]}]
+     options:opts
+     usingBlock:block];
 }
 
-- (void)enumerateIndexesAndKeysAndObjectsAtIndexes:(NSIndexSet *)s
+- (void)enumerateIndexesAndKeysAndObjectsAtIndexes:(NSIndexSet *)indexes
                                            options:(NSEnumerationOptions)opts
                                         usingBlock:(void (^)(NSUInteger idx, id key, id obj, BOOL *stop))block
 {
     NSDictionary *dictionary = self.dictionary;
     [self.orderedKeys
-     enumerateObjectsAtIndexes:s
+     enumerateObjectsAtIndexes:indexes
      options:opts
-     usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+     usingBlock:^(id key, NSUInteger idx, BOOL *stop) {
          
-         block(idx, obj, [dictionary objectForKey:obj], stop);
+         block(idx, key, [dictionary objectForKey:key], stop);
          
      }];
 }

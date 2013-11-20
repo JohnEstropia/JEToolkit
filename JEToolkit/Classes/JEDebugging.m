@@ -847,6 +847,19 @@
     }
 }
 
++ (void)dispatchToConsoleQueue:(void(^)(void))block
+{
+    static dispatch_queue_t consoleBarrierQueue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        consoleBarrierQueue = dispatch_queue_create("JEDebugging.consoleBarrierQueue", DISPATCH_QUEUE_CONCURRENT);
+        
+    });
+    
+    dispatch_barrier_async(consoleBarrierQueue, block);
+}
+
 
 #pragma mark - public
 
@@ -861,23 +874,32 @@
         NSString *typeName;
         NSString *valueString;
         
-        [self logStringFromValue:wrappedValue
-                        objCType:[wrappedValue objCType]
-                     indentLevel:0
-                        typeName:&typeName
-                     valueString:&valueString];
+        [self
+         logStringFromValue:wrappedValue
+         objCType:[wrappedValue objCType]
+         indentLevel:0
+         typeName:&typeName
+         valueString:&valueString];
         
-        printf("[%s](%s:%ld) %s\n→\t\"%s\"\n=\t(%s) %s\n\n",
+        NSString *consoleString = [[NSString alloc] initWithFormat:
+                                   @"[%s](%s:%ld) %s\n→\t\"%s\"\n=\t(%@) %@\n",
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-               dispatch_queue_get_label(dispatch_get_current_queue()),
+                                   dispatch_queue_get_label(dispatch_get_current_queue()),
 #pragma clang diagnostic pop
-               ((strrchr(sourceFile, '/') ?: sourceFile - 1) + 1),
-               (long)lineNumber,
-               functionName,
-               label,
-               [typeName UTF8String],
-               [valueString UTF8String]);
+                                   ((strrchr(sourceFile, '/') ?: sourceFile - 1) + 1),
+                                   (long)lineNumber,
+                                   functionName,
+                                   label,
+                                   typeName,
+                                   valueString];
+        
+        [self dispatchToConsoleQueue:^{
+            
+            puts([consoleString UTF8String]);
+            
+        }];
+        
     }
 }
 
@@ -888,18 +910,25 @@
 {
     va_list arguments;
     va_start(arguments, lineNumber);
+    NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arguments];
+	va_end(arguments);
     
-    printf("[%s](%s:%ld) %s\n→\t\%s\n",
+    NSString *consoleString = [[NSString alloc] initWithFormat:
+                               @"[%s](%s:%ld) %s\n→\t\%@\n",
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-           dispatch_queue_get_label(dispatch_get_current_queue()),
+                               dispatch_queue_get_label(dispatch_get_current_queue()),
 #pragma clang diagnostic pop
-           ((strrchr(sourceFile, '/') ?: sourceFile - 1) + 1),
-           (long)lineNumber,
-           functionName,
-           [[[NSString alloc] initWithFormat:format arguments:arguments] UTF8String]);
+                               ((strrchr(sourceFile, '/') ?: sourceFile - 1) + 1),
+                               (long)lineNumber,
+                               functionName,
+                               formattedString];
     
-	va_end(arguments);
+    [self dispatchToConsoleQueue:^{
+        
+        puts([consoleString UTF8String]);
+        
+    }];
 }
 
 @end

@@ -60,7 +60,7 @@
      sourceFile:__FILE__ \
      functionName:__PRETTY_FUNCTION__ \
      lineNumber:__LINE__, \
-     __VA_ARGS__]
+      ##__VA_ARGS__]
 
 #else
 

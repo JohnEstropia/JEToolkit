@@ -135,7 +135,7 @@
 
 JESynthesizeObject(id, synthesizedId, setSynthesizedId, JESynthesizeRetainNonatomic);
 JESynthesizeObject(void(^)(void), synthesizedBlock, setSynthesizedBlock, JESynthesizeCopyNonatomic);
-JESynthesizeObject(id, synthesizedWeak, setSynthesizedWeak, JESynthesizeAssign);
+JESynthesizeObject(id, synthesizedAssign, setSynthesizedAssign, JESynthesizeAssign);
 JESynthesizeScalar(CGRect, synthesizedRect, setSynthesizedRect);
 
 - (void)testSynthesized
@@ -148,9 +148,9 @@ JESynthesizeScalar(CGRect, synthesizedRect, setSynthesizedRect);
     self.synthesizedBlock = ^{ };
     JEDump(self.synthesizedBlock);
     
-    JEDump(self.synthesizedWeak);
-    self.synthesizedWeak = self;
-    JEDump(self.synthesizedWeak);
+    JEDump(self.synthesizedAssign);
+    self.synthesizedAssign = self;
+    JEDump(self.synthesizedAssign);
     
     JEDump(self.synthesizedRect);
     self.synthesizedRect = (CGRect){ {1, 2}, {3, 4} };

@@ -57,5 +57,10 @@ NSString *L8N(NSString *keyString, NSString *stringsFile)
 }
 
 
+#pragma mark - Convenience
+
+#define IsEnumBitSet(enumVar, enumBit) ( (enumVar & enumBit) == enumBit )
+
+
 
 #endif
