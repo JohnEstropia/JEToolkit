@@ -82,7 +82,7 @@
     JEDump([NSValue valueWithBytes:&selector objCType:@encode(typeof(selector))]);
     
     JEDump([UIView new]);
-    UIView *view = nil;
+    UIView * view = nil;
     JEDump(view);
     JEDump(&view);
     JEDump([NSValue valueWithBytes:&view objCType:@encode(typeof(view))]);
@@ -131,6 +131,9 @@
     JEDump([NSValue valueWithBytes:&block objCType:@encode(typeof(block))]);
     dispatch_block_t voidBlock = ^{ };
     JEDump(voidBlock);
+    
+    JELog(@"No Parameters");
+    JELog(@"Many Parameters: %@, %d, %f", @"yo", 10, 20.4f);
 }
 
 JESynthesizeObject(id, synthesizedId, setSynthesizedId, JESynthesizeRetainNonatomic);
