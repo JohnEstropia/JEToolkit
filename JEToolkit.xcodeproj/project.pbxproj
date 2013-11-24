@@ -82,6 +82,8 @@
 		2F36590D17F0A62300794CC0 /* JEToolkit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JEToolkit.podspec; sourceTree = SOURCE_ROOT; };
 		2F39821718122ACB007A843F /* JEOrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEOrderedDictionary.h; sourceTree = "<group>"; };
 		2F39821818122ACB007A843F /* JEOrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEOrderedDictionary.m; sourceTree = "<group>"; };
+		2F5566F2184104F000098714 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		2F5566F4184104F800098714 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2F6D774E17E0CFEA00D3735D /* NSDateFormatter+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+JEToolkit.h"; sourceTree = "<group>"; };
 		2F6D774F17E0CFEA00D3735D /* NSDateFormatter+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+JEToolkit.m"; sourceTree = "<group>"; };
 		2F8FC86017B65DB500C3C0F3 /* libJEToolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJEToolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,6 +172,8 @@
 		2F8FC86217B65DB500C3C0F3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2F5566F4184104F800098714 /* MapKit.framework */,
+				2F5566F2184104F000098714 /* CoreLocation.framework */,
 				2F1DCF8517FF1D4D00AFD8C7 /* MobileCoreServices.framework */,
 				2F8FC88F17B660C300C3C0F3 /* UIKit.framework */,
 				2F8FC86317B65DB500C3C0F3 /* Foundation.framework */,
@@ -481,6 +485,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;

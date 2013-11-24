@@ -11,6 +11,15 @@
 #import "JECompilerDefines.h"
 
 
+typedef struct {
+    const char *sourceFile;
+    const char *functionName;
+    int lineNumber;
+} JELogHeader;
+
+#define JE_LOG_HEADER  ((JELogHeader){__FILE__, __PRETTY_FUNCTION__, __LINE__})
+
+
 #if DEBUG
 
 /*! Dumps any variable, expression, etc. other than static arrays to the console. Also displays the source filename, line number, and method name. For static arrays use JEDumpArray() instead.
@@ -23,13 +32,11 @@
         _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
         const typeof(nonArrayExpression) _objectClone = nonArrayExpression; \
         [JEDebugging \
-         logValue:[[NSValue alloc] \
-                   initWithBytes:&_objectClone \
-                   objCType:@encode(typeof(nonArrayExpression))] \
-         sourceFile:__FILE__ \
-         functionName:__PRETTY_FUNCTION__ \
-         lineNumber:__LINE__ \
-         label:#nonArrayExpression]; \
+         dumpValue:[[NSValue alloc] \
+                    initWithBytes:&_objectClone \
+                    objCType:@encode(typeof(nonArrayExpression))] \
+         label:#nonArrayExpression \
+         header:JE_LOG_HEADER]; \
         _Pragma("clang diagnostic pop") \
     } while(0)
 
@@ -38,17 +45,15 @@
 #define JEDumpArray(arrayExpression...) \
     do \
     { \
+        [JEDebugging \
         _Pragma("clang diagnostic push") \
         _Pragma("clang diagnostic ignored \"-Wmissing-braces\"") \
         _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
-        [JEDebugging \
-         logValue:[[NSValue alloc] \
-                   initWithBytes:&arrayExpression[0] \
-                   objCType:@encode(typeof(arrayExpression))] \
-         sourceFile:__FILE__ \
-         functionName:__PRETTY_FUNCTION__ \
-         lineNumber:__LINE__ \
-         label:#arrayExpression]; \
+         dumpValue:[[NSValue alloc] \
+                    initWithBytes:&arrayExpression[0] \
+                    objCType:@encode(typeof(arrayExpression))] \
+         label:#arrayExpression \
+         header:JE_LOG_HEADER]; \
         _Pragma("clang diagnostic pop") \
     } while(0)
 
@@ -56,10 +61,8 @@
  */
 #define JELog(format, ...) \
     [JEDebugging \
-     logFormat:format \
-     sourceFile:__FILE__ \
-     functionName:__PRETTY_FUNCTION__ \
-     lineNumber:__LINE__, \
+      logFormat:format \
+      header:JE_LOG_HEADER, \
       ##__VA_ARGS__]
 
 #else
@@ -71,17 +74,31 @@
 #endif
 
 
+typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
+{
+    JEConsoleLogHeaderMaskNone      = 0,
+    JEConsoleLogHeaderMaskDate      = (1 << 1),
+    JEConsoleLogHeaderMaskQueue     = (1 << 2),
+    JEConsoleLogHeaderMaskFile      = (1 << 3),
+    JEConsoleLogHeaderMaskFunction  = (1 << 4),
+    
+    JEConsoleLogHeaderMaskAll       = -1
+};
+
+
 @interface JEDebugging : NSObject
 
-+ (void)logValue:(NSValue *)wrappedValue
-      sourceFile:(const char *)sourceFile
-    functionName:(const char *)functionName
-      lineNumber:(NSInteger)lineNumber
-           label:(const char *)label;
++ (JEConsoleLogHeaderMask)consoleLogHeaderMask; // default:(JEConsoleLogHeaderMaskQueue | JEConsoleLogHeaderMaskFile | JEConsoleLogHeaderMaskFunction)
++ (void)setConsoleLogHeaderMask:(JEConsoleLogHeaderMask)mask;
+
++ (JEConsoleLogHeaderMask)HUDLogHeaderMask; // default:(JEConsoleLogHeaderMaskQueue | JEConsoleLogHeaderMaskFile | JEConsoleLogHeaderMaskFunction)
++ (void)setHUDLogHeaderMask:(JEConsoleLogHeaderMask)mask;
+
++ (void)dumpValue:(NSValue *)wrappedValue
+            label:(const char *)label
+           header:(JELogHeader)header;
 
 + (void)logFormat:(NSString *)format
-       sourceFile:(const char *)sourceFile
-     functionName:(const char *)functionName
-       lineNumber:(NSInteger)lineNumber, ... JE_FORMAT_STRING(1,5);
+           header:(JELogHeader)header, ... JE_FORMAT_STRING(1,3);
 
 @end

@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>98CF198D-7FA1-4BCB-B80F-00410BB239A8</string>
+	<string>AF5FC1E4-7F29-43CE-9BED-678954BEEDB1</string>
 	<key>IDESourceControlProjectName</key>
 	<string>JEToolkit</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>C9FC9AEA-83C8-4E63-9E8D-A38524C961EE</key>
-		<string>https://bitbucket.org/erurainon/jretoolkit.git</string>
+		<key>5E5281E0-FCA6-4262-8F57-4A98B5B020DC</key>
+		<string>ssh://github.com/JohnEstropia/JEToolkit.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>JEToolkit.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>C9FC9AEA-83C8-4E63-9E8D-A38524C961EE</key>
+		<key>5E5281E0-FCA6-4262-8F57-4A98B5B020DC</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://bitbucket.org/erurainon/jretoolkit.git</string>
+	<string>ssh://github.com/JohnEstropia/JEToolkit.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>C9FC9AEA-83C8-4E63-9E8D-A38524C961EE</string>
+	<string>5E5281E0-FCA6-4262-8F57-4A98B5B020DC</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>C9FC9AEA-83C8-4E63-9E8D-A38524C961EE</string>
+			<string>5E5281E0-FCA6-4262-8F57-4A98B5B020DC</string>
 			<key>IDESourceControlWCCName</key>
-			<string>JREToolkit</string>
+			<string>JEToolkit</string>
 		</dict>
 	</array>
 </dict>
