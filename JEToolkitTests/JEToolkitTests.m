@@ -84,6 +84,7 @@
     
     
     JEDump([UIView new]);
+    JEDump(@"日本語😈");
     UIView * view = nil;
     JEDump(view);
     JEDump(&view);
@@ -110,13 +111,57 @@
     JEDump([NSValue valueWithBytes:&class objCType:@encode(typeof(class))]);
     
     NSError *error = nil;
-    [[NSFileManager defaultManager] moveItemAtPath:@"testdir" toPath:@"testdir" error:&error];
+    JEDump([[NSFileManager defaultManager]
+            moveItemAtPath:@"testdir"
+            toPath:@"testdir"
+            error:&error]);
     JEDump(error);
+    JEDump([error userInfo]);
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    dictionary[@12] = @"cccc";
+    dictionary[@34] = @"gggg";
+    dictionary[@56] = @"iiii";
+    dictionary[@"j"] = @"jjjj";
+    dictionary[@"three"] = @{ @"threeone" : @31, @"threetwo" : @"three-two" };
+    dictionary[@"e"] = @"eeee";
+    dictionary[@"a"] = @1;
+    dictionary[@"f"] = @"ffff";
+    dictionary[@{ @"oneone" : @11 }] = @{ @"oneone" : @11 };
+    dictionary[@"d"] = @"dddd";
+    dictionary[@"b"] = @"bbbb";
+    dictionary[@"h"] = @"hhhh";
+    JEDump(dictionary);
+    
+    JEDump([dictionary allKeys]);
+    JEDump([NSOrderedSet orderedSetWithArray:[dictionary allKeys]]);
+    JEDump([NSSet setWithArray:[dictionary allValues]]);
+    
+    
+    NSMapTable *mapTable = [NSMapTable strongToWeakObjectsMapTable];
+    NSHashTable *hashTable = [NSHashTable weakObjectsHashTable];
+    NSPointerArray *pointerArray = [NSPointerArray weakObjectsPointerArray];
+    [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        
+        [mapTable setObject:obj forKey:key];
+        [hashTable addObject:key];
+        [pointerArray addPointer:(__bridge void *)(obj)];
+        
+    }];
+    JEDump(mapTable);
+    JEDump(hashTable);
+    JEDump(pointerArray);
     
     JEDump(CGRectZero);
     
-    JEDump((CGPoint){1.999, 2.999});
-    JEDump((CGSize){1.999, 2.999});
+    JEDump((CGPoint){
+        1.999,
+        2.999
+    });
+    JEDump((CGSize){
+        1.999,
+        2.999
+    });
     JEDump((CGRect){{1.999, 2.999}, {3.999, 4.999}});
     JEDump((CGAffineTransform){1.999, 2.999, 3.999, 4.999, 5.999, 6.999});
     JEDump((UIEdgeInsets){1.999, 2.999, 3.999, 4.999});
@@ -235,9 +280,22 @@
     JEDump(1234567899123456789912.123456789912l);
     JEDump(12345678991234567899123.1234567899123l);
     
-    
     JELog(@"No Parameters");
     JELog(@"Many Parameters: %@, %d, %f", @"yo", 10, 20.4f);
+    
+    dispatch_queue_t queue = dispatch_queue_create("TestQueue", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_barrier_sync(queue, ^{
+        
+        JELog(@"Named queue");
+        
+    });
+    
+    queue = dispatch_queue_create(NULL, DISPATCH_QUEUE_CONCURRENT);
+    dispatch_barrier_sync(queue, ^{
+        
+        JELog(@"Unnamed queue");
+        
+    });
 }
 
 JESynthesizeObject(id, synthesizedId, setSynthesizedId, JESynthesizeRetainNonatomic);

@@ -56,6 +56,11 @@
 	return characters;
 }
 
+- (NSRange)range
+{
+    return (NSRange){ .location = 0, .length = [self length] };
+}
+
 #pragma mark Validation
 
 + (BOOL)isNilOrEmptyString:(id)valueOrNil

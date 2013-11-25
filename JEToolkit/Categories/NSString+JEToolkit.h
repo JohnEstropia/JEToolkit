@@ -42,6 +42,10 @@
  */
 - (NSArray *)charactersArray;
 
+/*! Gets the range of the receiver
+ */
+- (NSRange)range;
+
 
 #pragma mark - Validation
 

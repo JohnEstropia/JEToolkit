@@ -11,12 +11,15 @@
 #import <objc/runtime.h>
 
 #import "JESafetyHelpers.h"
+#import "NSString+JEToolkit.h"
 #import "NSCalendar+JEToolkit.h"
 
 
 @interface NSObject (_JEDebugging)
 
-- (NSString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel;
+- (NSMutableString *)_JE_escapedDescription;
+- (NSMutableString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+                                   includeAddress:(BOOL)includeAddress;
 
 @end
 
@@ -25,6 +28,8 @@
 
 @property (nonatomic, assign) JEConsoleLogHeaderMask consoleLogHeaderMask;
 @property (nonatomic, assign) JEConsoleLogHeaderMask HUDLogHeaderMask;
+@property (nonatomic, copy) NSString *logBulletString;
+@property (nonatomic, copy) NSString *dumpBulletString;
 
 @end
 
@@ -41,12 +46,11 @@
         return nil;
     }
     
-    _consoleLogHeaderMask = (JEConsoleLogHeaderMaskQueue
-                             | JEConsoleLogHeaderMaskFile
-                             | JEConsoleLogHeaderMaskFunction);
-    _HUDLogHeaderMask = (JEConsoleLogHeaderMaskQueue
-                         | JEConsoleLogHeaderMaskFile
-                         | JEConsoleLogHeaderMaskFunction);
+    _consoleLogHeaderMask = JEConsoleLogHeaderMaskDefault;
+    _HUDLogHeaderMask = JEConsoleLogHeaderMaskDefault;
+    _logBulletString = nil;
+    _dumpBulletString = nil;
+    
     
     return self;
 }
@@ -123,6 +127,16 @@
     return settingsQueue;
 }
 
++ (NSString *)defaultLogBulletString
+{
+    return @"🔹";
+}
+
++ (NSString *)defaultDumpBulletString
+{
+    return @"🔸";
+}
+
 #pragma mark Utilities
 
 + (const char *)objCTypeByIgnoringModifiers:(const char *)objCType
@@ -147,24 +161,24 @@
     return objCType;
 }
 
-+ (NSString *)indentStringWithLevel:(NSUInteger)indentLevel
++ (NSString *)indentationWithLevel:(NSUInteger)indentLevel
 {
     return [[NSString string]
-            stringByPaddingToLength:(indentLevel + 2)
-            withString:@"\t"
+            stringByPaddingToLength:(indentLevel + 2) * 2
+            withString:@" "
             startingAtIndex:0];
 }
 
-+ (NSString *)indentString:(NSString *)string withLevel:(NSUInteger)indentLevel
++ (void)indentString:(NSMutableString *)string withLevel:(NSUInteger)indentLevel
 {
-    return [string
-            stringByReplacingOccurrencesOfString:@"\n"
-            withString:[@"\n"
-                        stringByPaddingToLength:(indentLevel + 3)
-                        withString:@"\t"
-                        startingAtIndex:0]
-            options:(NSCaseInsensitiveSearch | NSLiteralSearch)
-            range:(NSRange){ .location = 0, .length = [string length] }];
+    [string
+     replaceOccurrencesOfString:@"\n"
+     withString:[@"\n"
+                 stringByPaddingToLength:(indentLevel + 2) * 2
+                 withString:@" "
+                 startingAtIndex:0]
+     options:(NSCaseInsensitiveSearch | NSLiteralSearch)
+     range:[string range]];
 }
 
 #pragma mark JEDump handlers
@@ -172,14 +186,20 @@
 + (void)inspectIdValue:(NSValue *)wrappedValue
               objCType:(const char *)objCType
            indentLevel:(NSUInteger)indentLevel
-              typeName:(NSString *__autoreleasing *)typeName
+              typeName:(NSMutableString *)typeName
            valueString:(NSString *__autoreleasing *)valueString
 {
     id __unsafe_unretained idValue = nil;
     [wrappedValue getValue:&idValue];
-    (*typeName) = (idValue
-                   ? [NSString stringWithFormat:@"%@ *", [idValue class]]
-                   : @"id");
+    
+    if (idValue)
+    {
+        [typeName appendFormat:@"%@ *", [idValue class]];
+    }
+    else
+    {
+        [typeName appendString:@"id"];
+    }
     
     if (!valueString)
     {
@@ -237,14 +257,14 @@
             
             @autoreleasepool {
                 
-                NSString *argTypeName;
+                [blockSignatureString appendString:@" "];
                 [self
                  inspectValue:nil
                  objCType:[blockSignature methodReturnType]
                  indentLevel:0
-                 typeName:&argTypeName
+                 typeName:blockSignatureString
                  valueString:NULL];
-                [blockSignatureString appendFormat:@" %@(^)", argTypeName];
+                [blockSignatureString appendString:@"(^)"];
                 
             }
             
@@ -255,24 +275,27 @@
             }
             else
             {
-                NSMutableArray *argTypeNames = [[NSMutableArray alloc] initWithCapacity:(argCount - 1)];
+                [blockSignatureString appendString:@"("];
+                
                 for (NSUInteger i = 1; i < argCount; ++i)
                 {
                     @autoreleasepool {
                         
-                        NSString *argTypeName;
-                        NSString *argDummyValueString;
+                        if (i > 1)
+                        {
+                            [blockSignatureString appendString:@","];
+                        }
+                    
                         [self
                          inspectValue:nil
                          objCType:[blockSignature getArgumentTypeAtIndex:i]
                          indentLevel:indentLevel
-                         typeName:&argTypeName
-                         valueString:&argDummyValueString];
-                        [argTypeNames addObject:argTypeName];
+                         typeName:blockSignatureString
+                         valueString:NULL];
                         
                     }
                 }
-                [blockSignatureString appendFormat:@"(%@)", [argTypeNames componentsJoinedByString:@", "]];
+                [blockSignatureString appendString:@")"];
             }
         }
         
@@ -280,15 +303,15 @@
     }
     else
     {
-        (*valueString) = [idValue _JE_logStringWithIndentLevel:indentLevel];
+        (*valueString) = [idValue _JE_logStringWithIndentLevel:indentLevel includeAddress:YES];
     }
 }
 
 + (void)inspectClassValue:(NSValue *)wrappedValue
-                 typeName:(NSString *__autoreleasing *)typeName
+                 typeName:(NSMutableString *)typeName
               valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"Class";
+    [typeName appendString:@"Class"];
     
     if (!valueString)
     {
@@ -301,10 +324,10 @@
 }
 
 + (void)inspectSelectorValue:(NSValue *)wrappedValue
-                    typeName:(NSString *__autoreleasing *)typeName
+                    typeName:(NSMutableString *)typeName
                  valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"SEL";
+    [typeName appendString:@"SEL"];
     
     if (!valueString)
     {
@@ -317,10 +340,10 @@
 }
 
 + (void)inspectCharValue:(NSValue *)wrappedValue
-                typeName:(NSString *__autoreleasing *)typeName
+                typeName:(NSMutableString *)typeName
              valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"char";
+    [typeName appendString:@"char"];
     
     if (!valueString)
     {
@@ -333,10 +356,10 @@
 }
 
 + (void)inspectUnsignedCharValue:(NSValue *)wrappedValue
-                        typeName:(NSString *__autoreleasing *)typeName
+                        typeName:(NSMutableString *)typeName
                      valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"unsigned char";
+    [typeName appendString:@"unsigned char"];
     
     if (!valueString)
     {
@@ -349,10 +372,10 @@
 }
 
 + (void)inspectShortValue:(NSValue *)wrappedValue
-                 typeName:(NSString *__autoreleasing *)typeName
+                 typeName:(NSMutableString *)typeName
               valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"short";
+    [typeName appendString:@"short"];
     
     if (!valueString)
     {
@@ -365,10 +388,10 @@
 }
 
 + (void)inspectUnsignedShortValue:(NSValue *)wrappedValue
-                         typeName:(NSString *__autoreleasing *)typeName
+                         typeName:(NSMutableString *)typeName
                       valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"unsigned short";
+    [typeName appendString:@"unsigned short"];
     
     if (!valueString)
     {
@@ -381,10 +404,10 @@
 }
 
 + (void)inspectIntValue:(NSValue *)wrappedValue
-               typeName:(NSString *__autoreleasing *)typeName
+               typeName:(NSMutableString *)typeName
             valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"int";
+    [typeName appendString:@"int"];
     
     if (!valueString)
     {
@@ -397,10 +420,10 @@
 }
 
 + (void)inspectUnsignedIntValue:(NSValue *)wrappedValue
-                       typeName:(NSString *__autoreleasing *)typeName
+                       typeName:(NSMutableString *)typeName
                     valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"unsigned int";
+    [typeName appendString:@"unsigned int"];
     
     if (!valueString)
     {
@@ -413,10 +436,10 @@
 }
 
 + (void)inspectLongValue:(NSValue *)wrappedValue
-                typeName:(NSString *__autoreleasing *)typeName
+                typeName:(NSMutableString *)typeName
              valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"long";
+    [typeName appendString:@"long"];
     
     if (!valueString)
     {
@@ -429,10 +452,10 @@
 }
 
 + (void)inspectUnsignedLongValue:(NSValue *)wrappedValue
-                        typeName:(NSString *__autoreleasing *)typeName
+                        typeName:(NSMutableString *)typeName
                      valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"unsigned long";
+    [typeName appendString:@"unsigned long"];
     
     if (!valueString)
     {
@@ -445,10 +468,10 @@
 }
 
 + (void)inspectLongLongValue:(NSValue *)wrappedValue
-                    typeName:(NSString *__autoreleasing *)typeName
+                    typeName:(NSMutableString *)typeName
                  valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"long long";
+    [typeName appendString:@"long long"];
     
     if (!valueString)
     {
@@ -461,10 +484,10 @@
 }
 
 + (void)inspectUnsignedLongLongValue:(NSValue *)wrappedValue
-                            typeName:(NSString *__autoreleasing *)typeName
+                            typeName:(NSMutableString *)typeName
                          valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"unsigned long long";
+    [typeName appendString:@"unsigned long long"];
     
     if (!valueString)
     {
@@ -477,10 +500,10 @@
 }
 
 + (void)inspectFloatValue:(NSValue *)wrappedValue
-                 typeName:(NSString *__autoreleasing *)typeName
+                 typeName:(NSMutableString *)typeName
               valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"float";
+    [typeName appendString:@"float"];
     
     if (!valueString)
     {
@@ -498,10 +521,10 @@
 }
 
 + (void)inspectDoubleValue:(NSValue *)wrappedValue
-                  typeName:(NSString *__autoreleasing *)typeName
+                  typeName:(NSMutableString *)typeName
                valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"double";
+    [typeName appendString:@"double"];
     
     if (!valueString)
     {
@@ -519,10 +542,10 @@
 }
 
 + (void)inspectLongDoubleValue:(NSValue *)wrappedValue
-                  typeName:(NSString *__autoreleasing *)typeName
+                  typeName:(NSMutableString *)typeName
                valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"long double";
+    [typeName appendString:@"long double"];
     
     if (!valueString)
     {
@@ -541,7 +564,7 @@
 
 + (void)inspectBitFieldValue:(NSValue *)wrappedValue
                     objCType:(const char *)objCType
-                    typeName:(NSString *__autoreleasing *)typeName
+                    typeName:(NSMutableString *)typeName
                  valueString:(NSString *__autoreleasing *)valueString
 {
     NSScanner *scanner = [[NSScanner alloc] initWithString:[[NSString alloc] initWithUTF8String:(objCType + 1)]];
@@ -549,7 +572,7 @@
     unsigned long long bitCount = 0;
     [scanner scanUnsignedLongLong:&bitCount];
     
-    (*typeName) = [NSString stringWithFormat:@"%llubit", bitCount];
+    [typeName appendFormat:@"%llubit", bitCount];
     
     if (!valueString)
     {
@@ -567,10 +590,10 @@
 }
 
 + (void)inspectBoolValue:(NSValue *)wrappedValue
-                typeName:(NSString *__autoreleasing *)typeName
+                typeName:(NSMutableString *)typeName
              valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"bool";
+    [typeName appendString:@"bool"];
     
     if (!valueString)
     {
@@ -583,10 +606,10 @@
 }
 
 + (void)inspectVoidValue:(NSValue *)wrappedValue
-                typeName:(NSString *__autoreleasing *)typeName
+                typeName:(NSMutableString *)typeName
              valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"void";
+    [typeName appendString:@"void"];
     
     if (!valueString)
     {
@@ -597,10 +620,10 @@
 }
 
 + (void)inspectUndefinedValue:(NSValue *)wrappedValue
-                     typeName:(NSString *__autoreleasing *)typeName
+                     typeName:(NSMutableString *)typeName
                   valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"?";
+    [typeName appendString:@"?"];
     
     if (!valueString)
     {
@@ -613,7 +636,7 @@
 + (void)inspectPointerValue:(NSValue *)wrappedValue
                    objCType:(const char *)objCType
                 indentLevel:(NSUInteger)indentLevel
-                   typeName:(NSString *__autoreleasing *)typeName
+                   typeName:(NSMutableString *)typeName
                 valueString:(NSString *__autoreleasing *)valueString
 {
     const void *pointerValue = NULL;
@@ -622,7 +645,7 @@
     objCType = [self objCTypeByIgnoringModifiers:(objCType + 1)];
     if (objCType[0] == _C_UNDEF)
     {
-        (*typeName) = @"func *";
+        [typeName appendString:@"func *"];
         
         if (!valueString)
         {
@@ -635,7 +658,6 @@
     }
     else
     {
-        NSString *referencedTypeName;
         NSString *referencedValueString;
         
         [self
@@ -644,13 +666,14 @@
                        : nil)
          objCType:objCType
          indentLevel:indentLevel
-         typeName:&referencedTypeName
+         typeName:typeName
          valueString:(valueString
                       ? &referencedValueString
                       : NULL)];
         
-        (*typeName) = [referencedTypeName stringByAppendingString:
-                       ([referencedTypeName hasSuffix:@"*"] ? @"*" : @" *")];
+        [typeName appendString:([typeName hasSuffix:@"*"]
+                                ? @"*"
+                                : @" *")];
         
         if (!valueString)
         {
@@ -664,10 +687,10 @@
 }
 
 + (void)inspectCStringValue:(NSValue *)wrappedValue
-                   typeName:(NSString *__autoreleasing *)typeName
+                   typeName:(NSMutableString *)typeName
                 valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"char *";
+    [typeName appendString:@"char *"];
     
     if (!valueString)
     {
@@ -682,10 +705,10 @@
 }
 
 + (void)inspectAtomValue:(NSValue *)wrappedValue
-                typeName:(NSString *__autoreleasing *)typeName
+                typeName:(NSMutableString *)typeName
              valueString:(NSString *__autoreleasing *)valueString
 {
-    (*typeName) = @"atom";
+    [typeName appendString:@"atom"];
     
     if (!valueString)
     {
@@ -698,7 +721,7 @@
 + (void)inspectArrayValue:(NSValue *)wrappedValue
                  objCType:(const char *)objCType
               indentLevel:(NSUInteger)indentLevel
-                 typeName:(NSString *__autoreleasing *)typeName
+                 typeName:(NSMutableString *)typeName
               valueString:(NSString *__autoreleasing *)valueString
 {
     NSString *substring = @((objCType + 1));
@@ -715,15 +738,14 @@
     
     const char *objCSubType = [subtype UTF8String];
     
-    NSString *itemTypeName;
     [self
      inspectValue:nil
      objCType:objCSubType
      indentLevel:(indentLevel + 1)
-     typeName:&itemTypeName
+     typeName:typeName
      valueString:NULL];
     
-    (*typeName) = [NSString stringWithFormat:@"%@[%llu]", itemTypeName, count];
+    [typeName appendFormat:@"[%llu]", count];
     
     if (!valueString)
     {
@@ -740,7 +762,7 @@
     [wrappedValue getValue:arrayValue];
     
     NSMutableString *arrayValueString = [[NSMutableString alloc] init];
-    NSString *indentString = [self indentStringWithLevel:indentLevel];
+    NSString *indentString = [self indentationWithLevel:indentLevel];
     for (unsigned long long i = 0; i < count; ++i)
     {
         if (i == 0)
@@ -755,16 +777,16 @@
         
         @autoreleasepool {
             
-            NSString *itemTypeName;
+            NSMutableString *itemTypeName = [[NSMutableString alloc] init];
             NSString *itemValueString;
             [self
              inspectValue:itemValue
              objCType:objCSubType
              indentLevel:(indentLevel + 1)
-             typeName:&itemTypeName
+             typeName:itemTypeName
              valueString:&itemValueString];
             
-            [arrayValueString appendFormat:@"\t[%llu]: (%@) %@,\n", i, itemTypeName, itemValueString];
+            [arrayValueString appendFormat:@"  [%llu]: (%@) %@,\n", i, itemTypeName, itemValueString];
             
         }
         
@@ -778,7 +800,7 @@
 + (void)inspectUnionValue:(NSValue *)wrappedValue
                  objCType:(const char *)objCType
               indentLevel:(NSUInteger)indentLevel
-                 typeName:(NSString *__autoreleasing *)typeName
+                 typeName:(NSMutableString *)typeName
               valueString:(NSString *__autoreleasing *)valueString
 {
     NSString *substring = @((objCType + 1));
@@ -790,7 +812,7 @@
     NSString *structName;
     [scanner scanUpToString:@"=" intoString:&structName];
     
-    (*typeName) = [NSString stringWithFormat:@"struct %@", structName];
+    [typeName appendFormat:@"union %@", structName];
     
     if (!valueString)
     {
@@ -816,7 +838,7 @@
 + (void)inspectStructValue:(NSValue *)wrappedValue
                   objCType:(const char *)objCType
                indentLevel:(NSUInteger)indentLevel
-                  typeName:(NSString *__autoreleasing *)typeName
+                  typeName:(NSMutableString *)typeName
                valueString:(NSString *__autoreleasing *)valueString
 {
     NSString *substring = @((objCType + 1));
@@ -828,7 +850,7 @@
     NSString *structName;
     [scanner scanUpToString:@"=" intoString:&structName];
     
-    (*typeName) = [NSString stringWithFormat:@"struct %@", structName];
+    [typeName appendFormat:@"struct %@", structName];
     
     if (!valueString)
     {
@@ -845,8 +867,8 @@
             CGPoint point = [structValue CGPointValue];
             return [NSString stringWithFormat:
                     @"{\n"
-                    "\tx: (float) %g,\n"
-                    "\ty: (float) %g\n"
+                    "  x: (float) %g,\n"
+                    "  y: (float) %g\n"
                     "}",
                     point.x,
                     point.y];
@@ -857,8 +879,8 @@
             CGSize size = [structValue CGSizeValue];
             return [NSString stringWithFormat:
                     @"{\n"
-                    "\twidth: (float) %g,\n"
-                    "\theight: (float) %g\n"
+                    "  width: (float) %g,\n"
+                    "  height: (float) %g\n"
                     "}",
                     size.width,
                     size.height];
@@ -869,10 +891,10 @@
             CGRect rect = [structValue CGRectValue];
             return [NSString stringWithFormat:
                     @"{\n"
-                    "\tx: (float) %g,\n"
-                    "\ty: (float) %g,\n"
-                    "\twidth: (float) %g,\n"
-                    "\theight: (float) %g\n"
+                    "  x: (float) %g,\n"
+                    "  y: (float) %g,\n"
+                    "  width: (float) %g,\n"
+                    "  height: (float) %g\n"
                     "}",
                     rect.origin.x,
                     rect.origin.y,
@@ -885,12 +907,12 @@
             CGAffineTransform affineTransform = [structValue CGAffineTransformValue];
             return [NSString stringWithFormat:
                     @"{\n"
-                    "\ta: (float) %g,\n"
-                    "\tb: (float) %g,\n"
-                    "\tc: (float) %g,\n"
-                    "\td: (float) %g,\n"
-                    "\ttx: (float) %g,\n"
-                    "\tty: (float) %g\n"
+                    "  a: (float) %g,\n"
+                    "  b: (float) %g,\n"
+                    "  c: (float) %g,\n"
+                    "  d: (float) %g,\n"
+                    "  tx: (float) %g,\n"
+                    "  ty: (float) %g\n"
                     "}",
                     affineTransform.a,
                     affineTransform.b,
@@ -905,10 +927,10 @@
             UIEdgeInsets edgeInsets = [structValue UIEdgeInsetsValue];
             return [NSString stringWithFormat:
                     @"{\n"
-                    "\ttop: (float) %g,\n"
-                    "\tleft: (float) %g,\n"
-                    "\tbottom: (float) %g,\n"
-                    "\tright: (float) %g\n"
+                    "  top: (float) %g,\n"
+                    "  left: (float) %g,\n"
+                    "  bottom: (float) %g,\n"
+                    "  right: (float) %g\n"
                     "}",
                     edgeInsets.top,
                     edgeInsets.left,
@@ -921,8 +943,8 @@
             UIOffset offset = [structValue UIOffsetValue];
             return [NSString stringWithFormat:
                     @"{\n"
-                    "\thorizontal: (float) %g,\n"
-                    "\tvertical: (float) %g\n"
+                    "  horizontal: (float) %g,\n"
+                    "  vertical: (float) %g\n"
                     "}",
                     offset.horizontal,
                     offset.vertical];
@@ -933,8 +955,8 @@
             NSRange range = [structValue rangeValue];
             return [NSString stringWithFormat:
                     @"{\n"
-                    "\tlocation: (unsigned int) %lu,\n"
-                    "\tlength: (unsigned int) %lu\n"
+                    "  location: (unsigned int) %lu,\n"
+                    "  length: (unsigned int) %lu\n"
                     "}",
                     (unsigned long)range.location,
                     (unsigned long)range.length];
@@ -948,7 +970,10 @@
     NSString *(^getStructString)(NSValue *structValue) = structHandlers[@(objCType)];
     if (getStructString)
     {
-        (*valueString) = [self indentString:getStructString(wrappedValue) withLevel:indentLevel];
+        NSMutableString *structString = [NSMutableString stringWithString:getStructString(wrappedValue)];
+        [self indentString:structString withLevel:indentLevel];
+        
+        (*valueString) = structString;
     }
     else if (wrappedValue)
     {
@@ -963,7 +988,7 @@
 + (void)inspectValue:(NSValue *)wrappedValue
             objCType:(const char *)objCType
          indentLevel:(NSUInteger)indentLevel
-            typeName:(NSString *__autoreleasing *)typeName
+            typeName:(NSMutableString *)typeName
          valueString:(NSString *__autoreleasing *)valueString
 {
     if (!objCType)
@@ -1180,21 +1205,24 @@
     }
     if (IsEnumBitSet(mask, JEConsoleLogHeaderMaskQueue))
     {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        [string appendFormat:@"[%s] ", dispatch_queue_get_label(dispatch_get_current_queue())];
-#pragma clang diagnostic pop
+        [string appendFormat:@"[%s] ", dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)];
     }
-    if (IsEnumBitSet(mask, JEConsoleLogHeaderMaskFile))
+    
+    if (header.sourceFile != NULL
+        && header.functionName != NULL
+        && header.lineNumber > 0)
     {
-        [string appendFormat:
-         @"%s:%li ",
-         ((strrchr(header.sourceFile, '/') ?: (header.sourceFile - 1)) + 1),
-         (long)header.lineNumber];
-    }
-    if (IsEnumBitSet(mask, JEConsoleLogHeaderMaskFunction))
-    {
-        [string appendFormat:@"%s ", header.functionName];
+        if (IsEnumBitSet(mask, JEConsoleLogHeaderMaskFile))
+        {
+            [string appendFormat:
+             @"%s:%li ",
+             ((strrchr(header.sourceFile, '/') ?: (header.sourceFile - 1)) + 1),
+             (long)header.lineNumber];
+        }
+        if (IsEnumBitSet(mask, JEConsoleLogHeaderMaskFunction))
+        {
+            [string appendFormat:@"%s ", header.functionName];
+        }
     }
     
     if ([string length] > 0)
@@ -1248,36 +1276,86 @@
     });
 }
 
++ (NSString *)logBulletString
+{
+    NSString *__block logBulletString;
+    dispatch_barrier_sync([self settingsQueue], ^{
+        
+        logBulletString = [self sharedInstance].logBulletString;
+        
+    });
+    return logBulletString;
+}
+
++ (void)setLogBulletString:(NSString *)logBulletString
+{
+    dispatch_barrier_async([self settingsQueue], ^{
+        
+        [self sharedInstance].logBulletString = logBulletString;
+        
+    });
+}
+
++ (NSString *)dumpBulletString
+{
+    NSString *__block dumpBulletString;
+    dispatch_barrier_sync([self settingsQueue], ^{
+        
+        dumpBulletString = [self sharedInstance].dumpBulletString;
+        
+    });
+    return dumpBulletString;
+}
+
++ (void)setDumpBulletString:(NSString *)dumpBulletString
+{
+    dispatch_barrier_async([self settingsQueue], ^{
+        
+        [self sharedInstance].dumpBulletString = dumpBulletString;
+        
+    });
+}
+
 + (void)dumpValue:(NSValue *)wrappedValue
-            label:(const char *)label
+            label:(NSString *)label
            header:(JELogHeader)header
 {
     @autoreleasepool {
         
-        NSString *typeName;
+        NSMutableString *typeName = [[NSMutableString alloc] init];
         NSString *valueString;
         
         [self
          inspectValue:wrappedValue
          objCType:[wrappedValue objCType]
          indentLevel:0
-         typeName:&typeName
+         typeName:typeName
          valueString:&valueString];
         
         JEConsoleLogHeaderMask __block consoleLogHeaderMask;
         JEConsoleLogHeaderMask __block HUDLogHeaderMask;
+        NSString *__block logBulletString;
+        NSString *__block dumpBulletString;
         dispatch_barrier_sync([self settingsQueue], ^{
             
             JEDebugging *instance = [self sharedInstance];
             consoleLogHeaderMask = instance.consoleLogHeaderMask;
             HUDLogHeaderMask = instance.HUDLogHeaderMask;
+            logBulletString = instance.logBulletString;
+            dumpBulletString = instance.dumpBulletString;
             
         });
         
         NSMutableString *consoleString = [self
                                           stringForlogHeader:header
                                           withMask:consoleLogHeaderMask];
-        [consoleString appendFormat:@"→\t\"%s\"\n\t→\t(%@) %@\n", label, typeName, valueString];
+        [consoleString appendFormat:
+         @"%@%@\n  %@(%@) %@\n",
+         (logBulletString ?: [self defaultLogBulletString]),
+         label,
+         (dumpBulletString ?: [self defaultDumpBulletString]),
+         typeName,
+         valueString];
         
         dispatch_barrier_sync([self consoleQueue], ^{
             
@@ -1298,18 +1376,23 @@
     
     JEConsoleLogHeaderMask __block consoleLogHeaderMask;
     JEConsoleLogHeaderMask __block HUDLogHeaderMask;
+    NSString *__block logBulletString;
     dispatch_barrier_sync([self settingsQueue], ^{
         
         JEDebugging *instance = [self sharedInstance];
         consoleLogHeaderMask = instance.HUDLogHeaderMask;
         HUDLogHeaderMask = instance.HUDLogHeaderMask;
+        logBulletString = instance.logBulletString;
         
     });
     
     NSMutableString *consoleString = [self
                                       stringForlogHeader:header
                                       withMask:consoleLogHeaderMask];
-    [consoleString appendFormat:@"→\t\%@\n", formattedString];
+    [consoleString appendFormat:
+     @"%@%@\n",
+     (logBulletString ?: [self defaultLogBulletString]),
+     formattedString];
     
     dispatch_barrier_sync([self consoleQueue], ^{
         
@@ -1326,14 +1409,59 @@
 
 @implementation NSObject (JEDebugging)
 
-- (NSString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+- (NSMutableString *)_JE_escapedDescription
 {
-    return [NSString stringWithFormat:
-            @"<%p> %@",
-            self,
-            [JEDebugging
-             indentString:[self debugDescription]
-             withLevel:indentLevel]];
+    NSMutableString *description = [[NSMutableString alloc] initWithString:[self debugDescription]];
+    static NSDictionary *escapeMapping;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        escapeMapping = @{ @"\0" : @"\\0",
+                           @"\a" : @"\\a",
+                           @"\b" : @"\\b",
+                           @"\f" : @"\\f",
+                           @"\n" : @"\\n",
+                           @"\r" : @"\\r",
+                           @"\t" : @"\\t",
+                           @"\v" : @"\\v",
+                           @"\"" : @"\\\"" };
+        
+    });
+    
+    [description
+     replaceOccurrencesOfString:@"\\"
+     withString:@"\\\\"
+     options:(NSCaseInsensitiveSearch | NSLiteralSearch)
+     range:[description range]];
+    
+    [escapeMapping enumerateKeysAndObjectsUsingBlock:^(NSString *occurrence, NSString *replacement, BOOL *stop) {
+        
+        [description
+         replaceOccurrencesOfString:occurrence
+         withString:replacement
+         options:(NSCaseInsensitiveSearch | NSLiteralSearch)
+         range:[description range]];
+        
+    }];
+    
+    [description insertString:@"\"" atIndex:0];
+    [description appendString:@"\""];
+    
+    return description;
+}
+
+- (NSMutableString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+                                   includeAddress:(BOOL)includeAddress
+{
+    NSMutableString *logString = [self _JE_escapedDescription];
+    if (includeAddress)
+    {
+        [logString
+         insertString:[[NSString alloc] initWithFormat:@"<%p> ", self]
+         atIndex:0];
+    }
+    
+    return logString;
 }
 
 @end
@@ -1341,14 +1469,51 @@
 
 @implementation NSError (JEDebugging)
 
-- (NSString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+- (NSMutableString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+                                   includeAddress:(BOOL)includeAddress
 {
-    return [NSString stringWithFormat:
-            @"<%p> %@",
-            self,
-            [JEDebugging
-             indentString:[[self userInfo] debugDescription]
-             withLevel:indentLevel]];
+    NSMutableString *logString;
+    if (includeAddress)
+    {
+        logString = [[NSMutableString alloc] initWithFormat:@"<%p> ", self];
+    }
+    else
+    {
+        logString = [[NSMutableString alloc] init];
+    }
+    
+    [logString appendFormat:@"%@(code %li)", [self domain], (long)[self code]];
+    
+    NSDictionary *userInfo = [self userInfo];
+    if ([userInfo count] <= 0)
+    {
+        return logString;
+    }
+    
+    [logString appendString:@" {"];
+    
+    NSUInteger nextIndentLevel = (indentLevel + 1);
+    NSString *indentString = [JEDebugging indentationWithLevel:nextIndentLevel];
+    [userInfo enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        
+        @autoreleasepool {
+            
+            [logString appendFormat:
+             @"\n%@%@: (%@ *) %@,",
+             indentString,
+             [key _JE_logStringWithIndentLevel:nextIndentLevel
+                                includeAddress:NO],
+             [obj class],
+             [obj _JE_logStringWithIndentLevel:nextIndentLevel
+                                includeAddress:NO]];
+            
+        }
+        
+    }];
+    
+    [logString appendFormat:@"\n%@}", [JEDebugging indentationWithLevel:indentLevel]];
+    
+    return logString;
 }
 
 @end
@@ -1356,18 +1521,364 @@
 
 @implementation NSValue (JEDebugging)
 
-- (NSString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+- (NSMutableString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+                                   includeAddress:(BOOL)includeAddress
 {
-    NSString *valueTypeName;
+    NSMutableString *logString;
+    if (includeAddress)
+    {
+        logString = [[NSMutableString alloc] initWithFormat:@"<%p> (", self];
+    }
+    else
+    {
+        logString = [[NSMutableString alloc] initWithString:@"("];
+    }
+    
     NSString *valueValueString;
     [JEDebugging
      inspectValue:self
      objCType:[self objCType]
      indentLevel:indentLevel
-     typeName:&valueTypeName
+     typeName:logString
      valueString:&valueValueString];
     
-    return [NSString stringWithFormat:@"<%p> (%@) %@", self, valueTypeName, valueValueString];
+    [logString appendFormat:@") %@", valueValueString];
+    return logString;
+}
+
+@end
+
+
+@implementation NSDictionary (JEDebugging)
+
+- (NSMutableString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+                                   includeAddress:(BOOL)includeAddress
+{
+    NSMutableString *logString;
+    if (includeAddress)
+    {
+        logString = [[NSMutableString alloc] initWithFormat:@"<%p> {", self];
+    }
+    else
+    {
+        logString = [[NSMutableString alloc] initWithString:@"{"];
+    }
+    
+    if ([self count] <= 0)
+    {
+        [logString appendString:@"}"];
+        return logString;
+    }
+    
+    NSUInteger nextIndentLevel = (indentLevel + 1);
+    NSString *indentString = [JEDebugging indentationWithLevel:nextIndentLevel];
+    [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        
+        @autoreleasepool {
+            
+            [logString appendFormat:
+             @"\n%@(%@ *) %@: (%@ *) %@,",
+             indentString,
+             [key class],
+             [key _JE_logStringWithIndentLevel:nextIndentLevel
+                                includeAddress:NO],
+             [obj class],
+             [obj _JE_logStringWithIndentLevel:nextIndentLevel
+                                includeAddress:NO]];
+            
+        }
+        
+    }];
+    
+    [logString appendFormat:@"\n%@}", [JEDebugging indentationWithLevel:indentLevel]];
+    
+    return logString;
+}
+
+@end
+
+
+@implementation NSMapTable (JEDebugging)
+
+- (NSMutableString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+                                   includeAddress:(BOOL)includeAddress
+{
+    NSMutableString *logString;
+    if (includeAddress)
+    {
+        logString = [[NSMutableString alloc] initWithFormat:@"<%p> {", self];
+    }
+    else
+    {
+        logString = [[NSMutableString alloc] initWithString:@"{"];
+    }
+    
+    if ([self count] <= 0)
+    {
+        [logString appendString:@"}"];
+        return logString;
+    }
+    
+    NSUInteger nextIndentLevel = (indentLevel + 1);
+    NSString *indentString = [JEDebugging indentationWithLevel:nextIndentLevel];
+    for (id key in self)
+    {
+        @autoreleasepool {
+            
+            id obj = [self objectForKey:key];
+            if (!obj)
+            {
+                continue;
+            }
+            
+            [logString appendFormat:
+             @"\n%@(%@ *) %@: (%@ *) %@,",
+             indentString,
+             [key class],
+             [key _JE_logStringWithIndentLevel:nextIndentLevel
+                                includeAddress:NO],
+             [obj class],
+             [obj _JE_logStringWithIndentLevel:nextIndentLevel
+                                includeAddress:NO]];
+            
+        }
+    }
+    
+    [logString appendFormat:@"\n%@}", [JEDebugging indentationWithLevel:indentLevel]];
+    
+    return logString;
+}
+
+@end
+
+
+@implementation NSArray (JEDebugging)
+
+- (NSMutableString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+                                   includeAddress:(BOOL)includeAddress
+{
+    NSMutableString *logString;
+    if (includeAddress)
+    {
+        logString = [[NSMutableString alloc] initWithFormat:@"<%p> [", self];
+    }
+    else
+    {
+        logString = [[NSMutableString alloc] initWithString:@"["];
+    }
+    
+    if ([self count] <= 0)
+    {
+        [logString appendString:@"]"];
+        return logString;
+    }
+    
+    NSUInteger nextIndentLevel = (indentLevel + 1);
+    NSString *indentString = [JEDebugging indentationWithLevel:nextIndentLevel];
+    [self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        @autoreleasepool {
+            
+            [logString appendFormat:
+             @"\n%@[%lu]: (%@ *) %@,",
+             indentString,
+             (unsigned long)idx,
+             [obj class],
+             [obj _JE_logStringWithIndentLevel:nextIndentLevel
+                                includeAddress:NO]];
+            
+        }
+        
+    }];
+    
+    [logString appendFormat:@"\n%@]", [JEDebugging indentationWithLevel:indentLevel]];
+    
+    return logString;
+}
+
+@end
+
+
+@implementation NSOrderedSet (JEDebugging)
+
+- (NSMutableString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+                                   includeAddress:(BOOL)includeAddress
+{
+    NSMutableString *logString;
+    if (includeAddress)
+    {
+        logString = [[NSMutableString alloc] initWithFormat:@"<%p> [", self];
+    }
+    else
+    {
+        logString = [[NSMutableString alloc] initWithString:@"["];
+    }
+    
+    if ([self count] <= 0)
+    {
+        [logString appendString:@"]"];
+        return logString;
+    }
+    
+    NSUInteger nextIndentLevel = (indentLevel + 1);
+    NSString *indentString = [JEDebugging indentationWithLevel:nextIndentLevel];
+    [self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        @autoreleasepool {
+            
+            [logString appendFormat:
+             @"\n%@[%lu]: (%@ *) %@,",
+             indentString,
+             (unsigned long)idx,
+             [obj class],
+             [obj _JE_logStringWithIndentLevel:nextIndentLevel
+                                includeAddress:NO]];
+            
+        }
+        
+    }];
+    
+    [logString appendFormat:@"\n%@]", [JEDebugging indentationWithLevel:indentLevel]];
+    
+    return logString;
+}
+
+@end
+
+
+@implementation NSPointerArray (JEDebugging)
+
+- (NSMutableString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+                                   includeAddress:(BOOL)includeAddress
+{
+    NSMutableString *logString;
+    if (includeAddress)
+    {
+        logString = [[NSMutableString alloc] initWithFormat:@"<%p> [", self];
+    }
+    else
+    {
+        logString = [[NSMutableString alloc] initWithString:@"["];
+    }
+    
+    NSUInteger count = [self count];
+    if (count <= 0)
+    {
+        [logString appendString:@"]"];
+        return logString;
+    }
+    
+    NSUInteger nextIndentLevel = (indentLevel + 1);
+    NSString *indentString = [JEDebugging indentationWithLevel:nextIndentLevel];
+    for (NSInteger idx = 0; idx < count; ++idx)
+    {
+        @autoreleasepool {
+            
+            void *pointer = [self pointerAtIndex:idx];
+            
+            [logString appendFormat:
+             @"\n%@[%lu]: (void *) <%p>,",
+             indentString,
+             (unsigned long)idx,
+             pointer];
+            
+        }
+    }
+    
+    [logString appendFormat:@"\n%@]", [JEDebugging indentationWithLevel:indentLevel]];
+    
+    return logString;
+}
+
+@end
+
+
+@implementation NSSet (JEDebugging)
+
+- (NSMutableString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+                                   includeAddress:(BOOL)includeAddress
+{
+    NSMutableString *logString;
+    if (includeAddress)
+    {
+        logString = [[NSMutableString alloc] initWithFormat:@"<%p> (", self];
+    }
+    else
+    {
+        logString = [[NSMutableString alloc] initWithString:@"("];
+    }
+    
+    if ([self count] <= 0)
+    {
+        [logString appendString:@")"];
+        return logString;
+    }
+    
+    NSUInteger nextIndentLevel = (indentLevel + 1);
+    NSString *indentString = [JEDebugging indentationWithLevel:nextIndentLevel];
+    [self enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        
+        @autoreleasepool {
+            
+            [logString appendFormat:
+             @"\n%@(%@ *) %@,",
+             indentString,
+             [obj class],
+             [obj _JE_logStringWithIndentLevel:nextIndentLevel
+                                includeAddress:NO]];
+            
+        }
+        
+    }];
+    
+    [logString appendFormat:@"\n%@)", [JEDebugging indentationWithLevel:indentLevel]];
+    
+    return logString;
+}
+
+@end
+
+
+@implementation NSHashTable (JEDebugging)
+
+- (NSMutableString *)_JE_logStringWithIndentLevel:(NSUInteger)indentLevel
+                                   includeAddress:(BOOL)includeAddress
+{
+    NSMutableString *logString;
+    if (includeAddress)
+    {
+        logString = [[NSMutableString alloc] initWithFormat:@"<%p> (", self];
+    }
+    else
+    {
+        logString = [[NSMutableString alloc] initWithString:@"("];
+    }
+    
+    if ([self count] <= 0)
+    {
+        [logString appendString:@")"];
+        return logString;
+    }
+    
+    NSUInteger nextIndentLevel = (indentLevel + 1);
+    NSString *indentString = [JEDebugging indentationWithLevel:nextIndentLevel];
+    for (id obj in self)
+    {
+        @autoreleasepool {
+            
+            [logString appendFormat:
+             @"\n%@(%@ *) %@,",
+             indentString,
+             [obj class],
+             [obj _JE_logStringWithIndentLevel:nextIndentLevel
+                                includeAddress:NO]];
+            
+        }
+    }
+    
+    [logString appendFormat:@"\n%@)", [JEDebugging indentationWithLevel:indentLevel]];
+    
+    return logString;
 }
 
 @end

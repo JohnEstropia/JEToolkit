@@ -11,16 +11,22 @@
 #import "JECompilerDefines.h"
 
 
-typedef struct {
+typedef struct JELogHeader {
     const char *sourceFile;
     const char *functionName;
     int lineNumber;
 } JELogHeader;
 
+
+#ifdef DEBUG
+
 #define JE_LOG_HEADER  ((JELogHeader){__FILE__, __PRETTY_FUNCTION__, __LINE__})
 
+#else
 
-#if DEBUG
+#define JE_LOG_HEADER  ((JELogHeader){NULL, NULL, 0})
+
+#endif
 
 /*! Dumps any variable, expression, etc. other than static arrays to the console. Also displays the source filename, line number, and method name. For static arrays use JEDumpArray() instead.
  */
@@ -35,7 +41,7 @@ typedef struct {
          dumpValue:[[NSValue alloc] \
                     initWithBytes:&_objectClone \
                     objCType:@encode(typeof(nonArrayExpression))] \
-         label:#nonArrayExpression \
+         label:@""#nonArrayExpression \
          header:JE_LOG_HEADER]; \
         _Pragma("clang diagnostic pop") \
     } while(0)
@@ -52,7 +58,7 @@ typedef struct {
          dumpValue:[[NSValue alloc] \
                     initWithBytes:&arrayExpression[0] \
                     objCType:@encode(typeof(arrayExpression))] \
-         label:#arrayExpression \
+         label:@""#arrayExpression \
          header:JE_LOG_HEADER]; \
         _Pragma("clang diagnostic pop") \
     } while(0)
@@ -65,14 +71,6 @@ typedef struct {
       header:JE_LOG_HEADER, \
       ##__VA_ARGS__]
 
-#else
-
-#define JEDump(...)        do {} while(0)
-#define JEDumpArray(...)   do {} while(0)
-#define JELog(format, ...) do {} while(0)
-
-#endif
-
 
 typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
 {
@@ -82,20 +80,30 @@ typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
     JEConsoleLogHeaderMaskFile      = (1 << 3),
     JEConsoleLogHeaderMaskFunction  = (1 << 4),
     
+    JEConsoleLogHeaderMaskDefault   = (JEConsoleLogHeaderMaskQueue
+                                       | JEConsoleLogHeaderMaskFile
+                                       | JEConsoleLogHeaderMaskFunction),
+    
     JEConsoleLogHeaderMaskAll       = -1
 };
 
 
 @interface JEDebugging : NSObject
 
-+ (JEConsoleLogHeaderMask)consoleLogHeaderMask; // default:(JEConsoleLogHeaderMaskQueue | JEConsoleLogHeaderMaskFile | JEConsoleLogHeaderMaskFunction)
++ (JEConsoleLogHeaderMask)consoleLogHeaderMask;
 + (void)setConsoleLogHeaderMask:(JEConsoleLogHeaderMask)mask;
 
-+ (JEConsoleLogHeaderMask)HUDLogHeaderMask; // default:(JEConsoleLogHeaderMaskQueue | JEConsoleLogHeaderMaskFile | JEConsoleLogHeaderMaskFunction)
++ (JEConsoleLogHeaderMask)HUDLogHeaderMask;
 + (void)setHUDLogHeaderMask:(JEConsoleLogHeaderMask)mask;
 
++ (NSString *)logBulletString;
++ (void)setLogBulletString:(NSString *)logBulletString;
+
++ (NSString *)dumpBulletString;
++ (void)setDumpBulletString:(NSString *)dumpBulletString;
+
 + (void)dumpValue:(NSValue *)wrappedValue
-            label:(const char *)label
+            label:(NSString *)label
            header:(JELogHeader)header;
 
 + (void)logFormat:(NSString *)format
