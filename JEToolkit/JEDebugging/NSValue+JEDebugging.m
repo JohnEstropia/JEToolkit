@@ -43,9 +43,7 @@
         [description insertString:[NSString stringWithFormat:@"(%@ *) ", [self class]] atIndex:0];
     }
     
-    [valueStringBuilder indentByLevel:1];
-    
-    return valueStringBuilder;
+    return description;
 }
 
 
@@ -72,9 +70,7 @@
 {
     if (!objCType || strlen(objCType) < 1)
     {
-        [self
-         inspectUndefinedValue:wrappedValue
-         typeNameBuilder:typeNameBuilder];
+        [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
         return;
     }
     
@@ -196,7 +192,7 @@
         case _C_BFLD:
             [self
              inspectBitFieldValue:wrappedValue
-             objCType:objCType
+             expectedObjCType:objCType
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
@@ -209,17 +205,13 @@
             break;
             
         case _C_VOID:
-            [self
-             inspectVoidValue:wrappedValue
-             typeNameBuilder:typeNameBuilder
-             valueStringBuilder:valueStringBuilder];
+            [self inspectVoidValueWithTypeNameBuilder:typeNameBuilder];
             break;
             
         case _C_PTR:
             [self
              inspectPointerValue:wrappedValue
-             objCType:objCType
-             indentLevel:indentLevel
+             expectedObjCType:objCType
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
@@ -234,8 +226,7 @@
         case _C_ARY_B:
             [self
              inspectArrayValue:wrappedValue
-             objCType:objCType
-             indentLevel:indentLevel
+             expectedObjCType:objCType
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
@@ -243,8 +234,7 @@
         case _C_UNION_B:
             [self
              inspectUnionValue:wrappedValue
-             objCType:objCType
-             indentLevel:indentLevel
+             expectedObjCType:objCType
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
@@ -252,8 +242,7 @@
         case _C_STRUCT_B:
             [self
              inspectStructValue:wrappedValue
-             objCType:objCType
-             indentLevel:indentLevel
+             expectedObjCType:objCType
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
@@ -262,9 +251,7 @@
         case _C_ATOM:
         case _C_VECTOR:
         default:
-            [self
-             inspectUndefinedValue:wrappedValue
-             typeNameBuilder:typeNameBuilder];
+            [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
             break;
     }
 }
@@ -297,10 +284,10 @@
         return;
     }
     
-    [valueStringBuilder appendFormat:@"<%p> ", idValue];
-    
     if ((strlen(objCType) > 1) && (objCType[1] == _C_UNDEF))
     {
+        [valueStringBuilder appendFormat:@"<%p> ", idValue];
+        
         struct _JEBlockLiteral
         {
             Class isa;
@@ -387,9 +374,7 @@
     }
     else
     {
-        NSMutableString *detailedDescription = [idValue detailedDescriptionIncludeClass:NO includeAddress:NO];
-        [detailedDescription indentByLevel:1];
-        [valueStringBuilder appendString:detailedDescription];
+        [valueStringBuilder appendString:[idValue detailedDescriptionIncludeClass:NO includeAddress:YES]];
     }
 }
 
@@ -717,29 +702,31 @@
     [valueStringBuilder appendString:(boolValue ? @"true" : @"false")];
 }
 
-+ (void)inspectVoidValue:(NSValue *)wrappedValue
-         typeNameBuilder:(NSMutableString *)typeNameBuilder
-      valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)inspectVoidValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
 {
     [typeNameBuilder appendString:@"void"];
 }
 
-+ (void)inspectUndefinedValue:(NSValue *)wrappedValue
-              typeNameBuilder:(NSMutableString *)typeNameBuilder
++ (void)inspectUndefinedValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
 {
     [typeNameBuilder appendString:@"?"];
 }
 
 + (void)inspectPointerValue:(NSValue *)wrappedValue
            expectedObjCType:(const char *)objCType
-                indentLevel:(NSUInteger)indentLevel
             typeNameBuilder:(NSMutableString *)typeNameBuilder
          valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
+    if (strlen(objCType) < 2)
+    {
+        [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
+        return;
+    }
+    
     const void *pointerValue = NULL;
     [wrappedValue getValue:&pointerValue];
     
-    objCType += 1;
+    objCType++;
     if (objCType[0] == _C_UNDEF)
     {
         [typeNameBuilder appendString:@"func *"];
@@ -773,8 +760,7 @@
          inspectValue:(pointerValue
                        ? [[NSValue alloc] initWithBytes:pointerValue objCType:objCType]
                        : nil)
-         objCType:objCType
-         indentLevel:indentLevel
+         expectedObjCType:objCType
          typeNameBuilder:typeNameBuilder
          valueStringBuilder:(pointerValue ? valueStringBuilder : nil)];
         
@@ -800,7 +786,9 @@
     
     if (cstringValue)
     {
-        [valueStringBuilder appendFormat:@"<%1$p> \"%1$s\"", cstringValue];
+        NSMutableString *escapedString = [[NSMutableString alloc] initWithUTF8String:cstringValue];
+        [escapedString replaceWithCStringRepresentation];
+        [valueStringBuilder appendFormat:@"<%p> %@", cstringValue, escapedString];
     }
     else
     {
@@ -808,19 +796,22 @@
     }
 }
 
-+ (void)inspectAtomValue:(NSValue *)wrappedValue
-         typeNameBuilder:(NSMutableString *)typeNameBuilder
-      valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)inspectAtomValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
 {
     [typeNameBuilder appendString:@"atom"];
 }
 
 + (void)inspectArrayValue:(NSValue *)wrappedValue
-                 objCType:(const char *)objCType
-              indentLevel:(NSUInteger)indentLevel
+         expectedObjCType:(const char *)objCType
           typeNameBuilder:(NSMutableString *)typeNameBuilder
        valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
+    if (strlen(objCType) < 2)
+    {
+        [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
+        return;
+    }
+    
     NSString *substring = @((objCType + 1));
     NSScanner *scanner = [[NSScanner alloc] initWithString:
                           [substring substringToIndex:
@@ -837,8 +828,7 @@
     
     [self
      inspectValue:nil
-     objCType:objCSubType
-     indentLevel:(indentLevel + 1)
+     expectedObjCType:objCSubType
      typeNameBuilder:typeNameBuilder
      valueStringBuilder:NULL];
     
@@ -846,6 +836,12 @@
     
     if (!valueStringBuilder)
     {
+        return;
+    }
+    
+    if (count <= 0)
+    {
+        [valueStringBuilder appendString:@"[]"];
         return;
     }
     
@@ -858,15 +854,16 @@
     void *arrayValue = calloc((size_t)count, (size_t)sizePerSubelement);
     [wrappedValue getValue:arrayValue];
     
-    NSString *indentString = [self indentationWithLevel:indentLevel];
-    
-    [valueStringBuilder appendString:@"["];
+    NSMutableString *valueString = [[NSMutableString alloc] initWithString:@"["];
     for (unsigned long long i = 0; i < count; ++i)
     {
-        if (i == 0)
+        if (i > 0)
         {
-            [valueStringBuilder appendString:@"\n"];
-            [valueStringBuilder appendString:indentString];
+            [valueString appendString:@",\n"];
+        }
+        else
+        {
+            [valueString appendString:@"\n"];
         }
         
         NSValue *itemValue = [[NSValue alloc]
@@ -875,35 +872,38 @@
         
         @autoreleasepool {
             
-            [valueStringBuilder appendFormat:@"  [%llu]: (", i];
+            [valueString appendFormat:@"[%llu]: (", i];
             
             NSMutableString *itemValueString = [[NSMutableString alloc] init];
             [self
              inspectValue:itemValue
-             objCType:objCSubType
-             indentLevel:(indentLevel + 1)
-             typeNameBuilder:valueStringBuilder
+             expectedObjCType:objCSubType
+             typeNameBuilder:valueString
              valueStringBuilder:itemValueString];
             
-            [valueStringBuilder appendString:@") "];
-            [valueStringBuilder appendString:itemValueString];
-            [valueStringBuilder appendString:@",\n"];
+            [valueString appendString:@") "];
+            [valueString appendString:itemValueString];
             
         }
-        
-        [valueStringBuilder appendString:indentString];
     }
     free(arrayValue);
     
-    [valueStringBuilder appendString:@"]"];
+    [valueString indentByLevel:1];
+    [valueString appendString:@"\n]"];
+    [valueStringBuilder appendString:valueString];
 }
 
 + (void)inspectUnionValue:(NSValue *)wrappedValue
-                 objCType:(const char *)objCType
-              indentLevel:(NSUInteger)indentLevel
+         expectedObjCType:(const char *)objCType
           typeNameBuilder:(NSMutableString *)typeNameBuilder
        valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
+    if (strlen(objCType) < 2)
+    {
+        [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
+        return;
+    }
+    
     NSString *substring = @((objCType + 1));
     NSScanner *scanner = [[NSScanner alloc] initWithString:
                           [substring substringToIndex:
@@ -920,9 +920,6 @@
         return;
     }
     
-    //    NSString *subtype;
-    //    [scanner scanUpToString:@"\0" intoString:&subtype];
-    
     if (wrappedValue)
     {
         [valueStringBuilder appendFormat:@"{ %@ }", [wrappedValue debugDescription]];
@@ -934,11 +931,16 @@
 }
 
 + (void)inspectStructValue:(NSValue *)wrappedValue
-                  objCType:(const char *)objCType
-               indentLevel:(NSUInteger)indentLevel
+          expectedObjCType:(const char *)objCType
            typeNameBuilder:(NSMutableString *)typeNameBuilder
         valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
+    if (strlen(objCType) < 2)
+    {
+        [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
+        return;
+    }
+    
     NSString *substring = @((objCType + 1));
     NSScanner *scanner = [[NSScanner alloc] initWithString:
                           [substring substringToIndex:
@@ -961,7 +963,7 @@
         
         NSMutableDictionary *blockDictionary = [[NSMutableDictionary alloc] init];
         blockDictionary[@(@encode(CGPoint))] = [^ NSString *(NSValue *structValue){
-            
+#warning TODO: indent correctly
             CGPoint point = [structValue CGPointValue];
             return [NSString stringWithFormat:
                     @"{\n"
@@ -1068,10 +1070,7 @@
     NSString *(^getStructString)(NSValue *structValue) = structHandlers[@(objCType)];
     if (getStructString)
     {
-        NSMutableString *structString = [NSMutableString stringWithString:getStructString(wrappedValue)];
-        [self indentString:structString withLevel:indentLevel];
-        
-        [valueStringBuilder appendString:structString];
+        [valueStringBuilder appendString:getStructString(wrappedValue)];
     }
     else if (wrappedValue)
     {
