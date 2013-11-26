@@ -45,6 +45,20 @@ void JEDispatchUIAfter(NSTimeInterval delay, dispatch_block_t block)
 				   block);
 }
 
+void JEDispatchUIASAP(dispatch_block_t block)
+{
+    NSCParameterAssert(block);
+    
+    if ([NSThread isMainThread])
+    {
+        block();
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), block);
+    }
+}
+
 void JEDispatchSerial(id owner, dispatch_block_t block)
 {
     NSCParameterAssert(owner);

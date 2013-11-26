@@ -90,6 +90,9 @@ typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
 
 @interface JEDebugging : NSObject
 
++ (BOOL)isHUDEnabled;
++ (void)setIsHUDEnabled:(BOOL)isHUDEnabled;
+
 + (JEConsoleLogHeaderMask)consoleLogHeaderMask;
 + (void)setConsoleLogHeaderMask:(JEConsoleLogHeaderMask)mask;
 
