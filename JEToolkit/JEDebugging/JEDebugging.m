@@ -153,7 +153,7 @@
         [string appendFormat:@"[%s] ", dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)];
     }
     
-    if (header.sourceFile != NULL
+    if (header.fileName != NULL
         && header.functionName != NULL
         && header.lineNumber > 0)
     {
@@ -161,7 +161,7 @@
         {
             [string appendFormat:
              @"%s:%li ",
-             ((strrchr(header.sourceFile, '/') ?: (header.sourceFile - 1)) + 1),
+             header.fileName,
              (long)header.lineNumber];
         }
         if (IsEnumBitSet(mask, JEConsoleLogHeaderMaskFunction))
@@ -217,7 +217,7 @@
 + (JEConsoleLogHeaderMask)consoleLogHeaderMask
 {
     JEConsoleLogHeaderMask __block consoleHeaderMask;
-    dispatch_barrier_sync([self settingsQueue], ^{
+    dispatch_sync([self settingsQueue], ^{
         
         consoleHeaderMask = [self sharedInstance].consoleLogHeaderMask;
         
@@ -237,7 +237,7 @@
 + (JEConsoleLogHeaderMask)HUDLogHeaderMask
 {
     JEConsoleLogHeaderMask __block HUDLogHeaderMask;
-    dispatch_barrier_sync([self settingsQueue], ^{
+    dispatch_sync([self settingsQueue], ^{
         
         HUDLogHeaderMask = [self sharedInstance].HUDLogHeaderMask;
         
@@ -257,7 +257,7 @@
 + (NSString *)logBulletString
 {
     NSString *__block logBulletString;
-    dispatch_barrier_sync([self settingsQueue], ^{
+    dispatch_sync([self settingsQueue], ^{
         
         logBulletString = [self sharedInstance].logBulletString;
         
@@ -277,7 +277,7 @@
 + (NSString *)dumpBulletString
 {
     NSString *__block dumpBulletString;
-    dispatch_barrier_sync([self settingsQueue], ^{
+    dispatch_sync([self settingsQueue], ^{
         
         dumpBulletString = [self sharedInstance].dumpBulletString;
         
@@ -300,14 +300,17 @@
 {
     @autoreleasepool {
         
-        NSMutableString *description = [wrappedValue detailedDescriptionIncludeClass:NO includeAddress:NO];
+        // Note that because of a bug(?) with NSGetSizeAndAlignment, structs and unions with bitfields cannot be wrapped in NSValue, in which case wrappedValue will be nil.
+        NSMutableString *description = (wrappedValue
+                                        ? [wrappedValue detailedDescriptionIncludeClass:NO includeAddress:NO]
+                                        : [[NSMutableString alloc] initWithString:@"(?) { ... }"]);
         [description indentByLevel:1];
         
         JEConsoleLogHeaderMask __block consoleLogHeaderMask;
         JEConsoleLogHeaderMask __block HUDLogHeaderMask;
         NSString *__block logBulletString;
         NSString *__block dumpBulletString;
-        dispatch_barrier_sync([self settingsQueue], ^{
+        dispatch_sync([self settingsQueue], ^{
             
             JEDebugging *instance = [self sharedInstance];
             consoleLogHeaderMask = instance.consoleLogHeaderMask;
@@ -327,7 +330,7 @@
          (dumpBulletString ?: [self defaultDumpBulletString]),
          description];
         
-        dispatch_barrier_sync([self consoleQueue], ^{
+        dispatch_sync([self consoleQueue], ^{
             
             puts([consoleString UTF8String]);
             
@@ -347,7 +350,7 @@
     JEConsoleLogHeaderMask __block consoleLogHeaderMask;
     JEConsoleLogHeaderMask __block HUDLogHeaderMask;
     NSString *__block logBulletString;
-    dispatch_barrier_sync([self settingsQueue], ^{
+    dispatch_sync([self settingsQueue], ^{
         
         JEDebugging *instance = [self sharedInstance];
         consoleLogHeaderMask = instance.HUDLogHeaderMask;
@@ -364,7 +367,7 @@
      (logBulletString ?: [self defaultLogBulletString]),
      formattedString];
     
-    dispatch_barrier_sync([self consoleQueue], ^{
+    dispatch_sync([self consoleQueue], ^{
         
         puts([consoleString UTF8String]);
         

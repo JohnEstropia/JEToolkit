@@ -12,7 +12,7 @@
 
 
 typedef struct JELogHeader {
-    const char *sourceFile;
+    const char *fileName;
     const char *functionName;
     int lineNumber;
 } JELogHeader;
@@ -20,11 +20,13 @@ typedef struct JELogHeader {
 
 #ifdef DEBUG
 
-#define JE_LOG_HEADER  ((JELogHeader){__FILE__, __PRETTY_FUNCTION__, __LINE__})
+#define JE_FILE_NAME   ((strrchr(__FILE__, '/') ?: (__FILE__ - 1)) + 1)
+#define JE_LOG_HEADER  ((JELogHeader){ JE_FILE_NAME, __PRETTY_FUNCTION__, __LINE__ })
 
 #else
 
-#define JE_LOG_HEADER  ((JELogHeader){NULL, NULL, 0})
+#define JE_FILE_NAME   NULL
+#define JE_LOG_HEADER  ((JELogHeader){ JE_FILE_NAME, NULL, 0 })
 
 #endif
 
@@ -36,10 +38,10 @@ typedef struct JELogHeader {
         _Pragma("clang diagnostic push") \
         _Pragma("clang diagnostic ignored \"-Wmissing-braces\"") \
         _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
-        const typeof(nonArrayExpression) _objectClone = nonArrayExpression; \
+        const typeof(nonArrayExpression) _je_objectClone = nonArrayExpression; \
         [JEDebugging \
          dumpValue:[[NSValue alloc] \
-                    initWithBytes:&_objectClone \
+                    initWithBytes:&_je_objectClone \
                     objCType:@encode(typeof(nonArrayExpression))] \
          label:@""#nonArrayExpression \
          header:JE_LOG_HEADER]; \

@@ -9,9 +9,11 @@
 #import <Foundation/Foundation.h>
 
 #import "NSObject+JEDebugging.h"
-#import "NSMutableString+JEDebugging.h"
 
 
 @interface NSOrderedSet (JEDebugging)
+
+- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
+                                      includeAddress:(BOOL)includeAddress;
 
 @end

@@ -10,8 +10,7 @@
 
 #import <objc/runtime.h>
 
-#import "JECompilerDefines.h"
-#import "NSObject+JEDebugging.h"
+#import "NSString+JEToolkit.h"
 #import "NSMutableString+JEDebugging.h"
 
 
@@ -25,10 +24,10 @@
     NSMutableString *typeNameBuilder = [[NSMutableString alloc] init];
     NSMutableString *valueStringBuilder = [[NSMutableString alloc] init];
     
-    [NSValue inspectValue:self
-         expectedObjCType:[self objCType]
-          typeNameBuilder:typeNameBuilder
-       valueStringBuilder:valueStringBuilder];
+    [NSValue appendDetailsForForValue:self
+                     expectedObjCType:[self objCType]
+                      typeNameBuilder:typeNameBuilder
+                   valueStringBuilder:valueStringBuilder];
     
     NSMutableString *description = [[NSMutableString alloc] initWithFormat:
                                     @"(%@) %@",
@@ -63,14 +62,14 @@
     return integerFormatter;
 }
 
-+ (void)inspectValue:(NSValue *)wrappedValue
-    expectedObjCType:(const char *)objCType
-     typeNameBuilder:(NSMutableString *)typeNameBuilder
-  valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForValue:(NSValue *)wrappedValue
+                expectedObjCType:(const char *)objCType
+                 typeNameBuilder:(NSMutableString *)typeNameBuilder
+              valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     if (!objCType || strlen(objCType) < 1)
     {
-        [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
+        [self appendDetailsForForUndefinedValueWithTypeNameBuilder:typeNameBuilder];
         return;
     }
     
@@ -78,7 +77,7 @@
     {
         case _C_ID:
             [self
-             inspectIdValue:wrappedValue
+             appendDetailsForForIdValue:wrappedValue
              expectedObjCType:objCType
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
@@ -86,112 +85,112 @@
             
         case _C_CLASS:
             [self
-             inspectClassValue:wrappedValue
+             appendDetailsForForClassValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_SEL:
             [self
-             inspectSelectorValue:wrappedValue
+             appendDetailsForForSelectorValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_CHR:
             [self
-             inspectCharValue:wrappedValue
+             appendDetailsForForCharValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_UCHR:
             [self
-             inspectUnsignedCharValue:wrappedValue
+             appendDetailsForForUnsignedCharValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_SHT:
             [self
-             inspectShortValue:wrappedValue
+             appendDetailsForForShortValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_USHT:
             [self
-             inspectUnsignedShortValue:wrappedValue
+             appendDetailsForForUnsignedShortValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_INT:
             [self
-             inspectIntValue:wrappedValue
+             appendDetailsForForIntValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_UINT:
             [self
-             inspectUnsignedIntValue:wrappedValue
+             appendDetailsForForUnsignedIntValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_LNG:
             [self
-             inspectLongValue:wrappedValue
+             appendDetailsForForLongValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_ULNG:
             [self
-             inspectUnsignedLongValue:wrappedValue
+             appendDetailsForForUnsignedLongValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_LNG_LNG:
             [self
-             inspectLongLongValue:wrappedValue
+             appendDetailsForForLongLongValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_ULNG_LNG:
             [self
-             inspectUnsignedLongLongValue:wrappedValue
+             appendDetailsForForUnsignedLongLongValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_FLT:
             [self
-             inspectFloatValue:wrappedValue
+             appendDetailsForForFloatValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_DBL:
             [self
-             inspectDoubleValue:wrappedValue
+             appendDetailsForForDoubleValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case 'D':
             [self
-             inspectLongDoubleValue:wrappedValue
+             appendDetailsForForLongDoubleValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_BFLD:
             [self
-             inspectBitFieldValue:wrappedValue
+             appendDetailsForForBitFieldValue:wrappedValue
              expectedObjCType:objCType
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
@@ -199,18 +198,18 @@
             
         case _C_BOOL:
             [self
-             inspectBoolValue:wrappedValue
+             appendDetailsForForBoolValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_VOID:
-            [self inspectVoidValueWithTypeNameBuilder:typeNameBuilder];
+            [self appendDetailsForForVoidValueWithTypeNameBuilder:typeNameBuilder];
             break;
             
         case _C_PTR:
             [self
-             inspectPointerValue:wrappedValue
+             appendDetailsForForPointerValue:wrappedValue
              expectedObjCType:objCType
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
@@ -218,14 +217,14 @@
             
         case _C_CHARPTR:
             [self
-             inspectCStringValue:wrappedValue
+             appendDetailsForForCStringValue:wrappedValue
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
             break;
             
         case _C_ARY_B:
             [self
-             inspectArrayValue:wrappedValue
+             appendDetailsForForArrayValue:wrappedValue
              expectedObjCType:objCType
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
@@ -233,7 +232,7 @@
             
         case _C_UNION_B:
             [self
-             inspectUnionValue:wrappedValue
+             appendDetailsForForUnionValue:wrappedValue
              expectedObjCType:objCType
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
@@ -241,7 +240,7 @@
             
         case _C_STRUCT_B:
             [self
-             inspectStructValue:wrappedValue
+             appendDetailsForStructValue:wrappedValue
              expectedObjCType:objCType
              typeNameBuilder:typeNameBuilder
              valueStringBuilder:valueStringBuilder];
@@ -251,15 +250,15 @@
         case _C_ATOM:
         case _C_VECTOR:
         default:
-            [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
+            [self appendDetailsForForUndefinedValueWithTypeNameBuilder:typeNameBuilder];
             break;
     }
 }
 
-+ (void)inspectIdValue:(NSValue *)wrappedValue
-      expectedObjCType:(const char *)objCType
-       typeNameBuilder:(NSMutableString *)typeNameBuilder
-    valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForIdValue:(NSValue *)wrappedValue
+                  expectedObjCType:(const char *)objCType
+                   typeNameBuilder:(NSMutableString *)typeNameBuilder
+                valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     id __unsafe_unretained idValue = nil;
     [wrappedValue getValue:&idValue];
@@ -334,7 +333,7 @@
                 
                 [valueStringBuilder appendString:@" "];
                 [self
-                 inspectValue:nil
+                 appendDetailsForForValue:nil
                  expectedObjCType:[blockSignature methodReturnType]
                  typeNameBuilder:valueStringBuilder
                  valueStringBuilder:NULL];
@@ -361,7 +360,7 @@
                         }
                         
                         [self
-                         inspectValue:nil
+                         appendDetailsForForValue:nil
                          expectedObjCType:[blockSignature getArgumentTypeAtIndex:i]
                          typeNameBuilder:valueStringBuilder
                          valueStringBuilder:NULL];
@@ -378,9 +377,9 @@
     }
 }
 
-+ (void)inspectClassValue:(NSValue *)wrappedValue
-          typeNameBuilder:(NSMutableString *)typeNameBuilder
-       valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForClassValue:(NSValue *)wrappedValue
+                      typeNameBuilder:(NSMutableString *)typeNameBuilder
+                   valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"Class"];
     
@@ -394,9 +393,9 @@
     [valueStringBuilder appendString:(NSStringFromClass(classValue) ?: @"Nil")];
 }
 
-+ (void)inspectSelectorValue:(NSValue *)wrappedValue
-             typeNameBuilder:(NSMutableString *)typeNameBuilder
-          valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForSelectorValue:(NSValue *)wrappedValue
+                         typeNameBuilder:(NSMutableString *)typeNameBuilder
+                      valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"SEL"];
     
@@ -410,9 +409,9 @@
     [valueStringBuilder appendString:(NSStringFromSelector(selectorValue) ?: @"NULL")];
 }
 
-+ (void)inspectCharValue:(NSValue *)wrappedValue
-         typeNameBuilder:(NSMutableString *)typeNameBuilder
-      valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForCharValue:(NSValue *)wrappedValue
+                     typeNameBuilder:(NSMutableString *)typeNameBuilder
+                  valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"char"];
     
@@ -424,12 +423,35 @@
     char charValue = '\0';
     [wrappedValue getValue:&charValue];
     
-    NSString *charMapping = [NSMutableString CStringBackslashEscapeMapping][[[NSString alloc]
-                                                                             initWithCharacters:&(const unichar){ charValue }
-                                                                             length:1]];
+    static NSDictionary *replacementMapping;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        // http://en.wikipedia.org/wiki/ASCII
+        replacementMapping = @{ @"\0" : @"\\0",
+                                @"\a" : @"\\a",
+                                @"\b" : @"\\b",
+                                @"\t" : @"\\t",
+                                @"\n" : @"\\n",
+                                @"\v" : @"\\v",
+                                @"\f" : @"\\f",
+                                @"\r" : @"\\r",
+                                @"\e" : @"\\e",
+                                @"\'" : @"\\\'",
+                                @"\\" : @"\\\\" };
+        
+    });
+    
+    NSString *charMapping = replacementMapping[[[NSString alloc]
+                                                initWithCharacters:&(const unichar){ charValue }
+                                                length:1]];
     if (charMapping)
     {
         [valueStringBuilder appendFormat:@"'%@' (%i)", charMapping, charValue];
+    }
+    else if (charValue < ' ' || charValue > '~')
+    {
+        [valueStringBuilder appendFormat:@"'\\x%1$02u' (%1$i)", charValue];
     }
     else
     {
@@ -437,9 +459,9 @@
     }
 }
 
-+ (void)inspectUnsignedCharValue:(NSValue *)wrappedValue
-                 typeNameBuilder:(NSMutableString *)typeNameBuilder
-              valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForUnsignedCharValue:(NSValue *)wrappedValue
+                             typeNameBuilder:(NSMutableString *)typeNameBuilder
+                          valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"unsigned char"];
     
@@ -453,9 +475,9 @@
     [valueStringBuilder appendFormat:@"%uc", unsignedCharValue];
 }
 
-+ (void)inspectShortValue:(NSValue *)wrappedValue
-          typeNameBuilder:(NSMutableString *)typeNameBuilder
-       valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForShortValue:(NSValue *)wrappedValue
+                      typeNameBuilder:(NSMutableString *)typeNameBuilder
+                   valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"short"];
     
@@ -469,9 +491,9 @@
     [valueStringBuilder appendString:[[self integerFormatter] stringFromNumber:@(shortValue)]];
 }
 
-+ (void)inspectUnsignedShortValue:(NSValue *)wrappedValue
-                  typeNameBuilder:(NSMutableString *)typeNameBuilder
-               valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForUnsignedShortValue:(NSValue *)wrappedValue
+                              typeNameBuilder:(NSMutableString *)typeNameBuilder
+                           valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"unsigned short"];
     
@@ -485,9 +507,9 @@
     [valueStringBuilder appendString:[[self integerFormatter] stringFromNumber:@(unsignedShortValue)]];
 }
 
-+ (void)inspectIntValue:(NSValue *)wrappedValue
-        typeNameBuilder:(NSMutableString *)typeNameBuilder
-     valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForIntValue:(NSValue *)wrappedValue
+                    typeNameBuilder:(NSMutableString *)typeNameBuilder
+                 valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"int"];
     
@@ -501,9 +523,9 @@
     [valueStringBuilder appendString:[[self integerFormatter] stringFromNumber:@(intValue)]];
 }
 
-+ (void)inspectUnsignedIntValue:(NSValue *)wrappedValue
-                typeNameBuilder:(NSMutableString *)typeNameBuilder
-             valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForUnsignedIntValue:(NSValue *)wrappedValue
+                            typeNameBuilder:(NSMutableString *)typeNameBuilder
+                         valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"unsigned int"];
     
@@ -517,9 +539,9 @@
     [valueStringBuilder appendString:[[self integerFormatter] stringFromNumber:@(unsignedIntValue)]];
 }
 
-+ (void)inspectLongValue:(NSValue *)wrappedValue
-         typeNameBuilder:(NSMutableString *)typeNameBuilder
-      valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForLongValue:(NSValue *)wrappedValue
+                     typeNameBuilder:(NSMutableString *)typeNameBuilder
+                  valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"long"];
     
@@ -533,9 +555,9 @@
     [valueStringBuilder appendString:[[self integerFormatter] stringFromNumber:@(longValue)]];
 }
 
-+ (void)inspectUnsignedLongValue:(NSValue *)wrappedValue
-                 typeNameBuilder:(NSMutableString *)typeNameBuilder
-              valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForUnsignedLongValue:(NSValue *)wrappedValue
+                             typeNameBuilder:(NSMutableString *)typeNameBuilder
+                          valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"unsigned long"];
     
@@ -549,9 +571,9 @@
     [valueStringBuilder appendString:[[self integerFormatter] stringFromNumber:@(unsignedLongValue)]];
 }
 
-+ (void)inspectLongLongValue:(NSValue *)wrappedValue
-             typeNameBuilder:(NSMutableString *)typeNameBuilder
-          valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForLongLongValue:(NSValue *)wrappedValue
+                         typeNameBuilder:(NSMutableString *)typeNameBuilder
+                      valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"long long"];
     
@@ -565,9 +587,9 @@
     [valueStringBuilder appendString:[[self integerFormatter] stringFromNumber:@(longlongValue)]];
 }
 
-+ (void)inspectUnsignedLongLongValue:(NSValue *)wrappedValue
-                     typeNameBuilder:(NSMutableString *)typeNameBuilder
-                  valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForUnsignedLongLongValue:(NSValue *)wrappedValue
+                                 typeNameBuilder:(NSMutableString *)typeNameBuilder
+                              valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"unsigned long long"];
     
@@ -581,9 +603,9 @@
     [valueStringBuilder appendString:[[self integerFormatter] stringFromNumber:@(unsignedLonglongValue)]];
 }
 
-+ (void)inspectFloatValue:(NSValue *)wrappedValue
-          typeNameBuilder:(NSMutableString *)typeNameBuilder
-       valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForFloatValue:(NSValue *)wrappedValue
+                      typeNameBuilder:(NSMutableString *)typeNameBuilder
+                   valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"float"];
     
@@ -607,9 +629,9 @@
     }
 }
 
-+ (void)inspectDoubleValue:(NSValue *)wrappedValue
-           typeNameBuilder:(NSMutableString *)typeNameBuilder
-        valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForDoubleValue:(NSValue *)wrappedValue
+                       typeNameBuilder:(NSMutableString *)typeNameBuilder
+                    valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"double"];
     
@@ -633,9 +655,9 @@
     }
 }
 
-+ (void)inspectLongDoubleValue:(NSValue *)wrappedValue
-               typeNameBuilder:(NSMutableString *)typeNameBuilder
-            valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForLongDoubleValue:(NSValue *)wrappedValue
+                           typeNameBuilder:(NSMutableString *)typeNameBuilder
+                        valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"long double"];
     
@@ -659,11 +681,15 @@
     }
 }
 
-+ (void)inspectBitFieldValue:(NSValue *)wrappedValue
-            expectedObjCType:(const char *)objCType
-             typeNameBuilder:(NSMutableString *)typeNameBuilder
-          valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForBitFieldValue:(NSValue *)wrappedValue
+                        expectedObjCType:(const char *)objCType
+                         typeNameBuilder:(NSMutableString *)typeNameBuilder
+                      valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
+    // Note that currently it is impossible to reach this code.
+    // A bug(?) with NSGetSizeAndAlignment prevents structs and unions with bitfields to be wrapped in NSValue, in which case the NSValue for the containing struct will be nil in the first place.
+    // The code below is for future reference only.
+    
     NSScanner *scanner = [[NSScanner alloc] initWithString:[[NSString alloc] initWithUTF8String:(objCType + 1)]];
     
     unsigned long long bitCount = 0;
@@ -686,9 +712,9 @@
     [valueStringBuilder appendString:[[self integerFormatter] stringFromNumber:@(bitFieldValue)]];
 }
 
-+ (void)inspectBoolValue:(NSValue *)wrappedValue
-         typeNameBuilder:(NSMutableString *)typeNameBuilder
-      valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForBoolValue:(NSValue *)wrappedValue
+                     typeNameBuilder:(NSMutableString *)typeNameBuilder
+                  valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"bool"];
     
@@ -702,24 +728,24 @@
     [valueStringBuilder appendString:(boolValue ? @"true" : @"false")];
 }
 
-+ (void)inspectVoidValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
++ (void)appendDetailsForForVoidValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
 {
     [typeNameBuilder appendString:@"void"];
 }
 
-+ (void)inspectUndefinedValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
++ (void)appendDetailsForForUndefinedValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
 {
     [typeNameBuilder appendString:@"?"];
 }
 
-+ (void)inspectPointerValue:(NSValue *)wrappedValue
-           expectedObjCType:(const char *)objCType
-            typeNameBuilder:(NSMutableString *)typeNameBuilder
-         valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForPointerValue:(NSValue *)wrappedValue
+                       expectedObjCType:(const char *)objCType
+                        typeNameBuilder:(NSMutableString *)typeNameBuilder
+                     valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     if (strlen(objCType) < 2)
     {
-        [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
+        [self appendDetailsForForUndefinedValueWithTypeNameBuilder:typeNameBuilder];
         return;
     }
     
@@ -757,9 +783,9 @@
         }
         
         [self
-         inspectValue:(pointerValue
-                       ? [[NSValue alloc] initWithBytes:pointerValue objCType:objCType]
-                       : nil)
+         appendDetailsForForValue:(pointerValue
+                                   ? [[NSValue alloc] initWithBytes:pointerValue objCType:objCType]
+                                   : nil)
          expectedObjCType:objCType
          typeNameBuilder:typeNameBuilder
          valueStringBuilder:(pointerValue ? valueStringBuilder : nil)];
@@ -770,9 +796,9 @@
     }
 }
 
-+ (void)inspectCStringValue:(NSValue *)wrappedValue
-            typeNameBuilder:(NSMutableString *)typeNameBuilder
-         valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForCStringValue:(NSValue *)wrappedValue
+                        typeNameBuilder:(NSMutableString *)typeNameBuilder
+                     valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     [typeNameBuilder appendString:@"char *"];
     
@@ -796,19 +822,19 @@
     }
 }
 
-+ (void)inspectAtomValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
++ (void)appendDetailsForForAtomValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
 {
     [typeNameBuilder appendString:@"atom"];
 }
 
-+ (void)inspectArrayValue:(NSValue *)wrappedValue
-         expectedObjCType:(const char *)objCType
-          typeNameBuilder:(NSMutableString *)typeNameBuilder
-       valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForArrayValue:(NSValue *)wrappedValue
+                     expectedObjCType:(const char *)objCType
+                      typeNameBuilder:(NSMutableString *)typeNameBuilder
+                   valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     if (strlen(objCType) < 2)
     {
-        [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
+        [self appendDetailsForForUndefinedValueWithTypeNameBuilder:typeNameBuilder];
         return;
     }
     
@@ -827,7 +853,7 @@
     const char *objCSubType = [subtype UTF8String];
     
     [self
-     inspectValue:nil
+     appendDetailsForForValue:nil
      expectedObjCType:objCSubType
      typeNameBuilder:typeNameBuilder
      valueStringBuilder:NULL];
@@ -876,7 +902,7 @@
             
             NSMutableString *itemValueString = [[NSMutableString alloc] init];
             [self
-             inspectValue:itemValue
+             appendDetailsForForValue:itemValue
              expectedObjCType:objCSubType
              typeNameBuilder:valueString
              valueStringBuilder:itemValueString];
@@ -893,14 +919,14 @@
     [valueStringBuilder appendString:valueString];
 }
 
-+ (void)inspectUnionValue:(NSValue *)wrappedValue
-         expectedObjCType:(const char *)objCType
-          typeNameBuilder:(NSMutableString *)typeNameBuilder
-       valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForForUnionValue:(NSValue *)wrappedValue
+                     expectedObjCType:(const char *)objCType
+                      typeNameBuilder:(NSMutableString *)typeNameBuilder
+                   valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     if (strlen(objCType) < 2)
     {
-        [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
+        [self appendDetailsForForUndefinedValueWithTypeNameBuilder:typeNameBuilder];
         return;
     }
     
@@ -920,24 +946,24 @@
         return;
     }
     
-    if (wrappedValue)
+    NSString *description = [wrappedValue debugDescription];
+    if (([NSString isNilOrEmptyString:description] || [description length] == 2 )
+        && [description hasPrefix:@"<"]
+        && [description hasSuffix:@">"])
     {
-        [valueStringBuilder appendFormat:@"{ %@ }", [wrappedValue debugDescription]];
+        description = @"...";
     }
-    else
-    {
-        [valueStringBuilder appendString:@"{ ... }"];
-    }
+    [valueStringBuilder appendFormat:@"{ %@ }", description];
 }
 
-+ (void)inspectStructValue:(NSValue *)wrappedValue
-          expectedObjCType:(const char *)objCType
-           typeNameBuilder:(NSMutableString *)typeNameBuilder
-        valueStringBuilder:(NSMutableString *)valueStringBuilder
++ (void)appendDetailsForStructValue:(NSValue *)wrappedValue
+                   expectedObjCType:(const char *)objCType
+                    typeNameBuilder:(NSMutableString *)typeNameBuilder
+                 valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
     if (strlen(objCType) < 2)
     {
-        [self inspectUndefinedValueWithTypeNameBuilder:typeNameBuilder];
+        [self appendDetailsForForUndefinedValueWithTypeNameBuilder:typeNameBuilder];
         return;
     }
     
@@ -962,104 +988,123 @@
     dispatch_once(&onceToken, ^{
         
         NSMutableDictionary *blockDictionary = [[NSMutableDictionary alloc] init];
-        blockDictionary[@(@encode(CGPoint))] = [^ NSString *(NSValue *structValue){
-#warning TODO: indent correctly
+        blockDictionary[@(@encode(CGPoint))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
+            
             CGPoint point = [structValue CGPointValue];
-            return [NSString stringWithFormat:
-                    @"{\n"
-                    "  x: (float) %g,\n"
-                    "  y: (float) %g\n"
-                    "}",
-                    point.x,
-                    point.y];
+            [stringBuilder appendFormat:
+             @"{ x:%g, y:%g }",
+             point.x, point.y];
             
         } copy];
-        blockDictionary[@(@encode(CGSize))] = [^ NSString *(NSValue *structValue){
+        blockDictionary[@(@encode(CGSize))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
             
             CGSize size = [structValue CGSizeValue];
-            return [NSString stringWithFormat:
-                    @"{\n"
-                    "  width: (float) %g,\n"
-                    "  height: (float) %g\n"
-                    "}",
-                    size.width,
-                    size.height];
+            [stringBuilder appendFormat:
+             @"{ width:%g, height:%g }",
+             size.width, size.height];
             
         } copy];
-        blockDictionary[@(@encode(CGRect))] = [^ NSString *(NSValue *structValue){
+        blockDictionary[@(@encode(CGRect))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
             
             CGRect rect = [structValue CGRectValue];
-            return [NSString stringWithFormat:
-                    @"{\n"
-                    "  x: (float) %g,\n"
-                    "  y: (float) %g,\n"
-                    "  width: (float) %g,\n"
-                    "  height: (float) %g\n"
-                    "}",
-                    rect.origin.x,
-                    rect.origin.y,
-                    rect.size.width,
-                    rect.size.height];
+            [stringBuilder appendFormat:
+             @"{ x:%g, y:%g, width:%g, height:%g }",
+             rect.origin.x, rect.origin.y, rect.size.width, rect.size.height];
             
         } copy];
-        blockDictionary[@(@encode(CGAffineTransform))] = [^ NSString *(NSValue *structValue){
+        blockDictionary[@(@encode(CGAffineTransform))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
             
             CGAffineTransform affineTransform = [structValue CGAffineTransformValue];
-            return [NSString stringWithFormat:
-                    @"{\n"
-                    "  a: (float) %g,\n"
-                    "  b: (float) %g,\n"
-                    "  c: (float) %g,\n"
-                    "  d: (float) %g,\n"
-                    "  tx: (float) %g,\n"
-                    "  ty: (float) %g\n"
-                    "}",
-                    affineTransform.a,
-                    affineTransform.b,
-                    affineTransform.c,
-                    affineTransform.d,
-                    affineTransform.tx,
-                    affineTransform.ty];
+            [stringBuilder appendFormat:
+             @"{\n"
+             "   a:%g, b:%g, c:%g, d:%g,\n"
+             "   tx:%g, ty:%g\n"
+             "}",
+             affineTransform.a, affineTransform.b, affineTransform.c, affineTransform.d,
+             affineTransform.tx, affineTransform.ty];
             
         } copy];
-        blockDictionary[@(@encode(UIEdgeInsets))] = [^ NSString *(NSValue *structValue){
+        blockDictionary[@(@encode(UIEdgeInsets))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
             
             UIEdgeInsets edgeInsets = [structValue UIEdgeInsetsValue];
-            return [NSString stringWithFormat:
-                    @"{\n"
-                    "  top: (float) %g,\n"
-                    "  left: (float) %g,\n"
-                    "  bottom: (float) %g,\n"
-                    "  right: (float) %g\n"
-                    "}",
-                    edgeInsets.top,
-                    edgeInsets.left,
-                    edgeInsets.bottom,
-                    edgeInsets.right];
+            [stringBuilder appendFormat:
+             @"{ top:%g, left:%g, bottom:%g, right:%g }",
+             edgeInsets.top, edgeInsets.left, edgeInsets.bottom, edgeInsets.right];
             
         } copy];
-        blockDictionary[@(@encode(UIOffset))] = [^ NSString *(NSValue *structValue){
+        blockDictionary[@(@encode(UIOffset))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
             
             UIOffset offset = [structValue UIOffsetValue];
-            return [NSString stringWithFormat:
-                    @"{\n"
-                    "  horizontal: (float) %g,\n"
-                    "  vertical: (float) %g\n"
-                    "}",
-                    offset.horizontal,
-                    offset.vertical];
+            [stringBuilder appendFormat:
+             @"{ horizontal:%g, vertical:%g }",
+             offset.horizontal, offset.vertical];
             
         } copy];
-        blockDictionary[@(@encode(NSRange))] = [^ NSString *(NSValue *structValue){
+        blockDictionary[@(@encode(NSRange))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
             
             NSRange range = [structValue rangeValue];
-            return [NSString stringWithFormat:
-                    @"{\n"
-                    "  location: (unsigned int) %lu,\n"
-                    "  length: (unsigned int) %lu\n"
-                    "}",
-                    (unsigned long)range.location,
-                    (unsigned long)range.length];
+            [stringBuilder appendFormat:
+             @"{ location:%lu, length:%lu }",
+             (unsigned long)range.location, (unsigned long)range.length];
+            
+        } copy];
+        
+        // common structures for unnamed structs
+        union {
+            struct {
+                CGFloat f1; CGFloat f2;
+            } _je_structFF;
+            struct {
+                struct { CGFloat f1; CGFloat f2; } s1;
+                struct { CGFloat f1; CGFloat f2; } s2;
+            } _je_structFFFF;
+            struct {
+                double d1; double d2;
+            } _je_structDD;
+            struct {
+                struct { double d1; double d2; } s1;
+                struct { double d1; double d2; } s2;
+            } _je_structDDDD;
+        } _je_structProxy;
+        
+        blockDictionary[@(@encode(typeof(_je_structProxy._je_structFF)))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
+            
+            typeof(_je_structProxy) proxy = {};
+            [structValue getValue:&proxy];
+            [stringBuilder appendFormat:
+             @"{ %g, %g }",
+             proxy._je_structFF.f1, proxy._je_structFF.f2];
+            
+        } copy];
+        blockDictionary[@(@encode(typeof(_je_structProxy._je_structFFFF)))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
+            
+            typeof(_je_structProxy) proxy = {};
+            [structValue getValue:&proxy];
+            [stringBuilder appendFormat:
+             @"{ { %g, %g }, { %g, %g } }",
+             proxy._je_structFFFF.s1.f1, proxy._je_structFFFF.s1.f2,
+             proxy._je_structFFFF.s2.f1, proxy._je_structFFFF.s2.f2];
+            
+        } copy];
+        blockDictionary[@(@encode(typeof(_je_structProxy._je_structDD)))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
+            
+            typeof(_je_structProxy) proxy = {};
+            [structValue getValue:&proxy];
+            [stringBuilder appendFormat:
+             @"{ %g, %g }",
+             proxy._je_structDD.d1, proxy._je_structDD.d2];
+            
+        } copy];
+        blockDictionary[@(@encode(typeof(_je_structProxy._je_structDDDD)))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
+            
+            typeof(_je_structProxy) proxy = {};
+            [structValue getValue:&proxy];
+            [stringBuilder appendFormat:
+             @"{ { %g, %g }, { %g, %g } }",
+             proxy._je_structDDDD.s1.d1,
+             proxy._je_structDDDD.s1.d2,
+             proxy._je_structDDDD.s2.d1,
+             proxy._je_structDDDD.s2.d2];
             
         } copy];
         
@@ -1067,18 +1112,21 @@
         
     });
     
-    NSString *(^getStructString)(NSValue *structValue) = structHandlers[@(objCType)];
+    void (^getStructString)(NSValue *structValue, NSMutableString *stringBuilder) = structHandlers[@(objCType)];
     if (getStructString)
     {
-        [valueStringBuilder appendString:getStructString(wrappedValue)];
-    }
-    else if (wrappedValue)
-    {
-        [valueStringBuilder appendFormat:@"{ %@ }", [wrappedValue debugDescription]];
+        getStructString(wrappedValue, valueStringBuilder);
     }
     else
     {
-        [valueStringBuilder appendString:@"{ ... }"];
+        NSString *description = [wrappedValue debugDescription];
+        if (([NSString isNilOrEmptyString:description] || [description length] == 2 )
+            && [description hasPrefix:@"<"]
+            && [description hasSuffix:@">"])
+        {
+            description = @"...";
+        }
+        [valueStringBuilder appendFormat:@"{ %@ }", description];
     }
 }
 

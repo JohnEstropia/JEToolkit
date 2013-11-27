@@ -10,8 +10,6 @@
 
 @interface NSMutableString (JEDebugging)
 
-+ (NSDictionary *)CStringBackslashEscapeMapping;
-
 /*! Converts the receiver to how it would be backslash-escaped in a C source code and encloses it in double quotes.
  */
 - (void)replaceWithCStringRepresentation;

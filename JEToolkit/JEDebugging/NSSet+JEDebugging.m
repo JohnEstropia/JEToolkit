@@ -8,7 +8,6 @@
 
 #import "NSSet+JEDebugging.h"
 
-#import "NSObject+JEDebugging.h"
 #import "NSMutableString+JEDebugging.h"
 
 

@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#import "NSObject+JEDebugging.h"
+
+
 @interface NSObject (JEDebugging)
 
 - (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass

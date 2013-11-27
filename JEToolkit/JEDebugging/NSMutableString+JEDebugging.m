@@ -15,7 +15,7 @@
 
 #pragma mark - public
 
-+ (NSDictionary *)CStringBackslashEscapeMapping
+- (void)replaceWithCStringRepresentation
 {
     static NSDictionary *replacementMapping;
     static dispatch_once_t onceToken;
@@ -34,18 +34,14 @@
                                 @"\"" : @"\\\"" };
         
     });
-    return replacementMapping;
-}
-
-- (void)replaceWithCStringRepresentation
-{
+    
     [self
      replaceOccurrencesOfString:@"\\"
      withString:@"\\\\"
      options:(NSCaseInsensitiveSearch | NSLiteralSearch)
      range:[self range]];
     
-    [[[self class] CStringBackslashEscapeMapping] enumerateKeysAndObjectsUsingBlock:^(NSString *occurrence, NSString *replacement, BOOL *stop) {
+    [replacementMapping enumerateKeysAndObjectsUsingBlock:^(NSString *occurrence, NSString *replacement, BOOL *stop) {
         
         [self
          replaceOccurrencesOfString:occurrence

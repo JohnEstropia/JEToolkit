@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+#import "NSObject+JEDebugging.h"
+
+
 @interface NSDictionary (JEDebugging)
+
+- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
+                                      includeAddress:(BOOL)includeAddress;
 
 @end

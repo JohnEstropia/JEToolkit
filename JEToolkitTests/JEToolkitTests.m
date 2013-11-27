@@ -9,12 +9,16 @@
 #import <XCTest/XCTest.h>
 
 #import <Foundation/Foundation.h>
+
+#import <CoreLocation/CoreLocation.h>
+#import <MapKit/MapKit.h>
 #import "JEToolkit.h"
 
 
 @interface JEToolkitTests : XCTestCase
 
 @end
+
 
 @implementation JEToolkitTests
 
@@ -70,7 +74,13 @@
     JEDumpArray(cstringArray);
     JEDump(&cstringArray);
     JEDump([NSValue valueWithBytes:cstringArray objCType:@encode(typeof(cstringArray))]);
-    
+    char asciiArray[CHAR_MAX + 1] = {};
+    for(int i = 0; i <= CHAR_MAX; ++i)
+    {
+        asciiArray[i] = i;
+    }
+    JEDumpArray(asciiArray);
+
     JEDump(_cmd);
     JEDump(@selector(viewDidAppear:));
     SEL selector = NULL;
@@ -154,19 +164,29 @@
     
     JEDump(CGRectZero);
     
-    JEDump((CGPoint){
-        1.999,
-        2.999
-    });
-    JEDump((CGSize){
-        1.999,
-        2.999
-    });
-    JEDump((CGRect){{1.999, 2.999}, {3.999, 4.999}});
-    JEDump((CGAffineTransform){1.999, 2.999, 3.999, 4.999, 5.999, 6.999});
-    JEDump((UIEdgeInsets){1.999, 2.999, 3.999, 4.999});
-    JEDump((UIOffset){1.999, 2.999});
-    JEDump((NSRange){1, 2});
+    JEDump((CGPoint){ 1.999, 2.999 });
+    JEDump((CGSize){ 1.999, 2.999 });
+    JEDump((CGRect){ {1.999, 2.999 }, { 3.999, 4.999 }});
+    JEDump((CGAffineTransform){ 1.999, 2.999, 3.999, 4.999, 5.999, 6.999 });
+    JEDump((UIEdgeInsets){ 1.999, 2.999, 3.999, 4.999 });
+    JEDump((UIOffset){ 1.999, 2.999 });
+    JEDump((NSRange){ 1, 2 });
+    JEDump((CLLocationCoordinate2D){ 1.999, 2.999 });
+    JEDump((MKCoordinateSpan){ 1.999, 2.999 });
+    JEDump((MKCoordinateRegion){ { 1.999, 2.999 }, { 3.999, 4.999 } });
+    JEDump((MKMapPoint){ 1.999, 2.999 });
+    JEDump((MKMapSize){ 1.999, 2.999 });
+    JEDump((MKMapRect){ { 1.999, 2.999 }, { 3.999, 4.999 } });
+    struct { int i1; int i2; int i3; } unnamedStruct;
+    JEDump(unnamedStruct);
+    
+    struct { char i1:1; char i2:1; char i3:1; } bitfieldStruct = { 1, 0, 1 };
+    JEDump(bitfieldStruct);
+    JEDump((const char *)@encode(typeof(bitfieldStruct)));
+    NSUInteger bitfieldSize = 0;
+    NSUInteger bitfieldAlignedSize = 0;
+    JEDump(bitfieldSize);
+    JEDump(bitfieldAlignedSize);
     
     CGRect rect = (CGRect){{1, 2}, {3, 4}};
     JEDump(rect);
@@ -296,6 +316,22 @@
         JELog(@"Unnamed queue");
         
     });
+    
+    JEDump((CGColorRef)NULL);
+    JEDump([UIColor clearColor].CGColor);
+    JEDump(CFGetTypeID([UIColor clearColor].CGColor));
+    
+    @try {
+        
+        [[NSException
+          exceptionWithName:@"Test Exception"
+          reason:@"This exception was raised to test exception logging"
+          userInfo:dictionary] raise];
+    }
+    @catch (NSException *exception) {
+        
+        JEDump(exception);
+    }
 }
 
 JESynthesizeObject(id, synthesizedId, setSynthesizedId, JESynthesizeRetainNonatomic);
