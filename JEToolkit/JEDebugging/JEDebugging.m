@@ -23,8 +23,10 @@
 
 @property (nonatomic, assign) JEConsoleLogHeaderMask consoleLogHeaderMask;
 @property (nonatomic, assign) JEConsoleLogHeaderMask HUDLogHeaderMask;
+@property (nonatomic, copy) NSString *traceBulletString;
 @property (nonatomic, copy) NSString *logBulletString;
 @property (nonatomic, copy) NSString *dumpBulletString;
+@property (nonatomic, copy) NSString *errorBulletString;
 @property (nonatomic, weak) JEConsoleHUD *consoleHUD;
 
 @end
@@ -52,7 +54,9 @@
 }
 
 
-#pragma mark - private
+#pragma mark - Private
+
+#pragma mark shared objects
 
 + (JEDebugging *)sharedInstance
 {
@@ -129,15 +133,29 @@
     return settingsQueue;
 }
 
-+ (NSString *)defaultLogBulletString
+#pragma mark default bullets
+
++ (NSString *)defaultTraceBulletString
 {
     return @"🔹";
 }
 
-+ (NSString *)defaultDumpBulletString
++ (NSString *)defaultLogBulletString
 {
     return @"🔸";
 }
+
++ (NSString *)defaultDumpBulletString
+{
+    return @"↪︎";
+}
+
++ (NSString *)defaultErrorBulletString
+{
+    return @"⚠️";
+}
+
+#pragma mark utilities
 
 + (NSMutableString *)stringForlogHeader:(JELogHeader)header
                                withMask:(JEConsoleLogHeaderMask)mask
@@ -179,7 +197,9 @@
 }
 
 
-#pragma mark - public
+#pragma mark - Public
+
+#pragma mark HUD settings
 
 + (BOOL)isHUDEnabled
 {
@@ -225,15 +245,6 @@
     return consoleHeaderMask;
 }
 
-+ (void)setConsoleLogHeaderMask:(JEConsoleLogHeaderMask)mask
-{
-    dispatch_barrier_async([self settingsQueue], ^{
-        
-        [self sharedInstance].consoleLogHeaderMask = mask;
-        
-    });
-}
-
 + (JEConsoleLogHeaderMask)HUDLogHeaderMask
 {
     JEConsoleLogHeaderMask __block HUDLogHeaderMask;
@@ -245,6 +256,15 @@
     return HUDLogHeaderMask;
 }
 
++ (void)setConsoleLogHeaderMask:(JEConsoleLogHeaderMask)mask
+{
+    dispatch_barrier_async([self settingsQueue], ^{
+        
+        [self sharedInstance].consoleLogHeaderMask = mask;
+        
+    });
+}
+
 + (void)setHUDLogHeaderMask:(JEConsoleLogHeaderMask)mask
 {
     dispatch_barrier_async([self settingsQueue], ^{
@@ -252,6 +272,19 @@
         [self sharedInstance].HUDLogHeaderMask = mask;
         
     });
+}
+
+#pragma mark bullet settings
+
++ (NSString *)traceBulletString
+{
+    NSString *__block traceBulletString;
+    dispatch_sync([self settingsQueue], ^{
+        
+        traceBulletString = [self sharedInstance].traceBulletString;
+        
+    });
+    return traceBulletString;
 }
 
 + (NSString *)logBulletString
@@ -265,15 +298,6 @@
     return logBulletString;
 }
 
-+ (void)setLogBulletString:(NSString *)logBulletString
-{
-    dispatch_barrier_async([self settingsQueue], ^{
-        
-        [self sharedInstance].logBulletString = logBulletString;
-        
-    });
-}
-
 + (NSString *)dumpBulletString
 {
     NSString *__block dumpBulletString;
@@ -285,6 +309,35 @@
     return dumpBulletString;
 }
 
++ (NSString *)errorBulletString
+{
+    NSString *__block errorBulletString;
+    dispatch_sync([self settingsQueue], ^{
+        
+        errorBulletString = [self sharedInstance].errorBulletString;
+        
+    });
+    return errorBulletString;
+}
+
++ (void)setTraceBulletString:(NSString *)traceBulletString
+{
+    dispatch_barrier_async([self settingsQueue], ^{
+        
+        [self sharedInstance].traceBulletString = traceBulletString;
+        
+    });
+}
+
++ (void)setLogBulletString:(NSString *)logBulletString
+{
+    dispatch_barrier_async([self settingsQueue], ^{
+        
+        [self sharedInstance].logBulletString = logBulletString;
+        
+    });
+}
+
 + (void)setDumpBulletString:(NSString *)dumpBulletString
 {
     dispatch_barrier_async([self settingsQueue], ^{
@@ -293,6 +346,17 @@
         
     });
 }
+
++ (void)setErrorBulletString:(NSString *)errorBulletString
+{
+    dispatch_barrier_async([self settingsQueue], ^{
+        
+        [self sharedInstance].errorBulletString = errorBulletString;
+        
+    });
+}
+
+#pragma mark logging
 
 + (void)dumpValue:(NSValue *)wrappedValue
             label:(NSString *)label

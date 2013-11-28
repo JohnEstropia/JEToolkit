@@ -13,7 +13,4 @@
 
 @interface NSHashTable (JEDebugging)
 
-- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
-                                      includeAddress:(BOOL)includeAddress;
-
 @end

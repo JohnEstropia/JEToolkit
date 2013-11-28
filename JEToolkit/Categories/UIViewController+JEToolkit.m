@@ -11,7 +11,7 @@
 
 @implementation UIViewController (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 - (BOOL)hasWindow
 {

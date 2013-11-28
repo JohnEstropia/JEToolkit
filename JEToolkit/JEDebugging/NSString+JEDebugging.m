@@ -1,28 +1,27 @@
 //
-//  NSObject+JEDebugging.m
+//  NSString+JEDebugging.m
 //  JEToolkit
 //
-//  Created by DIT John Estropia on 2013/11/26.
+//  Created by DIT John Estropia on 2013/11/28.
 //  Copyright (c) 2013年 John Rommel Estropia. All rights reserved.
 //
 
-#import "NSObject+JEDebugging.h"
+#import "NSString+JEDebugging.h"
 
 #import "NSMutableString+JEDebugging.h"
 
 
-@implementation NSObject (JEDebugging)
+@implementation NSString (JEDebugging)
 
-- (NSMutableString *)detailedDescription
-{
-    return [self detailedDescriptionIncludeClass:YES includeAddress:YES];
-}
+#pragma mark - NSObject+JEDebugging
 
 - (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
                                       includeAddress:(BOOL)includeAddress
 {
     NSMutableString *description = [[NSMutableString alloc] initWithString:[self debugDescription]];
     [description replaceWithCStringRepresentation];
+    [description insertString:@"@" atIndex:0];
+    
     if (includeAddress)
     {
         [description insertString:[NSString stringWithFormat:@"<%p> ", self] atIndex:0];

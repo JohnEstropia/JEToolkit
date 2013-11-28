@@ -13,7 +13,7 @@
 
 @implementation NSMutableString (JEDebugging)
 
-#pragma mark - public
+#pragma mark - Public
 
 - (void)replaceWithCStringRepresentation
 {

@@ -14,7 +14,7 @@
 
 @implementation NSURL (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 - (NSString *)UTI
 {

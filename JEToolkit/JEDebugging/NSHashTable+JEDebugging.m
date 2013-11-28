@@ -19,9 +19,10 @@
                                       includeAddress:(BOOL)includeAddress
 {
     NSUInteger count = [self count];
-    NSMutableString *description = [[NSMutableString alloc] initWithFormat:
-                                    @"count = %lu (",
-                                    (unsigned long)count];
+    NSMutableString *description = (count == 1
+                                    ? [[NSMutableString alloc] initWithString:@"1 entry ("]
+                                    : [[NSMutableString alloc] initWithFormat:@"%lu entries (",
+                                       (unsigned long)count]);
     if (includeAddress)
     {
         [description insertString:[NSString stringWithFormat:@"<%p> ", self] atIndex:0];

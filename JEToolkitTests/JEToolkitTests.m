@@ -12,7 +12,10 @@
 
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
+#import <float.h>
+
 #import "JEToolkit.h"
+#import "JEOrderedDictionary.h"
 
 
 @interface JEToolkitTests : XCTestCase
@@ -221,23 +224,40 @@
     JEDump(longDouble);
     
     JEDump(0.12345f);
+    JEDump([[NSNumber numberWithFloat:0.12345f] stringValue]);
     JEDump(0.123456f);
+    JEDump([[NSNumber numberWithFloat:0.123456f] stringValue]);
     JEDump(0.1234567f);
+    JEDump([[NSNumber numberWithFloat:0.1234567f] stringValue]);
     JEDump(0.12345678f);
+    JEDump([[NSNumber numberWithFloat:0.12345678f] stringValue]);
     JEDump(0.123456789f);
+    JEDump([[NSNumber numberWithFloat:0.123456789f] stringValue]);
     JEDump(0.1234567899f);
+    JEDump([[NSNumber numberWithFloat:0.1234567899f] stringValue]);
     JEDump(0.12345678991f);
+    JEDump([[NSNumber numberWithFloat:0.12345678991f] stringValue]);
     JEDump(0.123456789912f);
+    JEDump([[NSNumber numberWithFloat:0.123456789912f] stringValue]);
     JEDump(123.123f);
+    JEDump([[NSNumber numberWithFloat:123.123f] stringValue]);
     JEDump(1234.1234f);
+    JEDump([[NSNumber numberWithFloat:1234.1234f] stringValue]);
     JEDump(12345.12345f);
+    JEDump([[NSNumber numberWithFloat:12345.12345f] stringValue]);
     JEDump(123456.123456f);
+    JEDump([[NSNumber numberWithFloat:123456.123456f] stringValue]);
     JEDump(1234567.1234567f);
+    JEDump([[NSNumber numberWithFloat:1234567.1234567f] stringValue]);
     JEDump(12345678.12345678f);
+    JEDump([[NSNumber numberWithFloat:12345678.12345678f] stringValue]);
     JEDump(123456789.123456789f);
+    JEDump([[NSNumber numberWithFloat:123456789.123456789f] stringValue]);
     JEDump(1234567899.1234567899f);
+    JEDump([[NSNumber numberWithFloat:1234567899.1234567899f] stringValue]);
     
     JEDump(0.1234567);
+    JEDump([[NSNumber numberWithDouble:0.1234567] stringValue]);
     JEDump(0.12345678);
     JEDump(0.123456789);
     JEDump(0.1234567899);
@@ -252,7 +272,9 @@
     JEDump(0.1234567899123456789);
     JEDump(0.12345678991234567899);
     JEDump(0.123456789912345678991);
+    JEDump([[NSNumber numberWithDouble:0.123456789912345678991] stringValue]);
     JEDump(123456.123456);
+    JEDump([[NSNumber numberWithDouble:123456.123456] stringValue]);
     JEDump(1234567.1234567);
     JEDump(12345678.12345678);
     JEDump(123456789.123456789);
@@ -267,6 +289,7 @@
     JEDump(123456789912345678.123456789912345678);
     JEDump(1234567899123456789.1234567899123456789);
     JEDump(12345678991234567899.0);
+    JEDump([[NSNumber numberWithDouble:12345678991234567899.0] stringValue]);
     
     JEDump(0.123456789912l);
     JEDump(0.1234567899123l);
@@ -332,6 +355,34 @@
         
         JEDump(exception);
     }
+    
+    JEOrderedDictionary *orderedDictionary = [[JEOrderedDictionary alloc] init];
+    orderedDictionary[@"500"] = @5,000;
+    orderedDictionary[@"200"] = @NO;
+    orderedDictionary[@3000] = @"300";
+    orderedDictionary[@"100"] = @1,000;
+    orderedDictionary[@"000"] = @0;
+    JEDump(orderedDictionary);
+    
+    orderedDictionary[@"500"] = @YES;
+    JEDump(orderedDictionary);
+    
+    JEDump([NSNumber numberWithBool:YES]);
+    JEDump([NSNumber numberWithBool:NO]);
+    JEDump([NSNumber numberWithChar:YES]);
+    JEDump([NSNumber numberWithChar:NO]);
+    JEDump(@YES);
+    JEDump(@NO);
+    JEDump(@([orderedDictionary count] == 5));
+    JEDump(@([orderedDictionary count] < 5));
+    JEDump(@((BOOL)([orderedDictionary count] == 5)));
+    JEDump(@((BOOL)([orderedDictionary count] < 5)));
+    
+    NSString *string = @"string";
+    id idArray[3] = { string, string, string };
+    JEDumpArray(idArray);
+    
+    JEDump([NSNull null]);
 }
 
 JESynthesizeObject(id, synthesizedId, setSynthesizedId, JESynthesizeRetainNonatomic);

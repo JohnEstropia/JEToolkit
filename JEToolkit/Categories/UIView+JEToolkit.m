@@ -10,7 +10,7 @@
 
 @implementation UIView (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 - (id)firstSubviewWithClass:(Class)class
 {

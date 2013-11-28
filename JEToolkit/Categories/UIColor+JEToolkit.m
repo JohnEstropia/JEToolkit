@@ -10,7 +10,7 @@
 
 @implementation UIColor (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 + (UIColor *)colorWithValue:(id)valueOrNil
 {

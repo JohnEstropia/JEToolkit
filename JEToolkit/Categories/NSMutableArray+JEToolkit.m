@@ -10,7 +10,7 @@
 
 @implementation NSMutableArray (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 - (void)shuffle
 {

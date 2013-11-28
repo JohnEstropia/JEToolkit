@@ -1,8 +1,8 @@
 //
-//  NSPointerArray+JEDebugging.h
+//  NSNumber+JEDebugging.h
 //  JEToolkit
 //
-//  Created by DIT John Estropia on 2013/11/26.
+//  Created by DIT John Estropia on 2013/11/28.
 //  Copyright (c) 2013年 John Rommel Estropia. All rights reserved.
 //
 
@@ -11,6 +11,6 @@
 #import "NSObject+JEDebugging.h"
 
 
-@interface NSPointerArray (JEDebugging)
+@interface NSNumber (JEDebugging)
 
 @end

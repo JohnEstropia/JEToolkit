@@ -19,7 +19,7 @@
                                       includeAddress:(BOOL)includeAddress
 {
     NSMutableString *description = [[NSMutableString alloc] initWithFormat:
-                                    @"%@ (code = %li) {",
+                                    @"%@ (code %li)",
                                     [self domain],
                                     (long)[self code]];
     if (includeAddress)
@@ -34,9 +34,10 @@
     NSDictionary *userInfo = [self userInfo];
     if ([userInfo count] <= 0)
     {
-        [description appendString:@"}"];
         return description;
     }
+    
+    [description appendString:@" userInfo: {"];
     
     BOOL __block isFirstEntry = YES;
     [userInfo enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "JECompilerDefines.h"
+#import "NSObject+JEDebugging.h"
 
 
 typedef struct JELogHeader {
@@ -16,6 +17,16 @@ typedef struct JELogHeader {
     const char *functionName;
     int lineNumber;
 } JELogHeader;
+
+typedef NS_OPTIONS(NSUInteger, JELogLevel)
+{
+    JELogLevelTrace = 0,
+    JELogLevelDebug = (1 << 0),
+    JELogLevelError = (1 << 1),
+    // add custom masks here
+    
+    JELogLevelAll   = ~0u
+};
 
 
 #ifdef DEBUG
@@ -92,20 +103,30 @@ typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
 
 @interface JEDebugging : NSObject
 
+#pragma mark - HUD settings
+
 + (BOOL)isHUDEnabled;
 + (void)setIsHUDEnabled:(BOOL)isHUDEnabled;
 
 + (JEConsoleLogHeaderMask)consoleLogHeaderMask;
-+ (void)setConsoleLogHeaderMask:(JEConsoleLogHeaderMask)mask;
-
 + (JEConsoleLogHeaderMask)HUDLogHeaderMask;
++ (void)setConsoleLogHeaderMask:(JEConsoleLogHeaderMask)mask;
 + (void)setHUDLogHeaderMask:(JEConsoleLogHeaderMask)mask;
 
-+ (NSString *)logBulletString;
-+ (void)setLogBulletString:(NSString *)logBulletString;
 
+#pragma mark - bullet settings
+
++ (NSString *)traceBulletString;
++ (NSString *)logBulletString;
 + (NSString *)dumpBulletString;
++ (NSString *)errorBulletString;
++ (void)setTraceBulletString:(NSString *)traceBulletString;
++ (void)setLogBulletString:(NSString *)logBulletString;
 + (void)setDumpBulletString:(NSString *)dumpBulletString;
++ (void)setErrorBulletString:(NSString *)errorBulletString;
+
+
+#pragma mark - logging
 
 + (void)dumpValue:(NSValue *)wrappedValue
             label:(NSString *)label

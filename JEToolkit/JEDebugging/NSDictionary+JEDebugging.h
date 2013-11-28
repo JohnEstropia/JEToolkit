@@ -13,7 +13,4 @@
 
 @interface NSDictionary (JEDebugging)
 
-- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
-                                      includeAddress:(BOOL)includeAddress;
-
 @end

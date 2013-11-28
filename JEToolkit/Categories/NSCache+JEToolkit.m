@@ -10,7 +10,7 @@
 
 @implementation NSCache (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 - (id)objectForKeyedSubscript:(id)key
 {

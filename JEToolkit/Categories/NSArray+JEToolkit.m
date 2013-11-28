@@ -13,7 +13,7 @@
 
 @implementation NSArray (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 #pragma mark Container Tools
 

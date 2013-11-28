@@ -10,7 +10,7 @@
 
 @implementation UIImage (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 + (instancetype)imageFromFile:(NSString *)filePath
                         scale:(CGFloat)scale

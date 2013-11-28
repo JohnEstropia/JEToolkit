@@ -14,7 +14,7 @@
  */
 - (void)replaceWithCStringRepresentation;
 
-/*! Indents the receiver by two spaces times indentLevel. The first line will not be indented.
+/*! Indents the receiver by two spaces for each indentLevel. The first line will not be indented.
  */
 - (void)indentByLevel:(NSUInteger)indentLevel;
 

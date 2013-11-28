@@ -10,7 +10,7 @@
 
 @implementation NSNumber (JEToolkit)
 
-#pragma mark - private
+#pragma mark - Private
 
 + (NSNumberFormatter *)decimalFormatter
 {
@@ -26,7 +26,7 @@
 }
 
 
-#pragma mark - public
+#pragma mark - Public
 
 #pragma mark Conversion
 

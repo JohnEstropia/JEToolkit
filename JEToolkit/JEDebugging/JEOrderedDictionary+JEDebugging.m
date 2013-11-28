@@ -1,17 +1,17 @@
 //
-//  NSDictionary+JEDebugging.m
+//  JEOrderedDictionary+JEDebugging.m
 //  JEToolkit
 //
-//  Created by DIT John Estropia on 2013/11/26.
+//  Created by DIT John Estropia on 2013/11/28.
 //  Copyright (c) 2013年 John Rommel Estropia. All rights reserved.
 //
 
-#import "NSDictionary+JEDebugging.h"
+#import "JEOrderedDictionary+JEDebugging.h"
 
 #import "NSMutableString+JEDebugging.h"
 
 
-@implementation NSDictionary (JEDebugging)
+@implementation JEOrderedDictionary (JEDebugging)
 
 #pragma mark - NSObject+JEDebugging
 
@@ -20,8 +20,8 @@
 {
     NSUInteger count = [self count];
     NSMutableString *description = (count == 1
-                                    ? [[NSMutableString alloc] initWithString:@"1 entry {"]
-                                    : [[NSMutableString alloc] initWithFormat:@"%lu entries {",
+                                    ? [[NSMutableString alloc] initWithString:@"1 entry @{"]
+                                    : [[NSMutableString alloc] initWithFormat:@"%lu entries @{",
                                        (unsigned long)count]);
     if (includeAddress)
     {
@@ -38,7 +38,7 @@
     }
     
     BOOL __block isFirstEntry = YES;
-    [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+    [self enumerateIndexesAndKeysAndObjectsUsingBlock:^(NSUInteger idx, id key, id obj, BOOL *stop) {
         
         @autoreleasepool {
             
@@ -52,6 +52,7 @@
                 [description appendString:@",\n["];
             }
             
+            [description appendFormat:@"%lu: ", (unsigned long)idx];
             [description appendString:[key detailedDescriptionIncludeClass:NO includeAddress:NO]];
             [description appendString:@"]: "];
             [description appendString:[obj detailedDescriptionIncludeClass:YES includeAddress:NO]];

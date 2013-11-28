@@ -46,7 +46,7 @@
 }
 
 
-#pragma mark - private
+#pragma mark - Private
 
 + (NSNumberFormatter *)integerFormatter
 {
@@ -331,7 +331,6 @@
             
             @autoreleasepool {
                 
-                [valueStringBuilder appendString:@" "];
                 [self
                  appendDetailsForForValue:nil
                  expectedObjCType:[blockSignature methodReturnType]
@@ -356,7 +355,7 @@
                         
                         if (i > 1)
                         {
-                            [valueStringBuilder appendString:@","];
+                            [valueStringBuilder appendString:@", "];
                         }
                         
                         [self

@@ -10,7 +10,7 @@
 
 @implementation NSObject (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 + (NSString *)className
 {

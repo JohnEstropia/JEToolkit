@@ -10,7 +10,7 @@
 
 @implementation NSIndexSet (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 - (NSUInteger)integerAtIndex:(NSInteger)index
 {

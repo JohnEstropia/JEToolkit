@@ -14,7 +14,7 @@
 
 @implementation NSDate (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 #pragma mark Conversion
 
