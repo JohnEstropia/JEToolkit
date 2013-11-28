@@ -379,7 +379,7 @@
     JEDump(@((BOOL)([orderedDictionary count] < 5)));
     
     NSString *string = @"string";
-    id idArray[3] = { string, string, string };
+    id idArray[] = { string, string, string };
     JEDumpArray(idArray);
     
     JEDump([NSNull null]);

@@ -2,8 +2,8 @@
 //  NSException+JEDebugging.m
 //  JEToolkit
 //
-//  Created by DIT John Estropia on 2013/11/27.
-//  Copyright (c) 2013年 John Rommel Estropia. All rights reserved.
+//  Created by John Rommel Estropia on 2013/11/27.
+//  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
 #import "NSException+JEDebugging.h"
@@ -57,15 +57,8 @@
         
         @autoreleasepool {
             
-            if (idx > 0)
-            {
-                [callStackString appendString:@",\n"];
-            }
-            else
-            {
-                [callStackString appendString:@"\n"];
-            }
-            [callStackString appendString:[obj detailedDescriptionIncludeClass:NO includeAddress:NO]];
+            [callStackString appendString:@"\n"];
+            [callStackString appendString:[obj description]];
             
         }
         

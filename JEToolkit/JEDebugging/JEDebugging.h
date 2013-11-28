@@ -18,14 +18,28 @@ typedef struct JELogHeader {
     int lineNumber;
 } JELogHeader;
 
+
+typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
+{
+    JEConsoleLogHeaderMaskNone      = 0,
+    JEConsoleLogHeaderMaskDate      = (1 << 0),
+    JEConsoleLogHeaderMaskQueue     = (1 << 1),
+    JEConsoleLogHeaderMaskFile      = (1 << 2),
+    JEConsoleLogHeaderMaskFunction  = (1 << 3),
+    JEConsoleLogHeaderMaskDefault   = (JEConsoleLogHeaderMaskQueue
+                                       | JEConsoleLogHeaderMaskFile
+                                       | JEConsoleLogHeaderMaskFunction),
+    JEConsoleLogHeaderMaskAll       = ~0u
+};
+
 typedef NS_OPTIONS(NSUInteger, JELogLevel)
 {
-    JELogLevelTrace = 0,
-    JELogLevelDebug = (1 << 0),
-    JELogLevelError = (1 << 1),
+    JELogLevelTrace     = 0,
+    JELogLevelLog       = (1 << 0),
+    JELogLevelAlert     = (1 << 1),
     // add custom masks here
     
-    JELogLevelAll   = ~0u
+    JELogLevelAll       = ~0u
 };
 
 
@@ -46,9 +60,6 @@ typedef NS_OPTIONS(NSUInteger, JELogLevel)
 #define JEDump(nonArrayExpression...) \
     do \
     { \
-        _Pragma("clang diagnostic push") \
-        _Pragma("clang diagnostic ignored \"-Wmissing-braces\"") \
-        _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
         const typeof(nonArrayExpression) _je_objectClone = nonArrayExpression; \
         [JEDebugging \
          dumpValue:[[NSValue alloc] \
@@ -56,7 +67,6 @@ typedef NS_OPTIONS(NSUInteger, JELogLevel)
                     objCType:@encode(typeof(nonArrayExpression))] \
          label:@""#nonArrayExpression \
          header:JE_LOG_HEADER]; \
-        _Pragma("clang diagnostic pop") \
     } while(0)
 
 /*! Dumps static arrays to the console. Also displays the source filename, line number, and method name. For other variables, expressions, etc., use JEDump() instead.
@@ -65,15 +75,11 @@ typedef NS_OPTIONS(NSUInteger, JELogLevel)
     do \
     { \
         [JEDebugging \
-        _Pragma("clang diagnostic push") \
-        _Pragma("clang diagnostic ignored \"-Wmissing-braces\"") \
-        _Pragma("clang diagnostic ignored \"-Wint-conversion\"") \
          dumpValue:[[NSValue alloc] \
                     initWithBytes:&arrayExpression[0] \
                     objCType:@encode(typeof(arrayExpression))] \
          label:@""#arrayExpression \
          header:JE_LOG_HEADER]; \
-        _Pragma("clang diagnostic pop") \
     } while(0)
 
 /*! Logs a format string to the console. Also displays the source filename, line number, and method name.
@@ -84,21 +90,8 @@ typedef NS_OPTIONS(NSUInteger, JELogLevel)
       header:JE_LOG_HEADER, \
       ##__VA_ARGS__]
 
-
-typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
-{
-    JEConsoleLogHeaderMaskNone      = 0,
-    JEConsoleLogHeaderMaskDate      = (1 << 1),
-    JEConsoleLogHeaderMaskQueue     = (1 << 2),
-    JEConsoleLogHeaderMaskFile      = (1 << 3),
-    JEConsoleLogHeaderMaskFunction  = (1 << 4),
-    
-    JEConsoleLogHeaderMaskDefault   = (JEConsoleLogHeaderMaskQueue
-                                       | JEConsoleLogHeaderMaskFile
-                                       | JEConsoleLogHeaderMaskFunction),
-    
-    JEConsoleLogHeaderMaskAll       = -1
-};
+#warning TODO: http://doing-it-wrong.mikeweller.com/2012/07/youre-doing-it-wrong-1-nslogdebug-ios.html
+#define JELog(expression...)
 
 
 @interface JEDebugging : NSObject
@@ -116,14 +109,14 @@ typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
 
 #pragma mark - bullet settings
 
++ (NSString *)dumpBulletString;
 + (NSString *)traceBulletString;
 + (NSString *)logBulletString;
-+ (NSString *)dumpBulletString;
-+ (NSString *)errorBulletString;
++ (NSString *)alertBulletString;
++ (void)setDumpBulletString:(NSString *)dumpBulletString;
 + (void)setTraceBulletString:(NSString *)traceBulletString;
 + (void)setLogBulletString:(NSString *)logBulletString;
-+ (void)setDumpBulletString:(NSString *)dumpBulletString;
-+ (void)setErrorBulletString:(NSString *)errorBulletString;
++ (void)setAlertBulletString:(NSString *)alertBulletString;
 
 
 #pragma mark - logging

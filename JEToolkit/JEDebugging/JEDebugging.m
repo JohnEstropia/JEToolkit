@@ -26,7 +26,7 @@
 @property (nonatomic, copy) NSString *traceBulletString;
 @property (nonatomic, copy) NSString *logBulletString;
 @property (nonatomic, copy) NSString *dumpBulletString;
-@property (nonatomic, copy) NSString *errorBulletString;
+@property (nonatomic, copy) NSString *alertBulletString;
 @property (nonatomic, weak) JEConsoleHUD *consoleHUD;
 
 @end
@@ -46,9 +46,6 @@
     
     _consoleLogHeaderMask = JEConsoleLogHeaderMaskDefault;
     _HUDLogHeaderMask = JEConsoleLogHeaderMaskDefault;
-    _logBulletString = nil;
-    _dumpBulletString = nil;
-    
     
     return self;
 }
@@ -276,6 +273,17 @@
 
 #pragma mark bullet settings
 
++ (NSString *)dumpBulletString
+{
+    NSString *__block dumpBulletString;
+    dispatch_sync([self settingsQueue], ^{
+        
+        dumpBulletString = [self sharedInstance].dumpBulletString;
+        
+    });
+    return dumpBulletString;
+}
+
 + (NSString *)traceBulletString
 {
     NSString *__block traceBulletString;
@@ -298,26 +306,24 @@
     return logBulletString;
 }
 
-+ (NSString *)dumpBulletString
++ (NSString *)alertBulletString
 {
-    NSString *__block dumpBulletString;
+    NSString *__block alertBulletString;
     dispatch_sync([self settingsQueue], ^{
         
-        dumpBulletString = [self sharedInstance].dumpBulletString;
+        alertBulletString = [self sharedInstance].alertBulletString;
         
     });
-    return dumpBulletString;
+    return alertBulletString;
 }
 
-+ (NSString *)errorBulletString
++ (void)setDumpBulletString:(NSString *)dumpBulletString
 {
-    NSString *__block errorBulletString;
-    dispatch_sync([self settingsQueue], ^{
+    dispatch_barrier_async([self settingsQueue], ^{
         
-        errorBulletString = [self sharedInstance].errorBulletString;
+        [self sharedInstance].dumpBulletString = dumpBulletString;
         
     });
-    return errorBulletString;
 }
 
 + (void)setTraceBulletString:(NSString *)traceBulletString
@@ -338,20 +344,11 @@
     });
 }
 
-+ (void)setDumpBulletString:(NSString *)dumpBulletString
++ (void)setAlertBulletString:(NSString *)alertBulletString
 {
     dispatch_barrier_async([self settingsQueue], ^{
         
-        [self sharedInstance].dumpBulletString = dumpBulletString;
-        
-    });
-}
-
-+ (void)setErrorBulletString:(NSString *)errorBulletString
-{
-    dispatch_barrier_async([self settingsQueue], ^{
-        
-        [self sharedInstance].errorBulletString = errorBulletString;
+        [self sharedInstance].alertBulletString = alertBulletString;
         
     });
 }
