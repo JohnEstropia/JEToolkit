@@ -25,6 +25,7 @@
 #define JE_STATIC                   static
 #define JE_STATIC_INLINE            FOUNDATION_STATIC_INLINE
 #define JE_REQUIRES_NIL_TERMINATION NS_REQUIRES_NIL_TERMINATION
+#define JE_FILE_NAME                ((strrchr(__FILE__, '/') ?: (__FILE__ - 1)) + 1)
 
 
 #endif

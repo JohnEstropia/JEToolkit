@@ -183,14 +183,6 @@
     struct { int i1; int i2; int i3; } unnamedStruct;
     JEDump(unnamedStruct);
     
-    struct { char i1:1; char i2:1; char i3:1; } bitfieldStruct = { 1, 0, 1 };
-    JEDump(bitfieldStruct);
-    JEDump((const char *)@encode(typeof(bitfieldStruct)));
-    NSUInteger bitfieldSize = 0;
-    NSUInteger bitfieldAlignedSize = 0;
-    JEDump(bitfieldSize);
-    JEDump(bitfieldAlignedSize);
-    
     CGRect rect = (CGRect){{1, 2}, {3, 4}};
     JEDump(rect);
     JEDump(&rect);
@@ -323,23 +315,6 @@
     JEDump(1234567899123456789912.123456789912l);
     JEDump(12345678991234567899123.1234567899123l);
     
-    JELog(@"No Parameters");
-    JELog(@"Many Parameters: %@, %d, %f", @"yo", 10, 20.4f);
-    
-    dispatch_queue_t queue = dispatch_queue_create("TestQueue", DISPATCH_QUEUE_CONCURRENT);
-    dispatch_barrier_sync(queue, ^{
-        
-        JELog(@"Named queue");
-        
-    });
-    
-    queue = dispatch_queue_create(NULL, DISPATCH_QUEUE_CONCURRENT);
-    dispatch_barrier_sync(queue, ^{
-        
-        JELog(@"Unnamed queue");
-        
-    });
-    
     JEDump((CGColorRef)NULL);
     JEDump([UIColor clearColor].CGColor);
     JEDump(CFGetTypeID([UIColor clearColor].CGColor));
@@ -383,6 +358,28 @@
     JEDumpArray(idArray);
     
     JEDump([NSNull null]);
+    
+    JELog(@"Trace No Parameters");
+    JELogNotice(@"Log No Parameters");
+    JELogAlert(@"Alert No Parameters");
+    
+    JELog(@"Trace Many Parameters: %@, %d, %f", @"yo", 10, 20.4f);
+    JELogNotice(@"Log Many Parameters: %@, %d, %f", @"yo", 10, 20.4f);
+    JELogAlert(@"Alert Many Parameters: %@, %d, %f", @"yo", 10, 20.4f);
+    
+    dispatch_queue_t queue = dispatch_queue_create("TestQueue", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_barrier_sync(queue, ^{
+        
+        JELogLevel((1 << 5), @"Named queue");
+        
+    });
+    
+    queue = dispatch_queue_create(NULL, DISPATCH_QUEUE_CONCURRENT);
+    dispatch_barrier_sync(queue, ^{
+        
+        JELogLevel((1 << 5), @"Unnamed queue");
+        
+    });
 }
 
 JESynthesizeObject(id, synthesizedId, setSynthesizedId, JESynthesizeRetainNonatomic);

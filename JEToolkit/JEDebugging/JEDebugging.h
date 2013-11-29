@@ -12,30 +12,23 @@
 #import "NSObject+JEDebugging.h"
 
 
-typedef struct JELogHeader {
-    const char *fileName;
-    const char *functionName;
-    int lineNumber;
-} JELogHeader;
-
-
 typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
 {
-    JEConsoleLogHeaderMaskNone      = 0,
-    JEConsoleLogHeaderMaskDate      = (1 << 0),
-    JEConsoleLogHeaderMaskQueue     = (1 << 1),
-    JEConsoleLogHeaderMaskFile      = (1 << 2),
-    JEConsoleLogHeaderMaskFunction  = (1 << 3),
-    JEConsoleLogHeaderMaskDefault   = (JEConsoleLogHeaderMaskQueue
-                                       | JEConsoleLogHeaderMaskFile
-                                       | JEConsoleLogHeaderMaskFunction),
-    JEConsoleLogHeaderMaskAll       = ~0u
+    JEConsoleLogHeaderNone      = 0,
+    JEConsoleLogHeaderDate      = (1 << 0),
+    JEConsoleLogHeaderQueue     = (1 << 1),
+    
+    // Note that JEConsoleLogHeaderFile and JEConsoleLogHeaderFunction are ignored if neither DEBUG or JE_COMPILE_WITH_LOG_HEADER_CONSTANTS are defined. This is to prevent project directories and private method names from appearing in the app binary.
+    JEConsoleLogHeaderFile      = (1 << 2),
+    JEConsoleLogHeaderFunction  = (1 << 3),
+    
+    JEConsoleLogHeaderAll       = ~0u
 };
 
-typedef NS_OPTIONS(NSUInteger, JELogLevel)
+typedef NS_OPTIONS(NSUInteger, JELogLevelMask)
 {
     JELogLevelTrace     = 0,
-    JELogLevelLog       = (1 << 0),
+    JELogLevelNotice    = (1 << 0),
     JELogLevelAlert     = (1 << 1),
     // add custom masks here
     
@@ -43,19 +36,21 @@ typedef NS_OPTIONS(NSUInteger, JELogLevel)
 };
 
 
-#ifdef DEBUG
+typedef struct JELogHeader
+{
+    const char *fileName;
+    const char *functionName;
+    int lineNumber;
+} JELogHeader;
 
-#define JE_FILE_NAME   ((strrchr(__FILE__, '/') ?: (__FILE__ - 1)) + 1)
+#if defined(DEBUG) || JE_COMPILE_WITH_LOG_HEADER_CONSTANTS
 #define JE_LOG_HEADER  ((JELogHeader){ JE_FILE_NAME, __PRETTY_FUNCTION__, __LINE__ })
-
 #else
-
-#define JE_FILE_NAME   NULL
-#define JE_LOG_HEADER  ((JELogHeader){ JE_FILE_NAME, NULL, 0 })
-
+#define JE_LOG_HEADER  ((JELogHeader){ NULL, NULL, 0 })
 #endif
 
-/*! Dumps any variable, expression, etc. other than static arrays to the console. Also displays the source filename, line number, and method name. For static arrays use JEDumpArray() instead.
+/*! Dumps any variable, expression, etc. other than static arrays to the console.
+ For static arrays use JEDumpArray() instead.
  */
 #define JEDump(nonArrayExpression...) \
     do \
@@ -69,7 +64,8 @@ typedef NS_OPTIONS(NSUInteger, JELogLevel)
          header:JE_LOG_HEADER]; \
     } while(0)
 
-/*! Dumps static arrays to the console. Also displays the source filename, line number, and method name. For other variables, expressions, etc., use JEDump() instead.
+/*! Dumps static arrays to the console.
+ For other variables, expressions, etc., use JEDump() instead.
  */
 #define JEDumpArray(arrayExpression...) \
     do \
@@ -82,40 +78,69 @@ typedef NS_OPTIONS(NSUInteger, JELogLevel)
          header:JE_LOG_HEADER]; \
     } while(0)
 
+#ifndef JE_LOG_DEFAULT_LEVEL
+#define JE_LOG_DEFAULT_LEVEL JELogLevelTrace
+#endif
+
 /*! Logs a format string to the console. Also displays the source filename, line number, and method name.
  */
-#define JELog(format, ...) \
-    [JEDebugging \
-      logFormat:format \
-      header:JE_LOG_HEADER, \
-      ##__VA_ARGS__]
+#define JELog(formatString, ...) \
+    JELogLevel(JE_LOG_DEFAULT_LEVEL, formatString, ##__VA_ARGS__)
 
-#warning TODO: http://doing-it-wrong.mikeweller.com/2012/07/youre-doing-it-wrong-1-nslogdebug-ios.html
-#define JELog(expression...)
+#define JELogTrace(formatString, ...) \
+    JELogLevel(JELogLevelTrace, formatString, ##__VA_ARGS__)
+
+#define JELogNotice(formatString, ...) \
+    JELogLevel(JELogLevelNotice, formatString, ##__VA_ARGS__)
+
+#define JELogAlert(formatString, ...) \
+    JELogLevel(JELogLevelAlert, formatString, ##__VA_ARGS__)
+
+#define JELogLevel(level, formatString, ...) \
+    [JEDebugging \
+     logLevel:level \
+     header:JE_LOG_HEADER \
+     format:formatString, \
+     ##__VA_ARGS__]
 
 
 @interface JEDebugging : NSObject
 
 #pragma mark - HUD settings
 
-+ (BOOL)isHUDEnabled;
+// default: NO
 + (void)setIsHUDEnabled:(BOOL)isHUDEnabled;
 
-+ (JEConsoleLogHeaderMask)consoleLogHeaderMask;
-+ (JEConsoleLogHeaderMask)HUDLogHeaderMask;
+
+#pragma mark - log header mask settings
+
+// default: (JEConsoleLogHeaderQueue | JEConsoleLogHeaderFile | JEConsoleLogHeaderFunction)
 + (void)setConsoleLogHeaderMask:(JEConsoleLogHeaderMask)mask;
+// default: (JEConsoleLogHeaderQueue | JEConsoleLogHeaderFile | JEConsoleLogHeaderFunction)
 + (void)setHUDLogHeaderMask:(JEConsoleLogHeaderMask)mask;
+// default: JEConsoleLogHeaderAll
++ (void)setFileLogHeaderMask:(JEConsoleLogHeaderMask)mask;
+
+
+#pragma mark - log destination mask settings
+
+// default: JELogLevelAll
++ (void)setConsoleLogLevelMask:(JELogLevelMask)mask;
+// default: JELogLevelAll
++ (void)setHUDLogLevelMask:(JELogLevelMask)mask;
+// default: (JELogLevelNotice | JELogLevelAlert)
++ (void)setFileLogLevelMask:(JELogLevelMask)mask;
 
 
 #pragma mark - bullet settings
 
-+ (NSString *)dumpBulletString;
-+ (NSString *)traceBulletString;
-+ (NSString *)logBulletString;
-+ (NSString *)alertBulletString;
+// default: ↪︎
 + (void)setDumpBulletString:(NSString *)dumpBulletString;
+// default: 🔹
 + (void)setTraceBulletString:(NSString *)traceBulletString;
+// default: 🔸
 + (void)setLogBulletString:(NSString *)logBulletString;
+// default: ⚠️
 + (void)setAlertBulletString:(NSString *)alertBulletString;
 
 
@@ -125,7 +150,8 @@ typedef NS_OPTIONS(NSUInteger, JELogLevel)
             label:(NSString *)label
            header:(JELogHeader)header;
 
-+ (void)logFormat:(NSString *)format
-           header:(JELogHeader)header, ... JE_FORMAT_STRING(1,3);
++ (void)logLevel:(JELogLevelMask)level
+          header:(JELogHeader)header
+          format:(NSString *)format, ... JE_FORMAT_STRING(3, 4);
 
 @end
