@@ -616,7 +616,7 @@
     float floatValue = 0.0f;
     [wrappedValue getValue:&floatValue];
     
-    static const NSInteger _JREDecimalDigits = 9;
+    static const int _JREDecimalDigits = 9;
     
     if (floatValue >= (powf(10.0f, (_JREDecimalDigits - 1))))
     {
@@ -642,7 +642,7 @@
     double doubleValue = 0.0;
     [wrappedValue getValue:&doubleValue];
     
-    static const NSInteger _JREDecimalDigits = 17;
+    static const int _JREDecimalDigits = 17;
     
     if (doubleValue >= (pow(10.0, (_JREDecimalDigits - 1))))
     {
@@ -668,7 +668,7 @@
     long double longDoubleValue = 0.0l;
     [wrappedValue getValue:&longDoubleValue];
     
-    static const NSInteger _JREDecimalDigits = 21;
+    static const int _JREDecimalDigits = 21;
     
     if (longDoubleValue >= (powl(10.0l, (_JREDecimalDigits - 1))))
     {

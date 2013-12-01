@@ -21,8 +21,8 @@
 - (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
                                       includeAddress:(BOOL)includeAddress
 {
-    NSMutableString *description = [[NSMutableString alloc] initWithString:[self debugDescription]];
-    [description replaceWithCStringRepresentation];
+    NSMutableString *description = [[NSMutableString alloc] initWithString:[self description]];
+    [description indentByLevel:1];
     if (includeAddress)
     {
         [description insertString:[NSString stringWithFormat:@"<%p> ", self] atIndex:0];

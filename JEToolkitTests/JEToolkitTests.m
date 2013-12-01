@@ -39,6 +39,8 @@
 
 - (void)testDumps
 {
+    [JEDebugging setFileLogLevelMask:JELogLevelAll];
+    
     JEDump(100);
     int oneHundred = 100;
     JEDump(oneHundred);

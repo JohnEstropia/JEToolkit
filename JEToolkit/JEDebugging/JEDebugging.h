@@ -27,9 +27,10 @@ typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
 
 typedef NS_OPTIONS(NSUInteger, JELogLevelMask)
 {
-    JELogLevelTrace     = 0,
-    JELogLevelNotice    = (1 << 0),
-    JELogLevelAlert     = (1 << 1),
+    JELogLevelNone      = 0,
+    JELogLevelTrace     = (1 << 0),
+    JELogLevelNotice    = (1 << 1),
+    JELogLevelAlert     = (1 << 2),
     // add custom masks here
     
     JELogLevelAll       = ~0u
@@ -106,6 +107,17 @@ typedef struct JELogHeader
 
 @interface JEDebugging : NSObject
 
+#pragma mark - logging
+
++ (void)dumpValue:(NSValue *)wrappedValue
+            label:(NSString *)label
+           header:(JELogHeader)header;
+
++ (void)logLevel:(JELogLevelMask)level
+          header:(JELogHeader)header
+          format:(NSString *)format, ... JE_FORMAT_STRING(3, 4);
+
+
 #pragma mark - HUD settings
 
 // default: NO
@@ -131,27 +143,5 @@ typedef struct JELogHeader
 // default: (JELogLevelNotice | JELogLevelAlert)
 + (void)setFileLogLevelMask:(JELogLevelMask)mask;
 
-
-#pragma mark - bullet settings
-
-// default: ↪︎
-+ (void)setDumpBulletString:(NSString *)dumpBulletString;
-// default: 🔹
-+ (void)setTraceBulletString:(NSString *)traceBulletString;
-// default: 🔸
-+ (void)setLogBulletString:(NSString *)logBulletString;
-// default: ⚠️
-+ (void)setAlertBulletString:(NSString *)alertBulletString;
-
-
-#pragma mark - logging
-
-+ (void)dumpValue:(NSValue *)wrappedValue
-            label:(NSString *)label
-           header:(JELogHeader)header;
-
-+ (void)logLevel:(JELogLevelMask)level
-          header:(JELogHeader)header
-          format:(NSString *)format, ... JE_FORMAT_STRING(3, 4);
 
 @end
