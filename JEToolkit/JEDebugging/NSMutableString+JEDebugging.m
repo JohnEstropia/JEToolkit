@@ -15,7 +15,7 @@
 
 #pragma mark - Public
 
-- (void)replaceWithCStringRepresentation
+- (void)escapeWithUTF8CStringRepresentation
 {
     static NSDictionary *replacementMapping;
     static dispatch_once_t onceToken;

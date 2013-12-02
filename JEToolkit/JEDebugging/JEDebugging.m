@@ -17,6 +17,12 @@
 #import "NSMutableString+JEDebugging.h"
 
 
+static const void *_JEDebuggingQueueIDKey = &_JEDebuggingQueueIDKey;
+static const void *_JEDebuggingSettingsQueueID = &_JEDebuggingSettingsQueueID;
+static const void *_JEDebuggingConsoleLogQueueID = &_JEDebuggingConsoleLogQueueID;
+static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
+
+
 @interface JEDebugging ()
 
 @property (nonatomic, assign) JEConsoleLogHeaderMask consoleLogHeaderMask;
@@ -242,6 +248,10 @@
     dispatch_once(&onceToken, ^{
         
         settingsQueue = dispatch_queue_create("JEDebugging.settingsQueue", DISPATCH_QUEUE_CONCURRENT);
+        dispatch_queue_set_specific(settingsQueue,
+                                    _JEDebuggingQueueIDKey,
+                                    (void *)_JEDebuggingSettingsQueueID,
+                                    NULL);
         
     });
     return settingsQueue;
@@ -254,6 +264,10 @@
     dispatch_once(&onceToken, ^{
         
         consoleLogQueue = dispatch_queue_create("JEDebugging.consoleLogQueue", DISPATCH_QUEUE_CONCURRENT);
+        dispatch_queue_set_specific(consoleLogQueue,
+                                    _JEDebuggingQueueIDKey,
+                                    (void *)_JEDebuggingConsoleLogQueueID,
+                                    NULL);
         
     });
     return consoleLogQueue;
@@ -266,6 +280,10 @@
     dispatch_once(&onceToken, ^{
         
         fileLogQueue = dispatch_queue_create("JEDebugging.fileLogQueue", DISPATCH_QUEUE_CONCURRENT);
+        dispatch_queue_set_specific(fileLogQueue,
+                                    _JEDebuggingQueueIDKey,
+                                    (void *)_JEDebuggingFileLogQueueID,
+                                    NULL);
         
     });
     return fileLogQueue;
@@ -415,6 +433,9 @@
 
 - (void)deleteOldFileLogs
 {
+    NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
+              @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
+    
     NSDateComponents *dayAgo = [[NSDateComponents alloc] init];
     [dayAgo setDay:(-self.fileDayAgeDeleteThreshold)];
     
@@ -467,6 +488,9 @@
 
 - (void)appendStringToFile:(NSString *)string
 {
+    NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
+              @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
+    
     @try {
         
         [self.fileLogFileHandle writeData:[string dataUsingEncoding:NSUTF8StringEncoding]];
@@ -482,10 +506,20 @@
 
 - (void)flushFileHandleIfNeededOrForced:(BOOL)forceSave
 {
+    NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
+              @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
+    
     NSFileHandle *fileLogFileHandle = self.fileLogFileHandle;
     unsigned long long offsetInFile = [fileLogFileHandle offsetInFile];
+    unsigned long long lastSynchronizedOffset = self.lastSynchronizedOffset;
+    
+    if (offsetInFile == lastSynchronizedOffset)
+    {
+        return;
+    }
+    
     if (forceSave
-        || (offsetInFile - self.lastSynchronizedOffset) >= self.filePendingBytesFlushThreshold)
+        || (offsetInFile - lastSynchronizedOffset) >= self.filePendingBytesFlushThreshold)
     {
         [fileLogFileHandle synchronizeFile];
         self.lastSynchronizedOffset = offsetInFile;

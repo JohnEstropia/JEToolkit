@@ -812,7 +812,7 @@
     if (cstringValue)
     {
         NSMutableString *escapedString = [[NSMutableString alloc] initWithUTF8String:cstringValue];
-        [escapedString replaceWithCStringRepresentation];
+        [escapedString escapeWithUTF8CStringRepresentation];
         [valueStringBuilder appendFormat:@"<%p> %@", cstringValue, escapedString];
     }
     else

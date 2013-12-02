@@ -12,7 +12,7 @@
 
 /*! Converts the receiver to how it would be backslash-escaped in a C source code and encloses it in double quotes.
  */
-- (void)replaceWithCStringRepresentation;
+- (void)escapeWithUTF8CStringRepresentation;
 
 /*! Indents the receiver by two spaces for each indentLevel. The first line will not be indented.
  */

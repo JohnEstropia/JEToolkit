@@ -19,7 +19,7 @@
                                       includeAddress:(BOOL)includeAddress
 {
     NSMutableString *description = [[NSMutableString alloc] initWithString:[self debugDescription]];
-    [description replaceWithCStringRepresentation];
+    [description escapeWithUTF8CStringRepresentation];
     [description insertString:@"@" atIndex:0];
     
     if (includeAddress)

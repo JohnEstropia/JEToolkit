@@ -53,29 +53,34 @@ typedef struct JELogHeader
 /*! Dumps any variable, expression, etc. other than static arrays to the console.
  For static arrays use JEDumpArray() instead.
  */
-#define JEDump(nonArrayExpression...) \
+#define JEDump(labelString, nonArrayExpression...) \
+    _JEDump((labelString ?: @""#nonArrayExpression), (nonArrayExpression))
+
+#define _JEDump(labelString, nonArrayExpression) \
     do \
     { \
-        const typeof(nonArrayExpression) _je_objectClone = nonArrayExpression; \
         [JEDebugging \
          dumpValue:[[NSValue alloc] \
-                    initWithBytes:&_je_objectClone \
+                    initWithBytes:(typeof(nonArrayExpression) []){ nonArrayExpression } \
                     objCType:@encode(typeof(nonArrayExpression))] \
-         label:@""#nonArrayExpression \
+         label:labelString \
          header:JE_LOG_HEADER]; \
     } while(0)
 
 /*! Dumps static arrays to the console.
  For other variables, expressions, etc., use JEDump() instead.
  */
-#define JEDumpArray(arrayExpression...) \
+#define JEDumpArray(labelString, arrayExpression...) \
+    _JEDumpArray((labelString ?: @""#arrayExpression), (arrayExpression))
+
+#define _JEDumpArray(labelString, arrayExpression...) \
     do \
     { \
         [JEDebugging \
          dumpValue:[[NSValue alloc] \
                     initWithBytes:&arrayExpression[0] \
                     objCType:@encode(typeof(arrayExpression))] \
-         label:@""#arrayExpression \
+         label:(labelString ?: @""#arrayExpression) \
          header:JE_LOG_HEADER]; \
     } while(0)
 
