@@ -34,6 +34,18 @@
     return [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
 }
 
+#pragma mark Constants
+
++ (NSString *)applicationVersion
+{
+    return [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+}
+
++ (NSString *)applicationBundleVersion
+{
+    return [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+}
+
 #pragma mark String Manipulation
 
 - (NSString *)trimmedString

@@ -31,6 +31,15 @@
  */
 + (NSString *)appSupportDirectory JE_CONST;
 
+#pragma mark Constants
+
+/*! Convenience method to get the app short version string
+ */
++ (NSString *)applicationVersion JE_CONST;
+
+/*! Convenience method to get the app bundle version string
+ */
++ (NSString *)applicationBundleVersion JE_CONST;
 
 #pragma mark - String Manipulation
 

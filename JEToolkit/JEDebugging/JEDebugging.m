@@ -92,7 +92,10 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     
 #warning TODO: add app version to filename
     NSURL *fileLogFileURL = [fileLogDirectoryURL
-                             URLByAppendingPathComponent:[[JEDebugging fileNameDateFormatter] stringFromDate:[[NSDate alloc] init]]
+                             URLByAppendingPathComponent:
+                             [[NSString alloc] initWithFormat:@"%@ %@.log",
+                              [NSString applicationBundleVersion],
+                              [[JEDebugging fileNameDateFormatter] stringFromDate:[[NSDate alloc] init]]]
                              isDirectory:YES];
     
     NSString *fileLogFilePath = [fileLogFileURL path];
@@ -234,7 +237,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
         [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
         [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         [formatter setCalendar:[NSCalendar gregorianCalendar]];
-        [formatter setDateFormat:@"yyyy'-'MM'-'dd'.log'"];
+        [formatter setDateFormat:@"yyyy'-'MM'-'dd"];
         consoleDateFormatter = formatter;
         
     });
