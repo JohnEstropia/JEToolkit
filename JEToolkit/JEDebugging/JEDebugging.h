@@ -50,37 +50,41 @@ typedef struct JELogHeader
 #define JE_LOG_HEADER  ((JELogHeader){ NULL, NULL, 0 })
 #endif
 
-/*! Dumps any variable, expression, etc. other than static arrays to the console.
- For static arrays use JEDumpArray() instead.
+/*! Dumps detailed information of any variable or expression to the console.
+ Note that a bug(?) with NSGetSizeAndAlignment() and NSValue prevents structs and unions with bitfields to be wrapped in NSValue, in which case JEDump() will just print "(struct ?){ ... }".
+ The macro argument is variadic to allow expressions that have commas in them. You can use this as a trick to use the comma operator to attach a string before the expression such as JEDump("This will be 2", 1+1); Be warned though that you cannot use the same trick for arrays as the typeof() evaluation will be different:
+ @encode(typeof(arrayVariable)) == "[7i]"
+ @encode(typeof("dont", arrayVariable)) == "^i"
+ In the second case, only the first item in the array will be printed (or crash if you passed an empty array).
  */
-#define JEDump(labelString, nonArrayExpression...) \
-    _JEDump((labelString ?: @""#nonArrayExpression), (nonArrayExpression))
-
-#define _JEDump(labelString, nonArrayExpression) \
+#define JEDump(nonArrayExpression...) \
     do \
     { \
+        _Pragma("clang diagnostic push") \
+        _Pragma("clang diagnostic ignored \"-Wunused-value\"") \
+        /* We need to assign the expression to a variable in case it is not an lvalue. The comma operator in typeof(0, nonArrayExpression) is needed to demote array types into pointers. */ \
+        const typeof(0, nonArrayExpression) _je_expressionValue = (nonArrayExpression); \
+        /* We use _JE_PtrForType() to get the proper address to pass to NSValue. That is, for arrays we need to pass _je_expressionValue directly, otherwise we pass the address of _je_expressionValue. */ \
         [JEDebugging \
          dumpValue:[[NSValue alloc] \
-                    initWithBytes:(typeof(nonArrayExpression) []){ nonArrayExpression } \
+                    initWithBytes:_JE_PtrForType(&_je_expressionValue, @encode(typeof(nonArrayExpression))) \
                     objCType:@encode(typeof(nonArrayExpression))] \
-         label:labelString \
+         label:(@""#nonArrayExpression) \
          header:JE_LOG_HEADER]; \
+        _Pragma("clang diagnostic pop") \
     } while(0)
 
 /*! Dumps static arrays to the console.
  For other variables, expressions, etc., use JEDump() instead.
  */
-#define JEDumpArray(labelString, arrayExpression...) \
-    _JEDumpArray((labelString ?: @""#arrayExpression), (arrayExpression))
-
-#define _JEDumpArray(labelString, arrayExpression...) \
+#define JEDumpArray(arrayExpression...) \
     do \
     { \
         [JEDebugging \
          dumpValue:[[NSValue alloc] \
-                    initWithBytes:&arrayExpression[0] \
-                    objCType:@encode(typeof(arrayExpression))] \
-         label:(labelString ?: @""#arrayExpression) \
+                    initWithBytes:&(arrayExpression[0]) \
+                    objCType:@encode(typeof((arrayExpression)))] \
+         label:(@""#arrayExpression) \
          header:JE_LOG_HEADER]; \
     } while(0)
 
@@ -150,3 +154,11 @@ typedef struct JELogHeader
 
 
 @end
+
+
+#pragma mark - Internal
+
+JE_STATIC_INLINE const void *_JE_PtrForType(const void *objPtr, const char objCType[])
+{
+    return (objCType[0] == '[' ?  *(const void **)objPtr : objPtr);
+}

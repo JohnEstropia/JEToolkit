@@ -442,7 +442,7 @@
     });
     
     NSString *charMapping = replacementMapping[[[NSString alloc]
-                                                initWithCharacters:&(const unichar){ charValue }
+                                                initWithCharacters:(unichar[]){ charValue }
                                                 length:1]];
     if (charMapping)
     {
