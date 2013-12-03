@@ -36,6 +36,14 @@ typedef NS_OPTIONS(NSUInteger, JELogLevelMask)
     JELogLevelAll       = ~0u
 };
 
+#ifndef JE_LOG_DEFAULT_LEVEL
+#define JE_LOG_DEFAULT_LEVEL JELogLevelTrace
+#endif
+
+#ifndef JE_DUMP_DEFAULT_LEVEL
+#define JE_DUMP_DEFAULT_LEVEL JELogLevelTrace
+#endif
+
 
 typedef struct JELogHeader
 {
@@ -51,46 +59,43 @@ typedef struct JELogHeader
 #endif
 
 /*! Dumps detailed information of any variable or expression to the console.
- Note that a bug(?) with NSGetSizeAndAlignment() and NSValue prevents structs and unions with bitfields to be wrapped in NSValue, in which case JEDump() will just print "(struct ?){ ... }".
- The macro argument is variadic to allow expressions that have commas in them. You can use this as a trick to use the comma operator to attach a string before the expression such as JEDump("This will be 2", 1+1); Be warned though that you cannot use the same trick for arrays as the typeof() evaluation will be different:
- @encode(typeof(arrayVariable)) == "[7i]"
- @encode(typeof("dont", arrayVariable)) == "^i"
- In the second case, only the first item in the array will be printed (or crash if you passed an empty array).
+ 
+ The macro argument is variadic to allow expressions that have commas in them. You can use this as a trick to use the comma operator to attach a string before the expression, such as JEDump("This will be 2", 1+1); Be warned though that if you are using the comma operator for arrays you need to pass the address instead: JEDump("This is safe", &arrayVariable);
+ Otherwise, only the first item in the array will be printed (or crash if you passed an empty array).
+ 
+ Note that a bug(?) with NSGetSizeAndAlignment() prevents structs and unions with bitfields to be wrapped in NSValue, in which case JEDump() will just print "(?){ ... }".
  */
 #define JEDump(nonArrayExpression...) \
+    JEDumpLevel(JE_DUMP_DEFAULT_LEVEL, ##nonArrayExpression)
+
+#define JEDumpTrace(nonArrayExpression...) \
+    JEDumpLevel(JELogLevelTrace, ##nonArrayExpression)
+
+#define JEDumpNotice(nonArrayExpression...) \
+    JEDumpLevel(JELogLevelNotice, ##nonArrayExpression)
+
+#define JEDumpAlert(nonArrayExpression...) \
+    JEDumpLevel(JELogLevelAlert, ##nonArrayExpression)
+
+#define JEDumpLevel(level, nonArrayExpression...) \
     do \
     { \
         _Pragma("clang diagnostic push") \
         _Pragma("clang diagnostic ignored \"-Wunused-value\"") \
-        /* We need to assign the expression to a variable in case it is not an lvalue. The comma operator in typeof(0, nonArrayExpression) is needed to demote array types into pointers. */ \
+        /* We need to assign the expression to a variable in case it is an rvalue. */ \
+        /* The comma operator in typeof(0, nonArrayExpression) is needed to demote array types into a pointer. */ \
         const typeof(0, nonArrayExpression) _je_expressionValue = (nonArrayExpression); \
         /* We use _JE_PtrForType() to get the proper address to pass to NSValue. That is, for arrays we need to pass _je_expressionValue directly, otherwise we pass the address of _je_expressionValue. */ \
         [JEDebugging \
-         dumpValue:[[NSValue alloc] \
-                    initWithBytes:_JE_PtrForType(&_je_expressionValue, @encode(typeof(nonArrayExpression))) \
-                    objCType:@encode(typeof(nonArrayExpression))] \
+         dumpLevel:level \
+         header:JE_LOG_HEADER \
          label:(@""#nonArrayExpression) \
-         header:JE_LOG_HEADER]; \
+         value:[[NSValue alloc] \
+                initWithBytes:_JE_PtrForType(&_je_expressionValue, @encode(typeof(nonArrayExpression))) \
+                objCType:@encode(typeof(nonArrayExpression))]]; \
         _Pragma("clang diagnostic pop") \
     } while(0)
 
-/*! Dumps static arrays to the console.
- For other variables, expressions, etc., use JEDump() instead.
- */
-#define JEDumpArray(arrayExpression...) \
-    do \
-    { \
-        [JEDebugging \
-         dumpValue:[[NSValue alloc] \
-                    initWithBytes:&(arrayExpression[0]) \
-                    objCType:@encode(typeof((arrayExpression)))] \
-         label:(@""#arrayExpression) \
-         header:JE_LOG_HEADER]; \
-    } while(0)
-
-#ifndef JE_LOG_DEFAULT_LEVEL
-#define JE_LOG_DEFAULT_LEVEL JELogLevelTrace
-#endif
 
 /*! Logs a format string to the console. Also displays the source filename, line number, and method name.
  */
@@ -118,9 +123,10 @@ typedef struct JELogHeader
 
 #pragma mark - logging
 
-+ (void)dumpValue:(NSValue *)wrappedValue
++ (void)dumpLevel:(JELogLevelMask)level
+           header:(JELogHeader)header
             label:(NSString *)label
-           header:(JELogHeader)header;
+            value:(NSValue *)wrappedValue;
 
 + (void)logLevel:(JELogLevelMask)level
           header:(JELogHeader)header
@@ -160,5 +166,6 @@ typedef struct JELogHeader
 
 JE_STATIC_INLINE const void *_JE_PtrForType(const void *objPtr, const char objCType[])
 {
+    // dirty but works
     return (objCType[0] == '[' ?  *(const void **)objPtr : objPtr);
 }

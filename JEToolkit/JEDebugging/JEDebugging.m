@@ -90,7 +90,6 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
         return self;
     }
     
-#warning TODO: add app version to filename
     NSURL *fileLogFileURL = [fileLogDirectoryURL
                              URLByAppendingPathComponent:
                              [[NSString alloc] initWithFormat:@"%@ %@.log",
@@ -564,9 +563,10 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
 
 #pragma mark logging
 
-+ (void)dumpValue:(NSValue *)wrappedValue
-            label:(NSString *)label
++ (void)dumpLevel:(JELogLevelMask)level
            header:(JELogHeader)header
+            label:(NSString *)label
+            value:(NSValue *)wrappedValue
 {
     @autoreleasepool {
         
@@ -590,9 +590,9 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
             
         });
         
-        if (!IsEnumBitSet(consoleLogLevelMask, JELogLevelTrace)
-            && !IsEnumBitSet(HUDLogLevelMask, JELogLevelTrace)
-            && !IsEnumBitSet(fileLogLevelMask, JELogLevelTrace))
+        if (!IsEnumBitSet(consoleLogLevelMask, level)
+            && !IsEnumBitSet(HUDLogLevelMask, level)
+            && !IsEnumBitSet(fileLogLevelMask, level))
         {
             return;
         }
@@ -607,7 +607,21 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
                                        headerEntriesForLogHeader:header
                                        withMask:(consoleLogHeaderMask | HUDLogHeaderMask | fileLogHeaderMask)];
         
-        if (IsEnumBitSet(consoleLogLevelMask, JELogLevelTrace))
+        NSString *bulletString;
+        if (IsEnumBitSet(level, JELogLevelAlert))
+        {
+            bulletString = [self defaultAlertBulletString];
+        }
+        else if (IsEnumBitSet(level, JELogLevelNotice))
+        {
+            bulletString = [self defaultLogBulletString];
+        }
+        else
+        {
+            bulletString = [self defaultTraceBulletString];
+        }
+        
+        if (IsEnumBitSet(consoleLogLevelMask, level))
         {
             dispatch_sync([self consoleLogQueue], ^{
                 
@@ -616,7 +630,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
                     NSMutableString *consoleString = [self
                                                       logHeaderStringWithEntries:headerEntries
                                                       withMask:consoleLogHeaderMask];
-                    [consoleString appendString:[self defaultTraceBulletString]];
+                    [consoleString appendString:bulletString];
                     [consoleString appendString:@" "];
                     [consoleString appendString:label];
                     [consoleString appendString:@"\n  "];
@@ -631,13 +645,13 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
                 
             });
         }
-        if (IsEnumBitSet(HUDLogLevelMask, JELogLevelTrace))
+        if (IsEnumBitSet(HUDLogLevelMask, level))
         {
             NSMutableString *HUDString = [self
                                           logHeaderStringWithEntries:headerEntries
                                           withMask:HUDLogHeaderMask];
         }
-        if (IsEnumBitSet(fileLogLevelMask, JELogLevelTrace))
+        if (IsEnumBitSet(fileLogLevelMask, level))
         {
             dispatch_barrier_async([self fileLogQueue], ^{
                 
@@ -646,7 +660,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
                     NSMutableString *fileString = [self
                                                    logHeaderStringWithEntries:headerEntries
                                                    withMask:fileLogHeaderMask];
-                    [fileString appendString:[self defaultTraceBulletString]];
+                    [fileString appendString:bulletString];
                     [fileString appendString:@" "];
                     [fileString appendString:label];
                     [fileString appendString:@"\n  "];
@@ -695,6 +709,13 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
             fileLogLevelMask = instance.fileLogLevelMask;
             
         });
+        
+        if (!IsEnumBitSet(consoleLogLevelMask, level)
+            && !IsEnumBitSet(HUDLogLevelMask, level)
+            && !IsEnumBitSet(fileLogLevelMask, level))
+        {
+            return;
+        }
         
         NSDictionary *headerEntries = [self
                                        headerEntriesForLogHeader:header

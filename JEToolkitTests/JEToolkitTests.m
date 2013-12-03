@@ -77,7 +77,6 @@
     JEDump(cstringPtr);
     JEDump("This is a dump", &cstringPtr);
     char cstringArray[7] = "cstring";
-    JEDumpArray(cstringArray);
     JEDump(cstringArray);
     JEDump(@encode(typeof(cstringArray)));
     JEDump(@encode(typeof(nil, cstringArray)));
@@ -94,7 +93,6 @@
     {
         asciiArray[i] = i;
     }
-    JEDumpArray(asciiArray);
     JEDump(asciiArray);
     JEDump(asciiArray);
     JEDump(&asciiArray);
@@ -143,8 +141,7 @@
             moveItemAtPath:@"testdir"
             toPath:@"testdir"
             error:&error]);
-    JEDump(error);
-    JEDump([error userInfo]);
+    JEDumpAlert(error);
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     dictionary[@12] = @"cccc";
@@ -202,15 +199,13 @@
     JEDump(rect);
     JEDump(&rect);
     JEDump([NSValue valueWithBytes:&rect objCType:@encode(typeof(rect))]);
-    JEDumpArray((CGRect [3]){(CGRect){ {1.999, 2.999 }, { 3.999, 4.999 }}, (CGRect){ {1.999, 2.999 }, { 3.999, 4.999 }}, (CGRect){ {1.999, 2.999 }, { 3.999, 4.999 }}});
-    JEDump(&(CGRect [3]){(CGRect){ {1.999, 2.999 }, { 3.999, 4.999 }}, (CGRect){ {1.999, 2.999 }, { 3.999, 4.999 }}, (CGRect){ {1.999, 2.999 }, { 3.999, 4.999 }}});
+    JEDump((CGRect [3]){(CGRect){ {1.999, 2.999 }, { 3.999, 4.999 }}, (CGRect){ {1.999, 2.999 }, { 3.999, 4.999 }}, (CGRect){ {1.999, 2.999 }, { 3.999, 4.999 }}});
     
     JEDump(&CGImageCreate);
     
     int intArray[2][3] = {{1, 2, 3}, {4, 5, 6}};
-    JEDumpArray(intArray);
     JEDump(intArray);
-    JEDump("", intArray);
+    JEDump("intArray !!", &intArray);
     JEDump(&intArray);
     JEDump([NSValue valueWithBytes:intArray objCType:@encode(typeof(intArray))]);
     
@@ -347,7 +342,7 @@
     }
     @catch (NSException *exception) {
         
-        JEDump(exception);
+        JEDumpAlert(exception);
     }
     
     JEOrderedDictionary *orderedDictionary = [[JEOrderedDictionary alloc] init];
@@ -374,7 +369,7 @@
     
     NSString *string = @"string";
     id idArray[] = { string, string, string };
-    JEDumpArray(idArray);
+    JEDump(idArray);
     JEDump(&idArray);
     
     JEDump([NSNull null]);

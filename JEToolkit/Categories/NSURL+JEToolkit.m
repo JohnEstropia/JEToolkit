@@ -46,7 +46,7 @@
           forKey:NSURLIsExcludedFromBackupKey
           error:&resourceValueError])
     {
-        JEDump(@"Failed to update NSURLIsExcludedFromBackupKey because of error.", resourceValueError);
+        JEDump("Failed to update NSURLIsExcludedFromBackupKey because of error.", resourceValueError);
         return NO;
     }
     
