@@ -69,11 +69,8 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     _fileDayAgeDeleteThreshold = 7;
     
     NSURL *fileLogDirectoryURL = [[NSURL alloc]
-                                  initFileURLWithPath:[[NSString appSupportDirectory] stringByAppendingPathComponent:@"logs"]
+                                  initFileURLWithPath:[[NSString cachesDirectory] stringByAppendingPathComponent:@"Logs"]
                                   isDirectory:YES];
-#if DEBUG
-    fileLogDirectoryURL = [fileLogDirectoryURL URLByAppendingPathComponent:@"debug" isDirectory:YES];
-#endif
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *directoryCreateError;
@@ -84,7 +81,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
           error:&directoryCreateError])
     {
         [JEDebugging
-         logInternalError:directoryCreateError
+         logFileError:directoryCreateError
          withHeader:JE_LOG_HEADER
          message:@"Failed to create logs directory because of error:"];
         return self;
@@ -102,7 +99,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
         && ![fileManager createFileAtPath:fileLogFilePath contents:nil attributes:nil])
     {
         [JEDebugging
-         logInternalError:nil
+         logFileError:nil
          withHeader:JE_LOG_HEADER
          message:@"Failed to create log file."];
         return self;
@@ -115,7 +112,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     if (!fileLogFileHandle)
     {
         [JEDebugging
-         logInternalError:fileHandleError
+         logFileError:fileHandleError
          withHeader:JE_LOG_HEADER
          message:@"Failed to open log file because of error:"];
         return self;
@@ -315,9 +312,9 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
 
 #pragma mark utilities
 
-+ (void)logInternalError:(NSError *)error
-              withHeader:(JELogHeader)header
-                 message:(NSString *)message
++ (void)logFileError:(id)errorOrException
+          withHeader:(JELogHeader)header
+             message:(NSString *)message
 {
     JEConsoleLogHeaderMask __block consoleLogHeaderMask;
     JEConsoleLogHeaderMask __block HUDLogHeaderMask;
@@ -347,11 +344,11 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
                                                  logHeaderStringWithEntries:headerEntries
                                                  withMask:consoleLogHeaderMask];
             
-            NSMutableString *errorDescription = [error detailedDescription];
-            [errorDescription indentByLevel:1];
-            
+            NSMutableString *errorDescription = [errorOrException detailedDescription];
             if (errorDescription)
             {
+                [errorDescription indentByLevel:1];
+            
                 [consoleLogString appendFormat:
                  @"%@ %@\n  %@ %@\n",
                  [JEDebugging defaultAlertBulletString],
@@ -501,7 +498,10 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     }
     @catch (NSException *exception) {
         
-        // Do nothing, just give up
+        [JEDebugging
+         logFileError:exception
+         withHeader:JE_LOG_HEADER
+         message:@"Failed appending to log file because of exception:"];
         
     }
 }

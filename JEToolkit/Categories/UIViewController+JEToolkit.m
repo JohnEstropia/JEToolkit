@@ -8,7 +8,6 @@
 
 #import "UIViewController+JEToolkit.h"
 
-
 @implementation UIViewController (JEToolkit)
 
 #pragma mark - Public

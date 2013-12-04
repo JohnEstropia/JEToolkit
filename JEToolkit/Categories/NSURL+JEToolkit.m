@@ -9,7 +9,6 @@
 #import "NSURL+JEToolkit.h"
 
 #import <MobileCoreServices/MobileCoreServices.h>
-#import "JEDebugging.h"
 
 
 @implementation NSURL (JEToolkit)
@@ -38,19 +37,12 @@
     return [[self scheme] isEqualToString:@"data"];
 }
 
-- (BOOL)setExcludeFromBackup:(BOOL)excludeFromBackup
+- (BOOL)setExcludeFromBackup:(BOOL)excludeFromBackup error:(NSError *__autoreleasing *)error
 {
-    NSError *resourceValueError;
-    if (![self
-          setResourceValue:@(excludeFromBackup)
-          forKey:NSURLIsExcludedFromBackupKey
-          error:&resourceValueError])
-    {
-        JEDump("Failed to update NSURLIsExcludedFromBackupKey because of error.", resourceValueError);
-        return NO;
-    }
-    
-    return YES;
+    return [self
+            setResourceValue:@(excludeFromBackup)
+            forKey:NSURLIsExcludedFromBackupKey
+            error:error];
 }
 
 @end

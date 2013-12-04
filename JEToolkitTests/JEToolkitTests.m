@@ -9,10 +9,10 @@
 #import <XCTest/XCTest.h>
 
 #import <Foundation/Foundation.h>
+#import <float.h>
 
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
-#import <float.h>
 
 #import "JEToolkit.h"
 #import "JEOrderedDictionary.h"

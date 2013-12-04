@@ -12,6 +12,8 @@
 #import "NSObject+JEDebugging.h"
 
 
+#pragma mark - Log message header masks
+
 typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
 {
     JEConsoleLogHeaderNone      = 0,
@@ -24,6 +26,9 @@ typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
     
     JEConsoleLogHeaderAll       = ~0u
 };
+
+
+#pragma mark - Log message levels
 
 typedef NS_OPTIONS(NSUInteger, JELogLevelMask)
 {
@@ -45,6 +50,8 @@ typedef NS_OPTIONS(NSUInteger, JELogLevelMask)
 #endif
 
 
+#pragma mark - Log message header constants container
+
 typedef struct JELogHeader
 {
     const char *fileName;
@@ -57,6 +64,9 @@ typedef struct JELogHeader
 #else
 #define JE_LOG_HEADER  ((JELogHeader){ NULL, NULL, 0 })
 #endif
+
+
+#pragma mark - JEDump() variants
 
 /*! Dumps detailed information of any variable or expression to the console.
  
@@ -83,19 +93,26 @@ typedef struct JELogHeader
         _Pragma("clang diagnostic push") \
         _Pragma("clang diagnostic ignored \"-Wunused-value\"") \
         /* We need to assign the expression to a variable in case it is an rvalue. */ \
-        /* The comma operator in typeof(0, nonArrayExpression) is needed to demote array types into a pointer. */ \
-        const typeof(0, nonArrayExpression) _je_expressionValue = (nonArrayExpression); \
-        /* We use _JE_PtrForType() to get the proper address to pass to NSValue. That is, for arrays we need to pass _je_expressionValue directly, otherwise we pass the address of _je_expressionValue. */ \
+        /* Since arrays cannot be assigned to another array, we use the comma operator in typeof(0, nonArrayExpression) to demote array types to their pointer counterparts. */ \
+        const typeof(0, nonArrayExpression) _je_value = (nonArrayExpression); \
         [JEDebugging \
          dumpLevel:level \
          header:JE_LOG_HEADER \
          label:(@""#nonArrayExpression) \
          value:[[NSValue alloc] \
-                initWithBytes:_JE_PtrForType(&_je_expressionValue, @encode(typeof(nonArrayExpression))) \
+                initWithBytes:({ \
+                    /* We need to get the proper address to pass to NSValue. That is, if an array we need to pass itself, otherwise its address. Hopefully, this all gets optimized out by the compiler. */ \
+                    const void *_je_pointer = &_je_value; \
+                    (@encode(typeof(nonArrayExpression))[0] == '[' \
+                        ?  *(const void **)_je_pointer \
+                        : (const void *)_je_pointer); \
+                }) \
                 objCType:@encode(typeof(nonArrayExpression))]]; \
         _Pragma("clang diagnostic pop") \
     } while(0)
 
+
+#pragma mark - JELog() variants
 
 /*! Logs a format string to the console. Also displays the source filename, line number, and method name.
  */
@@ -118,6 +135,8 @@ typedef struct JELogHeader
      format:formatString, \
      ##__VA_ARGS__]
 
+
+#pragma mark - JEDebugging class
 
 @interface JEDebugging : NSObject
 
@@ -158,14 +177,7 @@ typedef struct JELogHeader
 // default: (JELogLevelNotice | JELogLevelAlert)
 + (void)setFileLogLevelMask:(JELogLevelMask)mask;
 
+#warning TODO: move all settings to corresponding settings classes
+
 
 @end
-
-
-#pragma mark - Internal
-
-JE_STATIC_INLINE const void *_JE_PtrForType(const void *objPtr, const char objCType[])
-{
-    // dirty but works
-    return (objCType[0] == '[' ?  *(const void **)objPtr : objPtr);
-}

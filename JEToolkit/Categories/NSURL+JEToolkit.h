@@ -30,6 +30,6 @@
  @param excludeFromBackup YES to prevent the resource from being backed up, NO to include in backups
  @return YES if the setting change succeeded, NO otherwise
  */
-- (BOOL)setExcludeFromBackup:(BOOL)excludeFromBackup;
+- (BOOL)setExcludeFromBackup:(BOOL)excludeFromBackup error:(NSError **)error;
 
 @end
