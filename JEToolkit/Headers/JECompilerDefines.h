@@ -9,7 +9,7 @@
 #ifndef JEToolkit_JECompilerDefines_h
 #define JEToolkit_JECompilerDefines_h
 
-#import <Foundation/Foundation.h>
+#import <Foundation/NSObjCRuntime.h>
 
 
 #pragma mark - Function attributes
@@ -23,9 +23,14 @@
 #define JE_NONNULL(...)             __attribute__((nonnull(__VA_ARGS__)))
 #define JE_OVERLOAD                 __attribute__((overloadable))
 #define JE_STATIC                   static
-#define JE_STATIC_INLINE            FOUNDATION_STATIC_INLINE
+#define JE_STATIC_INLINE            static inline
 #define JE_REQUIRES_NIL_TERMINATION NS_REQUIRES_NIL_TERMINATION
-#define JE_FILE_NAME                ((strrchr(__FILE__, '/') ?: (__FILE__ - 1)) + 1)
+#define JE_WARN_UNUSED_RESULT       DISPATCH_WARN_RESULT
+
+
+#pragma mark - Constants
+
+#define __JE_FILE_NAME__            ((strrchr(__FILE__, '/') ?: (__FILE__ - 1)) + 1)
 
 
 #endif

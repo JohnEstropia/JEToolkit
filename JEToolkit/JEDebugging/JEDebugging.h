@@ -11,58 +11,52 @@
 #import "JECompilerDefines.h"
 #import "NSObject+JEDebugging.h"
 
-
-#pragma mark - Log message header masks
-
-typedef NS_OPTIONS(NSUInteger, JEConsoleLogHeaderMask)
-{
-    JEConsoleLogHeaderNone      = 0,
-    JEConsoleLogHeaderDate      = (1 << 0),
-    JEConsoleLogHeaderQueue     = (1 << 1),
-    
-    // Note that JEConsoleLogHeaderFile and JEConsoleLogHeaderFunction are ignored if neither DEBUG or JE_COMPILE_WITH_LOG_HEADER_CONSTANTS are defined. This is to prevent project directories and private method names from appearing in the app binary.
-    JEConsoleLogHeaderFile      = (1 << 2),
-    JEConsoleLogHeaderFunction  = (1 << 3),
-    
-    JEConsoleLogHeaderAll       = ~0u
-};
+#import "JEConsoleLoggerSettings.h"
+#import "JEHUDLoggerSettings.h"
+#import "JEFileLoggerSettings.h"
 
 
-#pragma mark - Log message levels
-
-typedef NS_OPTIONS(NSUInteger, JELogLevelMask)
-{
-    JELogLevelNone      = 0,
-    JELogLevelTrace     = (1 << 0),
-    JELogLevelNotice    = (1 << 1),
-    JELogLevelAlert     = (1 << 2),
-    // add custom masks here
-    
-    JELogLevelAll       = ~0u
-};
+#pragma mark - Log default masks
 
 #ifndef JE_LOG_DEFAULT_LEVEL
-#define JE_LOG_DEFAULT_LEVEL JELogLevelTrace
+    #define JE_LOG_DEFAULT_LEVEL    JELogLevelTrace
 #endif
 
 #ifndef JE_DUMP_DEFAULT_LEVEL
-#define JE_DUMP_DEFAULT_LEVEL JELogLevelTrace
+    #define JE_DUMP_DEFAULT_LEVEL   JELogLevelTrace
 #endif
 
 
 #pragma mark - Log message header constants container
 
-typedef struct JELogHeader
+typedef struct JELogLocation
 {
     const char *fileName;
     const char *functionName;
     int lineNumber;
-} JELogHeader;
+} JELogLocation;
 
-#if defined(DEBUG) || JE_COMPILE_WITH_LOG_HEADER_CONSTANTS
-#define JE_LOG_HEADER  ((JELogHeader){ JE_FILE_NAME, __PRETTY_FUNCTION__, __LINE__ })
+#define JELogLocationCurrent()  ((JELogLocation){ \
+                                    JE_LOG_LOCATION_FILENAME, \
+                                    JE_LOG_LOCATION_FUNCTION_NAME, \
+                                    JE_LOG_LOCATION_LINE_NUMBER })
+
+#if defined(DEBUG) || JE_LOG_EMBED_FILENAME
+    #define JE_LOG_LOCATION_FILENAME        __JE_FILE_NAME__
 #else
-#define JE_LOG_HEADER  ((JELogHeader){ NULL, NULL, 0 })
+    #define JE_LOG_LOCATION_FILENAME        NULL
+#endif
+
+#if defined(DEBUG) || JE_LOG_EMBED_FUNCTION_NAME
+    #define JE_LOG_LOCATION_FUNCTION_NAME   __PRETTY_FUNCTION__
+#else
+    #define JE_LOG_LOCATION_FUNCTION_NAME   NULL
+#endif
+
+#if defined(DEBUG) || JE_LOG_EMBED_LINE_NUMBER
+    #define JE_LOG_LOCATION_LINE_NUMBER     __LINE__
+#else
+    #define JE_LOG_LOCATION_LINE_NUMBER     0
 #endif
 
 
@@ -97,7 +91,7 @@ typedef struct JELogHeader
         const typeof(0, nonArrayExpression) _je_value = (nonArrayExpression); \
         [JEDebugging \
          dumpLevel:level \
-         header:JE_LOG_HEADER \
+         location:JELogLocationCurrent() \
          label:(@""#nonArrayExpression) \
          value:[[NSValue alloc] \
                 initWithBytes:({ \
@@ -131,7 +125,7 @@ typedef struct JELogHeader
 #define JELogLevel(level, formatString, ...) \
     [JEDebugging \
      logLevel:level \
-     header:JE_LOG_HEADER \
+     location:JELogLocationCurrent() \
      format:formatString, \
      ##__VA_ARGS__]
 
@@ -143,41 +137,25 @@ typedef struct JELogHeader
 #pragma mark - logging
 
 + (void)dumpLevel:(JELogLevelMask)level
-           header:(JELogHeader)header
+         location:(JELogLocation)location
             label:(NSString *)label
             value:(NSValue *)wrappedValue;
 
 + (void)logLevel:(JELogLevelMask)level
-          header:(JELogHeader)header
+        location:(JELogLocation)location
           format:(NSString *)format, ... JE_FORMAT_STRING(3, 4);
 
 
-#pragma mark - HUD settings
+#pragma mark - logger settings
 
-// default: NO
-+ (void)setIsHUDEnabled:(BOOL)isHUDEnabled;
++ (JEConsoleLoggerSettings *)copyConsoleLoggerSettings JE_WARN_UNUSED_RESULT;
++ (void)setConsoleLoggerSettings:(JEConsoleLoggerSettings *)consoleLoggerSettings;
 
++ (JEHUDLoggerSettings *)copyHUDLoggerSettings JE_WARN_UNUSED_RESULT;
++ (void)setHUDLoggerSettings:(JEHUDLoggerSettings *)HUDLoggerSettings;
 
-#pragma mark - log header mask settings
-
-// default: (JEConsoleLogHeaderQueue | JEConsoleLogHeaderFile | JEConsoleLogHeaderFunction)
-+ (void)setConsoleLogHeaderMask:(JEConsoleLogHeaderMask)mask;
-// default: (JEConsoleLogHeaderQueue | JEConsoleLogHeaderFile | JEConsoleLogHeaderFunction)
-+ (void)setHUDLogHeaderMask:(JEConsoleLogHeaderMask)mask;
-// default: JEConsoleLogHeaderAll
-+ (void)setFileLogHeaderMask:(JEConsoleLogHeaderMask)mask;
-
-
-#pragma mark - log destination mask settings
-
-// default: JELogLevelAll
-+ (void)setConsoleLogLevelMask:(JELogLevelMask)mask;
-// default: JELogLevelAll
-+ (void)setHUDLogLevelMask:(JELogLevelMask)mask;
-// default: (JELogLevelNotice | JELogLevelAlert)
-+ (void)setFileLogLevelMask:(JELogLevelMask)mask;
-
-#warning TODO: move all settings to corresponding settings classes
++ (JEFileLoggerSettings *)copyFileLoggerSettings JE_WARN_UNUSED_RESULT;
++ (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings;
 
 
 @end

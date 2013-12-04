@@ -113,7 +113,7 @@
 
 - (id)mutableCopyWithZone:(NSZone *)zone
 {
-    typeof(self) instance = [[JEOrderedDictionary allocWithZone:zone] init];
+    typeof(self) instance = [[[self class] allocWithZone:zone] init];
     instance->_orderedKeys = [_orderedKeys mutableCopyWithZone:zone];
     instance->_dictionary = [_dictionary mutableCopyWithZone:zone];
     return instance;

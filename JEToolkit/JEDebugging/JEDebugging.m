@@ -25,13 +25,9 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
 
 @interface JEDebugging ()
 
-@property (nonatomic, assign) JEConsoleLogHeaderMask consoleLogHeaderMask;
-@property (nonatomic, assign) JEConsoleLogHeaderMask HUDLogHeaderMask;
-@property (nonatomic, assign) JEConsoleLogHeaderMask fileLogHeaderMask;
-
-@property (nonatomic, assign) JELogLevelMask consoleLogLevelMask;
-@property (nonatomic, assign) JELogLevelMask HUDLogLevelMask;
-@property (nonatomic, assign) JELogLevelMask fileLogLevelMask;
+@property (nonatomic, copy) JEConsoleLoggerSettings *consoleLoggerSettings;
+@property (nonatomic, copy) JEHUDLoggerSettings *HUDLoggerSettings;
+@property (nonatomic, copy) JEFileLoggerSettings *fileLoggerSettings;
 
 #warning TODO: setter methods
 @property (nonatomic, assign) unsigned long long filePendingBytesFlushThreshold;
@@ -57,17 +53,18 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
         return nil;
     }
     
-    _consoleLogHeaderMask = (JEConsoleLogHeaderQueue | JEConsoleLogHeaderFile | JEConsoleLogHeaderFunction);
-    _HUDLogHeaderMask = (JEConsoleLogHeaderQueue | JEConsoleLogHeaderFile | JEConsoleLogHeaderFunction);
-    _fileLogHeaderMask = JEConsoleLogHeaderAll;
+    JEConsoleLoggerSettings *consoleLoggerSettings = [[JEConsoleLoggerSettings alloc] init];
+    JEHUDLoggerSettings *HUDLoggerSettings = [[JEHUDLoggerSettings alloc] init];
+    JEFileLoggerSettings *fileLoggerSettings = [[JEFileLoggerSettings alloc] init];
     
-    _consoleLogLevelMask = JELogLevelAll;
-    _HUDLogLevelMask = (JELogLevelNotice | JELogLevelAlert);
-    _fileLogLevelMask = (JELogLevelNotice | JELogLevelAlert);
+    _consoleLoggerSettings = consoleLoggerSettings;
+    _HUDLoggerSettings = HUDLoggerSettings;
+    _fileLoggerSettings = fileLoggerSettings;
     
     _filePendingBytesFlushThreshold = (1024 * 100);
     _fileDayAgeDeleteThreshold = 7;
     
+#warning TODO: create file and open handle only when needed
     NSURL *fileLogDirectoryURL = [[NSURL alloc]
                                   initFileURLWithPath:[[NSString cachesDirectory] stringByAppendingPathComponent:@"Logs"]
                                   isDirectory:YES];
@@ -82,7 +79,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     {
         [JEDebugging
          logFileError:directoryCreateError
-         withHeader:JE_LOG_HEADER
+         location:JELogLocationCurrent()
          message:@"Failed to create logs directory because of error:"];
         return self;
     }
@@ -100,7 +97,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     {
         [JEDebugging
          logFileError:nil
-         withHeader:JE_LOG_HEADER
+         location:JELogLocationCurrent()
          message:@"Failed to create log file."];
         return self;
     }
@@ -113,7 +110,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     {
         [JEDebugging
          logFileError:fileHandleError
-         withHeader:JE_LOG_HEADER
+         location:JELogLocationCurrent()
          message:@"Failed to open log file because of error:"];
         return self;
     }
@@ -313,43 +310,37 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
 #pragma mark utilities
 
 + (void)logFileError:(id)errorOrException
-          withHeader:(JELogHeader)header
+            location:(JELogLocation)location
              message:(NSString *)message
 {
-    JEConsoleLogHeaderMask __block consoleLogHeaderMask;
-    JEConsoleLogHeaderMask __block HUDLogHeaderMask;
-    JELogLevelMask __block consoleLogLevelMask;
-    JELogLevelMask __block HUDLogLevelMask;
+    JEConsoleLoggerSettings __block *consoleLoggerSettings;
+    JEHUDLoggerSettings __block *HUDLoggerSettings;
     dispatch_sync([self settingsQueue], ^{
         
         JEDebugging *instance = [self sharedInstance];
-        
-        consoleLogHeaderMask = instance.consoleLogHeaderMask;
-        HUDLogHeaderMask = instance.HUDLogHeaderMask;
-        
-        consoleLogLevelMask = instance.consoleLogLevelMask;
-        HUDLogLevelMask = instance.HUDLogLevelMask;
+        consoleLoggerSettings = instance.consoleLoggerSettings;
+        HUDLoggerSettings = instance.HUDLoggerSettings;
         
     });
     
     NSDictionary *headerEntries = [self
-                                   headerEntriesForLogHeader:header
-                                   withMask:(consoleLogHeaderMask | HUDLogHeaderMask)];
+                                   headerEntriesForLocation:location
+                                   withMask:(consoleLoggerSettings.logMessageHeaderMask
+                                             | HUDLoggerSettings.logMessageHeaderMask)];
     
-    if (IsEnumBitSet(consoleLogLevelMask, JELogLevelAlert))
+    if (IsEnumBitSet(consoleLoggerSettings.logLevelMask, JELogLevelAlert))
     {
         dispatch_barrier_async([JEDebugging consoleLogQueue], ^{
             
-            NSMutableString *consoleLogString = [self
-                                                 logHeaderStringWithEntries:headerEntries
-                                                 withMask:consoleLogHeaderMask];
+            NSMutableString *logString = [self messageHeaderFromEntries:headerEntries
+                                                           withSettings:consoleLoggerSettings];
             
             NSMutableString *errorDescription = [errorOrException detailedDescription];
             if (errorDescription)
             {
                 [errorDescription indentByLevel:1];
             
-                [consoleLogString appendFormat:
+                [logString appendFormat:
                  @"%@ %@\n  %@ %@\n",
                  [JEDebugging defaultAlertBulletString],
                  message,
@@ -358,76 +349,80 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
             }
             else
             {
-                [consoleLogString appendFormat:
+                [logString appendFormat:
                  @"%@ %@\n",
                  [JEDebugging defaultAlertBulletString],
                  message];
             }
             
-            puts([consoleLogString UTF8String]);
+            puts([logString UTF8String]);
             
         });
     }
-    if (IsEnumBitSet(HUDLogLevelMask, JELogLevelAlert))
+    if (IsEnumBitSet(HUDLoggerSettings.logLevelMask, JELogLevelAlert))
     {
-        NSMutableString *HUDString = [self
-                                      logHeaderStringWithEntries:headerEntries
-                                      withMask:HUDLogHeaderMask];
+        NSMutableString *logString = [self
+                                      messageHeaderFromEntries:headerEntries
+                                      withSettings:HUDLoggerSettings];
     }
 }
 
-+ (NSDictionary *)headerEntriesForLogHeader:(JELogHeader)header
-                                   withMask:(JEConsoleLogHeaderMask)mask
++ (NSDictionary *)headerEntriesForLocation:(JELogLocation)location
+                                  withMask:(JELogMessageHeaderMask)logMessageHeaderMask
 {
     NSMutableDictionary * headerEntries = [[NSMutableDictionary alloc] init];
-    headerEntries[@(JEConsoleLogHeaderDate)]
-    = (IsEnumBitSet(mask, JEConsoleLogHeaderDate)
+    
+    headerEntries[@(JELogMessageHeaderDate)]
+    = (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderDate)
        ? [NSString stringWithFormat:@"%@ ", [[self consoleDateFormatter] stringFromDate:[[NSDate alloc] init]]]
        : [NSString string]);
-    headerEntries[@(JEConsoleLogHeaderQueue)]
-    = (IsEnumBitSet(mask, JEConsoleLogHeaderQueue)
+    headerEntries[@(JELogMessageHeaderQueue)]
+    = (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderQueue)
        ? [NSString stringWithFormat:@"[%s] ", dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)]
        : [NSString string]);
-    headerEntries[@(JEConsoleLogHeaderFile)]
-    = ((IsEnumBitSet(mask, JEConsoleLogHeaderFile) && header.fileName != NULL && header.lineNumber > 0)
-       ? [NSString stringWithFormat:@"%s:%li ", header.fileName, (long)header.lineNumber]
+    headerEntries[@(JELogMessageHeaderSourceFile)]
+    = ((IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderSourceFile)
+        && location.fileName != NULL
+        && location.lineNumber > 0)
+       ? [NSString stringWithFormat:@"%s:%li ", location.fileName, (long)location.lineNumber]
        : [NSString string]);
-    headerEntries[@(JEConsoleLogHeaderFunction)]
-    = ((IsEnumBitSet(mask, JEConsoleLogHeaderFunction) && header.functionName != NULL)
-       ? [NSString stringWithFormat:@"%s ", header.functionName]
+    headerEntries[@(JELogMessageHeaderFunction)]
+    = ((IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderFunction) && location.functionName != NULL)
+       ? [NSString stringWithFormat:@"%s ", location.functionName]
        : [NSString string]);
     
     return headerEntries;
 }
 
-+ (NSMutableString *)logHeaderStringWithEntries:(NSDictionary *)headerEntries
-                                       withMask:(JEConsoleLogHeaderMask)mask
++ (NSMutableString *)messageHeaderFromEntries:(NSDictionary *)logMessageHeaderEntries
+                                 withSettings:(JEBaseLoggerSettings *)loggerSettings
 {
-    NSMutableString *string = [[NSMutableString alloc] init];
+    JELogMessageHeaderMask logMessageHeaderMask = loggerSettings.logMessageHeaderMask;
+    NSMutableString *messageHeader = [[NSMutableString alloc] init];
     
-    if (IsEnumBitSet(mask, JEConsoleLogHeaderDate))
+    if (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderDate))
     {
-        [string appendString:headerEntries[@(JEConsoleLogHeaderDate)]];
+        [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderDate)]];
     }
-    if (IsEnumBitSet(mask, JEConsoleLogHeaderQueue))
+    if (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderQueue))
     {
-        [string appendString:headerEntries[@(JEConsoleLogHeaderQueue)]];
+        [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderQueue)]];
     }
-    if (IsEnumBitSet(mask, JEConsoleLogHeaderFile))
+    if (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderSourceFile))
     {
-        [string appendString:headerEntries[@(JEConsoleLogHeaderFile)]];
+        [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderSourceFile)]];
     }
-    if (IsEnumBitSet(mask, JEConsoleLogHeaderFunction))
+    if (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderFunction))
     {
-        [string appendString:headerEntries[@(JEConsoleLogHeaderFunction)]];
-    }
-    
-    if ([string length] > 0)
-    {
-        [string appendString:@"\n"];
+        [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderFunction)]];
     }
     
-    return string;
+    if ([messageHeader length] > 0)
+    {
+        [messageHeader appendString:@"\n"];
+    }
+    
+    return messageHeader;
 }
 
 - (void)deleteOldFileLogs
@@ -500,7 +495,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
         
         [JEDebugging
          logFileError:exception
-         withHeader:JE_LOG_HEADER
+         location:JELogLocationCurrent()
          message:@"Failed appending to log file because of exception:"];
         
     }
@@ -564,35 +559,27 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
 #pragma mark logging
 
 + (void)dumpLevel:(JELogLevelMask)level
-           header:(JELogHeader)header
+         location:(JELogLocation)location
             label:(NSString *)label
             value:(NSValue *)wrappedValue
 {
     @autoreleasepool {
         
-        JEConsoleLogHeaderMask __block consoleLogHeaderMask;
-        JEConsoleLogHeaderMask __block HUDLogHeaderMask;
-        JEConsoleLogHeaderMask __block fileLogHeaderMask;
-        JELogLevelMask __block consoleLogLevelMask;
-        JELogLevelMask __block HUDLogLevelMask;
-        JELogLevelMask __block fileLogLevelMask;
+        JEConsoleLoggerSettings __block *consoleLoggerSettings;
+        JEHUDLoggerSettings __block *HUDLoggerSettings;
+        JEFileLoggerSettings __block *fileLoggerSettings;
         dispatch_sync([self settingsQueue], ^{
             
             JEDebugging *instance = [self sharedInstance];
-            
-            consoleLogHeaderMask = instance.consoleLogHeaderMask;
-            HUDLogHeaderMask = instance.HUDLogHeaderMask;
-            fileLogHeaderMask = instance.fileLogHeaderMask;
-            
-            consoleLogLevelMask = instance.consoleLogLevelMask;
-            HUDLogLevelMask = instance.HUDLogLevelMask;
-            fileLogLevelMask = instance.fileLogLevelMask;
+            consoleLoggerSettings = instance.consoleLoggerSettings;
+            HUDLoggerSettings = instance.HUDLoggerSettings;
+            fileLoggerSettings = instance.fileLoggerSettings;
             
         });
         
-        if (!IsEnumBitSet(consoleLogLevelMask, level)
-            && !IsEnumBitSet(HUDLogLevelMask, level)
-            && !IsEnumBitSet(fileLogLevelMask, level))
+        if (!IsEnumBitSet(consoleLoggerSettings.logLevelMask, level)
+            && !IsEnumBitSet(HUDLoggerSettings.logLevelMask, level)
+            && !IsEnumBitSet(fileLoggerSettings.logLevelMask, level))
         {
             return;
         }
@@ -604,9 +591,10 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
         [description indentByLevel:1];
         
         NSDictionary *headerEntries = [self
-                                       headerEntriesForLogHeader:header
-                                       withMask:(consoleLogHeaderMask | HUDLogHeaderMask | fileLogHeaderMask)];
-        
+                                       headerEntriesForLocation:location
+                                       withMask:(consoleLoggerSettings.logMessageHeaderMask
+                                                 | HUDLoggerSettings.logMessageHeaderMask
+                                                 | fileLoggerSettings.logMessageHeaderMask)];
         NSString *bulletString;
         if (IsEnumBitSet(level, JELogLevelAlert))
         {
@@ -621,55 +609,45 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
             bulletString = [self defaultTraceBulletString];
         }
         
-        if (IsEnumBitSet(consoleLogLevelMask, level))
+        if (IsEnumBitSet(consoleLoggerSettings.logLevelMask, level))
         {
             dispatch_sync([self consoleLogQueue], ^{
                 
                 @autoreleasepool {
                     
-                    NSMutableString *consoleString = [self
-                                                      logHeaderStringWithEntries:headerEntries
-                                                      withMask:consoleLogHeaderMask];
-                    [consoleString appendString:bulletString];
-                    [consoleString appendString:@" "];
-                    [consoleString appendString:label];
-                    [consoleString appendString:@"\n  "];
-                    [consoleString appendString:[self defaultDumpBulletString]];
-                    [consoleString appendString:@" "];
-                    [consoleString appendString:description];
-                    [consoleString appendString:@"\n"];
+                    NSMutableString *logString = [self
+                                                  messageHeaderFromEntries:headerEntries
+                                                  withSettings:consoleLoggerSettings];
+                    [logString appendFormat:@"%@ %@\n  %@ %@\n",
+                     bulletString, label, [self defaultDumpBulletString], description];
                     
-                    puts([consoleString UTF8String]);
+                    puts([logString UTF8String]);
                 
                 }
                 
             });
         }
-        if (IsEnumBitSet(HUDLogLevelMask, level))
+        if (IsEnumBitSet(HUDLoggerSettings.logLevelMask, level))
         {
-            NSMutableString *HUDString = [self
-                                          logHeaderStringWithEntries:headerEntries
-                                          withMask:HUDLogHeaderMask];
+            NSMutableString *logString = [self
+                                          messageHeaderFromEntries:headerEntries
+                                          withSettings:fileLoggerSettings];
+            [logString appendFormat:@"%@ %@\n  %@ %@\n",
+             bulletString, label, [self defaultDumpBulletString], description];
         }
-        if (IsEnumBitSet(fileLogLevelMask, level))
+        if (IsEnumBitSet(fileLoggerSettings.logLevelMask, level))
         {
             dispatch_barrier_async([self fileLogQueue], ^{
                 
                 @autoreleasepool {
                     
-                    NSMutableString *fileString = [self
-                                                   logHeaderStringWithEntries:headerEntries
-                                                   withMask:fileLogHeaderMask];
-                    [fileString appendString:bulletString];
-                    [fileString appendString:@" "];
-                    [fileString appendString:label];
-                    [fileString appendString:@"\n  "];
-                    [fileString appendString:[self defaultDumpBulletString]];
-                    [fileString appendString:@" "];
-                    [fileString appendString:description];
-                    [fileString appendString:@"\n\n"];
+                    NSMutableString *logString = [self
+                                                  messageHeaderFromEntries:headerEntries
+                                                  withSettings:fileLoggerSettings];
+                    [logString appendFormat:@"%@ %@\n  %@ %@\n",
+                     bulletString, label, [self defaultDumpBulletString], description];
                     
-                    [[self sharedInstance] appendStringToFile:fileString];
+                    [[self sharedInstance] appendStringToFile:logString];
                     
                 }
                 
@@ -680,7 +658,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
 }
 
 + (void)logLevel:(JELogLevelMask)level
-          header:(JELogHeader)header
+        location:(JELogLocation)location
           format:(NSString *)format, ...
 {
     @autoreleasepool {
@@ -690,37 +668,30 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
         NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arguments];
         va_end(arguments);
         
-        JEConsoleLogHeaderMask __block consoleLogHeaderMask;
-        JEConsoleLogHeaderMask __block HUDLogHeaderMask;
-        JEConsoleLogHeaderMask __block fileLogHeaderMask;
-        JELogLevelMask __block consoleLogLevelMask;
-        JELogLevelMask __block HUDLogLevelMask;
-        JELogLevelMask __block fileLogLevelMask;
+        JEConsoleLoggerSettings __block *consoleLoggerSettings;
+        JEHUDLoggerSettings __block *HUDLoggerSettings;
+        JEFileLoggerSettings __block *fileLoggerSettings;
         dispatch_sync([self settingsQueue], ^{
             
             JEDebugging *instance = [self sharedInstance];
-            
-            consoleLogHeaderMask = instance.consoleLogHeaderMask;
-            HUDLogHeaderMask = instance.HUDLogHeaderMask;
-            fileLogHeaderMask = instance.fileLogHeaderMask;
-            
-            consoleLogLevelMask = instance.consoleLogLevelMask;
-            HUDLogLevelMask = instance.HUDLogLevelMask;
-            fileLogLevelMask = instance.fileLogLevelMask;
+            consoleLoggerSettings = instance.consoleLoggerSettings;
+            HUDLoggerSettings = instance.HUDLoggerSettings;
+            fileLoggerSettings = instance.fileLoggerSettings;
             
         });
         
-        if (!IsEnumBitSet(consoleLogLevelMask, level)
-            && !IsEnumBitSet(HUDLogLevelMask, level)
-            && !IsEnumBitSet(fileLogLevelMask, level))
+        if (!IsEnumBitSet(consoleLoggerSettings.logLevelMask, level)
+            && !IsEnumBitSet(HUDLoggerSettings.logLevelMask, level)
+            && !IsEnumBitSet(fileLoggerSettings.logLevelMask, level))
         {
             return;
         }
         
         NSDictionary *headerEntries = [self
-                                       headerEntriesForLogHeader:header
-                                       withMask:(consoleLogHeaderMask | HUDLogHeaderMask | fileLogHeaderMask)];
-        
+                                       headerEntriesForLocation:location
+                                       withMask:(consoleLoggerSettings.logMessageHeaderMask
+                                                 | HUDLoggerSettings.logMessageHeaderMask
+                                                 | fileLoggerSettings.logMessageHeaderMask)];
         NSString *bulletString;
         if (IsEnumBitSet(level, JELogLevelAlert))
         {
@@ -735,47 +706,44 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
             bulletString = [self defaultTraceBulletString];
         }
         
-        if (IsEnumBitSet(consoleLogLevelMask, level))
+        if (IsEnumBitSet(consoleLoggerSettings.logLevelMask, level))
         {
             dispatch_sync([self consoleLogQueue], ^{
                 
                 @autoreleasepool {
                     
-                    NSMutableString *consoleString = [self
-                                                      logHeaderStringWithEntries:headerEntries
-                                                      withMask:consoleLogHeaderMask];
-                    [consoleString appendString:bulletString];
-                    [consoleString appendString:@" "];
-                    [consoleString appendString:formattedString];
-                    [consoleString appendString:@"\n"];
+                    NSMutableString *logString = [self
+                                                  messageHeaderFromEntries:headerEntries
+                                                  withSettings:consoleLoggerSettings];
+                    [logString appendFormat:@"%@ %@\n\n",
+                     bulletString, formattedString];
                     
-                    puts([consoleString UTF8String]);
+                    puts([logString UTF8String]);
                     
                 }
                 
             });
         }
-        if (IsEnumBitSet(HUDLogLevelMask, level))
+        if (IsEnumBitSet(HUDLoggerSettings.logLevelMask, level))
         {
-            NSMutableString *HUDString = [self
-                                          logHeaderStringWithEntries:headerEntries
-                                          withMask:HUDLogHeaderMask];
+            NSMutableString *logString = [self
+                                          messageHeaderFromEntries:headerEntries
+                                          withSettings:HUDLoggerSettings];
+            [logString appendFormat:@"%@ %@\n\n", bulletString, formattedString];
         }
-        if (IsEnumBitSet(fileLogLevelMask, level))
+        if (IsEnumBitSet(fileLoggerSettings.logLevelMask, level))
         {
             dispatch_barrier_async([self fileLogQueue], ^{
                 
                 @autoreleasepool {
                     
-                    NSMutableString *fileString = [self
-                                                   logHeaderStringWithEntries:headerEntries
-                                                   withMask:fileLogHeaderMask];
-                    [fileString appendString:bulletString];
-                    [fileString appendString:@" "];
-                    [fileString appendString:formattedString];
-                    [fileString appendString:@"\n\n"];
+                    NSMutableString *logString = [self
+                                                  messageHeaderFromEntries:headerEntries
+                                                  withSettings:fileLoggerSettings];
+                    [logString appendFormat:@"%@ %@\n\n",
+                     bulletString, formattedString];
                     
-                    [[self sharedInstance] appendStringToFile:fileString];
+                    [[self sharedInstance] appendStringToFile:logString];
                     
                 }
                 
@@ -785,78 +753,70 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     }
 }
 
-#pragma mark HUD settings
+#pragma mark logger settings
 
-+ (void)setIsHUDEnabled:(BOOL)isHUDEnabled
++ (JEConsoleLoggerSettings *)copyConsoleLoggerSettings
 {
-    if ([NSThread isMainThread])
-    {
-#warning TODO: create view
-    }
-    else
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-#warning TODO: create view
-            
-        });
-    }
+    JEConsoleLoggerSettings *__block settings;
+    dispatch_sync([self settingsQueue], ^{
+        
+        settings = [[self sharedInstance].consoleLoggerSettings copy];
+        
+    });
+    return settings;
 }
 
-#pragma mark log header mask settings
-
-+ (void)setConsoleLogHeaderMask:(JEConsoleLogHeaderMask)mask
++ (void)setConsoleLoggerSettings:(JEConsoleLoggerSettings *)consoleLoggerSettings
 {
+    NSCParameterAssert(consoleLoggerSettings != nil);
+    
     dispatch_barrier_async([self settingsQueue], ^{
         
-        [self sharedInstance].consoleLogHeaderMask = mask;
+        [self sharedInstance].consoleLoggerSettings = [consoleLoggerSettings copy];
         
     });
 }
 
-+ (void)setHUDLogHeaderMask:(JEConsoleLogHeaderMask)mask
++ (JEHUDLoggerSettings *)copyHUDLoggerSettings
 {
+    JEHUDLoggerSettings *__block settings;
+    dispatch_sync([self settingsQueue], ^{
+        
+        settings = [[self sharedInstance].HUDLoggerSettings copy];
+        
+    });
+    return settings;
+}
+
++ (void)setHUDLoggerSettings:(JEHUDLoggerSettings *)HUDLoggerSettings
+{
+    NSCParameterAssert(HUDLoggerSettings != nil);
+    
     dispatch_barrier_async([self settingsQueue], ^{
         
-        [self sharedInstance].HUDLogHeaderMask = mask;
+        [self sharedInstance].HUDLoggerSettings = [HUDLoggerSettings copy];
         
     });
 }
 
-+ (void)setFileLogHeaderMask:(JEConsoleLogHeaderMask)mask
++ (JEFileLoggerSettings *)copyFileLoggerSettings
 {
-    dispatch_barrier_async([self settingsQueue], ^{
+    JEFileLoggerSettings *__block settings;
+    dispatch_sync([self settingsQueue], ^{
         
-        [self sharedInstance].fileLogHeaderMask = mask;
+        settings = [[self sharedInstance].fileLoggerSettings copy];
         
     });
+    return settings;
 }
 
-#pragma mark log destination mask settings
-
-+ (void)setConsoleLogLevelMask:(JELogLevelMask)mask
++ (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings
 {
+    NSCParameterAssert(fileLoggerSettings != nil);
+    
     dispatch_barrier_async([self settingsQueue], ^{
         
-        [self sharedInstance].consoleLogLevelMask = mask;
-        
-    });
-}
-
-+ (void)setHUDLogLevelMask:(JELogLevelMask)mask
-{
-    dispatch_barrier_async([self settingsQueue], ^{
-        
-        [self sharedInstance].HUDLogLevelMask = mask;
-        
-    });
-}
-
-+ (void)setFileLogLevelMask:(JELogLevelMask)mask
-{
-    dispatch_barrier_async([self settingsQueue], ^{
-        
-        [self sharedInstance].fileLogLevelMask = mask;
+        [self sharedInstance].fileLoggerSettings = [fileLoggerSettings copy];
         
     });
 }

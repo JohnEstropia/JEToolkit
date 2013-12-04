@@ -39,7 +39,10 @@
 
 - (void)testDumps
 {
-    [JEDebugging setFileLogLevelMask:JELogLevelAll];
+    JEFileLoggerSettings *fileLoggerSettings = [JEDebugging copyFileLoggerSettings];
+    fileLoggerSettings.logLevelMask = JELogLevelAll;
+    [JEDebugging setFileLoggerSettings:fileLoggerSettings];
+    
     JEDump("This will be 2", 1+1);
     
     JEDump(100);
