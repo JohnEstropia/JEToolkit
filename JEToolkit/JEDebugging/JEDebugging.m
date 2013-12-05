@@ -31,11 +31,11 @@
 
 @implementation JEFileLoggerSettings (_JEDebugging)
 
-JESynthesize(NSFileHandle *, fileHandle, setFileHandle, strong);
-JESynthesize(NSURL *, fileURL, setFileURL, copy);
-JESynthesize(unsigned long long, lastSynchronizedOffset, setLastSynchronizedOffset, assign);
-JESynthesize(BOOL, isDisabled, setIsDisabled, assign);
-JESynthesize(void(^)(void), testBlock, setTestBlock, copy);
+JESynthesize(strong, NSFileHandle *, fileHandle, setFileHandle);
+JESynthesize(copy, NSURL *, fileURL, setFileURL);
+JESynthesize(assign, unsigned long long, lastSynchronizedOffset, setLastSynchronizedOffset);
+JESynthesize(assign, BOOL, isDisabled, setIsDisabled);
+JESynthesize(copy, void(^)(void), testBlock, setTestBlock);
 
 @end
 
