@@ -26,10 +26,25 @@
  */
 - (BOOL)isDataURL;
 
-/*! Excludes or includes the resource pointed to by the receiver from iCloud or iTunes backup.
- @param excludeFromBackup YES to prevent the resource from being backed up, NO to include in backups
- @return YES if the setting change succeeded, NO otherwise
+/*! Reads the extended attribute of a file URL referred to by key. Note anything other than file system URLs will be ignored.
+ @param extendedAttribute The destination address of the read attribute
+ @param key The key for the extended attribute
+ @param error The error if the process failed
+ @return YES if the attribute was read successfully, NO otherwise.
  */
-- (BOOL)setExcludeFromBackup:(BOOL)excludeFromBackup error:(NSError **)error;
+- (BOOL)getExtendedAttribute:(NSString **)extendedAttribute
+                      forKey:(NSString *)key
+                       error:(NSError **)error;
+
+/*! Sets an extended attribute on the file refered by the receiver. Note anything other than file system URLs will be ignored.
+ @param extendedAttribute The value for the extended attribute
+ @param key The key for the extended attribute
+ @param error The error if the process failed
+ @return YES if the attribute was set successfully, NO otherwise.
+ */
+- (BOOL)setExtendedAttribute:(NSString *)extendedAttribute
+                      forKey:(NSString *)key
+                       error:(NSError **)error;
+
 
 @end

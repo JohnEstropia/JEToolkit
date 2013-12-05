@@ -52,6 +52,7 @@
 		34ECBD43184EF10B00960D4A /* JEConsoleLoggerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD42184EF10B00960D4A /* JEConsoleLoggerSettings.m */; };
 		34ECBD46184EF12900960D4A /* JEHUDLoggerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD45184EF12900960D4A /* JEHUDLoggerSettings.m */; };
 		34ECBD49184EF13800960D4A /* JEFileLoggerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD48184EF13800960D4A /* JEFileLoggerSettings.m */; };
+		34F035D51850211C004AD192 /* NSError+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F035D41850211C004AD192 /* NSError+JEToolkit.m */; };
 		34F124721844882E00856ACA /* JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F124711844882E00856ACA /* JEDebugging.m */; };
 /* End PBXBuildFile section */
 
@@ -169,6 +170,8 @@
 		34ECBD45184EF12900960D4A /* JEHUDLoggerSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEHUDLoggerSettings.m; sourceTree = "<group>"; };
 		34ECBD47184EF13800960D4A /* JEFileLoggerSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEFileLoggerSettings.h; sourceTree = "<group>"; };
 		34ECBD48184EF13800960D4A /* JEFileLoggerSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEFileLoggerSettings.m; sourceTree = "<group>"; };
+		34F035D31850211C004AD192 /* NSError+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+JEToolkit.h"; sourceTree = "<group>"; };
+		34F035D41850211C004AD192 /* NSError+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+JEToolkit.m"; sourceTree = "<group>"; };
 		34F124701844882E00856ACA /* JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEDebugging.h; sourceTree = "<group>"; };
 		34F124711844882E00856ACA /* JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEDebugging.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -293,6 +296,8 @@
 				2FA7B82E17E49C3300D41011 /* NSDate+JEToolkit.m */,
 				2F6D774E17E0CFEA00D3735D /* NSDateFormatter+JEToolkit.h */,
 				2F6D774F17E0CFEA00D3735D /* NSDateFormatter+JEToolkit.m */,
+				34F035D31850211C004AD192 /* NSError+JEToolkit.h */,
+				34F035D41850211C004AD192 /* NSError+JEToolkit.m */,
 				2F1DCF7F17FF186E00AFD8C7 /* NSIndexSet+JEToolkit.h */,
 				2F1DCF8017FF186E00AFD8C7 /* NSIndexSet+JEToolkit.m */,
 				2FA7B83617E5F7DB00D41011 /* NSMutableArray+JEToolkit.h */,
@@ -483,6 +488,7 @@
 				2F1DCF8117FF186E00AFD8C7 /* NSIndexSet+JEToolkit.m in Sources */,
 				2FA7B82C17E498AC00D41011 /* NSArray+JEToolkit.m in Sources */,
 				2FA7B83517E5EFCC00D41011 /* NSCache+JEToolkit.m in Sources */,
+				34F035D51850211C004AD192 /* NSError+JEToolkit.m in Sources */,
 				2F1DCF8C180030FD00AFD8C7 /* UIView+JEToolkit.m in Sources */,
 				2F1DCF8417FF1CCA00AFD8C7 /* NSURL+JEToolkit.m in Sources */,
 				2F6D775017E0CFEA00D3735D /* NSDateFormatter+JEToolkit.m in Sources */,

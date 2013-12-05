@@ -11,10 +11,33 @@
 #import <objc/runtime.h>
 
 #import "JESafetyHelpers.h"
-#import "NSString+JEToolkit.h"
+#import "JEAssociatedObjects.h"
+
 #import "NSCalendar+JEToolkit.h"
-#import "NSObject+JEDebugging.h"
 #import "NSMutableString+JEDebugging.h"
+#import "NSObject+JEDebugging.h"
+#import "NSString+JEToolkit.h"
+#import "NSURL+JEToolkit.h"
+
+
+@interface JEFileLoggerSettings (_JEDebugging)
+
+@property (nonatomic, strong) NSFileHandle *fileHandle;
+@property (nonatomic, copy) NSURL *fileURL;
+@property (nonatomic, assign) unsigned long long lastSynchronizedOffset;
+@property (nonatomic, assign) BOOL isDisabled;
+
+@end
+
+@implementation JEFileLoggerSettings (_JEDebugging)
+
+JESynthesize(NSFileHandle *, fileHandle, setFileHandle, strong);
+JESynthesize(NSURL *, fileURL, setFileURL, copy);
+JESynthesize(unsigned long long, lastSynchronizedOffset, setLastSynchronizedOffset, assign);
+JESynthesize(BOOL, isDisabled, setIsDisabled, assign);
+JESynthesize(void(^)(void), testBlock, setTestBlock, copy);
+
+@end
 
 
 static const void *_JEDebuggingQueueIDKey = &_JEDebuggingQueueIDKey;
@@ -22,16 +45,15 @@ static const void *_JEDebuggingSettingsQueueID = &_JEDebuggingSettingsQueueID;
 static const void *_JEDebuggingConsoleLogQueueID = &_JEDebuggingConsoleLogQueueID;
 static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
 
+static NSString *const _JEDebuggingFileLogAttributeKey = @"com.JEDebugging.JEToolkit";
+static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
+
 
 @interface JEDebugging ()
 
 @property (nonatomic, copy) JEConsoleLoggerSettings *consoleLoggerSettings;
 @property (nonatomic, copy) JEHUDLoggerSettings *HUDLoggerSettings;
 @property (nonatomic, copy) JEFileLoggerSettings *fileLoggerSettings;
-
-@property (nonatomic, copy) NSURL *fileLogFileURL;
-@property (nonatomic, strong) NSFileHandle *fileLogFileHandle;
-@property (nonatomic, assign) unsigned long long lastSynchronizedOffset;
 
 @end
 
@@ -55,66 +77,6 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     _consoleLoggerSettings = [consoleLoggerSettings copy];
     _HUDLoggerSettings = [HUDLoggerSettings copy];
     _fileLoggerSettings = [fileLoggerSettings copy];
-    
-#warning TODO: create file and open handle only when needed
-    NSURL *fileLogsDirectoryURL = fileLoggerSettings.fileLogsDirectoryURL;
-    
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSError *directoryCreateError;
-    if (![fileManager
-          createDirectoryAtURL:fileLogsDirectoryURL
-          withIntermediateDirectories:YES
-          attributes:nil
-          error:&directoryCreateError])
-    {
-        [JEDebugging
-         logFileError:directoryCreateError
-         location:JELogLocationCurrent()
-         message:@"Failed to create logs directory because of error:"];
-        return self;
-    }
-    
-    NSURL *fileLogFileURL = [fileLogsDirectoryURL
-                             URLByAppendingPathComponent:
-                             [[NSString alloc] initWithFormat:@"%@ %@.log",
-                              [NSString applicationBundleVersion],
-                              [[JEDebugging fileNameDateFormatter] stringFromDate:[[NSDate alloc] init]]]
-                             isDirectory:YES];
-    
-    NSString *fileLogFilePath = [fileLogFileURL path];
-    if (![fileManager fileExistsAtPath:fileLogFilePath]
-        && ![fileManager createFileAtPath:fileLogFilePath contents:nil attributes:nil])
-    {
-        [JEDebugging
-         logFileError:nil
-         location:JELogLocationCurrent()
-         message:@"Failed to create log file."];
-        return self;
-    }
-    
-    NSError *fileHandleError;
-    NSFileHandle *fileLogFileHandle = [NSFileHandle
-                                       fileHandleForWritingToURL:fileLogFileURL
-                                       error:&fileHandleError];
-    if (!fileLogFileHandle)
-    {
-        [JEDebugging
-         logFileError:fileHandleError
-         location:JELogLocationCurrent()
-         message:@"Failed to open log file because of error:"];
-        return self;
-    }
-    
-    [fileLogFileHandle seekToEndOfFile];
-    
-    _fileLogFileURL = fileLogFileURL;
-    _fileLogFileHandle = fileLogFileHandle;
-    
-    dispatch_barrier_async([JEDebugging fileLogQueue], ^{
-        
-        [self deleteOldFileLogsWithThreadSafeSettings:fileLoggerSettings];
-        
-    });
     
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center
@@ -414,10 +376,138 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     return messageHeader;
 }
 
+- (NSFileHandle *)cachedFileHandleWithThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings
+{
+    NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
+              @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
+    
+    NSFileHandle *fileHandle = fileLoggerSettings.fileHandle;
+    if (fileHandle)
+    {
+        return fileHandle;
+    }
+    
+    if (fileLoggerSettings.isDisabled)
+    {
+        // We don't want to keep making IO's if we already failed creating the file handle once.
+        return nil;
+    }
+    
+    void (^failure)(JELogLocation location, NSString *message, NSError *error)
+    = ^(JELogLocation location, NSString *message, NSError *error){
+        
+        [JEDebugging
+         logFileError:error
+         location:location
+         message:message];
+        
+        // Prevent retrying
+        fileLoggerSettings.isDisabled = YES;
+        
+    };
+    
+    NSURL *fileURL = fileLoggerSettings.fileURL;
+    if (!fileURL)
+    {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSURL *fileLogsDirectoryURL = fileLoggerSettings.fileLogsDirectoryURL;
+        NSError *directoryCreateError;
+        if (![fileManager
+              createDirectoryAtURL:fileLogsDirectoryURL
+              withIntermediateDirectories:YES
+              attributes:nil
+              error:&directoryCreateError])
+        {
+            failure(JELogLocationCurrent(),
+                    @"Failed to create logs directory because of error:",
+                    directoryCreateError);
+            return nil;
+        }
+        
+        fileURL = [fileLogsDirectoryURL
+                   URLByAppendingPathComponent:
+                   [[NSString alloc] initWithFormat:@"%@ %@.log",
+                    ([NSString applicationBundleVersion] ?: [NSString string]),
+                    [[JEDebugging fileNameDateFormatter] stringFromDate:[[NSDate alloc] init]]]
+                   isDirectory:NO];
+        
+        NSString *filePath = [fileURL path];
+        if (![fileManager fileExistsAtPath:filePath])
+        {
+            if (![fileManager createFileAtPath:filePath contents:nil attributes:nil])
+            {
+                failure(JELogLocationCurrent(),
+                        @"Failed to create log file.",
+                        nil);
+                return nil;
+            }
+        }
+        
+        NSError *attributeError;
+        if (![fileURL
+              setExtendedAttribute:_JEDebuggingFileLogAttributeValue
+              forKey:_JEDebuggingFileLogAttributeKey
+              error:&attributeError])
+        {
+            failure(JELogLocationCurrent(),
+                    @"Failed to attach extended attribute to log file because of error:",
+                    attributeError);
+            return nil;
+        }
+        
+        fileLoggerSettings.fileURL = fileURL;
+    }
+    
+    NSString *attributeString;
+    NSError *attributeError;
+    if (![fileURL
+          getExtendedAttribute:&attributeString
+          forKey:_JEDebuggingFileLogAttributeKey
+          error:&attributeError])
+    {
+        failure(JELogLocationCurrent(),
+                @"Failed to read extended attribute from log file because of error:",
+                attributeError);
+        return nil;
+    }
+    
+    if (![_JEDebuggingFileLogAttributeValue isEqualToString:attributeString])
+    {
+        failure(JELogLocationCurrent(),
+                @"Extended attribute read from log file is incorrect.",
+                nil);
+        return nil;
+    }
+    
+    NSError *fileHandleError;
+    fileHandle = [NSFileHandle fileHandleForWritingToURL:fileURL error:&fileHandleError];
+    if (!fileHandle)
+    {
+        failure(JELogLocationCurrent(),
+                @"Failed to open log file handle because of error:",
+                fileHandleError);
+        return nil;
+    }
+    
+    [fileHandle seekToEndOfFile];
+    
+    fileLoggerSettings.fileHandle = fileHandle;
+    
+    [self deleteOldFileLogsWithThreadSafeSettings:fileLoggerSettings];
+    
+    return fileHandle;
+}
+
 - (void)deleteOldFileLogsWithThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings
 {
     NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
+    
+    NSURL *currentFileURL = fileLoggerSettings.fileURL;
+    if (!currentFileURL)
+    {
+        return;
+    }
     
     NSDateComponents *dayAgo = [[NSDateComponents alloc] init];
     [dayAgo setDay:-fileLoggerSettings.numberOfDaysBeforeDeletingFile];
@@ -429,16 +519,22 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *fileEnumerationError;
-    for (NSURL *fileURL in [fileManager
-                            contentsOfDirectoryAtURL:fileLoggerSettings.fileLogsDirectoryURL
-                            includingPropertiesForKeys:@[(__bridge NSString *)kCFURLIsRegularFileKey,
-                                                         (__bridge NSString *)kCFURLCreationDateKey]
-                            options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants
-                                     | NSDirectoryEnumerationSkipsPackageDescendants
-                                     | NSDirectoryEnumerationSkipsHiddenFiles)
-                            error:&fileEnumerationError])
+    NSArray *fileURLs = [fileManager
+                         contentsOfDirectoryAtURL:fileLoggerSettings.fileLogsDirectoryURL
+                         includingPropertiesForKeys:@[(__bridge NSString *)kCFURLIsRegularFileKey,
+                                                      (__bridge NSString *)kCFURLCreationDateKey]
+                         options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants
+                                  | NSDirectoryEnumerationSkipsPackageDescendants
+                                  | NSDirectoryEnumerationSkipsHiddenFiles)
+                         error:&fileEnumerationError];
+    if (!fileURLs)
     {
-        if ([fileURL isEqual:self.fileLogFileURL])
+        return;
+    }
+    
+    for (NSURL *fileURL in fileURLs)
+    {
+        if ([fileURL isEqual:currentFileURL])
         {
             continue;
         }
@@ -448,8 +544,17 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
          getResourceValue:&isRegularFile
          forKey:(__bridge NSString *)kCFURLIsRegularFileKey
          error:NULL];
-        
         if (![isRegularFile boolValue])
+        {
+            continue;
+        }
+        
+        NSString *extendedAttribute;
+        [fileURL
+         getExtendedAttribute:&extendedAttribute
+         forKey:_JEDebuggingFileLogAttributeKey
+         error:NULL];
+        if (![_JEDebuggingFileLogAttributeValue isEqualToString:extendedAttribute])
         {
             continue;
         }
@@ -477,7 +582,8 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     
     @try {
         
-        [self.fileLogFileHandle writeData:[string dataUsingEncoding:NSUTF8StringEncoding]];
+        [[self cachedFileHandleWithThreadSafeSettings:fileLoggerSettings]
+         writeData:[string dataUsingEncoding:NSUTF8StringEncoding]];
         [self flushFileHandleIfNeededOrForced:NO withThreadSafeSettings:fileLoggerSettings];
         
     }
@@ -497,9 +603,14 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
-    NSFileHandle *fileLogFileHandle = self.fileLogFileHandle;
-    unsigned long long offsetInFile = [fileLogFileHandle offsetInFile];
-    unsigned long long lastSynchronizedOffset = self.lastSynchronizedOffset;
+    NSFileHandle *fileHandle = fileLoggerSettings.fileHandle;
+    if (!fileHandle)
+    {
+        return;
+    }
+    
+    unsigned long long offsetInFile = [fileHandle offsetInFile];
+    unsigned long long lastSynchronizedOffset = fileLoggerSettings.lastSynchronizedOffset;
     
     if (offsetInFile == lastSynchronizedOffset)
     {
@@ -509,8 +620,8 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
     if (forceSave
         || (offsetInFile - lastSynchronizedOffset) >= fileLoggerSettings.numberOfBytesInMemoryBeforeWritingToFile)
     {
-        [fileLogFileHandle synchronizeFile];
-        self.lastSynchronizedOffset = offsetInFile;
+        [fileHandle synchronizeFile];
+        fileLoggerSettings.lastSynchronizedOffset = offsetInFile;
     }
 }
 
@@ -638,7 +749,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
                     NSMutableString *logString = [self
                                                   messageHeaderFromEntries:headerEntries
                                                   withSettings:fileLoggerSettings];
-                    [logString appendFormat:@"%@ %@\n  %@ %@\n",
+                    [logString appendFormat:@"%@ %@\n  %@ %@\n\n",
                      bulletString, label, [self defaultDumpBulletString], description];
                     
                     [[self sharedInstance]
@@ -711,7 +822,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
                     NSMutableString *logString = [self
                                                   messageHeaderFromEntries:headerEntries
                                                   withSettings:consoleLoggerSettings];
-                    [logString appendFormat:@"%@ %@\n\n",
+                    [logString appendFormat:@"%@ %@\n",
                      bulletString, formattedString];
                     
                     puts([logString UTF8String]);
@@ -725,7 +836,7 @@ static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
             NSMutableString *logString = [self
                                           messageHeaderFromEntries:headerEntries
                                           withSettings:HUDLoggerSettings];
-            [logString appendFormat:@"%@ %@\n\n", bulletString, formattedString];
+            [logString appendFormat:@"%@ %@\n", bulletString, formattedString];
         }
         if (IsEnumBitSet(fileLoggerSettings.logLevelMask, level))
         {

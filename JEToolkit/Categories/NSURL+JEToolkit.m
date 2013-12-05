@@ -8,7 +8,11 @@
 
 #import "NSURL+JEToolkit.h"
 
+#import <sys/xattr.h>
 #import <MobileCoreServices/MobileCoreServices.h>
+
+#import "NSError+JEToolkit.h"
+#import "NSString+JEToolkit.h"
 
 
 @implementation NSURL (JEToolkit)
@@ -37,12 +41,116 @@
     return [[self scheme] isEqualToString:@"data"];
 }
 
-- (BOOL)setExcludeFromBackup:(BOOL)excludeFromBackup error:(NSError *__autoreleasing *)error
+- (BOOL)getExtendedAttribute:(NSString *__autoreleasing *)extendedAttribute
+                      forKey:(NSString *)key
+                       error:(NSError *__autoreleasing *)error
 {
-    return [self
-            setResourceValue:@(excludeFromBackup)
-            forKey:NSURLIsExcludedFromBackupKey
-            error:error];
+    NSCParameterAssert([self isFileURL]);
+    NSCParameterAssert(![NSString isNilOrEmptyString:key]);
+    NSCAssert([key length] <= XATTR_MAXNAMELEN,
+              @"Keys for extended attributes should be less than or equal to %d", XATTR_MAXNAMELEN);
+    
+    const char *keyString = [key UTF8String];
+    const char *fileSystemRepresentation = [self fileSystemRepresentation];
+    
+    const ssize_t bufferSize = getxattr(fileSystemRepresentation,
+                                        keyString,
+                                        NULL,
+                                        0,
+                                        0,
+                                        kNilOptions);
+    if (bufferSize < 0)
+    {
+        if (extendedAttribute)
+        {
+            (*extendedAttribute) = nil;
+        }
+        if (error)
+        {
+            (*error) = [NSError lastPOSIXErrorWithUserInfo:@{ NSURLErrorKey : self }];
+        }
+        return NO;
+    }
+    
+    char *buffer = calloc(1, bufferSize);
+    if (getxattr(fileSystemRepresentation,
+                 keyString,
+                 buffer,
+                 bufferSize,
+                 0,
+                 kNilOptions) < 0)
+    {
+        free(buffer);
+        
+        if (extendedAttribute)
+        {
+            (*extendedAttribute) = nil;
+        }
+        if (error)
+        {
+            (*error) = [NSError lastPOSIXErrorWithUserInfo:@{ NSURLErrorKey : self }];
+        }
+        return NO;
+    }
+    
+    NSString *attribute = [[NSString alloc]
+                           initWithBytes:buffer
+                           length:bufferSize
+                           encoding:NSUTF8StringEncoding];
+    free(buffer);
+    
+    if (extendedAttribute)
+    {
+        (*extendedAttribute) = attribute;
+    }
+    if (error)
+    {
+        (*error) = nil;
+    }
+    return YES;
 }
+
+- (BOOL)setExtendedAttribute:(NSString *)extendedAttribute
+                      forKey:(NSString *)key
+                       error:(NSError *__autoreleasing *)error
+{
+    NSCParameterAssert([self isFileURL]);
+    NSCParameterAssert(![NSString isNilOrEmptyString:key]);
+    NSCAssert([key length] <= XATTR_MAXNAMELEN,
+              @"Keys for extended attributes should be less than or equal to %d", XATTR_MAXNAMELEN);
+    
+    int errorCode = 0;
+    if (extendedAttribute)
+    {
+        const char *valueString = [extendedAttribute UTF8String];
+        errorCode = setxattr([self fileSystemRepresentation],
+                             [key UTF8String],
+                             valueString,
+                             strlen(valueString),
+                             0,
+                             kNilOptions);
+    }
+    else
+    {
+        errorCode = removexattr([self fileSystemRepresentation],
+                                [key UTF8String],
+                                kNilOptions);
+    }
+    
+    if (!error)
+    {
+        return (errorCode >= 0);
+    }
+    
+    if (errorCode < 0)
+    {
+        (*error) = [NSError lastPOSIXErrorWithUserInfo:@{ NSURLErrorKey : self }];
+        return NO;
+    }
+    
+    (*error) = nil;
+    return YES;
+}
+
 
 @end

@@ -400,10 +400,10 @@
     });
 }
 
-JESynthesizeObject(id, synthesizedId, setSynthesizedId, JESynthesizeRetainNonatomic);
-JESynthesizeObject(void(^)(void), synthesizedBlock, setSynthesizedBlock, JESynthesizeCopyNonatomic);
-JESynthesizeObject(id, synthesizedAssign, setSynthesizedAssign, JESynthesizeAssign);
-JESynthesizeScalar(CGRect, synthesizedRect, setSynthesizedRect);
+JESynthesize(id, synthesizedId, setSynthesizedId, strong);
+JESynthesize(void(^)(void), synthesizedBlock, setSynthesizedBlock, copy);
+JESynthesize(id, synthesizedAssign, setSynthesizedAssign, unsafe_unretained);
+JESynthesize(CGRect, synthesizedRect, setSynthesizedRect, assign);
 
 - (void)testSynthesized
 {

@@ -89,6 +89,7 @@ typedef struct JELogLocation
         /* We need to assign the expression to a variable in case it is an rvalue. */ \
         /* Since arrays cannot be assigned to another array, we use the comma operator in typeof(0, nonArrayExpression) to demote array types to their pointer counterparts. */ \
         const typeof(0, nonArrayExpression) _je_value = (nonArrayExpression); \
+        _Pragma("clang diagnostic pop") \
         [JEDebugging \
          dumpLevel:level \
          location:JELogLocationCurrent() \
@@ -96,13 +97,12 @@ typedef struct JELogLocation
          value:[[NSValue alloc] \
                 initWithBytes:({ \
                     /* We need to get the proper address to pass to NSValue. That is, if an array we need to pass itself, otherwise its address. Hopefully, this all gets optimized out by the compiler. */ \
-                    const void *_je_pointer = &_je_value; \
+                    const void *const _je_pointer = &_je_value; \
                     (@encode(typeof(nonArrayExpression))[0] == '[' \
-                        ?  *(const void **)_je_pointer \
-                        : (const void *)_je_pointer); \
+                        ? *(const void *const *)_je_pointer \
+                        : _je_pointer); \
                 }) \
                 objCType:@encode(typeof(nonArrayExpression))]]; \
-        _Pragma("clang diagnostic pop") \
     } while(0)
 
 
