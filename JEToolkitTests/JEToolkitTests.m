@@ -20,6 +20,8 @@
 
 @interface JEToolkitTests : XCTestCase
 
+@property (nonatomic, unsafe_unretained) id testUnsafe;
+
 @end
 
 
@@ -408,7 +410,7 @@ JESynthesize(assign, CGRect, synthesizedRect, setSynthesizedRect);
 - (void)testSynthesized
 {
     JEDump("Before assignment", self.synthesizedId);
-    self.synthesizedId = @"test";
+    self.synthesizedId = [NSMutableString new];
     JEDump("After assignment", self.synthesizedId);
     
     JEDump("Before assignment", self.synthesizedBlock);

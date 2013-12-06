@@ -29,13 +29,13 @@
 
 @end
 
+
 @implementation JEFileLoggerSettings (_JEDebugging)
 
 JESynthesize(strong, NSFileHandle *, fileHandle, setFileHandle);
 JESynthesize(copy, NSURL *, fileURL, setFileURL);
 JESynthesize(assign, unsigned long long, lastSynchronizedOffset, setLastSynchronizedOffset);
 JESynthesize(assign, BOOL, isDisabled, setIsDisabled);
-JESynthesize(copy, void(^)(void), testBlock, setTestBlock);
 
 @end
 
@@ -264,8 +264,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
             location:(JELogLocation)location
              message:(NSString *)message
 {
-    JEConsoleLoggerSettings __block *consoleLoggerSettings;
-    JEHUDLoggerSettings __block *HUDLoggerSettings;
+    JEConsoleLoggerSettings *__block consoleLoggerSettings;
+    JEHUDLoggerSettings *__block HUDLoggerSettings;
     dispatch_sync([self settingsQueue], ^{
         
         JEDebugging *instance = [self sharedInstance];
@@ -492,6 +492,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     [fileHandle seekToEndOfFile];
     
     fileLoggerSettings.fileHandle = fileHandle;
+    fileLoggerSettings.lastSynchronizedOffset = [fileHandle offsetInFile];
     
     [self deleteOldFileLogsWithThreadSafeSettings:fileLoggerSettings];
     
@@ -670,9 +671,9 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 {
     @autoreleasepool {
         
-        JEConsoleLoggerSettings __block *consoleLoggerSettings;
-        JEHUDLoggerSettings __block *HUDLoggerSettings;
-        JEFileLoggerSettings __block *fileLoggerSettings;
+        JEConsoleLoggerSettings *__block consoleLoggerSettings;
+        JEHUDLoggerSettings *__block HUDLoggerSettings;
+        JEFileLoggerSettings *__block fileLoggerSettings;
         dispatch_sync([self settingsQueue], ^{
             
             JEDebugging *instance = [self sharedInstance];
@@ -775,9 +776,9 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arguments];
         va_end(arguments);
         
-        JEConsoleLoggerSettings __block *consoleLoggerSettings;
-        JEHUDLoggerSettings __block *HUDLoggerSettings;
-        JEFileLoggerSettings __block *fileLoggerSettings;
+        JEConsoleLoggerSettings *__block consoleLoggerSettings;
+        JEHUDLoggerSettings *__block HUDLoggerSettings;
+        JEFileLoggerSettings *__block fileLoggerSettings;
         dispatch_sync([self settingsQueue], ^{
             
             JEDebugging *instance = [self sharedInstance];
