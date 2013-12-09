@@ -63,7 +63,7 @@
 }
 
 + (void)appendDetailsForForValue:(NSValue *)wrappedValue
-                expectedObjCType:(const char *)objCType
+                expectedObjCType:(const char [])objCType
                  typeNameBuilder:(NSMutableString *)typeNameBuilder
               valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
@@ -181,7 +181,7 @@
              valueStringBuilder:valueStringBuilder];
             break;
             
-        case 'D':
+        case 'D': // long double
             [self
              appendDetailsForForLongDoubleValue:wrappedValue
              typeNameBuilder:typeNameBuilder
@@ -256,7 +256,7 @@
 }
 
 + (void)appendDetailsForForIdValue:(NSValue *)wrappedValue
-                  expectedObjCType:(const char *)objCType
+                  expectedObjCType:(const char [])objCType
                    typeNameBuilder:(NSMutableString *)typeNameBuilder
                 valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
@@ -681,7 +681,7 @@
 }
 
 + (void)appendDetailsForForBitFieldValue:(NSValue *)wrappedValue
-                        expectedObjCType:(const char *)objCType
+                        expectedObjCType:(const char [])objCType
                          typeNameBuilder:(NSMutableString *)typeNameBuilder
                       valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
@@ -738,7 +738,7 @@
 }
 
 + (void)appendDetailsForForPointerValue:(NSValue *)wrappedValue
-                       expectedObjCType:(const char *)objCType
+                       expectedObjCType:(const char [])objCType
                         typeNameBuilder:(NSMutableString *)typeNameBuilder
                      valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
@@ -827,7 +827,7 @@
 }
 
 + (void)appendDetailsForForArrayValue:(NSValue *)wrappedValue
-                     expectedObjCType:(const char *)objCType
+                     expectedObjCType:(const char [])objCType
                       typeNameBuilder:(NSMutableString *)typeNameBuilder
                    valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
@@ -919,7 +919,7 @@
 }
 
 + (void)appendDetailsForForUnionValue:(NSValue *)wrappedValue
-                     expectedObjCType:(const char *)objCType
+                     expectedObjCType:(const char [])objCType
                       typeNameBuilder:(NSMutableString *)typeNameBuilder
                    valueStringBuilder:(NSMutableString *)valueStringBuilder
 {
@@ -956,7 +956,7 @@
 }
 
 + (void)appendDetailsForStructValue:(NSValue *)wrappedValue
-                   expectedObjCType:(const char *)objCType
+                   expectedObjCType:(const char [])objCType
                     typeNameBuilder:(NSMutableString *)typeNameBuilder
                  valueStringBuilder:(NSMutableString *)valueStringBuilder
 {

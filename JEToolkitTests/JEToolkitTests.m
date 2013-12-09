@@ -236,102 +236,27 @@
     
     JEDump(0.12345f);
     JEDump([[NSNumber numberWithFloat:0.12345f] stringValue]);
-    JEDump(0.123456f);
-    JEDump([[NSNumber numberWithFloat:0.123456f] stringValue]);
-    JEDump(0.1234567f);
-    JEDump([[NSNumber numberWithFloat:0.1234567f] stringValue]);
-    JEDump(0.12345678f);
-    JEDump([[NSNumber numberWithFloat:0.12345678f] stringValue]);
-    JEDump(0.123456789f);
-    JEDump([[NSNumber numberWithFloat:0.123456789f] stringValue]);
-    JEDump(0.1234567899f);
-    JEDump([[NSNumber numberWithFloat:0.1234567899f] stringValue]);
-    JEDump(0.12345678991f);
-    JEDump([[NSNumber numberWithFloat:0.12345678991f] stringValue]);
     JEDump(0.123456789912f);
     JEDump([[NSNumber numberWithFloat:0.123456789912f] stringValue]);
     JEDump(123.123f);
     JEDump([[NSNumber numberWithFloat:123.123f] stringValue]);
-    JEDump(1234.1234f);
-    JEDump([[NSNumber numberWithFloat:1234.1234f] stringValue]);
-    JEDump(12345.12345f);
-    JEDump([[NSNumber numberWithFloat:12345.12345f] stringValue]);
-    JEDump(123456.123456f);
-    JEDump([[NSNumber numberWithFloat:123456.123456f] stringValue]);
-    JEDump(1234567.1234567f);
-    JEDump([[NSNumber numberWithFloat:1234567.1234567f] stringValue]);
-    JEDump(12345678.12345678f);
-    JEDump([[NSNumber numberWithFloat:12345678.12345678f] stringValue]);
-    JEDump(123456789.123456789f);
-    JEDump([[NSNumber numberWithFloat:123456789.123456789f] stringValue]);
     JEDump(1234567899.1234567899f);
     JEDump([[NSNumber numberWithFloat:1234567899.1234567899f] stringValue]);
     
     JEDump(0.1234567);
     JEDump([[NSNumber numberWithDouble:0.1234567] stringValue]);
-    JEDump(0.12345678);
-    JEDump(0.123456789);
-    JEDump(0.1234567899);
-    JEDump(0.12345678991);
-    JEDump(0.123456789912);
-    JEDump(0.1234567899123);
-    JEDump(0.12345678991234);
-    JEDump(0.123456789912345);
-    JEDump(0.1234567899123456);
-    JEDump(0.12345678991234567);
-    JEDump(0.123456789912345678);
-    JEDump(0.1234567899123456789);
-    JEDump(0.12345678991234567899);
     JEDump(0.123456789912345678991);
     JEDump([[NSNumber numberWithDouble:0.123456789912345678991] stringValue]);
     JEDump(123456.123456);
     JEDump([[NSNumber numberWithDouble:123456.123456] stringValue]);
-    JEDump(1234567.1234567);
-    JEDump(12345678.12345678);
-    JEDump(123456789.123456789);
-    JEDump(1234567899.1234567899);
-    JEDump(12345678991.12345678991);
-    JEDump(123456789912.123456789912);
-    JEDump(1234567899123.1234567899123);
-    JEDump(12345678991234.12345678991234);
-    JEDump(123456789912345.123456789912345);
-    JEDump(1234567899123456.1234567899123456);
-    JEDump(12345678991234567.12345678991234567);
-    JEDump(123456789912345678.123456789912345678);
-    JEDump(1234567899123456789.1234567899123456789);
     JEDump(12345678991234567899.0);
     JEDump([[NSNumber numberWithDouble:12345678991234567899.0] stringValue]);
     
     JEDump(0.123456789912l);
-    JEDump(0.1234567899123l);
-    JEDump(0.12345678991234l);
-    JEDump(0.123456789912345l);
-    JEDump(0.1234567899123456l);
-    JEDump(0.12345678991234567l);
-    JEDump(0.123456789912345678l);
-    JEDump(0.1234567899123456789l);
-    JEDump(0.12345678991234567899l);
-    JEDump(0.123456789912345678991l);
-    JEDump(0.1234567899123456789912l);
-    JEDump(0.12345678991234567899123l);
     JEDump(0.123456789912345678991234l);
     JEDump(123456.123456l);
-    JEDump(1234567.1234567l);
-    JEDump(12345678.12345678l);
-    JEDump(123456789.123456789l);
-    JEDump(1234567899.1234567899l);
-    JEDump(12345678991.12345678991l);
-    JEDump(123456789912.123456789912l);
-    JEDump(1234567899123.1234567899123l);
-    JEDump(12345678991234.12345678991234l);
-    JEDump(123456789912345.123456789912345l);
     JEDump(1234567899123456.1234567899123456l);
     JEDump(12345678991234567.1234567l);
-    JEDump(123456789912345678.12345678l);
-    JEDump(1234567899123456789.123456789l);
-    JEDump(12345678991234567899.1234567899l);
-    JEDump(123456789912345678991.12345678991l);
-    JEDump(1234567899123456789912.123456789912l);
     JEDump(12345678991234567899123.1234567899123l);
     
     JEDump((CGColorRef)NULL);
@@ -428,3 +353,25 @@ JESynthesize(assign, CGRect, synthesizedRect, setSynthesizedRect);
 
 
 @end
+
+
+@interface NSObject (AwesomeUtils)
+
+@property (nonatomic, strong) id anObject;
+@property (nonatomic, copy) void (^aBlock)(void);
+@property (nonatomic, unsafe_unretained) id aDelegate;
+@property (nonatomic, assign) CGRect aRect;
+@property (nonatomic, assign) BOOL aFlag;
+
+@end
+
+@implementation NSObject (AwesomeUtils)
+
+JESynthesize(strong, id, anObject, setAnObject);
+JESynthesize(copy, void(^)(void), aBlock, setABlock);
+JESynthesize(unsafe_unretained, id, aDelegate, setADelegate);
+JESynthesize(assign, CGRect, aRect, setARect);
+JESynthesize(copy, BOOL, aFlag, setAFlag);
+
+@end
+

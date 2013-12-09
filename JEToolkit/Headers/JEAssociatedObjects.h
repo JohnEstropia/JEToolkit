@@ -12,17 +12,17 @@
 #define JEToolkit_JEAssociatedObjects_h
 
 
-//#define JESynthesize(policy, type, getter, setter) \
+//#define JESynthesize(ownership, type, getter, setter) \
 //    static const void *_JESynthesizeKey_##getter = &_JESynthesizeKey_##getter; \
 //    \
 //    - (type)getter \
 //    { \
-//        return _JESynthesize_get_##policy(type, getter); \
+//        return _JESynthesize_get_##ownership(type, getter); \
 //    } \
 //    \
 //    - (void)setter:(type)getter \
 //    { \
-//        _JESynthesize_set_##policy(type, getter); \
+//        _JESynthesize_set_##ownership(type, getter); \
 //    }
 //
 //
@@ -70,13 +70,13 @@
 //                             OBJC_ASSOCIATION_COPY_NONATOMIC);
 
 
-#define JESynthesize(policy, type, getter, setter) \
+#define JESynthesize(ownership, type, getter, setter) \
     static const void *_JESynthesizeKey_##getter = &_JESynthesizeKey_##getter; \
     \
     - (type)getter \
     { \
         /* If assign/unsafe_unretained semantics are set, then we treat the object as a value. This if/else (and actually all the pointer voodoo we're doing) will be optimized out by the compiler. */ \
-        if (_JEAssociationPolicy_##policy != OBJC_ASSOCIATION_ASSIGN && @encode(type)[0] == '@') \
+        if (_JEAssociationOwnership_##ownership != OBJC_ASSOCIATION_ASSIGN && @encode(type)[0] == '@') \
         { \
             id __strong _je_object = objc_getAssociatedObject(self, _JESynthesizeKey_##getter); \
             const void *_je_objectPointer = &_je_object; \
@@ -91,7 +91,7 @@
             /* We use an array so the initializer syntax will give us a nice zeroed-out value as default. */ \
             _Pragma("clang diagnostic push") \
             _Pragma("clang diagnostic error \"-Wignored-attributes\"") \
-            typeof(type) _JEAssociationAttribute_##policy _je_value[1] = {}; \
+            typeof(type) _JEAssociationAttribute_##ownership _je_value[1] = {}; \
             _Pragma("clang diagnostic pop") \
             [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) getValue:_je_value]; \
             return _je_value[0]; \
@@ -101,14 +101,14 @@
     - (void)setter:(type)getter \
     { \
         /* If assign/unsafe_unretained semantics are set, then we treat the object as a value. This if/else (and actually all the pointer voodoo we're doing) will be optimized out by the compiler. */ \
-        if (_JEAssociationPolicy_##policy != OBJC_ASSOCIATION_ASSIGN && @encode(type)[0] == '@') \
+        if (_JEAssociationOwnership_##ownership != OBJC_ASSOCIATION_ASSIGN && @encode(type)[0] == '@') \
         { \
             const void *_je_objectPointer = &getter; \
             objc_setAssociatedObject(self, \
                                      _JESynthesizeKey_##getter, \
                                      /* Method parameters are always retained, so we qualify with __strong. */ \
                                      *(id __strong *)_je_objectPointer, \
-                                     _JEAssociationPolicy_##policy); \
+                                     _JEAssociationOwnership_##ownership); \
         } \
         else \
         { \
@@ -120,11 +120,11 @@
     }
 
 
-#define _JEAssociationPolicy_assign             OBJC_ASSOCIATION_ASSIGN
-#define _JEAssociationPolicy_unsafe_unretained  OBJC_ASSOCIATION_ASSIGN
-#define _JEAssociationPolicy_retain             OBJC_ASSOCIATION_RETAIN_NONATOMIC
-#define _JEAssociationPolicy_strong             OBJC_ASSOCIATION_RETAIN_NONATOMIC
-#define _JEAssociationPolicy_copy               OBJC_ASSOCIATION_COPY_NONATOMIC
+#define _JEAssociationOwnership_assign              OBJC_ASSOCIATION_ASSIGN
+#define _JEAssociationOwnership_unsafe_unretained   OBJC_ASSOCIATION_ASSIGN
+#define _JEAssociationOwnership_retain              OBJC_ASSOCIATION_RETAIN_NONATOMIC
+#define _JEAssociationOwnership_strong              OBJC_ASSOCIATION_RETAIN_NONATOMIC
+#define _JEAssociationOwnership_copy                OBJC_ASSOCIATION_COPY_NONATOMIC
 
 #define _JEAssociationAttribute_assign
 #define _JEAssociationAttribute_unsafe_unretained   __unsafe_unretained
