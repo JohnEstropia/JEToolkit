@@ -20,6 +20,9 @@
 #import "NSURL+JEToolkit.h"
 
 
+#define JEDebuggingReverseDNSPrefix   "com.JEToolkit.JEDebugging."
+
+
 @interface JEFileLoggerSettings (_JEDebugging)
 
 @property (nonatomic, strong) NSFileHandle *fileHandle;
@@ -45,7 +48,7 @@ static const void *_JEDebuggingSettingsQueueID = &_JEDebuggingSettingsQueueID;
 static const void *_JEDebuggingConsoleLogQueueID = &_JEDebuggingConsoleLogQueueID;
 static const void *_JEDebuggingFileLogQueueID = &_JEDebuggingFileLogQueueID;
 
-static NSString *const _JEDebuggingFileLogAttributeKey = @"com.JEDebugging.JEToolkit";
+static NSString *const _JEDebuggingFileLogAttributeKey = @"" JEDebuggingReverseDNSPrefix "logFileAttribute";
 static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 
@@ -194,7 +197,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        settingsQueue = dispatch_queue_create("JEDebugging.settingsQueue", DISPATCH_QUEUE_CONCURRENT);
+        settingsQueue = dispatch_queue_create(JEDebuggingReverseDNSPrefix "settingsQueue", DISPATCH_QUEUE_CONCURRENT);
         dispatch_queue_set_specific(settingsQueue,
                                     _JEDebuggingQueueIDKey,
                                     (void *)_JEDebuggingSettingsQueueID,
@@ -210,7 +213,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        consoleLogQueue = dispatch_queue_create("JEDebugging.consoleLogQueue", DISPATCH_QUEUE_CONCURRENT);
+        consoleLogQueue = dispatch_queue_create(JEDebuggingReverseDNSPrefix "consoleLogQueue", DISPATCH_QUEUE_CONCURRENT);
         dispatch_queue_set_specific(consoleLogQueue,
                                     _JEDebuggingQueueIDKey,
                                     (void *)_JEDebuggingConsoleLogQueueID,
@@ -226,7 +229,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        fileLogQueue = dispatch_queue_create("JEDebugging.fileLogQueue", DISPATCH_QUEUE_CONCURRENT);
+        fileLogQueue = dispatch_queue_create(JEDebuggingReverseDNSPrefix "fileLogQueue", DISPATCH_QUEUE_CONCURRENT);
         dispatch_queue_set_specific(fileLogQueue,
                                     _JEDebuggingQueueIDKey,
                                     (void *)_JEDebuggingFileLogQueueID,

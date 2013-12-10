@@ -45,9 +45,8 @@
     fileLoggerSettings.logLevelMask = JELogLevelAll;
     [JEDebugging setFileLoggerSettings:fileLoggerSettings];
     
-    JEDump("This will be 2", 1+1);
-    
     JEDump(100);
+    JEDump("This how to annotate before printing", 1 + 1);
     int oneHundred = 100;
     JEDump(oneHundred);
     JEDump(&oneHundred);
@@ -83,12 +82,6 @@
     JEDump("This is a dump", &cstringPtr);
     char cstringArray[7] = "cstring";
     JEDump(cstringArray);
-    JEDump(@encode(typeof(cstringArray)));
-    JEDump(@encode(typeof(nil, cstringArray)));
-    JEDump(sizeof(cstringArray));
-    JEDump(sizeof(nil, cstringArray));
-    JEDump(strlen(cstringArray));
-    JEDump(strlen((nil, cstringArray)));
     
     
     JEDump(&cstringArray);
@@ -210,9 +203,10 @@
     
     int intArray[2][3] = {{1, 2, 3}, {4, 5, 6}};
     JEDump(intArray);
-    JEDump("intArray !!", &intArray);
     JEDump(&intArray);
     JEDump([NSValue valueWithBytes:intArray objCType:@encode(typeof(intArray))]);
+    JEDump("wrong way to annotate and print c arrays", intArray);
+    JEDump("correct way to annotate and print c arrays", &intArray);
     
     JEDump(^(int intParam, id idParam, CGRect rectParam, NSError ** outErrorParam){ return intParam + 100; });
     int (^block)(int intParam) = NULL;
@@ -355,23 +349,23 @@ JESynthesize(assign, CGRect, synthesizedRect, setSynthesizedRect);
 @end
 
 
-@interface NSObject (AwesomeUtils)
-
-@property (nonatomic, strong) id anObject;
-@property (nonatomic, copy) void (^aBlock)(void);
-@property (nonatomic, unsafe_unretained) id aDelegate;
-@property (nonatomic, assign) CGRect aRect;
-@property (nonatomic, assign) BOOL aFlag;
-
-@end
-
-@implementation NSObject (AwesomeUtils)
-
-JESynthesize(strong, id, anObject, setAnObject);
-JESynthesize(copy, void(^)(void), aBlock, setABlock);
-JESynthesize(unsafe_unretained, id, aDelegate, setADelegate);
-JESynthesize(assign, CGRect, aRect, setARect);
-JESynthesize(copy, BOOL, aFlag, setAFlag);
-
-@end
+//@interface NSObject (AwesomeUtils)
+//
+//@property (nonatomic, strong) id anObject;
+//@property (nonatomic, copy) void (^aBlock)(void);
+//@property (nonatomic, unsafe_unretained) id aDelegate;
+//@property (nonatomic, assign) CGRect aRect;
+//@property (nonatomic, assign) BOOL aFlag;
+//
+//@end
+//
+//@implementation NSObject (AwesomeUtils)
+//
+//JESynthesize(strong, id, anObject, setAnObject);
+//JESynthesize(copy, void(^)(void), aBlock, setABlock);
+//JESynthesize(unsafe_unretained, id, aDelegate, setADelegate);
+//JESynthesize(assign, CGRect, aRect, setARect);
+//JESynthesize(copy, BOOL, aFlag, setAFlag);
+//
+//@end
 
