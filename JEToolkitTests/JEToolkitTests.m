@@ -321,10 +321,12 @@
     });
 }
 
+JESynthesize(assign, void(^)(void), synthesizedCopy, setSynthesizedCopy);
 JESynthesize(strong, id, synthesizedId, setSynthesizedId);
 JESynthesize(copy, void(^)(void), synthesizedBlock, setSynthesizedBlock);
 JESynthesize(unsafe_unretained, id, synthesizedAssign, setSynthesizedAssign);
 JESynthesize(assign, CGRect, synthesizedRect, setSynthesizedRect);
+JESynthesize(weak, id, synthesizedWeak, setSynthesizedWeak);
 
 - (void)testSynthesized
 {
@@ -332,40 +334,30 @@ JESynthesize(assign, CGRect, synthesizedRect, setSynthesizedRect);
     self.synthesizedId = [NSMutableString new];
     JEDump("After assignment", self.synthesizedId);
     
-    JEDump("Before assignment", self.synthesizedBlock);
-    self.synthesizedBlock = ^{ };
-    JEDump("After assignment", self.synthesizedBlock);
-    
     JEDump("Before assignment", self.synthesizedAssign);
     self.synthesizedAssign = self;
     JEDump("After assignment", self.synthesizedAssign);
     
+    JEDump("Before assignment", self.synthesizedBlock);
+    self.synthesizedBlock = ^{ };
+    JEDump("After assignment", self.synthesizedBlock);
+    
     JEDump("Before assignment", self.synthesizedRect);
     self.synthesizedRect = (CGRect){ {1, 2}, {3, 4} };
     JEDump("After assignment", self.synthesizedRect);
+    
+    NSObject *obj = [NSObject new];
+    JEDump("Before assign", self.synthesizedWeak);
+    self.synthesizedWeak = obj;
+    @autoreleasepool {
+        
+        JEDump("Before nil", self.synthesizedWeak);
+        
+    }
+    obj = nil;
+    JEDump("After nil", self.synthesizedWeak);
 }
 
 
 @end
-
-
-//@interface NSObject (AwesomeUtils)
-//
-//@property (nonatomic, strong) id anObject;
-//@property (nonatomic, copy) void (^aBlock)(void);
-//@property (nonatomic, unsafe_unretained) id aDelegate;
-//@property (nonatomic, assign) CGRect aRect;
-//@property (nonatomic, assign) BOOL aFlag;
-//
-//@end
-//
-//@implementation NSObject (AwesomeUtils)
-//
-//JESynthesize(strong, id, anObject, setAnObject);
-//JESynthesize(copy, void(^)(void), aBlock, setABlock);
-//JESynthesize(unsafe_unretained, id, aDelegate, setADelegate);
-//JESynthesize(assign, CGRect, aRect, setARect);
-//JESynthesize(copy, BOOL, aFlag, setAFlag);
-//
-//@end
 

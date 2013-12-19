@@ -28,6 +28,7 @@
 #define JE_WARN_UNUSED_RESULT       DISPATCH_WARN_RESULT
 
 
+
 #pragma mark - Constants
 
 #define __JE_FILE_NAME__            ((strrchr(__FILE__, '/') ?: (__FILE__ - 1)) + 1)

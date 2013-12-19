@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+#if !__has_feature(objc_arc)
+#error JEDump() and JELog() requires ARC be enabled
+#endif
+
 #import "JECompilerDefines.h"
 #import "NSObject+JEDebugging.h"
 

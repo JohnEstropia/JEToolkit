@@ -15,6 +15,7 @@
 		2F1DCF8F1800341000AFD8C7 /* UIViewController+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DCF8E1800341000AFD8C7 /* UIViewController+JEToolkit.m */; };
 		2F27A69617F69A5500CE0230 /* JEDispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F27A69417F69A5500CE0230 /* JEDispatch.m */; };
 		2F39821918122ACB007A843F /* JEOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F39821818122ACB007A843F /* JEOrderedDictionary.m */; };
+		2F45A93C185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F45A93B185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.m */; };
 		2F6D775017E0CFEA00D3735D /* NSDateFormatter+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D774F17E0CFEA00D3735D /* NSDateFormatter+JEToolkit.m */; };
 		2F8FC86417B65DB500C3C0F3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC86317B65DB500C3C0F3 /* Foundation.framework */; };
 		2F8FC86917B65DB500C3C0F3 /* JEToolkit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F8FC86817B65DB500C3C0F3 /* JEToolkit.h */; };
@@ -100,6 +101,8 @@
 		2F36590D17F0A62300794CC0 /* JEToolkit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JEToolkit.podspec; sourceTree = SOURCE_ROOT; };
 		2F39821718122ACB007A843F /* JEOrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEOrderedDictionary.h; sourceTree = "<group>"; };
 		2F39821818122ACB007A843F /* JEOrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEOrderedDictionary.m; sourceTree = "<group>"; };
+		2F45A93A185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _JEAssociatedObjectsWeakWrapper.h; sourceTree = "<group>"; };
+		2F45A93B185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _JEAssociatedObjectsWeakWrapper.m; sourceTree = "<group>"; };
 		2F5566F2184104F000098714 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		2F5566F4184104F800098714 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2F6D774E17E0CFEA00D3735D /* NSDateFormatter+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+JEToolkit.h"; sourceTree = "<group>"; };
@@ -206,6 +209,8 @@
 				2F27A69B17F69C2800CE0230 /* JECompilerDefines.h */,
 				2F2A27C9180C01D0004064FF /* JESafetyHelpers.h */,
 				2F3259E4181BA74F0097D6F1 /* JEAssociatedObjects.h */,
+				2F45A93A185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.h */,
+				2F45A93B185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.m */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -492,6 +497,7 @@
 				2F1DCF8C180030FD00AFD8C7 /* UIView+JEToolkit.m in Sources */,
 				2F1DCF8417FF1CCA00AFD8C7 /* NSURL+JEToolkit.m in Sources */,
 				2F6D775017E0CFEA00D3735D /* NSDateFormatter+JEToolkit.m in Sources */,
+				2F45A93C185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.m in Sources */,
 				2FA7B83217E5E99800D41011 /* NSNumber+JEToolkit.m in Sources */,
 				2F1DCF8F1800341000AFD8C7 /* UIViewController+JEToolkit.m in Sources */,
 				2F27A69617F69A5500CE0230 /* JEDispatch.m in Sources */,
@@ -577,7 +583,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -629,7 +635,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -677,6 +683,7 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JEToolkit/JEToolkit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -697,6 +704,7 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JEToolkit/JEToolkit-Prefix.pch";
 				INFOPLIST_FILE = "JEToolkitTests/JEToolkitTests-Info.plist";
