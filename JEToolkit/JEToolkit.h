@@ -11,6 +11,7 @@
 #import "JECompilerDefines.h"
 #import "JESafetyHelpers.h"
 #import "JEAssociatedObjects.h"
+#import "JEFormulas.h"
 
 
 #pragma mark - Categories
@@ -20,6 +21,7 @@
 #import "NSCalendar+JEToolkit.h"
 #import "NSDate+JEToolkit.h"
 #import "NSDateFormatter+JEToolkit.h"
+#import "NSError+JEToolkit.h"
 #import "NSIndexSet+JEToolkit.h"
 #import "NSMutableArray+JEToolkit.h"
 #import "NSNumber+JEToolkit.h"

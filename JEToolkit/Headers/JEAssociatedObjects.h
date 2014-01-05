@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
+#ifndef JEToolkit_JEAssociatedObjects_h
+#define JEToolkit_JEAssociatedObjects_h
+
 #import <objc/runtime.h>
 
 #if !__has_feature(objc_arc)
@@ -13,10 +16,6 @@
 #endif
 
 #import "_JEAssociatedObjectsWeakWrapper.h"
-
-
-#ifndef JEToolkit_JEAssociatedObjects_h
-#define JEToolkit_JEAssociatedObjects_h
 
 
 #define JE_ASSOCIATED_OBJECTS_USE_SIMPLE    0

@@ -6,12 +6,10 @@
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
-#import "JECompilerDefines.h"
-
-
 #ifndef JEToolkit_JESafetyHelpers_h
 #define JEToolkit_JESafetyHelpers_h
 
+#import "JECompilerDefines.h"
 
 
 #pragma mark - Key-Value Coding

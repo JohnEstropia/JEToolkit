@@ -15,7 +15,6 @@
 #import <MapKit/MapKit.h>
 
 #import "JEToolkit.h"
-#import "JEOrderedDictionary.h"
 
 
 @interface JEToolkitTests : XCTestCase
@@ -105,7 +104,6 @@
     JEDump(selector);
     JEDump(&selector);
     JEDump([NSValue valueWithBytes:&selector objCType:@encode(typeof(selector))]);
-    
     
     JEDump([UIView new]);
     JEDump(@"日本語😈");
@@ -319,6 +317,11 @@
         JELogLevel((1 << 5), @"Unnamed queue");
         
     });
+    
+    UIImage *image = [UIImage imageFromColor:[UIColor blueColor] size:(CGSize){ 100, 200 }];
+    JEDump(image);
+    
+    JEDump([UIColor blueColor]);
 }
 
 JESynthesize(assign, void(^)(void), synthesizedCopy, setSynthesizedCopy);

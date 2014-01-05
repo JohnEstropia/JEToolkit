@@ -34,4 +34,18 @@
 #define __JE_FILE_NAME__            ((strrchr(__FILE__, '/') ?: (__FILE__ - 1)) + 1)
 
 
+
+#pragma mark - Environment settings
+
+JE_STATIC_INLINE JE_CONST
+BOOL JEIsDebugMode()
+{
+#ifdef DEBUG
+    return YES;
+#else
+    return NO;
+#endif
+}
+
+
 #endif

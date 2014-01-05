@@ -64,6 +64,13 @@ typedef struct JELogLocation
 #endif
 
 
+#pragma mark - JEAssert() variants
+
+#warning TODO: actual implementation
+#define JEAssert NSCAssert
+#define JEParameterAssert NSCParameterAssert
+
+
 #pragma mark - JEDump() variants
 
 /*! Dumps detailed information of any variable or expression to the console.

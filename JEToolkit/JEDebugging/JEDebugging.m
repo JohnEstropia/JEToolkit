@@ -318,6 +318,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         NSMutableString *logString = [self
                                       messageHeaderFromEntries:headerEntries
                                       withSettings:HUDLoggerSettings];
+#warning TODO:
     }
 }
 
