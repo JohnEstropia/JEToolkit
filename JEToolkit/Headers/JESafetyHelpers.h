@@ -10,6 +10,7 @@
 #define JEToolkit_JESafetyHelpers_h
 
 #import "JECompilerDefines.h"
+#import "JEDebugging.h"
 
 
 #pragma mark - Key-Value Coding
@@ -37,7 +38,7 @@ JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
 NSString *L8N(NSString *keyString)
 {
 	NSString *localizedString = NSLocalizedString(keyString, nil);
-    NSCAssert(keyString != localizedString,
+    JEAssert(keyString != localizedString,
               @"\"%@\" not found in Localizable.strings",
               keyString);
     return localizedString;
@@ -47,7 +48,7 @@ JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
 NSString *L8N(NSString *keyString, NSString *stringsFile)
 {
 	NSString *localizedString = NSLocalizedStringFromTable(keyString, stringsFile, nil);
-    NSCAssert(keyString != localizedString,
+    JEAssert(keyString != localizedString,
               @"\"%@\" not found in %@.strings",
               keyString,
               stringsFile);

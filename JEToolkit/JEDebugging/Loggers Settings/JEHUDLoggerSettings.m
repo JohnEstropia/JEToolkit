@@ -21,10 +21,24 @@
     }
     
     self.logLevelMask = JELogLevelAll;
-    self.logMessageHeaderMask = (JELogMessageHeaderQueue
-                                 | JELogMessageHeaderSourceFile
+    self.logMessageHeaderMask = (JELogMessageHeaderSourceFile
                                  | JELogMessageHeaderFunction);
+    self.visibleOnStart = YES;
+    self.numberOfLogEntriesInMemory = 100;
+    
     return self;
 }
+
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    typeof(self) copy = [super copyWithZone:zone];
+    copy->_visibleOnStart = _visibleOnStart;
+    copy->_numberOfLogEntriesInMemory = _numberOfLogEntriesInMemory;
+    return copy;
+}
+
 
 @end

@@ -30,6 +30,8 @@
 #import "NSURL+JEToolkit.h"
 #import "UIColor+JEToolkit.h"
 #import "UIImage+JEToolkit.h"
+#import "UILabel+JEToolkit.h"
+#import "UITextView+JEToolkit.h"
 #import "UIView+JEToolkit.h"
 #import "UIViewController+JEToolkit.h"
 

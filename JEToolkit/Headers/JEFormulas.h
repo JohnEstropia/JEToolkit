@@ -52,5 +52,24 @@ CGSize JESizeScaled(CGSize size, CGFloat scale)
     return (CGSize){ .width = (size.width * scale), .height = (size.height * scale) };
 }
 
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+double JEClamp(double min, double value, double max)
+{
+	return MIN(max, MAX(min, value));
+}
+
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+NSInteger JEClamp(NSInteger min, NSInteger value, NSInteger max)
+{
+	return MIN(max, MAX(min, value));
+}
+
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+NSUInteger JEClamp(NSUInteger min, NSUInteger value, NSUInteger max)
+{
+	return MIN(max, MAX(min, value));
+}
+
+
 
 #endif

@@ -11,6 +11,7 @@
 #import <sys/xattr.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
+#import "JEDebugging.h"
 #import "NSError+JEToolkit.h"
 #import "NSString+JEToolkit.h"
 
@@ -45,10 +46,10 @@
                       forKey:(NSString *)key
                        error:(NSError *__autoreleasing *)error
 {
-    NSCParameterAssert([self isFileURL]);
-    NSCParameterAssert(![NSString isNilOrEmptyString:key]);
-    NSCAssert([key length] <= XATTR_MAXNAMELEN,
-              @"Keys for extended attributes should be less than or equal to %d", XATTR_MAXNAMELEN);
+    JEParameterAssert([self isFileURL]);
+    JEParameterAssert(![NSString isNilOrEmptyString:key]);
+    JEAssert([key length] <= XATTR_MAXNAMELEN,
+             @"Keys for extended attributes should be less than or equal to %d", XATTR_MAXNAMELEN);
     
     const char *keyString = [key UTF8String];
     const char *fileSystemRepresentation = [self fileSystemRepresentation];
@@ -114,10 +115,10 @@
                       forKey:(NSString *)key
                        error:(NSError *__autoreleasing *)error
 {
-    NSCParameterAssert([self isFileURL]);
-    NSCParameterAssert(![NSString isNilOrEmptyString:key]);
-    NSCAssert([key length] <= XATTR_MAXNAMELEN,
-              @"Keys for extended attributes should be less than or equal to %d", XATTR_MAXNAMELEN);
+    JEParameterAssert([self isFileURL]);
+    JEParameterAssert(![NSString isNilOrEmptyString:key]);
+    JEAssert([key length] <= XATTR_MAXNAMELEN,
+             @"Keys for extended attributes should be less than or equal to %d", XATTR_MAXNAMELEN);
     
     int errorCode = 0;
     if (extendedAttribute)

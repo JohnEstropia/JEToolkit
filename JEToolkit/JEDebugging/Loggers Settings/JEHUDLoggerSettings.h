@@ -10,4 +10,7 @@
 
 @interface JEHUDLoggerSettings : JEBaseLoggerSettings
 
+@property (nonatomic, assign) BOOL visibleOnStart;
+@property (nonatomic, assign) NSUInteger numberOfLogEntriesInMemory;
+
 @end

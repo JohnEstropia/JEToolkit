@@ -27,11 +27,12 @@
                          | JELogLevelAlert);
     self.logMessageHeaderMask = JELogMessageHeaderAll;
     
-    _fileLogsDirectoryURL = [[NSURL alloc]
-                             initFileURLWithPath:[[NSString cachesDirectory] stringByAppendingPathComponent:@"Logs"]
-                             isDirectory:YES];
-    _numberOfBytesInMemoryBeforeWritingToFile = (1024 * 100); // 100KB
-    _numberOfDaysBeforeDeletingFile = 7;
+    self.fileLogsDirectoryURL = [[NSURL alloc]
+                                 initFileURLWithPath:[[NSString cachesDirectory] stringByAppendingPathComponent:@"Logs"]
+                                 isDirectory:YES];
+    self.numberOfBytesInMemoryBeforeWritingToFile = (1024 * 100); // 100KB
+    self.numberOfDaysBeforeDeletingFile = 7;
+    
     return self;
 }
 

@@ -20,6 +20,7 @@
 #import "JEFileLoggerSettings.h"
 
 
+
 #pragma mark - Log default masks
 
 #ifndef JE_LOG_DEFAULT_LEVEL
@@ -29,6 +30,7 @@
 #ifndef JE_DUMP_DEFAULT_LEVEL
     #define JE_DUMP_DEFAULT_LEVEL   JELogLevelTrace
 #endif
+
 
 
 #pragma mark - Log message header constants container
@@ -64,11 +66,38 @@ typedef struct JELogLocation
 #endif
 
 
+
 #pragma mark - JEAssert() variants
 
-#warning TODO: actual implementation
-#define JEAssert NSCAssert
-#define JEParameterAssert NSCParameterAssert
+#ifdef NS_BLOCK_ASSERTIONS
+
+#define JEAssert(condition, formatString, ...)  do {} while (0)
+#define JEParameterAssert(condition)            do {} while (0)
+
+#else
+
+#define JEAssert(condition, formatString, ...) \
+    do \
+    { \
+        if (!(condition)) \
+        { \
+            [JEDebugging \
+             logFailureInAssertionCondition:@"" #condition \
+             location:JELogLocationCurrent()]; \
+            _Pragma("clang diagnostic push") \
+            _Pragma("clang diagnostic ignored \"-Wformat-extra-args\"") \
+            [NSException \
+             raise:NSInternalInconsistencyException \
+             format:(formatString), ##__VA_ARGS__]; \
+            _Pragma("clang diagnostic pop") \
+        } \
+    } while(0)
+
+#define JEParameterAssert(condition) \
+    JEAssert((condition), @"Invalid parameter not satisfying: (%s)", #condition)
+
+#endif
+
 
 
 #pragma mark - JEDump() variants
@@ -117,33 +146,42 @@ typedef struct JELogLocation
     } while(0)
 
 
+
 #pragma mark - JELog() variants
 
 /*! Logs a format string to the console. Also displays the source filename, line number, and method name.
  */
 #define JELog(formatString, ...) \
-    JELogLevel(JE_LOG_DEFAULT_LEVEL, formatString, ##__VA_ARGS__)
+    JELogLevel(JE_LOG_DEFAULT_LEVEL, (formatString), ##__VA_ARGS__)
 
 #define JELogTrace(formatString, ...) \
-    JELogLevel(JELogLevelTrace, formatString, ##__VA_ARGS__)
+    JELogLevel(JELogLevelTrace, (formatString), ##__VA_ARGS__)
 
 #define JELogNotice(formatString, ...) \
-    JELogLevel(JELogLevelNotice, formatString, ##__VA_ARGS__)
+    JELogLevel(JELogLevelNotice, (formatString), ##__VA_ARGS__)
 
 #define JELogAlert(formatString, ...) \
-    JELogLevel(JELogLevelAlert, formatString, ##__VA_ARGS__)
+    JELogLevel(JELogLevelAlert, (formatString), ##__VA_ARGS__)
 
 #define JELogLevel(level, formatString, ...) \
-    [JEDebugging \
-     logLevel:level \
-     location:JELogLocationCurrent() \
-     format:formatString, \
-     ##__VA_ARGS__]
+    do \
+    { \
+        _Pragma("clang diagnostic push") \
+        _Pragma("clang diagnostic ignored \"-Wformat-extra-args\"") \
+        [JEDebugging \
+         logLevel:level \
+         location:JELogLocationCurrent() \
+         format:(formatString), ##__VA_ARGS__]; \
+        _Pragma("clang diagnostic pop") \
+    } while(0)
+
 
 
 #pragma mark - JEDebugging class
 
 @interface JEDebugging : NSObject
+
++ (void)start;
 
 #pragma mark - logging
 
@@ -155,6 +193,9 @@ typedef struct JELogLocation
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
           format:(NSString *)format, ... JE_FORMAT_STRING(3, 4);
+
++ (void)logFailureInAssertionCondition:(NSString *)conditionString
+                              location:(JELogLocation)location;
 
 
 #pragma mark - logger settings

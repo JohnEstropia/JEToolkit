@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F10BB6E1880EDFA00739760 /* JEHUDLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F10BB6D1880EDFA00739760 /* JEHUDLogView.m */; };
+		2F10BB721881124500739760 /* UILabel+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F10BB711881124500739760 /* UILabel+JEToolkit.m */; };
+		2F10BB751881125800739760 /* UITextView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F10BB741881125800739760 /* UITextView+JEToolkit.m */; };
 		2F1DCF7E17FF115700AFD8C7 /* NSObject+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DCF7D17FF115700AFD8C7 /* NSObject+JEToolkit.m */; };
 		2F1DCF8117FF186E00AFD8C7 /* NSIndexSet+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DCF8017FF186E00AFD8C7 /* NSIndexSet+JEToolkit.m */; };
 		2F1DCF8417FF1CCA00AFD8C7 /* NSURL+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DCF8317FF1CCA00AFD8C7 /* NSURL+JEToolkit.m */; };
@@ -80,6 +83,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2F10BB6C1880EDFA00739760 /* JEHUDLogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEHUDLogView.h; sourceTree = "<group>"; };
+		2F10BB6D1880EDFA00739760 /* JEHUDLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEHUDLogView.m; sourceTree = "<group>"; };
+		2F10BB701881124500739760 /* UILabel+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+JEToolkit.h"; sourceTree = "<group>"; };
+		2F10BB711881124500739760 /* UILabel+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+JEToolkit.m"; sourceTree = "<group>"; };
+		2F10BB731881125800739760 /* UITextView+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+JEToolkit.h"; sourceTree = "<group>"; };
+		2F10BB741881125800739760 /* UITextView+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+JEToolkit.m"; sourceTree = "<group>"; };
 		2F1DCF7C17FF115700AFD8C7 /* NSObject+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+JEToolkit.h"; sourceTree = "<group>"; };
 		2F1DCF7D17FF115700AFD8C7 /* NSObject+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JEToolkit.m"; sourceTree = "<group>"; };
 		2F1DCF7F17FF186E00AFD8C7 /* NSIndexSet+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+JEToolkit.h"; sourceTree = "<group>"; };
@@ -201,6 +210,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F10BB6B1880ED6300739760 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2F10BB6C1880EDFA00739760 /* JEHUDLogView.h */,
+				2F10BB6D1880EDFA00739760 /* JEHUDLogView.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		2F27A69A17F69C2800CE0230 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +336,10 @@
 				2FA7B83A17E5FCC400D41011 /* UIColor+JEToolkit.m */,
 				2F8FC88C17B6608400C3C0F3 /* UIImage+JEToolkit.h */,
 				2F8FC88D17B6608400C3C0F3 /* UIImage+JEToolkit.m */,
+				2F10BB701881124500739760 /* UILabel+JEToolkit.h */,
+				2F10BB711881124500739760 /* UILabel+JEToolkit.m */,
+				2F10BB731881125800739760 /* UITextView+JEToolkit.h */,
+				2F10BB741881125800739760 /* UITextView+JEToolkit.m */,
 				2F1DCF8A180030FD00AFD8C7 /* UIView+JEToolkit.h */,
 				2F1DCF8B180030FD00AFD8C7 /* UIView+JEToolkit.m */,
 				2F1DCF8D1800341000AFD8C7 /* UIViewController+JEToolkit.h */,
@@ -392,6 +414,7 @@
 			children = (
 				34F124701844882E00856ACA /* JEDebugging.h */,
 				34F124711844882E00856ACA /* JEDebugging.m */,
+				2F10BB6B1880ED6300739760 /* Views */,
 				34ECBD3D184EF09400960D4A /* Loggers Settings */,
 				34ECBD0F184EEFC400960D4A /* Categories */,
 			);
@@ -483,9 +506,11 @@
 				2FF317831877DEDC002DFCE3 /* NSArray+JEDebugging.m in Sources */,
 				2F1DCF7E17FF115700AFD8C7 /* NSObject+JEToolkit.m in Sources */,
 				2FF3178E1877DEDC002DFCE3 /* NSSet+JEDebugging.m in Sources */,
+				2F10BB721881124500739760 /* UILabel+JEToolkit.m in Sources */,
 				34ECBD49184EF13800960D4A /* JEFileLoggerSettings.m in Sources */,
 				2FA7B83B17E5FCC400D41011 /* UIColor+JEToolkit.m in Sources */,
 				2FA7B82F17E49C3300D41011 /* NSDate+JEToolkit.m in Sources */,
+				2F10BB6E1880EDFA00739760 /* JEHUDLogView.m in Sources */,
 				2F8FC88E17B6608400C3C0F3 /* UIImage+JEToolkit.m in Sources */,
 				2FA7B83817E5F7DB00D41011 /* NSMutableArray+JEToolkit.m in Sources */,
 				34F124721844882E00856ACA /* JEDebugging.m in Sources */,
@@ -502,6 +527,7 @@
 				2FF317871877DEDC002DFCE3 /* NSHashTable+JEDebugging.m in Sources */,
 				2FF317851877DEDC002DFCE3 /* NSError+JEDebugging.m in Sources */,
 				2FF317881877DEDC002DFCE3 /* NSMapTable+JEDebugging.m in Sources */,
+				2F10BB751881125800739760 /* UITextView+JEToolkit.m in Sources */,
 				2F45A93C185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.m in Sources */,
 				2FA7B83217E5E99800D41011 /* NSNumber+JEToolkit.m in Sources */,
 				2F1DCF8F1800341000AFD8C7 /* UIViewController+JEToolkit.m in Sources */,
@@ -572,14 +598,14 @@
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
+				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -624,7 +650,7 @@
 				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_RECEIVER_WEAK = YES;
+				CLANG_WARN_OBJC_RECEIVER_WEAK = NO;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
