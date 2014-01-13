@@ -23,8 +23,8 @@
     self.logLevelMask = JELogLevelAll;
     self.logMessageHeaderMask = (JELogMessageHeaderSourceFile
                                  | JELogMessageHeaderFunction);
-    self.visibleOnStart = YES;
-    self.numberOfLogEntriesInMemory = 100;
+    self.visibleOnStart = NO;
+    self.numberOfLogEntriesInMemory = 200;
     
     return self;
 }
