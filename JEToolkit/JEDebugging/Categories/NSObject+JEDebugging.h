@@ -21,4 +21,9 @@
 - (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
                                       includeAddress:(BOOL)includeAddress;
 
+/*! Subclasses that override detailedDescriptionIncludeClass:includeAddress: may use this method to create the initial NSMutableString.
+ */
+- (NSMutableString *)stringBuilderForDetailedDescriptionIncludeClass:(BOOL)includeClass
+                                                      includeAddress:(BOOL)includeAddress;
+
 @end

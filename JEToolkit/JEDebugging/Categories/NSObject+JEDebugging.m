@@ -21,15 +21,25 @@
 - (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
                                       includeAddress:(BOOL)includeAddress
 {
-    NSMutableString *description = [[NSMutableString alloc] initWithString:[self description]];
+    NSMutableString *description = [self
+                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
+                                    includeAddress:includeAddress];
+    [description appendString:[self description]];
     [description indentByLevel:1];
-    if (includeAddress)
-    {
-        [description insertString:[NSString stringWithFormat:@"<%p> ", self] atIndex:0];
-    }
+    return description;
+}
+
+- (NSMutableString *)stringBuilderForDetailedDescriptionIncludeClass:(BOOL)includeClass
+                                                      includeAddress:(BOOL)includeAddress
+{
+    NSMutableString *description = [[NSMutableString alloc] init];
     if (includeClass)
     {
-        [description insertString:[NSString stringWithFormat:@"(%@ *) ", [self class]] atIndex:0];
+        [description appendFormat:@"(%@ *) ", [self class]];
+    }
+    if (includeAddress)
+    {
+        [description appendFormat:@"<%p> ", self];
     }
     return description;
 }

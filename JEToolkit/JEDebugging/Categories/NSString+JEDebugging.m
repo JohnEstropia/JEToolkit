@@ -18,18 +18,15 @@
 - (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
                                       includeAddress:(BOOL)includeAddress
 {
-    NSMutableString *description = [[NSMutableString alloc] initWithString:[self debugDescription]];
-    [description escapeWithUTF8CStringRepresentation];
-    [description insertString:@"@" atIndex:0];
+    NSMutableString *description = [self
+                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
+                                    includeAddress:includeAddress];
+    [description appendString:@"@"];
     
-    if (includeAddress)
-    {
-        [description insertString:[NSString stringWithFormat:@"<%p> ", self] atIndex:0];
-    }
-    if (includeClass)
-    {
-        [description insertString:[NSString stringWithFormat:@"(%@ *) ", [self class]] atIndex:0];
-    }
+    NSMutableString *UTF8CString = [[NSMutableString alloc] initWithString:[self description]];
+    [UTF8CString escapeWithUTF8CStringRepresentation];
+    [description appendString:UTF8CString];
+    
     return description;
 }
 

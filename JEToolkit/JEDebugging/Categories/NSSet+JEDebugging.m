@@ -18,23 +18,23 @@
 - (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
                                       includeAddress:(BOOL)includeAddress
 {
+    NSMutableString *description = [self
+                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
+                                    includeAddress:includeAddress];
     NSUInteger count = [self count];
-    NSMutableString *description = (count == 1
-                                    ? [[NSMutableString alloc] initWithString:@"1 entry ("]
-                                    : [[NSMutableString alloc] initWithFormat:@"%lu entries (",
-                                       (unsigned long)count]);
-    if (includeAddress)
+    if (count == 1)
     {
-        [description insertString:[NSString stringWithFormat:@"<%p> ", self] atIndex:0];
+        [description appendString:@"1 entry ("];
     }
-    if (includeClass)
+    else
     {
-        [description insertString:[NSString stringWithFormat:@"(%@ *) ", [self class]] atIndex:0];
-    }
-    if (count <= 0)
-    {
-        [description appendString:@")"];
-        return description;
+        [description appendFormat:@"%lu entries (", (unsigned long)count];
+        
+        if (count <= 0)
+        {
+            [description appendString:@")"];
+            return description;
+        }
     }
     
     BOOL __block isFirstEntry = YES;

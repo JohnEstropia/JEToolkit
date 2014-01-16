@@ -58,14 +58,14 @@
 	NSInteger length = [self length];
 	NSMutableArray *characters = [[NSMutableArray alloc] initWithCapacity:length];
     [self
-     enumerateSubstringsInRange:NSMakeRange(0, length)
+     enumerateSubstringsInRange:(NSRange){ .location = 0, .length = length }
      options:NSStringEnumerationByComposedCharacterSequences
      usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
          
          [characters addObject:substring];
          
      }];
-	return characters;
+	return [characters copy];
 }
 
 - (NSRange)range

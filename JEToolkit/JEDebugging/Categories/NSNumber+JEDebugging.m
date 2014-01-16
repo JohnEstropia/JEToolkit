@@ -18,30 +18,24 @@
 - (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
                                       includeAddress:(BOOL)includeAddress
 {
-    NSMutableString *description;
+    NSMutableString *description = [self
+                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
+                                    includeAddress:includeAddress];
     if (self == (id)kCFBooleanTrue)
     {
-        description = [[NSMutableString alloc] initWithString:@"@YES"];
+        [description appendString:@"@YES"];
     }
     else if (self == (id)kCFBooleanFalse)
     {
-        description = [[NSMutableString alloc] initWithString:@"@NO"];
+        [description appendString:@"@NO"];
     }
     else
     {
-        description = [super detailedDescriptionIncludeClass:NO includeAddress:NO];
-        [description insertString:@"@(" atIndex:0];
+        [description appendString:@"@("];
+        [description appendString:[super detailedDescriptionIncludeClass:NO includeAddress:NO]];
         [description appendString:@")"];
     }
     
-    if (includeAddress)
-    {
-        [description insertString:[NSString stringWithFormat:@"<%p> ", self] atIndex:0];
-    }
-    if (includeClass)
-    {
-        [description insertString:[NSString stringWithFormat:@"(%@ *) ", [self class]] atIndex:0];
-    }
     return description;
 }
 

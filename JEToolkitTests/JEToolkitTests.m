@@ -43,6 +43,7 @@
     JEFileLoggerSettings *fileLoggerSettings = [JEDebugging copyFileLoggerSettings];
     fileLoggerSettings.logLevelMask = JELogLevelAll;
     [JEDebugging setFileLoggerSettings:fileLoggerSettings];
+    [JEDebugging start];
     
     JEDump(100);
     JEDump("This how to annotate before printing", 1 + 1);

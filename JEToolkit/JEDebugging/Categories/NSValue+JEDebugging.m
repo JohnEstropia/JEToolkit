@@ -24,23 +24,16 @@
     NSMutableString *typeNameBuilder = [[NSMutableString alloc] init];
     NSMutableString *valueStringBuilder = [[NSMutableString alloc] init];
     
-    [NSValue appendDetailsForForValue:self
-                     expectedObjCType:[self objCType]
-                      typeNameBuilder:typeNameBuilder
-                   valueStringBuilder:valueStringBuilder];
+    [NSValue
+     appendDetailsForForValue:self
+     expectedObjCType:[self objCType]
+     typeNameBuilder:typeNameBuilder
+     valueStringBuilder:valueStringBuilder];
     
-    NSMutableString *description = [[NSMutableString alloc] initWithFormat:
-                                    @"(%@) %@",
-                                    typeNameBuilder,
-                                    valueStringBuilder];
-    if (includeAddress)
-    {
-        [description insertString:[NSString stringWithFormat:@"<%p> ", self] atIndex:0];
-    }
-    if (includeClass)
-    {
-        [description insertString:[NSString stringWithFormat:@"(%@ *) ", [self class]] atIndex:0];
-    }
+    NSMutableString *description = [self
+                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
+                                    includeAddress:includeAddress];
+    [description appendFormat:@"(%@) %@", typeNameBuilder, valueStringBuilder];
     
     return description;
 }

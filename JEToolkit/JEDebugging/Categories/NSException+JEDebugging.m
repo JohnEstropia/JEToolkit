@@ -66,18 +66,11 @@
     [callStackString indentByLevel:1];
     [callStackString appendString:@"\n]"];
     
-    NSMutableString *description = [[NSMutableString alloc] initWithFormat:
-                                    @"%@ {\nreason: ",
-                                    [[self name] detailedDescriptionIncludeClass:NO includeAddress:NO]];
-    if (includeAddress)
-    {
-        [description insertString:[NSString stringWithFormat:@"<%p> ", self] atIndex:0];
-    }
-    if (includeClass)
-    {
-        [description insertString:[NSString stringWithFormat:@"(%@ *) ", [self class]] atIndex:0];
-    }
-    
+    NSMutableString *description = [self
+                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
+                                    includeAddress:includeAddress];
+    [description appendString:[[self name] detailedDescriptionIncludeClass:NO includeAddress:NO]];
+    [description appendString:@" {\nreason: "];
     [description appendString:[[self reason] detailedDescriptionIncludeClass:NO includeAddress:NO]];
     [description appendString:@",\nuserInfo: "];
     [description appendString:userInfoString];
