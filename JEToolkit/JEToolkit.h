@@ -24,6 +24,7 @@
 #import "NSError+JEToolkit.h"
 #import "NSIndexSet+JEToolkit.h"
 #import "NSMutableArray+JEToolkit.h"
+#import "NSMutableString+JEDebugging.h"
 #import "NSNumber+JEToolkit.h"
 #import "NSObject+JEToolkit.h"
 #import "NSString+JEToolkit.h"

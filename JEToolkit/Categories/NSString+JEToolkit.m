@@ -34,6 +34,16 @@
     return [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
 }
 
++ (NSString *)pathWithComponents:(NSArray *)components pathExtension:(NSString *)pathExtension
+{
+    NSString *path = [NSString pathWithComponents:components];
+    if (pathExtension)
+    {
+        path = [path stringByAppendingPathExtension:pathExtension];
+    }
+    return path;
+}
+
 #pragma mark Constants
 
 + (NSString *)applicationVersion
@@ -53,7 +63,7 @@
     return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
-- (NSArray *)charactersArray
+- (NSArray *)glyphs
 {
 	NSInteger length = [self length];
 	NSMutableArray *characters = [[NSMutableArray alloc] initWithCapacity:length];

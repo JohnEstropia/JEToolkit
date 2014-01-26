@@ -31,6 +31,10 @@
  */
 + (NSString *)appSupportDirectory JE_CONST;
 
+/*! Convenience method to build file path from components
+ */
++ (NSString *)pathWithComponents:(NSArray *)components pathExtension:(NSString *)pathExtension;
+
 #pragma mark Constants
 
 /*! Convenience method to get the app short version string
@@ -49,7 +53,7 @@
 
 /*! Gets the array of characters from the receiver
  */
-- (NSArray *)charactersArray;
+- (NSArray *)glyphs;
 
 /*! Gets the range of the receiver
  */
