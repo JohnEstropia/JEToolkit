@@ -17,6 +17,7 @@
 		2F1DCF8C180030FD00AFD8C7 /* UIView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DCF8B180030FD00AFD8C7 /* UIView+JEToolkit.m */; };
 		2F1DCF8F1800341000AFD8C7 /* UIViewController+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F1DCF8E1800341000AFD8C7 /* UIViewController+JEToolkit.m */; };
 		2F27A69617F69A5500CE0230 /* JEDispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F27A69417F69A5500CE0230 /* JEDispatch.m */; };
+		2F2C84AE189E42EA000D2B1F /* JEWeakCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F2C84AD189E42EA000D2B1F /* JEWeakCache.m */; };
 		2F39821918122ACB007A843F /* JEOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F39821818122ACB007A843F /* JEOrderedDictionary.m */; };
 		2F45A93C185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F45A93B185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.m */; };
 		2F6D775017E0CFEA00D3735D /* NSDateFormatter+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D774F17E0CFEA00D3735D /* NSDateFormatter+JEToolkit.m */; };
@@ -104,6 +105,8 @@
 		2F27A69517F69A5500CE0230 /* JEDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEDispatch.h; sourceTree = "<group>"; };
 		2F27A69B17F69C2800CE0230 /* JECompilerDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JECompilerDefines.h; sourceTree = "<group>"; };
 		2F2A27C9180C01D0004064FF /* JESafetyHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JESafetyHelpers.h; sourceTree = "<group>"; };
+		2F2C84AC189E42EA000D2B1F /* JEWeakCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEWeakCache.h; sourceTree = "<group>"; };
+		2F2C84AD189E42EA000D2B1F /* JEWeakCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEWeakCache.m; sourceTree = "<group>"; };
 		2F3259E4181BA74F0097D6F1 /* JEAssociatedObjects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JEAssociatedObjects.h; sourceTree = "<group>"; };
 		2F36590C17F0A62300794CC0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		2F36590D17F0A62300794CC0 /* JEToolkit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JEToolkit.podspec; sourceTree = SOURCE_ROOT; };
@@ -355,6 +358,8 @@
 				2F27A69417F69A5500CE0230 /* JEDispatch.m */,
 				2F39821718122ACB007A843F /* JEOrderedDictionary.h */,
 				2F39821818122ACB007A843F /* JEOrderedDictionary.m */,
+				2F2C84AC189E42EA000D2B1F /* JEWeakCache.h */,
+				2F2C84AD189E42EA000D2B1F /* JEWeakCache.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -539,6 +544,7 @@
 				2FF317841877DEDC002DFCE3 /* NSDictionary+JEDebugging.m in Sources */,
 				2FF3178B1877DEDC002DFCE3 /* NSObject+JEDebugging.m in Sources */,
 				2FF317861877DEDC002DFCE3 /* NSException+JEDebugging.m in Sources */,
+				2F2C84AE189E42EA000D2B1F /* JEWeakCache.m in Sources */,
 				2F8FC89917B669DE00C3C0F3 /* NSString+JEToolkit.m in Sources */,
 				2FF3178C1877DEDC002DFCE3 /* NSOrderedSet+JEDebugging.m in Sources */,
 				2F39821918122ACB007A843F /* JEOrderedDictionary.m in Sources */,

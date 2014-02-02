@@ -42,3 +42,4 @@
 #import "JEDispatch.h"
 #import "JEDebugging.h"
 #import "JEOrderedDictionary.h"
+#import "JEWeakCache.h"
