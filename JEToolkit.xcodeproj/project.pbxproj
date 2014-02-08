@@ -225,12 +225,12 @@
 		2F27A69A17F69C2800CE0230 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				2F27A69B17F69C2800CE0230 /* JECompilerDefines.h */,
-				2F2A27C9180C01D0004064FF /* JESafetyHelpers.h */,
-				2F3259E4181BA74F0097D6F1 /* JEAssociatedObjects.h */,
-				2FF317BC18799819002DFCE3 /* JEFormulas.h */,
 				2F45A93A185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.h */,
 				2F45A93B185C9C1900496921 /* _JEAssociatedObjectsWeakWrapper.m */,
+				2F3259E4181BA74F0097D6F1 /* JEAssociatedObjects.h */,
+				2F27A69B17F69C2800CE0230 /* JECompilerDefines.h */,
+				2FF317BC18799819002DFCE3 /* JEFormulas.h */,
+				2F2A27C9180C01D0004064FF /* JESafetyHelpers.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";

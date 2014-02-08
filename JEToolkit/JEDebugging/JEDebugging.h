@@ -84,12 +84,12 @@ typedef struct JELogLocation
             [JEDebugging \
              logFailureInAssertionCondition:@"" #condition \
              location:JELogLocationCurrent()]; \
-            _Pragma("clang diagnostic push") \
-            _Pragma("clang diagnostic ignored \"-Wformat-extra-args\"") \
+            JE_PRAGMA_PUSH \
+            JE_PRAGMA_IGNORE("-Wformat-extra-args") \
             [NSException \
              raise:NSInternalInconsistencyException \
              format:(formatString), ##__VA_ARGS__]; \
-            _Pragma("clang diagnostic pop") \
+            JE_PRAGMA_POP \
         } \
     } while(0)
 
@@ -124,12 +124,12 @@ typedef struct JELogLocation
 #define JEDumpLevel(level, nonArrayExpression...) \
     do \
     { \
-        _Pragma("clang diagnostic push") \
-        _Pragma("clang diagnostic ignored \"-Wunused-value\"") \
+        JE_PRAGMA_PUSH \
+        JE_PRAGMA_IGNORE("-Wunused-value") \
         /* We need to assign the expression to a variable in case it is an rvalue. */ \
         /* Since arrays cannot be assigned to another array, we use the comma operator in typeof(0, nonArrayExpression) to demote array types to their pointer counterparts. */ \
         const typeof(0, nonArrayExpression) _je_value = (nonArrayExpression); \
-        _Pragma("clang diagnostic pop") \
+        JE_PRAGMA_POP \
         [JEDebugging \
          dumpLevel:level \
          location:JELogLocationCurrent() \
@@ -166,13 +166,13 @@ typedef struct JELogLocation
 #define JELogLevel(level, formatString, ...) \
     do \
     { \
-        _Pragma("clang diagnostic push") \
-        _Pragma("clang diagnostic ignored \"-Wformat-extra-args\"") \
+        JE_PRAGMA_PUSH \
+        JE_PRAGMA_IGNORE("-Wformat-extra-args") \
         [JEDebugging \
          logLevel:level \
          location:JELogLocationCurrent() \
          format:(formatString), ##__VA_ARGS__]; \
-        _Pragma("clang diagnostic pop") \
+        JE_PRAGMA_POP \
     } while(0)
 
 

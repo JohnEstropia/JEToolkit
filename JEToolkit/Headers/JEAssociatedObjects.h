@@ -105,33 +105,33 @@
                 id __attribute__((objc_precise_lifetime)) __strong _je_object = ((_JEAssociatedObjectsWeakWrapper *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter)).weakObject; \
                 const void *_je_objectPointer = &_je_object; \
                 /* We will never reach here if the type is not an id, so we just ignore warnings. */ \
-                _Pragma("clang diagnostic push") \
-                _Pragma("clang diagnostic ignored \"-Wignored-attributes\"") \
+                JE_PRAGMA_PUSH \
+                JE_PRAGMA_IGNORE("-Wignored-attributes") \
                 return *(typeof(type) __strong *)_je_objectPointer; \
-                _Pragma("clang diagnostic pop") \
+                JE_PRAGMA_POP \
             } \
             else \
             { \
                 id __attribute__((objc_precise_lifetime)) __strong _je_object = objc_getAssociatedObject(self, _JESynthesizeKey_##getter); \
                 const void *_je_objectPointer = &_je_object; \
                 /* We will never reach here if the type is not an id, so we just ignore warnings. */ \
-                _Pragma("clang diagnostic push") \
-                _Pragma("clang diagnostic ignored \"-Wignored-attributes\"") \
+                JE_PRAGMA_PUSH \
+                JE_PRAGMA_IGNORE("-Wignored-attributes") \
                 return *(typeof(type) __strong *)_je_objectPointer; \
-                _Pragma("clang diagnostic pop") \
+                JE_PRAGMA_POP \
             } \
         } \
         else \
         { \
             /* We use an array so the initializer syntax will give us a nice zeroed-out value as default. */ \
-            _Pragma("clang diagnostic push") \
-            _Pragma("clang diagnostic error \"-Wignored-attributes\"") \
+            JE_PRAGMA_PUSH \
+            JE_PRAGMA_ERROR("-Wignored-attributes") \
             typeof(type) _JEAssociationAttribute_##ownership _je_value[1] = {}; \
-            _Pragma("clang diagnostic pop") \
-            _Pragma("clang diagnostic push") \
-            _Pragma("clang diagnostic ignored \"-Warc-repeated-use-of-weak\"") \
+            JE_PRAGMA_POP \
+            JE_PRAGMA_PUSH \
+            JE_PRAGMA_IGNORE("-Warc-repeated-use-of-weak") \
             [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) getValue:_je_value]; \
-            _Pragma("clang diagnostic pop") \
+            JE_PRAGMA_POP \
             return _je_value[0]; \
         } \
     } \

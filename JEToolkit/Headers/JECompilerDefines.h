@@ -35,6 +35,17 @@
 
 
 
+#pragma mark - Pragma helpers
+
+
+#define _JE_PRAGMA_STRINGIZE(x)     #x
+#define JE_PRAGMA_PUSH               _Pragma("clang diagnostic push")
+#define JE_PRAGMA_IGNORE(linkerFlag) _Pragma(_JE_PRAGMA_STRINGIZE(clang diagnostic ignored linkerFlag))
+#define JE_PRAGMA_ERROR(linkerFlag)  _Pragma(_JE_PRAGMA_STRINGIZE(clang diagnostic error linkerFlag))
+#define JE_PRAGMA_POP                _Pragma("clang diagnostic pop")
+
+
+
 #pragma mark - Environment settings
 
 JE_STATIC_INLINE JE_CONST
