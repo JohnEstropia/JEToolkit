@@ -38,5 +38,9 @@
  */
 + (UIColor *)colorWithComponents:(NSArray *)components JE_NONNULL_ALL;
 
+/*! Creates a random color.
+ @return a random opaque color
+ */
++ (UIColor *)randomColor;
 
 @end

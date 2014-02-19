@@ -121,5 +121,10 @@
     return nil;
 }
 
++ (UIColor *)randomColor
+{
+    return [UIColor colorWithInt:arc4random_uniform(0x01000000) alpha:1.0f];
+}
+
 
 @end
