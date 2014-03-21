@@ -10,20 +10,15 @@
 
 @interface NSObject (JEDebugging)
 
-/*! Convenience method equivalent to [self detailedDescriptionIncludeClass:YES includeAddress:YES].
+/*! Returns a string with detailed information about the receiver.
+ Subclasses should override this method directly or with categories.
  */
-- (NSMutableString *)detailedDescription;
+- (NSString *)loggingDescription;
 
-/*! Returns a string with detailed information about the receiver. 
- The return type is @p NSMutableString so callers can freely manipulate the string if needed (for indenting, etc.).
- Subclasses may override this method directly or with categories.
+/*! Returns a string with detailed information about the receiver, with options to include the class name and/or the object memory address.
+ Because this calls @p loggingDescription internally, subclasses typically don't need to override this method.
  */
-- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
-                                      includeAddress:(BOOL)includeAddress;
-
-/*! Subclasses that override detailedDescriptionIncludeClass:includeAddress: may use this method to create the initial NSMutableString.
- */
-- (NSMutableString *)stringBuilderForDetailedDescriptionIncludeClass:(BOOL)includeClass
-                                                      includeAddress:(BOOL)includeAddress;
+- (NSString *)loggingDescriptionIncludeClass:(BOOL)includeClass
+                              includeAddress:(BOOL)includeAddress;
 
 @end

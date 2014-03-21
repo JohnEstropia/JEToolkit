@@ -12,7 +12,7 @@
 
 #pragma mark - NSCopying
 
-- (id)copyWithZone:(NSZone *)zone
+- (instancetype)copyWithZone:(NSZone *)zone
 {
     typeof(self) copy = [[[self class] allocWithZone:zone] init];
     copy->_logLevelMask = _logLevelMask;

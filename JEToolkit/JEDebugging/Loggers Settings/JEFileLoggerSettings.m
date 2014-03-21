@@ -15,7 +15,7 @@
 
 #pragma mark - NSObject
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (!self)
@@ -39,7 +39,7 @@
 
 #pragma mark - NSCopying
 
-- (id)copyWithZone:(NSZone *)zone
+- (instancetype)copyWithZone:(NSZone *)zone
 {
     typeof(self) copy = [super copyWithZone:zone];
     copy->_fileLogsDirectoryURL = [_fileLogsDirectoryURL copyWithZone:zone];

@@ -10,7 +10,7 @@
 
 @implementation NSError (JEToolkit)
 
-#pragma mark - public
+#pragma mark - Public
 
 + (instancetype)lastPOSIXErrorWithUserInfo:(NSDictionary *)userInfo
 {

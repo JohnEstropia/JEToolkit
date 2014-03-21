@@ -11,7 +11,6 @@
 #import <objc/runtime.h>
 
 #import "JESafetyHelpers.h"
-#import "JEAssociatedObjects.h"
 
 #import "NSCalendar+JEToolkit.h"
 #import "NSMutableString+JEDebugging.h"
@@ -58,7 +57,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 #pragma mark - NSObject
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (!self)
@@ -295,7 +294,10 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                                    withMask:(consoleLoggerSettings.logMessageHeaderMask
                                              | HUDLoggerSettings.logMessageHeaderMask)];
     
-    NSMutableString *errorDescription = [errorOrException detailedDescription];
+    NSMutableString *errorDescription = [NSMutableString stringWithString:
+                                         [errorOrException
+                                          loggingDescriptionIncludeClass:YES
+                                          includeAddress:YES]];
     if (errorDescription)
     {
         [errorDescription indentByLevel:1];
@@ -549,6 +551,62 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     return fileHandle;
 }
 
+- (void)enumerateFileLogsWithThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings
+                                          block:(void (^)(NSURL *fileURL, BOOL *stop))block
+{
+    NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
+              @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *fileEnumerationError;
+    NSArray *fileURLs = [fileManager
+                         contentsOfDirectoryAtURL:fileLoggerSettings.fileLogsDirectoryURL
+                         includingPropertiesForKeys:@[(__bridge NSString *)kCFURLIsRegularFileKey,
+                                                      (__bridge NSString *)kCFURLCreationDateKey]
+                         options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants
+                                  | NSDirectoryEnumerationSkipsPackageDescendants
+                                  | NSDirectoryEnumerationSkipsHiddenFiles)
+                         error:&fileEnumerationError];
+    if (!fileURLs)
+    {
+        [JEDebugging
+         logFileError:fileEnumerationError
+         location:JELogLocationCurrent()
+         message:@"Failed enumerating log files because of exception:"];
+        return;
+    }
+    
+    [fileURLs enumerateObjectsUsingBlock:^(NSURL *fileURL, NSUInteger idx, BOOL *stop) {
+        
+        @autoreleasepool {
+            
+            NSNumber *isRegularFile;
+            [fileURL
+             getResourceValue:&isRegularFile
+             forKey:(__bridge NSString *)kCFURLIsRegularFileKey
+             error:NULL];
+            if (![isRegularFile boolValue])
+            {
+                return;
+            }
+            
+            NSString *extendedAttribute;
+            [fileURL
+             getExtendedAttribute:&extendedAttribute
+             forKey:_JEDebuggingFileLogAttributeKey
+             error:NULL];
+            if (![_JEDebuggingFileLogAttributeValue isEqualToString:extendedAttribute])
+            {
+                return;
+            }
+            
+            block(fileURL, stop);
+            
+        }
+        
+    }];
+}
+
 - (void)deleteOldFileLogsWithThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings
 {
     NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
@@ -569,45 +627,11 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                                    options:kNilOptions];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSError *fileEnumerationError;
-    NSArray *fileURLs = [fileManager
-                         contentsOfDirectoryAtURL:fileLoggerSettings.fileLogsDirectoryURL
-                         includingPropertiesForKeys:@[(__bridge NSString *)kCFURLIsRegularFileKey,
-                                                      (__bridge NSString *)kCFURLCreationDateKey]
-                         options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants
-                                  | NSDirectoryEnumerationSkipsPackageDescendants
-                                  | NSDirectoryEnumerationSkipsHiddenFiles)
-                         error:&fileEnumerationError];
-    if (!fileURLs)
-    {
-        return;
-    }
-    
-    for (NSURL *fileURL in fileURLs)
-    {
+    [self enumerateFileLogsWithThreadSafeSettings:fileLoggerSettings block:^(NSURL *fileURL, BOOL *stop) {
+        
         if ([fileURL isEqual:currentFileURL])
         {
-            continue;
-        }
-        
-        NSNumber *isRegularFile;
-        [fileURL
-         getResourceValue:&isRegularFile
-         forKey:(__bridge NSString *)kCFURLIsRegularFileKey
-         error:NULL];
-        if (![isRegularFile boolValue])
-        {
-            continue;
-        }
-        
-        NSString *extendedAttribute;
-        [fileURL
-         getExtendedAttribute:&extendedAttribute
-         forKey:_JEDebuggingFileLogAttributeKey
-         error:NULL];
-        if (![_JEDebuggingFileLogAttributeValue isEqualToString:extendedAttribute])
-        {
-            continue;
+            return;
         }
         
         NSDate *creationDate;
@@ -618,11 +642,12 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         
         if ([creationDate compare:earliestAllowedDate] != NSOrderedAscending)
         {
-            continue;
+            return;
         }
         
         [fileManager removeItemAtURL:fileURL error:NULL];
-    }
+        
+    }];
 }
 
 - (void)appendStringToFile:(NSString *)string
@@ -771,6 +796,74 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 #pragma mark - Public
 
+#pragma mark configuring
+
++ (JEConsoleLoggerSettings *)copyConsoleLoggerSettings
+{
+    JEConsoleLoggerSettings *__block settings;
+    dispatch_sync([self settingsQueue], ^{
+        
+        settings = [[self sharedInstance].consoleLoggerSettings copy];
+        
+    });
+    return settings;
+}
+
++ (void)setConsoleLoggerSettings:(JEConsoleLoggerSettings *)consoleLoggerSettings
+{
+    NSCParameterAssert(consoleLoggerSettings != nil);
+    
+    dispatch_barrier_async([self settingsQueue], ^{
+        
+        [self sharedInstance].consoleLoggerSettings = [consoleLoggerSettings copy];
+        
+    });
+}
+
++ (JEHUDLoggerSettings *)copyHUDLoggerSettings
+{
+    JEHUDLoggerSettings *__block settings;
+    dispatch_sync([self settingsQueue], ^{
+        
+        settings = [[self sharedInstance].HUDLoggerSettings copy];
+        
+    });
+    return settings;
+}
+
++ (void)setHUDLoggerSettings:(JEHUDLoggerSettings *)HUDLoggerSettings
+{
+    NSCParameterAssert(HUDLoggerSettings != nil);
+    
+    dispatch_barrier_async([self settingsQueue], ^{
+        
+        [self sharedInstance].HUDLoggerSettings = [HUDLoggerSettings copy];
+        
+    });
+}
+
++ (JEFileLoggerSettings *)copyFileLoggerSettings
+{
+    JEFileLoggerSettings *__block settings;
+    dispatch_sync([self settingsQueue], ^{
+        
+        settings = [[self sharedInstance].fileLoggerSettings copy];
+        
+    });
+    return settings;
+}
+
++ (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings
+{
+    NSCParameterAssert(fileLoggerSettings != nil);
+    
+    dispatch_barrier_async([self settingsQueue], ^{
+        
+        [self sharedInstance].fileLoggerSettings = [fileLoggerSettings copy];
+        
+    });
+}
+
 + (void)start
 {
     [self sharedInstance].isStarted = YES;
@@ -815,9 +908,12 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         }
         
         // Note that because of a bug(?) with NSGetSizeAndAlignment, structs and unions with bitfields cannot be wrapped in NSValue, in which case wrappedValue will be nil.
-        NSMutableString *description = (wrappedValue
-                                        ? [wrappedValue detailedDescriptionIncludeClass:NO includeAddress:NO]
-                                        : [[NSMutableString alloc] initWithString:@"(?) { ... }"]);
+        NSMutableString *description = [NSMutableString stringWithString:
+                                        (wrappedValue
+                                         ? [wrappedValue
+                                            loggingDescriptionIncludeClass:NO
+                                            includeAddress:NO]
+                                         : @"(?) { ... }")];
         [description indentByLevel:1];
         
         NSDictionary *headerEntries = [self
@@ -1118,70 +1214,40 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     }
 }
 
-#pragma mark logger settings
+#pragma mark retrieving
 
-+ (JEConsoleLoggerSettings *)copyConsoleLoggerSettings
++ (void)enumerateFileLogsWithBlock:(void (^)(NSString *fileName, NSData *data, BOOL *stop))block
 {
-    JEConsoleLoggerSettings *__block settings;
-    dispatch_sync([self settingsQueue], ^{
-        
-        settings = [[self sharedInstance].consoleLoggerSettings copy];
-        
-    });
-    return settings;
-}
-
-+ (void)setConsoleLoggerSettings:(JEConsoleLoggerSettings *)consoleLoggerSettings
-{
-    NSCParameterAssert(consoleLoggerSettings != nil);
+    JEAssert(block != NULL, @"Enumeration block was NULL.");
     
-    dispatch_barrier_async([self settingsQueue], ^{
+    JEFileLoggerSettings *__block fileLoggerSettings;
+    dispatch_sync([JEDebugging settingsQueue], ^{
         
-        [self sharedInstance].consoleLoggerSettings = [consoleLoggerSettings copy];
-        
-    });
-}
-
-+ (JEHUDLoggerSettings *)copyHUDLoggerSettings
-{
-    JEHUDLoggerSettings *__block settings;
-    dispatch_sync([self settingsQueue], ^{
-        
-        settings = [[self sharedInstance].HUDLoggerSettings copy];
+        fileLoggerSettings = [self sharedInstance].fileLoggerSettings;
         
     });
-    return settings;
-}
-
-+ (void)setHUDLoggerSettings:(JEHUDLoggerSettings *)HUDLoggerSettings
-{
-    NSCParameterAssert(HUDLoggerSettings != nil);
     
-    dispatch_barrier_async([self settingsQueue], ^{
+    dispatch_sync([self fileLogQueue], ^{
         
-        [self sharedInstance].HUDLoggerSettings = [HUDLoggerSettings copy];
-        
-    });
-}
-
-+ (JEFileLoggerSettings *)copyFileLoggerSettings
-{
-    JEFileLoggerSettings *__block settings;
-    dispatch_sync([self settingsQueue], ^{
-        
-        settings = [[self sharedInstance].fileLoggerSettings copy];
-        
-    });
-    return settings;
-}
-
-+ (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings
-{
-    NSCParameterAssert(fileLoggerSettings != nil);
-    
-    dispatch_barrier_async([self settingsQueue], ^{
-        
-        [self sharedInstance].fileLoggerSettings = [fileLoggerSettings copy];
+        [[self sharedInstance] enumerateFileLogsWithThreadSafeSettings:fileLoggerSettings block:^(NSURL *fileURL, BOOL *stop) {
+            
+            NSData *data = [[NSData alloc]
+                            initWithContentsOfURL:fileURL
+                            options:kNilOptions
+                            error:NULL];
+            if (!data)
+            {
+                return;
+            }
+            
+            BOOL shouldStop = NO;
+            block([fileURL lastPathComponent], data, &shouldStop);
+            if (shouldStop)
+            {
+                (*stop) = YES;
+            }
+            
+        }];
         
     });
 }

@@ -13,16 +13,21 @@
 
 @implementation NSError (JEDebugging)
 
+#pragma mark - NSObject
+
+- (NSString *)debugDescription
+{
+    return [super debugDescription];
+}
+
+
 #pragma mark - NSObject+JEDebugging
 
-- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
-                                      includeAddress:(BOOL)includeAddress
+- (NSString *)loggingDescription
 {
-    NSMutableString *description = [self
-                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
-                                    includeAddress:includeAddress];
-    [description appendFormat:@"%@ (code %li)", [self domain], (long)[self code]];
-    
+    NSMutableString *description = [NSMutableString stringWithFormat:
+                                    @"%@ (code %li)",
+                                    [self domain], (long)[self code]];
     NSDictionary *userInfo = [self userInfo];
     if ([userInfo count] <= 0)
     {
@@ -46,9 +51,13 @@
                 [description appendString:@",\n["];
             }
             
-            [description appendString:[key detailedDescriptionIncludeClass:NO includeAddress:NO]];
+            [description appendString:[key
+                                       loggingDescriptionIncludeClass:NO
+                                       includeAddress:NO]];
             [description appendString:@"]: "];
-            [description appendString:[obj detailedDescriptionIncludeClass:YES includeAddress:NO]];
+            [description appendString:[obj
+                                       loggingDescriptionIncludeClass:YES
+                                       includeAddress:NO]];
             
         }
         

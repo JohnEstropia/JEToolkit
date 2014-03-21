@@ -23,6 +23,10 @@
                         scale:(CGFloat)scale
                   orientation:(UIImageOrientation)orientation;
 
+/*! Takes a screenshot
+ */
++ (UIImage *)screenshot;
+
 /*! Creates a UIImage filled with the specified color
  @param color The color to fill the image
  @param size The size of the image

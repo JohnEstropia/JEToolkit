@@ -9,6 +9,7 @@
 #import "JEHUDLogView.h"
 
 #import "JEFormulas.h"
+#import "UIImage+JEToolkit.h"
 #import "UILabel+JEToolkit.h"
 
 
@@ -20,11 +21,13 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 
 @property (nonatomic, strong, readonly) NSMutableArray *logEntries;
 
+@property (nonatomic, weak) UIView *menuView;
+@property (nonatomic, weak) CAShapeLayer *menuMaskLayer;
 @property (nonatomic, weak) UIButton *toggleButton;
+@property (nonatomic, weak) UIButton *screenshotButton;
 @property (nonatomic, weak) UIButton *resizeButton;
 @property (nonatomic, weak) UIView *consoleView;
 @property (nonatomic, weak) UITableView *tableView;
-@property (nonatomic, weak) CAShapeLayer *toggleButtonMaskLayer;
 
 @property (nonatomic, assign) BOOL isDraggingToggleButton;
 @property (nonatomic, assign) BOOL isDraggingResizeButton;
@@ -36,8 +39,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 
 #pragma mark - NSObject
 
-- (id)initWithFrame:(CGRect)frame
- threadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings
+- (instancetype)initWithFrame:(CGRect)frame
+           threadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings
 {
     self = [super initWithFrame:frame];
     if (!self)
@@ -86,17 +89,40 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     self.tableView = tableView;
     
     
+    UIView *menuView = [[UIView alloc] initWithFrame:(CGRect){
+        .origin.y = (CGRectGetMinY(consoleView.frame) - JEHUDLogViewButtonSize),
+        .size.width = JEHUDLogViewButtonSize,
+        .size.height = JEHUDLogViewButtonSize
+    }];
+    menuView.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin
+                                 | UIViewAutoresizingFlexibleBottomMargin);
+    [menuView setTranslatesAutoresizingMaskIntoConstraints:YES];
+    menuView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+    
+    CALayer *menuLayer = menuView.layer;
+    menuLayer.rasterizationScale = [UIScreen mainScreen].scale;
+    menuLayer.shouldRasterize = YES;
+    
+    CAShapeLayer *menuMaskLayer = [[CAShapeLayer alloc] init];
+    menuMaskLayer.frame = menuLayer.bounds;
+    menuLayer.mask = menuMaskLayer;
+    self.menuMaskLayer = menuMaskLayer;
+    
+    [self addSubview:menuView];
+    self.menuView = menuView;
+    
+    
     UIButton *toggleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     toggleButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin
                                      | UIViewAutoresizingFlexibleBottomMargin);
     [toggleButton setTranslatesAutoresizingMaskIntoConstraints:YES];
     toggleButton.selected = HUDLogSettings.visibleOnStart;
     toggleButton.frame = (CGRect){
-        .origin.y = (CGRectGetMinY(consoleView.frame) - JEHUDLogViewButtonSize),
         .size.width = JEHUDLogViewButtonSize,
         .size.height = JEHUDLogViewButtonSize
     };
-    toggleButton.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+    toggleButton.backgroundColor = [UIColor clearColor];
+    toggleButton.showsTouchWhenHighlighted = YES;
     [toggleButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [toggleButton setTitleColor:[UIColor colorWithWhite:0.6f alpha:1.0f] forState:UIControlStateHighlighted];
     [toggleButton setTitleColor:[UIColor colorWithWhite:0.6f alpha:1.0f] forState:(UIControlStateSelected | UIControlStateHighlighted)];
@@ -116,18 +142,30 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
      addTarget:self
      action:@selector(toggleButtonTouchDrag:withEvent:)
      forControlEvents:(UIControlEventTouchDragInside | UIControlEventTouchDragOutside)];
-    
-    CALayer *toggleButtonLayer = toggleButton.layer;
-    toggleButtonLayer.rasterizationScale = [UIScreen mainScreen].scale;
-    toggleButtonLayer.shouldRasterize = YES;
-    
-    CAShapeLayer *toggleButtonMaskLayer = [[CAShapeLayer alloc] init];
-    toggleButtonMaskLayer.frame = toggleButtonLayer.bounds;
-    toggleButtonLayer.mask = toggleButtonMaskLayer;
-    self.toggleButtonMaskLayer = toggleButtonMaskLayer;
-    
-    [self addSubview:toggleButton];
+    [menuView addSubview:toggleButton];
     self.toggleButton = toggleButton;
+    
+    
+    UIButton *screenshotButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    screenshotButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin
+                                         | UIViewAutoresizingFlexibleBottomMargin);
+    [screenshotButton setTranslatesAutoresizingMaskIntoConstraints:YES];
+    screenshotButton.frame = (CGRect){
+        .origin.x = CGRectGetMaxX(toggleButton.frame),
+        .size.width = JEHUDLogViewButtonSize,
+        .size.height = JEHUDLogViewButtonSize
+    };
+    screenshotButton.backgroundColor = [UIColor clearColor];
+    screenshotButton.showsTouchWhenHighlighted = YES;
+    [screenshotButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [screenshotButton setTitleColor:[UIColor colorWithWhite:0.6f alpha:1.0f] forState:UIControlStateHighlighted];
+    [screenshotButton setTitle:@"📷" forState:UIControlStateNormal];
+    [screenshotButton
+     addTarget:self
+     action:@selector(screenshotButtonTouchUpInside:)
+     forControlEvents:UIControlEventTouchUpInside];
+    [menuView addSubview:screenshotButton];
+    self.screenshotButton = screenshotButton;
     
     
     UIButton *resizeButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -141,6 +179,7 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
         .size.height = JEHUDLogViewButtonSize
     };
     resizeButton.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+    resizeButton.showsTouchWhenHighlighted = YES;
     [resizeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [resizeButton setTitleColor:[UIColor colorWithWhite:0.6f alpha:1.0f] forState:UIControlStateHighlighted];
     [resizeButton setTitle:@"▼" forState:UIControlStateNormal];
@@ -206,18 +245,18 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 {
     [super layoutSubviews];
     
-    UIButton *toggleButton = self.toggleButton;
-    CGRect toggleButtonFrame = toggleButton.frame;
-    CGFloat toggleButtonHeight = CGRectGetHeight(toggleButtonFrame);
-    toggleButton.frame = (CGRect){
-        .origin.x = CGRectGetMinX(toggleButtonFrame),
+    UIView *menuView = self.menuView;
+    CGRect menuFrame = menuView.frame;
+    menuView.frame = (CGRect){
+        .origin.x = CGRectGetMinX(menuFrame),
         .origin.y = JEClamp(0.0f,
-                            CGRectGetMinY(toggleButtonFrame),
+                            CGRectGetMinY(menuFrame),
                             (CGRectGetHeight(self.bounds)
                              - JEHUDLogViewConsoleMinHeight
-                             - toggleButtonHeight)),
-        .size = toggleButtonFrame.size
+                             - CGRectGetHeight(menuFrame))),
+        .size = menuFrame.size
     };
+    
     [self layoutConsoleView];
 }
 
@@ -302,19 +341,42 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     UITouch *touch = [[event touchesForView:sender] anyObject];
     CGPoint location = [touch locationInView:self];
     
-    CGRect toggleButtonFrame = sender.frame;
-    CGFloat toggleButtonHeight = CGRectGetHeight(toggleButtonFrame);
-    sender.frame = (CGRect){
-        .origin.x = CGRectGetMinX(toggleButtonFrame),
+    UIView *menuView = self.menuView;
+    CGRect menuFrame = menuView.frame;
+    CGFloat menuHeight = CGRectGetHeight(menuFrame);
+    menuView.frame = (CGRect){
+        .origin.x = CGRectGetMinX(menuFrame),
         .origin.y = JEClamp(0.0f,
-                            (location.y - (toggleButtonHeight * 0.5f)),
+                            (location.y - (menuHeight * 0.5f)),
                             (CGRectGetHeight(self.bounds)
                              - JEHUDLogViewConsoleMinHeight
-                             - toggleButtonHeight)),
-        .size = toggleButtonFrame.size
+                             - menuHeight)),
+        .size = menuFrame.size
     };
     
     [self layoutConsoleView];
+}
+
+- (void)screenshotButtonTouchUpInside:(UIButton *)sender
+{
+    UIView *menuView = self.menuView;
+    UIView *consoleView = self.consoleView;
+    UIButton *resizeButton = self.resizeButton;
+    
+    BOOL menuHidden = menuView.hidden;
+    BOOL consoleHidden = consoleView.hidden;
+    BOOL resizeButtonHidden = resizeButton.hidden;
+    
+    menuView.hidden = YES;
+    consoleView.hidden = YES;
+    resizeButton.hidden = YES;
+    
+    UIImage *screenshot = [UIImage screenshot];
+    UIImageWriteToSavedPhotosAlbum(screenshot, nil, NULL, NULL);
+    
+    menuView.hidden = menuHidden;
+    consoleView.hidden = consoleHidden;
+    resizeButton.hidden = resizeButtonHidden;
 }
 
 - (void)resizeButtonTouchEnd:(UIButton *)sender
@@ -375,19 +437,38 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     self.consoleView.hidden = consoleHidden;
     self.resizeButton.hidden = consoleHidden;
     
-    CAShapeLayer *toggleButtonMaskLayer = self.toggleButtonMaskLayer;
+    UIButton *screenshotButton = self.screenshotButton;
+    screenshotButton.hidden = consoleHidden;
+    
+    UIView *menuView = self.menuView;
+    CGRect menuFrame = menuView.frame;
+    
+    CAShapeLayer *menuMaskLayer = self.menuMaskLayer;
     if (consoleHidden)
     {
-        toggleButtonMaskLayer.path = [UIBezierPath
-                                      bezierPathWithRoundedRect:toggleButtonMaskLayer.bounds
-                                      byRoundingCorners:(UIRectCornerTopRight | UIRectCornerBottomRight)
-                                      cornerRadii:(CGSize){ .width = 8.0f, .height = 8.0f }].CGPath;
+        menuView.frame = (CGRect){
+            .origin = menuFrame.origin,
+            .size.width = CGRectGetMinX(screenshotButton.frame),
+            .size.height = CGRectGetHeight(menuFrame)
+        };
+        menuMaskLayer.frame = menuView.layer.bounds;
+        menuMaskLayer.path = [UIBezierPath
+                              bezierPathWithRoundedRect:menuMaskLayer.bounds
+                              byRoundingCorners:(UIRectCornerTopRight | UIRectCornerBottomRight)
+                              cornerRadii:(CGSize){ .width = 8.0f, .height = 8.0f }].CGPath;
         return;
     }
-    toggleButtonMaskLayer.path = [UIBezierPath
-                                  bezierPathWithRoundedRect:toggleButtonMaskLayer.bounds
-                                  byRoundingCorners:UIRectCornerTopRight
-                                  cornerRadii:(CGSize){ .width = 8.0f, .height = 8.0f }].CGPath;
+    
+    menuView.frame = (CGRect){
+        .origin = menuFrame.origin,
+        .size.width = CGRectGetMaxX(screenshotButton.frame),
+        .size.height = CGRectGetHeight(menuFrame)
+    };
+    menuMaskLayer.frame = menuView.layer.bounds;
+    menuMaskLayer.path = [UIBezierPath
+                          bezierPathWithRoundedRect:menuMaskLayer.bounds
+                          byRoundingCorners:UIRectCornerTopRight
+                          cornerRadii:(CGSize){ .width = 8.0f, .height = 8.0f }].CGPath;
     
     UITableView *tableView = self.tableView;
     [tableView reloadData];
@@ -431,8 +512,9 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     CGRect bounds = self.bounds;
     CGFloat boundsHeight = CGRectGetHeight(bounds);
     
-    UIButton *toggleButton = self.toggleButton;
-    CGFloat toggleButtonBottom = CGRectGetMaxY(toggleButton.frame);
+    UIView *menuView = self.menuView;
+    CGRect menuFrame = menuView.frame;
+    CGFloat menuBottom = CGRectGetMaxY(menuFrame);
     
     UIButton *resizeButton = self.resizeButton;
     CGRect resizeButtonFrame = resizeButton.frame;
@@ -447,27 +529,27 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
         }
         resizeButton.frame = (CGRect){
             .origin.x = CGRectGetMinX(resizeButtonFrame),
-            .origin.y = JEClamp((CGRectGetMaxY(toggleButton.frame) + JEHUDLogViewConsoleMinHeight),
+            .origin.y = JEClamp((CGRectGetMaxY(menuFrame) + JEHUDLogViewConsoleMinHeight),
                                 resizeButtonTop,
                                 boundsHeight),
             .size = resizeButtonFrame.size
         };
         consoleView.frame = (CGRect){
             .origin.x = 0.0f,
-            .origin.y = toggleButtonBottom,
+            .origin.y = menuBottom,
             .size.width = CGRectGetWidth(bounds),
-            .size.height = (CGRectGetMinY(resizeButton.frame) - toggleButtonBottom)
+            .size.height = (CGRectGetMinY(resizeButton.frame) - menuBottom)
         };
     }
     else
     {
         consoleView.frame = (CGRect){
             .origin.x = 0.0f,
-            .origin.y = toggleButtonBottom,
+            .origin.y = menuBottom,
             .size.width = CGRectGetWidth(bounds),
             .size.height = JEClamp(JEHUDLogViewConsoleMinHeight,
                                    CGRectGetHeight(consoleView.frame),
-                                   (boundsHeight - toggleButtonBottom))
+                                   (boundsHeight - menuBottom))
         };
         resizeButton.frame = (CGRect){
             .origin.x = CGRectGetMinX(resizeButtonFrame),

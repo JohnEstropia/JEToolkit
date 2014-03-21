@@ -21,7 +21,7 @@
 
 #pragma mark - NSObject
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (!self)
@@ -30,7 +30,8 @@
     }
     
     _mapTable = [NSMapTable strongToWeakObjectsMapTable];
-    _barrierQueue = dispatch_queue_create("com.JEToolkit.JEWeakCache.barrierQueue", DISPATCH_QUEUE_CONCURRENT);
+    _barrierQueue = dispatch_queue_create("com.JEToolkit.JEWeakCache.barrierQueue",
+                                          DISPATCH_QUEUE_CONCURRENT);
     
     return self;
 }

@@ -13,19 +13,21 @@
 
 @implementation NSString (JEDebugging)
 
+#pragma mark - NSObject
+
+- (NSString *)debugDescription
+{
+    return [super debugDescription];
+}
+
+
 #pragma mark - NSObject+JEDebugging
 
-- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
-                                      includeAddress:(BOOL)includeAddress
+- (NSString *)loggingDescription
 {
-    NSMutableString *description = [self
-                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
-                                    includeAddress:includeAddress];
-    [description appendString:@"@"];
-    
-    NSMutableString *UTF8CString = [[NSMutableString alloc] initWithString:[self description]];
-    [UTF8CString escapeWithUTF8CStringRepresentation];
-    [description appendString:UTF8CString];
+    NSMutableString *description = [NSMutableString stringWithString:self];
+    [description escapeWithUTF8CStringRepresentation];
+    [description insertString:@"@" atIndex:0];
     
     return description;
 }

@@ -45,6 +45,62 @@
 	return image;
 }
 
++ (UIImage *)screenshot
+{
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    CGSize imageSize = [UIScreen mainScreen].bounds.size;
+    if (UIInterfaceOrientationIsLandscape(orientation))
+    {
+        imageSize = (CGSize){
+            .width = imageSize.height,
+            .height = imageSize.width
+        };
+    }
+    
+    UIGraphicsBeginImageContextWithOptions(imageSize, YES, 0.0f);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    for (UIWindow *window in [[UIApplication sharedApplication] windows])
+    {
+        CGRect windowBounds = window.bounds;
+        CGContextSaveGState(context);
+        CGContextTranslateCTM(context,
+                              window.center.x,
+                              window.center.y);
+        CGContextConcatCTM(context, window.transform);
+        CGContextTranslateCTM(context,
+                              (-windowBounds.size.width * window.layer.anchorPoint.x),
+                              (-windowBounds.size.height * window.layer.anchorPoint.y));
+        if (orientation == UIInterfaceOrientationLandscapeLeft)
+        {
+            CGContextRotateCTM(context, M_PI_2);
+            CGContextTranslateCTM(context, 0, -imageSize.width);
+        }
+        else if (orientation == UIInterfaceOrientationLandscapeRight)
+        {
+            CGContextRotateCTM(context, -M_PI_2);
+            CGContextTranslateCTM(context, -imageSize.height, 0);
+        }
+        else if (orientation == UIInterfaceOrientationPortraitUpsideDown)
+        {
+            CGContextRotateCTM(context, M_PI);
+            CGContextTranslateCTM(context, -imageSize.width, -imageSize.height);
+        }
+        if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)])
+        {
+            [window drawViewHierarchyInRect:windowBounds afterScreenUpdates:YES];
+        }
+        else
+        {
+            [window.layer renderInContext:context];
+        }
+        CGContextRestoreGState(context);
+    }
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
 - (instancetype)decodedImage
 {
     CGImageRef CGImage = self.CGImage;

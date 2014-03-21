@@ -23,7 +23,7 @@
 
 #pragma mark - NSObject
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (!self)
@@ -103,7 +103,7 @@
 
 #pragma mark - NSCopying
 
-- (id)copyWithZone:(NSZone *)zone
+- (instancetype)copyWithZone:(NSZone *)zone
 {
     return [self mutableCopyWithZone:zone];
 }
@@ -111,7 +111,7 @@
 
 #pragma mark - NSMutableCopying
 
-- (id)mutableCopyWithZone:(NSZone *)zone
+- (instancetype)mutableCopyWithZone:(NSZone *)zone
 {
     typeof(self) instance = [[[self class] allocWithZone:zone] init];
     instance->_orderedKeys = [_orderedKeys mutableCopyWithZone:zone];
@@ -122,13 +122,7 @@
 
 #pragma mark - NSCoding
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
-    [aCoder encodeObject:self.dictionary forKey:KVC(typeof(self), dictionary)];
-    [aCoder encodeObject:self.orderedKeys forKey:KVC(typeof(self), orderedKeys)];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super init];
     if (!self)
@@ -140,6 +134,12 @@
     _orderedKeys = [aDecoder decodeObjectForKey:KVC(typeof(self), orderedKeys)];
     
     return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.dictionary forKey:KVC(typeof(self), dictionary)];
+    [aCoder encodeObject:self.orderedKeys forKey:KVC(typeof(self), orderedKeys)];
 }
 
 

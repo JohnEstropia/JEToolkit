@@ -10,7 +10,7 @@
 
 #import "JECompilerDefines.h"
 #import "JESafetyHelpers.h"
-#import "JEAssociatedObjects.h"
+#import "JEAssociatedObject.h"
 #import "JEFormulas.h"
 
 

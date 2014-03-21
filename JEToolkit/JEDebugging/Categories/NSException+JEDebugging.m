@@ -13,69 +13,92 @@
 
 @implementation NSException (JEDebugging)
 
+#pragma mark - NSObject
+
+- (NSString *)debugDescription
+{
+    return [super debugDescription];
+}
+
+
 #pragma mark - NSObject+JEDebugging
 
-- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
-                                      includeAddress:(BOOL)includeAddress
+- (NSString *)loggingDescription
 {
-    NSMutableString *userInfoString = [[NSMutableString alloc] initWithString:@"{"];
-    NSDictionary *exceptionUserInfo = [self userInfo];
-    if ([exceptionUserInfo count] <= 0)
-    {
-        [userInfoString appendString:@"}"];
+    NSMutableString *description = [NSMutableString stringWithString:
+                                    [[self name]
+                                     loggingDescriptionIncludeClass:NO
+                                     includeAddress:NO]];
+    [description appendString:@" {\nreason: "];
+    [description appendString:[[self reason]
+                               loggingDescriptionIncludeClass:NO
+                               includeAddress:NO]];
+    
+    @autoreleasepool {
+        
+        NSMutableString *userInfoString = [[NSMutableString alloc] initWithString:@"{"];
+        NSDictionary *exceptionUserInfo = [self userInfo];
+        if ([exceptionUserInfo count] <= 0)
+        {
+            [userInfoString appendString:@"}"];
+        }
+        else
+        {
+            BOOL __block isFirstEntry = YES;
+            [[self userInfo] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                
+                @autoreleasepool {
+                    
+                    if (isFirstEntry)
+                    {
+                        [userInfoString appendString:@"\n["];
+                        isFirstEntry = NO;
+                    }
+                    else
+                    {
+                        [userInfoString appendString:@",\n["];
+                    }
+                    
+                    [userInfoString appendString:[key
+                                                  loggingDescriptionIncludeClass:NO
+                                                  includeAddress:NO]];
+                    [userInfoString appendString:@"]: "];
+                    [userInfoString appendString:[obj
+                                                  loggingDescriptionIncludeClass:YES
+                                                  includeAddress:NO]];
+                    
+                }
+                
+            }];
+            [userInfoString indentByLevel:1];
+            [userInfoString appendString:@"\n}"];
+        }
+        
+        [description appendString:@",\nuserInfo: "];
+        [description appendString:userInfoString];
+        
     }
-    else
-    {
-        BOOL __block isFirstEntry = YES;
-        [[self userInfo] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+    
+    @autoreleasepool {
+        
+        NSMutableString *callStackString = [[NSMutableString alloc] initWithString:@"["];
+        [[self callStackSymbols] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             
             @autoreleasepool {
                 
-                if (isFirstEntry)
-                {
-                    [userInfoString appendString:@"\n["];
-                    isFirstEntry = NO;
-                }
-                else
-                {
-                    [userInfoString appendString:@",\n["];
-                }
-                
-                [userInfoString appendString:[key detailedDescriptionIncludeClass:NO includeAddress:NO]];
-                [userInfoString appendString:@"]: "];
-                [userInfoString appendString:[obj detailedDescriptionIncludeClass:YES includeAddress:NO]];
+                [callStackString appendString:@"\n"];
+                [callStackString appendString:[obj description]];
                 
             }
             
         }];
-        [userInfoString indentByLevel:1];
-        [userInfoString appendString:@"\n}"];
+        [callStackString indentByLevel:1];
+        [callStackString appendString:@"\n]"];
+        
+        [description appendString:@",\ncallStackSymbols: "];
+        [description appendString:callStackString];
+        
     }
-    
-    NSMutableString *callStackString = [[NSMutableString alloc] initWithString:@"["];
-    [[self callStackSymbols] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        
-        @autoreleasepool {
-            
-            [callStackString appendString:@"\n"];
-            [callStackString appendString:[obj description]];
-            
-        }
-        
-    }];
-    [callStackString indentByLevel:1];
-    [callStackString appendString:@"\n]"];
-    
-    NSMutableString *description = [self
-                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
-                                    includeAddress:includeAddress];
-    [description appendString:[[self name] detailedDescriptionIncludeClass:NO includeAddress:NO]];
-    [description appendString:@" {\nreason: "];
-    [description appendString:[[self reason] detailedDescriptionIncludeClass:NO includeAddress:NO]];
-    [description appendString:@",\nuserInfo: "];
-    [description appendString:userInfoString];
-    [description appendString:@",\ncallStackSymbols: "];
-    [description appendString:callStackString];
     
     [description indentByLevel:1];
     [description appendString:@"\n}"];

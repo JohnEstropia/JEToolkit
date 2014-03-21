@@ -9,7 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #import <Foundation/Foundation.h>
-#import <float.h>
+#import <objc/NSObjCRuntime.h>
 
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
@@ -254,7 +254,6 @@
     
     JEDump((CGColorRef)NULL);
     JEDump([UIColor clearColor].CGColor);
-    JEDump(CFGetTypeID([UIColor clearColor].CGColor));
     
     @try {
         
@@ -323,6 +322,12 @@
     JEDump(image);
     
     JEDump([UIColor blueColor]);
+    
+    [JEDebugging enumerateFileLogsWithBlock:^(NSString *fileName, NSData *data, BOOL *stop) {
+        
+        JELog(@"File log: \"%@\" (%@)", fileName, [NSString stringFromFileSize:[data length]]);
+        
+    }];
 }
 
 JESynthesize(assign, void(^)(void), synthesizedCopy, setSynthesizedCopy);

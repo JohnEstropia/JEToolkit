@@ -13,30 +13,32 @@
 
 @implementation NSNumber (JEDebugging)
 
+#pragma mark - NSObject
+
+- (NSString *)debugDescription
+{
+    return [super debugDescription];
+}
+
+
 #pragma mark - NSObject+JEDebugging
 
-- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
-                                      includeAddress:(BOOL)includeAddress
+- (NSString *)loggingDescription
 {
-    NSMutableString *description = [self
-                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
-                                    includeAddress:includeAddress];
     if (self == (id)kCFBooleanTrue)
     {
-        [description appendString:@"@YES"];
+        return @"@YES";
     }
     else if (self == (id)kCFBooleanFalse)
     {
-        [description appendString:@"@NO"];
+        return @"@NO";
     }
     else
     {
-        [description appendString:@"@("];
-        [description appendString:[super detailedDescriptionIncludeClass:NO includeAddress:NO]];
-        [description appendString:@")"];
+        return [NSString stringWithFormat:
+                @"@(%@)",
+                [super loggingDescription]];
     }
-    
-    return description;
 }
 
 @end

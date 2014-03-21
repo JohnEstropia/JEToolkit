@@ -13,14 +13,19 @@
 
 @implementation NSPointerArray (JEDebugging)
 
+#pragma mark - NSObject
+
+- (NSString *)debugDescription
+{
+    return [super debugDescription];
+}
+
+
 #pragma mark - NSObject+JEDebugging
 
-- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
-                                      includeAddress:(BOOL)includeAddress
+- (NSString *)loggingDescription
 {
-    NSMutableString *description = [self
-                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
-                                    includeAddress:includeAddress];
+    NSMutableString *description = [NSMutableString string];
     NSUInteger count = [self count];
     if (count == 1)
     {

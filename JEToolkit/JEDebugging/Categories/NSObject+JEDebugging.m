@@ -13,26 +13,25 @@
 
 @implementation NSObject (JEDebugging)
 
-- (NSMutableString *)detailedDescription
+#pragma mark - NSObject
+
+- (NSString *)debugDescription
 {
-    return [self detailedDescriptionIncludeClass:YES includeAddress:YES];
+    return [self loggingDescriptionIncludeClass:YES includeAddress:YES];
 }
 
-- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
-                                      includeAddress:(BOOL)includeAddress
+
+#pragma mark - Public
+
+- (NSString *)loggingDescription
 {
-    NSMutableString *description = [self
-                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
-                                    includeAddress:includeAddress];
-    [description appendString:[self description]];
-    [description indentByLevel:1];
-    return description;
+    return [self description];
 }
 
-- (NSMutableString *)stringBuilderForDetailedDescriptionIncludeClass:(BOOL)includeClass
-                                                      includeAddress:(BOOL)includeAddress
+- (NSString *)loggingDescriptionIncludeClass:(BOOL)includeClass
+                              includeAddress:(BOOL)includeAddress
 {
-    NSMutableString *description = [[NSMutableString alloc] init];
+    NSMutableString *description = [NSMutableString string];
     if (includeClass)
     {
         [description appendFormat:@"(%@ *) ", [self class]];
@@ -41,7 +40,10 @@
     {
         [description appendFormat:@"<%p> ", self];
     }
+    [description appendString:[self loggingDescription]];
+    [description indentByLevel:1];
     return description;
 }
+
 
 @end

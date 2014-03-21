@@ -13,8 +13,8 @@
 
 @interface JEHUDLogView : UIView
 
-- (id)initWithFrame:(CGRect)frame
- threadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings;
+- (instancetype)initWithFrame:(CGRect)frame
+           threadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings;
 
 - (void)addLogString:(NSString *)logString
 withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings;

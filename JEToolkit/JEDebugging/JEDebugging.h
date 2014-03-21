@@ -181,7 +181,19 @@ typedef struct JELogLocation
 
 @interface JEDebugging : NSObject
 
+#pragma mark - configuring
+
++ (JEConsoleLoggerSettings *)copyConsoleLoggerSettings JE_WARN_UNUSED_RESULT;
++ (void)setConsoleLoggerSettings:(JEConsoleLoggerSettings *)consoleLoggerSettings;
+
++ (JEHUDLoggerSettings *)copyHUDLoggerSettings JE_WARN_UNUSED_RESULT;
++ (void)setHUDLoggerSettings:(JEHUDLoggerSettings *)HUDLoggerSettings;
+
++ (JEFileLoggerSettings *)copyFileLoggerSettings JE_WARN_UNUSED_RESULT;
++ (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings;
+
 + (void)start;
+
 
 #pragma mark - logging
 
@@ -198,16 +210,10 @@ typedef struct JELogLocation
                               location:(JELogLocation)location;
 
 
-#pragma mark - logger settings
+#pragma mark retrieving
 
-+ (JEConsoleLoggerSettings *)copyConsoleLoggerSettings JE_WARN_UNUSED_RESULT;
-+ (void)setConsoleLoggerSettings:(JEConsoleLoggerSettings *)consoleLoggerSettings;
-
-+ (JEHUDLoggerSettings *)copyHUDLoggerSettings JE_WARN_UNUSED_RESULT;
-+ (void)setHUDLoggerSettings:(JEHUDLoggerSettings *)HUDLoggerSettings;
-
-+ (JEFileLoggerSettings *)copyFileLoggerSettings JE_WARN_UNUSED_RESULT;
-+ (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings;
-
++ (void)enumerateFileLogsWithBlock:(void (^)(NSString *fileName,
+                                             NSData *data,
+                                             BOOL *stop))block;
 
 @end

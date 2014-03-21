@@ -16,10 +16,17 @@
 
 @implementation NSValue (JEDebugging)
 
+#pragma mark - NSObject
+
+- (NSString *)debugDescription
+{
+    return [super debugDescription];
+}
+
+
 #pragma mark - NSObject+JEDebugging
 
-- (NSMutableString *)detailedDescriptionIncludeClass:(BOOL)includeClass
-                                      includeAddress:(BOOL)includeAddress
+- (NSString *)loggingDescription
 {
     NSMutableString *typeNameBuilder = [[NSMutableString alloc] init];
     NSMutableString *valueStringBuilder = [[NSMutableString alloc] init];
@@ -30,12 +37,9 @@
      typeNameBuilder:typeNameBuilder
      valueStringBuilder:valueStringBuilder];
     
-    NSMutableString *description = [self
-                                    stringBuilderForDetailedDescriptionIncludeClass:includeClass
-                                    includeAddress:includeAddress];
-    [description appendFormat:@"(%@) %@", typeNameBuilder, valueStringBuilder];
-    
-    return description;
+    return [NSString stringWithFormat:
+            @"(%@) %@",
+            typeNameBuilder, valueStringBuilder];
 }
 
 
@@ -365,7 +369,9 @@
     }
     else
     {
-        [valueStringBuilder appendString:[idValue detailedDescriptionIncludeClass:NO includeAddress:YES]];
+        [valueStringBuilder appendString:[idValue
+                                          loggingDescriptionIncludeClass:NO
+                                          includeAddress:YES]];
     }
 }
 
@@ -938,7 +944,7 @@
         return;
     }
     
-    NSString *description = [wrappedValue debugDescription];
+    NSString *description = [wrappedValue description];
     if (([NSString isNilOrEmptyString:description] || [description length] == 2 )
         && [description hasPrefix:@"<"]
         && [description hasSuffix:@">"])
@@ -1111,7 +1117,7 @@
     }
     else
     {
-        NSString *description = [wrappedValue debugDescription];
+        NSString *description = [wrappedValue description];
         if (([NSString isNilOrEmptyString:description] || [description length] == 2 )
             && [description hasPrefix:@"<"]
             && [description hasSuffix:@">"])
