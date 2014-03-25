@@ -770,7 +770,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 - (void)windowDidBecomeKeyWindow:(NSNotification *)note
 {
-    JEAssert([NSThread isMainThread], @"UIApplication's keyWindow was set on a background thread.");
+    NSCAssert([NSThread isMainThread], @"UIApplication's keyWindow was set on a background thread.");
     
     JEHUDLogView *view = self.HUDLogView;
     if (!view)

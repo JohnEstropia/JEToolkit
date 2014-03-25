@@ -10,10 +10,12 @@
 
 @interface JEWeakCache : NSObject
 
-- (id)objectForKeyedSubscript:(id)key;
+- (id)objectForKey:(id)key;
+- (void)setObject:(id)obj forKey:(id)key;
+- (void)removeObjectForKey:(id)key;
 
+- (id)objectForKeyedSubscript:(id)key;
 - (void)setObject:(id)obj forKeyedSubscript:(id)key;
 
-- (void)removeObjectForKey:(id)key;
 
 @end
