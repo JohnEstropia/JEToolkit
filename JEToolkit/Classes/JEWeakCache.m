@@ -38,12 +38,12 @@
 
 #pragma mark - Public
 
-- (id)objectForKeyedSubscript:(id)key
+- (id)objectForKey:(id)key
 {
     id __block object;
     typeof(self) __weak weakSelf = self;
     dispatch_sync(self.barrierQueue, ^{
-       
+        
         typeof(self) strongSelf = weakSelf;
         object = [strongSelf.mapTable objectForKey:key];
         
@@ -51,7 +51,7 @@
     return object;
 }
 
-- (void)setObject:(id)obj forKeyedSubscript:(id)key
+- (void)setObject:(id)obj forKey:(id)key
 {
     typeof(self) __weak weakSelf = self;
     dispatch_barrier_async(self.barrierQueue, ^{
@@ -78,6 +78,16 @@
         [strongSelf.mapTable removeObjectForKey:key];
         
     });
+}
+
+- (id)objectForKeyedSubscript:(id)key
+{
+    return [self objectForKey:key];
+}
+
+- (void)setObject:(id)obj forKeyedSubscript:(id)key
+{
+    [self setObject:obj forKey:key];
 }
 
 @end
