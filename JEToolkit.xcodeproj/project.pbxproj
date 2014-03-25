@@ -115,6 +115,7 @@
 		2F45151E18DBF4810072C11E /* JEAssociatedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEAssociatedObject.m; sourceTree = "<group>"; };
 		2F5566F2184104F000098714 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		2F5566F4184104F800098714 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		2F602B8418DD033B008F10E2 /* JEUIMetrics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JEUIMetrics.h; sourceTree = "<group>"; };
 		2F6D774E17E0CFEA00D3735D /* NSDateFormatter+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+JEToolkit.h"; sourceTree = "<group>"; };
 		2F6D774F17E0CFEA00D3735D /* NSDateFormatter+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+JEToolkit.m"; sourceTree = "<group>"; };
 		2F8FC86017B65DB500C3C0F3 /* libJEToolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJEToolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -227,6 +228,7 @@
 				2F27A69B17F69C2800CE0230 /* JECompilerDefines.h */,
 				2FF317BC18799819002DFCE3 /* JEFormulas.h */,
 				2F2A27C9180C01D0004064FF /* JESafetyHelpers.h */,
+				2F602B8418DD033B008F10E2 /* JEUIMetrics.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -468,7 +470,7 @@
 		2F8FC85817B65DB500C3C0F3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "John Rommel Estropia";
 			};
 			buildConfigurationList = 2F8FC85B17B65DB500C3C0F3 /* Build configuration list for PBXProject "JEToolkit" */;
@@ -584,7 +586,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -636,7 +637,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;

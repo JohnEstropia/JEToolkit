@@ -12,6 +12,7 @@
 #import "JESafetyHelpers.h"
 #import "JEAssociatedObject.h"
 #import "JEFormulas.h"
+#import "JEUIMetrics.h"
 
 
 #pragma mark - Categories
