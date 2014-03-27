@@ -8,7 +8,39 @@
 
 #import <Foundation/Foundation.h>
 
+#import "JECompilerDefines.h"
+
+
 @interface NSURL (JEToolkit)
+
+#pragma mark - Directories
+
+/*! Convenience method to get the app Application Support URL
+ */
++ (NSURL *)applicationSupportDirectory JE_CONST;
+
+/*! Convenience method to get the app Caches URL
+ */
++ (NSURL *)cachesDirectory JE_CONST;
+
+/*! Convenience method to get the app Documents URL
+ */
++ (NSURL *)documentsDirectory JE_CONST;
+
+/*! Convenience method to get the app Downloads URL
+ */
++ (NSURL *)downloadsDirectory JE_CONST;
+
+/*! Convenience method to get the app Library URL
+ */
++ (NSURL *)libraryDirectory JE_CONST;
+
+/*! Convenience method to get the app Temporary URL
+ */
++ (NSURL *)temporaryDirectory JE_CONST;
+
+
+#pragma mark - Inspecting URLs
 
 /*! Returns the known UTI for the receiver
  */
@@ -25,6 +57,9 @@
 /*! Checks if the reciever is a data URL
  */
 - (BOOL)isDataURL;
+
+
+#pragma mark - Extended Attributes
 
 /*! Reads the extended attribute of a file URL referred to by key. Note anything other than file system URLs will be ignored.
  @param extendedAttribute The destination address of the read attribute

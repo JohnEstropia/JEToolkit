@@ -9,22 +9,48 @@
 #import "JEAssociatedObject.h"
 
 
-@interface JEAssociatedObject ()
+@interface _JEWeakValue : NSValue
 
 @property (nonatomic, weak, readonly) id weakObject;
+
+- (instancetype)initWithWeakObject:(id)weakObject;
 
 @end
 
 
-@implementation JEAssociatedObject
+@implementation _JEWeakValue
+
+- (instancetype)initWithWeakObject:(id)weakObject
+{
+    self = [super init];
+    if (!self)
+    {
+        return nil;
+    }
+    
+    _weakObject = weakObject;
+    return self;
+}
+
+@end
+
+
+@implementation NSValue (JEAssociatedObject)
 
 #pragma mark - Public
 
-+ (JEAssociatedObject *)valueWithWeakObject:(id)weakObject
++ (NSValue *)valueWithWeakObject:(id)weakObject
 {
-    JEAssociatedObject *value = [[JEAssociatedObject alloc] init];
-    value->_weakObject = weakObject;
-    return value;;
+    return [[_JEWeakValue alloc] initWithWeakObject:weakObject];
+}
+
+- (id)weakObject
+{
+    if ([self isKindOfClass:[_JEWeakValue class]])
+    {
+        return ((_JEWeakValue *)self).weakObject;
+    }
+    return nil;
 }
 
 @end

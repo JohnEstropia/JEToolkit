@@ -12,16 +12,11 @@
 
 #pragma mark - Public
 
-#pragma mark Paths
+#pragma mark Directories
 
-+ (NSString *)documentsDirectory
++ (NSString *)applicationSupportDirectory
 {
-    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-}
-
-+ (NSString *)temporaryDirectory
-{
-    return NSTemporaryDirectory();
+    return [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
 }
 
 + (NSString *)cachesDirectory
@@ -29,9 +24,24 @@
     return [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
 }
 
-+ (NSString *)appSupportDirectory
++ (NSString *)documentsDirectory
 {
-    return [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
+    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+}
+
++ (NSString *)downloadsDirectory
+{
+    return [NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES) firstObject];
+}
+
++ (NSString *)libraryDirectory
+{
+    return [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+}
+
++ (NSString *)temporaryDirectory
+{
+    return NSTemporaryDirectory();
 }
 
 + (NSString *)pathWithComponents:(NSArray *)components pathExtension:(NSString *)pathExtension

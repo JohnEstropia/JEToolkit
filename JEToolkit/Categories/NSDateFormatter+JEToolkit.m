@@ -14,6 +14,8 @@
 
 @implementation NSDateFormatter (JEToolkit)
 
+#pragma mark - Public
+
 + (NSDateFormatter *)ISO8601UTCDateFormatter
 {
     static NSDateFormatter *ISO8601UTCDateFormatter;

@@ -10,6 +10,10 @@
 
 @interface UIView (JEToolkit)
 
+/*! Returns the first view within the receiver's view tree that is the first responder
+ */
+- (UIView *)findFirstResponder;
+
 /*! Returns the first subview that is a subclass of class. Searches recursively, and may return the receiver itself.
  */
 - (id)firstSubviewWithClass:(Class)class;

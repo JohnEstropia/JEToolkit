@@ -58,6 +58,8 @@
 		34ECBD49184EF13800960D4A /* JEFileLoggerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD48184EF13800960D4A /* JEFileLoggerSettings.m */; };
 		34F035D51850211C004AD192 /* NSError+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F035D41850211C004AD192 /* NSError+JEToolkit.m */; };
 		34F124721844882E00856ACA /* JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F124711844882E00856ACA /* JEDebugging.m */; };
+		34FC084A18E3BA64000B6BBC /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 34FC084918E3BA64000B6BBC /* README.md */; };
+		34FED5E018E2624600DF93CF /* UIScrollView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FED5DF18E2624600DF93CF /* UIScrollView+JEToolkit.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +188,9 @@
 		34F035D41850211C004AD192 /* NSError+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+JEToolkit.m"; sourceTree = "<group>"; };
 		34F124701844882E00856ACA /* JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEDebugging.h; sourceTree = "<group>"; };
 		34F124711844882E00856ACA /* JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEDebugging.m; sourceTree = "<group>"; };
+		34FC084918E3BA64000B6BBC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
+		34FED5DE18E2624600DF93CF /* UIScrollView+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+JEToolkit.h"; sourceTree = "<group>"; };
+		34FED5DF18E2624600DF93CF /* UIScrollView+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+JEToolkit.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,6 +286,7 @@
 			children = (
 				2F8FC86717B65DB500C3C0F3 /* JEToolkit-Prefix.pch */,
 				2F36590C17F0A62300794CC0 /* LICENSE */,
+				34FC084918E3BA64000B6BBC /* README.md */,
 				2F36590D17F0A62300794CC0 /* JEToolkit.podspec */,
 			);
 			name = "Supporting Files";
@@ -341,6 +347,8 @@
 				2F10BB741881125800739760 /* UITextView+JEToolkit.m */,
 				2F1DCF8A180030FD00AFD8C7 /* UIView+JEToolkit.h */,
 				2F1DCF8B180030FD00AFD8C7 /* UIView+JEToolkit.m */,
+				34FED5DE18E2624600DF93CF /* UIScrollView+JEToolkit.h */,
+				34FED5DF18E2624600DF93CF /* UIScrollView+JEToolkit.m */,
 				2F1DCF8D1800341000AFD8C7 /* UIViewController+JEToolkit.h */,
 				2F1DCF8E1800341000AFD8C7 /* UIViewController+JEToolkit.m */,
 			);
@@ -494,6 +502,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34FC084A18E3BA64000B6BBC /* README.md in Resources */,
 				2F8FC87E17B65DB500C3C0F3 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -546,6 +555,7 @@
 				2FF3178C1877DEDC002DFCE3 /* NSOrderedSet+JEDebugging.m in Sources */,
 				2F39821918122ACB007A843F /* JEOrderedDictionary.m in Sources */,
 				2F8FC89317B6638800C3C0F3 /* NSCalendar+JEToolkit.m in Sources */,
+				34FED5E018E2624600DF93CF /* UIScrollView+JEToolkit.m in Sources */,
 				2F45151F18DBF4810072C11E /* JEAssociatedObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

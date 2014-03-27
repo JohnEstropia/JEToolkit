@@ -12,6 +12,24 @@
 
 #pragma mark - Public
 
+- (UIView *)findFirstResponder
+{
+    if ([self isFirstResponder])
+    {
+        return self;
+    }
+    
+    for (UIView *subview in self.subviews)
+    {
+        UIView *firstResponder = [subview findFirstResponder];
+        if (firstResponder)
+        {
+            return firstResponder;
+        }
+    }
+    return nil;
+}
+
 - (id)firstSubviewWithClass:(Class)class
 {
     NSCParameterAssert([class isSubclassOfClass:[UIView class]]);

@@ -10,6 +10,8 @@
 
 @implementation NSCalendar (JEToolkit)
 
+#pragma mark - Public
+
 + (NSCalendar *)cachedLocalizedCalendar
 {
     static NSCalendar *calendar;
