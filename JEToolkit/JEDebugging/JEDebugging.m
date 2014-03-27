@@ -13,8 +13,8 @@
 #import "JESafetyHelpers.h"
 
 #import "NSCalendar+JEToolkit.h"
-#import "NSMutableString+JEDebugging.h"
-#import "NSObject+JEDebugging.h"
+#import "NSMutableString+JEToolkit.h"
+#import "NSObject+JEToolkit.h"
 #import "NSString+JEToolkit.h"
 #import "NSURL+JEToolkit.h"
 

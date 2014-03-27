@@ -1,5 +1,5 @@
 //
-//  NSMapTable+JEDebugging.h
+//  NSSet+JEToolkit.h
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/26.
@@ -8,9 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "NSObject+JEDebugging.h"
-
-
-@interface NSMapTable (JEDebugging)
+@interface NSSet (JEToolkit)
 
 @end

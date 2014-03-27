@@ -1,5 +1,5 @@
 //
-//  NSHashTable+JEDebugging.h
+//  NSHashTable+JEToolkit.h
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/26.
@@ -8,9 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "NSObject+JEDebugging.h"
-
-
-@interface NSHashTable (JEDebugging)
+@interface NSHashTable (JEToolkit)
 
 @end

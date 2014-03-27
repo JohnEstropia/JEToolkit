@@ -2,8 +2,8 @@
 //  UIScrollView+JEToolkit.m
 //  JEToolkit
 //
-//  Created by DIT John Estropia on 2014/03/26.
-//  Copyright (c) 2014年 John Rommel Estropia. All rights reserved.
+//  Created by John Rommel Estropia on 2014/03/25.
+//  Copyright (c) 2014 John Rommel Estropia. All rights reserved.
 //
 
 #import "UIScrollView+JEToolkit.h"

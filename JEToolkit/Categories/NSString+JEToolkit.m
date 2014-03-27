@@ -8,7 +8,31 @@
 
 #import "NSString+JEToolkit.h"
 
+#import "NSMutableString+JEToolkit.h"
+#import "NSObject+JEToolkit.h"
+
+
 @implementation NSString (JEToolkit)
+
+#pragma mark - NSObject
+
+- (NSString *)debugDescription
+{
+    return [super debugDescription];
+}
+
+
+#pragma mark - NSObject+JEToolkit
+
+- (NSString *)loggingDescription
+{
+    NSMutableString *description = [NSMutableString stringWithString:self];
+    [description escapeWithUTF8CStringRepresentation];
+    [description insertString:@"@" atIndex:0];
+    
+    return description;
+}
+
 
 #pragma mark - Public
 

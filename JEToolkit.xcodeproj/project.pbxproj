@@ -38,20 +38,6 @@
 		2FA7B83517E5EFCC00D41011 /* NSCache+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7B83417E5EFCC00D41011 /* NSCache+JEToolkit.m */; };
 		2FA7B83817E5F7DB00D41011 /* NSMutableArray+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7B83717E5F7DB00D41011 /* NSMutableArray+JEToolkit.m */; };
 		2FA7B83B17E5FCC400D41011 /* UIColor+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7B83A17E5FCC400D41011 /* UIColor+JEToolkit.m */; };
-		2FF317831877DEDC002DFCE3 /* NSArray+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD13184EEFC400960D4A /* NSArray+JEDebugging.m */; };
-		2FF317841877DEDC002DFCE3 /* NSDictionary+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD15184EEFC400960D4A /* NSDictionary+JEDebugging.m */; };
-		2FF317851877DEDC002DFCE3 /* NSError+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD17184EEFC400960D4A /* NSError+JEDebugging.m */; };
-		2FF317861877DEDC002DFCE3 /* NSException+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD19184EEFC400960D4A /* NSException+JEDebugging.m */; };
-		2FF317871877DEDC002DFCE3 /* NSHashTable+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD1B184EEFC400960D4A /* NSHashTable+JEDebugging.m */; };
-		2FF317881877DEDC002DFCE3 /* NSMapTable+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD1D184EEFC400960D4A /* NSMapTable+JEDebugging.m */; };
-		2FF317891877DEDC002DFCE3 /* NSMutableString+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD1F184EEFC400960D4A /* NSMutableString+JEDebugging.m */; };
-		2FF3178A1877DEDC002DFCE3 /* NSNumber+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD21184EEFC400960D4A /* NSNumber+JEDebugging.m */; };
-		2FF3178B1877DEDC002DFCE3 /* NSObject+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD23184EEFC400960D4A /* NSObject+JEDebugging.m */; };
-		2FF3178C1877DEDC002DFCE3 /* NSOrderedSet+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD25184EEFC400960D4A /* NSOrderedSet+JEDebugging.m */; };
-		2FF3178D1877DEDC002DFCE3 /* NSPointerArray+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD27184EEFC400960D4A /* NSPointerArray+JEDebugging.m */; };
-		2FF3178E1877DEDC002DFCE3 /* NSSet+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD29184EEFC400960D4A /* NSSet+JEDebugging.m */; };
-		2FF3178F1877DEDC002DFCE3 /* NSString+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD2B184EEFC400960D4A /* NSString+JEDebugging.m */; };
-		2FF317901877DEDC002DFCE3 /* NSValue+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD2D184EEFC400960D4A /* NSValue+JEDebugging.m */; };
 		34ECBD40184EF0DD00960D4A /* JEBaseLoggerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD3F184EF0DD00960D4A /* JEBaseLoggerSettings.m */; };
 		34ECBD43184EF10B00960D4A /* JEConsoleLoggerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD42184EF10B00960D4A /* JEConsoleLoggerSettings.m */; };
 		34ECBD46184EF12900960D4A /* JEHUDLoggerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD45184EF12900960D4A /* JEHUDLoggerSettings.m */; };
@@ -59,6 +45,15 @@
 		34F035D51850211C004AD192 /* NSError+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F035D41850211C004AD192 /* NSError+JEToolkit.m */; };
 		34F124721844882E00856ACA /* JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F124711844882E00856ACA /* JEDebugging.m */; };
 		34FC084A18E3BA64000B6BBC /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 34FC084918E3BA64000B6BBC /* README.md */; };
+		34FC084D18E3F8F3000B6BBC /* NSMutableString+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC084C18E3F8F3000B6BBC /* NSMutableString+JEToolkit.m */; };
+		34FC085018E3FA0B000B6BBC /* NSDictionary+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC084F18E3FA0B000B6BBC /* NSDictionary+JEToolkit.m */; };
+		34FC085318E3FAFE000B6BBC /* NSException+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC085218E3FAFE000B6BBC /* NSException+JEToolkit.m */; };
+		34FC085618E3FB58000B6BBC /* NSHashTable+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC085518E3FB58000B6BBC /* NSHashTable+JEToolkit.m */; };
+		34FC085918E3FBB0000B6BBC /* NSMapTable+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC085818E3FBB0000B6BBC /* NSMapTable+JEToolkit.m */; };
+		34FC085C18E3FC67000B6BBC /* NSOrderedSet+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC085B18E3FC67000B6BBC /* NSOrderedSet+JEToolkit.m */; };
+		34FC085F18E3FCE3000B6BBC /* NSPointerArray+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC085E18E3FCE3000B6BBC /* NSPointerArray+JEToolkit.m */; };
+		34FC086218E3FD2E000B6BBC /* NSSet+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC086118E3FD2E000B6BBC /* NSSet+JEToolkit.m */; };
+		34FC086518E3FDB8000B6BBC /* NSValue+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC086418E3FDB8000B6BBC /* NSValue+JEToolkit.m */; };
 		34FED5E018E2624600DF93CF /* UIScrollView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FED5DF18E2624600DF93CF /* UIScrollView+JEToolkit.m */; };
 /* End PBXBuildFile section */
 
@@ -148,34 +143,6 @@
 		2FA7B83917E5FCC400D41011 /* UIColor+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+JEToolkit.h"; sourceTree = "<group>"; };
 		2FA7B83A17E5FCC400D41011 /* UIColor+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+JEToolkit.m"; sourceTree = "<group>"; };
 		2FF317BC18799819002DFCE3 /* JEFormulas.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JEFormulas.h; sourceTree = "<group>"; };
-		34ECBD12184EEFC400960D4A /* NSArray+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD13184EEFC400960D4A /* NSArray+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD14184EEFC400960D4A /* NSDictionary+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD15184EEFC400960D4A /* NSDictionary+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD16184EEFC400960D4A /* NSError+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD17184EEFC400960D4A /* NSError+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD18184EEFC400960D4A /* NSException+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSException+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD19184EEFC400960D4A /* NSException+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSException+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD1A184EEFC400960D4A /* NSHashTable+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSHashTable+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD1B184EEFC400960D4A /* NSHashTable+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSHashTable+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD1C184EEFC400960D4A /* NSMapTable+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMapTable+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD1D184EEFC400960D4A /* NSMapTable+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMapTable+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD1E184EEFC400960D4A /* NSMutableString+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD1F184EEFC400960D4A /* NSMutableString+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD20184EEFC400960D4A /* NSNumber+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD21184EEFC400960D4A /* NSNumber+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD22184EEFC400960D4A /* NSObject+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD23184EEFC400960D4A /* NSObject+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD24184EEFC400960D4A /* NSOrderedSet+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOrderedSet+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD25184EEFC400960D4A /* NSOrderedSet+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOrderedSet+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD26184EEFC400960D4A /* NSPointerArray+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPointerArray+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD27184EEFC400960D4A /* NSPointerArray+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPointerArray+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD28184EEFC400960D4A /* NSSet+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSSet+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD29184EEFC400960D4A /* NSSet+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD2A184EEFC400960D4A /* NSString+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD2B184EEFC400960D4A /* NSString+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JEDebugging.m"; sourceTree = "<group>"; };
-		34ECBD2C184EEFC400960D4A /* NSValue+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSValue+JEDebugging.h"; sourceTree = "<group>"; };
-		34ECBD2D184EEFC400960D4A /* NSValue+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSValue+JEDebugging.m"; sourceTree = "<group>"; };
 		34ECBD3E184EF0DD00960D4A /* JEBaseLoggerSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEBaseLoggerSettings.h; sourceTree = "<group>"; };
 		34ECBD3F184EF0DD00960D4A /* JEBaseLoggerSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEBaseLoggerSettings.m; sourceTree = "<group>"; };
 		34ECBD41184EF10B00960D4A /* JEConsoleLoggerSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEConsoleLoggerSettings.h; sourceTree = "<group>"; };
@@ -189,6 +156,24 @@
 		34F124701844882E00856ACA /* JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEDebugging.h; sourceTree = "<group>"; };
 		34F124711844882E00856ACA /* JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEDebugging.m; sourceTree = "<group>"; };
 		34FC084918E3BA64000B6BBC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
+		34FC084B18E3F8F3000B6BBC /* NSMutableString+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+JEToolkit.h"; sourceTree = "<group>"; };
+		34FC084C18E3F8F3000B6BBC /* NSMutableString+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+JEToolkit.m"; sourceTree = "<group>"; };
+		34FC084E18E3FA0B000B6BBC /* NSDictionary+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+JEToolkit.h"; sourceTree = "<group>"; };
+		34FC084F18E3FA0B000B6BBC /* NSDictionary+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+JEToolkit.m"; sourceTree = "<group>"; };
+		34FC085118E3FAFE000B6BBC /* NSException+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSException+JEToolkit.h"; sourceTree = "<group>"; };
+		34FC085218E3FAFE000B6BBC /* NSException+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSException+JEToolkit.m"; sourceTree = "<group>"; };
+		34FC085418E3FB58000B6BBC /* NSHashTable+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSHashTable+JEToolkit.h"; sourceTree = "<group>"; };
+		34FC085518E3FB58000B6BBC /* NSHashTable+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSHashTable+JEToolkit.m"; sourceTree = "<group>"; };
+		34FC085718E3FBB0000B6BBC /* NSMapTable+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMapTable+JEToolkit.h"; sourceTree = "<group>"; };
+		34FC085818E3FBB0000B6BBC /* NSMapTable+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMapTable+JEToolkit.m"; sourceTree = "<group>"; };
+		34FC085A18E3FC67000B6BBC /* NSOrderedSet+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOrderedSet+JEToolkit.h"; sourceTree = "<group>"; };
+		34FC085B18E3FC67000B6BBC /* NSOrderedSet+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOrderedSet+JEToolkit.m"; sourceTree = "<group>"; };
+		34FC085D18E3FCE3000B6BBC /* NSPointerArray+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPointerArray+JEToolkit.h"; sourceTree = "<group>"; };
+		34FC085E18E3FCE3000B6BBC /* NSPointerArray+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPointerArray+JEToolkit.m"; sourceTree = "<group>"; };
+		34FC086018E3FD2E000B6BBC /* NSSet+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSSet+JEToolkit.h"; sourceTree = "<group>"; };
+		34FC086118E3FD2E000B6BBC /* NSSet+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+JEToolkit.m"; sourceTree = "<group>"; };
+		34FC086318E3FDB8000B6BBC /* NSValue+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSValue+JEToolkit.h"; sourceTree = "<group>"; };
+		34FC086418E3FDB8000B6BBC /* NSValue+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSValue+JEToolkit.m"; sourceTree = "<group>"; };
 		34FED5DE18E2624600DF93CF /* UIScrollView+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+JEToolkit.h"; sourceTree = "<group>"; };
 		34FED5DF18E2624600DF93CF /* UIScrollView+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+JEToolkit.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -323,32 +308,50 @@
 				2FA7B82E17E49C3300D41011 /* NSDate+JEToolkit.m */,
 				2F6D774E17E0CFEA00D3735D /* NSDateFormatter+JEToolkit.h */,
 				2F6D774F17E0CFEA00D3735D /* NSDateFormatter+JEToolkit.m */,
+				34FC084E18E3FA0B000B6BBC /* NSDictionary+JEToolkit.h */,
+				34FC084F18E3FA0B000B6BBC /* NSDictionary+JEToolkit.m */,
 				34F035D31850211C004AD192 /* NSError+JEToolkit.h */,
 				34F035D41850211C004AD192 /* NSError+JEToolkit.m */,
+				34FC085118E3FAFE000B6BBC /* NSException+JEToolkit.h */,
+				34FC085218E3FAFE000B6BBC /* NSException+JEToolkit.m */,
+				34FC085418E3FB58000B6BBC /* NSHashTable+JEToolkit.h */,
+				34FC085518E3FB58000B6BBC /* NSHashTable+JEToolkit.m */,
 				2F1DCF7F17FF186E00AFD8C7 /* NSIndexSet+JEToolkit.h */,
 				2F1DCF8017FF186E00AFD8C7 /* NSIndexSet+JEToolkit.m */,
+				34FC085718E3FBB0000B6BBC /* NSMapTable+JEToolkit.h */,
+				34FC085818E3FBB0000B6BBC /* NSMapTable+JEToolkit.m */,
 				2FA7B83617E5F7DB00D41011 /* NSMutableArray+JEToolkit.h */,
 				2FA7B83717E5F7DB00D41011 /* NSMutableArray+JEToolkit.m */,
+				34FC084B18E3F8F3000B6BBC /* NSMutableString+JEToolkit.h */,
+				34FC084C18E3F8F3000B6BBC /* NSMutableString+JEToolkit.m */,
 				2FA7B83017E5E99700D41011 /* NSNumber+JEToolkit.h */,
 				2FA7B83117E5E99700D41011 /* NSNumber+JEToolkit.m */,
 				2F1DCF7C17FF115700AFD8C7 /* NSObject+JEToolkit.h */,
 				2F1DCF7D17FF115700AFD8C7 /* NSObject+JEToolkit.m */,
+				34FC085A18E3FC67000B6BBC /* NSOrderedSet+JEToolkit.h */,
+				34FC085B18E3FC67000B6BBC /* NSOrderedSet+JEToolkit.m */,
+				34FC085D18E3FCE3000B6BBC /* NSPointerArray+JEToolkit.h */,
+				34FC085E18E3FCE3000B6BBC /* NSPointerArray+JEToolkit.m */,
+				34FC086018E3FD2E000B6BBC /* NSSet+JEToolkit.h */,
+				34FC086118E3FD2E000B6BBC /* NSSet+JEToolkit.m */,
 				2F8FC89717B669DE00C3C0F3 /* NSString+JEToolkit.h */,
 				2F8FC89817B669DE00C3C0F3 /* NSString+JEToolkit.m */,
 				2F1DCF8217FF1CCA00AFD8C7 /* NSURL+JEToolkit.h */,
 				2F1DCF8317FF1CCA00AFD8C7 /* NSURL+JEToolkit.m */,
+				34FC086318E3FDB8000B6BBC /* NSValue+JEToolkit.h */,
+				34FC086418E3FDB8000B6BBC /* NSValue+JEToolkit.m */,
 				2FA7B83917E5FCC400D41011 /* UIColor+JEToolkit.h */,
 				2FA7B83A17E5FCC400D41011 /* UIColor+JEToolkit.m */,
 				2F8FC88C17B6608400C3C0F3 /* UIImage+JEToolkit.h */,
 				2F8FC88D17B6608400C3C0F3 /* UIImage+JEToolkit.m */,
 				2F10BB701881124500739760 /* UILabel+JEToolkit.h */,
 				2F10BB711881124500739760 /* UILabel+JEToolkit.m */,
+				34FED5DE18E2624600DF93CF /* UIScrollView+JEToolkit.h */,
+				34FED5DF18E2624600DF93CF /* UIScrollView+JEToolkit.m */,
 				2F10BB731881125800739760 /* UITextView+JEToolkit.h */,
 				2F10BB741881125800739760 /* UITextView+JEToolkit.m */,
 				2F1DCF8A180030FD00AFD8C7 /* UIView+JEToolkit.h */,
 				2F1DCF8B180030FD00AFD8C7 /* UIView+JEToolkit.m */,
-				34FED5DE18E2624600DF93CF /* UIScrollView+JEToolkit.h */,
-				34FED5DF18E2624600DF93CF /* UIScrollView+JEToolkit.m */,
 				2F1DCF8D1800341000AFD8C7 /* UIViewController+JEToolkit.h */,
 				2F1DCF8E1800341000AFD8C7 /* UIViewController+JEToolkit.m */,
 			);
@@ -368,41 +371,6 @@
 				2F2C84AD189E42EA000D2B1F /* JEWeakCache.m */,
 			);
 			path = Classes;
-			sourceTree = "<group>";
-		};
-		34ECBD0F184EEFC400960D4A /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-				34ECBD12184EEFC400960D4A /* NSArray+JEDebugging.h */,
-				34ECBD13184EEFC400960D4A /* NSArray+JEDebugging.m */,
-				34ECBD14184EEFC400960D4A /* NSDictionary+JEDebugging.h */,
-				34ECBD15184EEFC400960D4A /* NSDictionary+JEDebugging.m */,
-				34ECBD16184EEFC400960D4A /* NSError+JEDebugging.h */,
-				34ECBD17184EEFC400960D4A /* NSError+JEDebugging.m */,
-				34ECBD18184EEFC400960D4A /* NSException+JEDebugging.h */,
-				34ECBD19184EEFC400960D4A /* NSException+JEDebugging.m */,
-				34ECBD1A184EEFC400960D4A /* NSHashTable+JEDebugging.h */,
-				34ECBD1B184EEFC400960D4A /* NSHashTable+JEDebugging.m */,
-				34ECBD1C184EEFC400960D4A /* NSMapTable+JEDebugging.h */,
-				34ECBD1D184EEFC400960D4A /* NSMapTable+JEDebugging.m */,
-				34ECBD1E184EEFC400960D4A /* NSMutableString+JEDebugging.h */,
-				34ECBD1F184EEFC400960D4A /* NSMutableString+JEDebugging.m */,
-				34ECBD20184EEFC400960D4A /* NSNumber+JEDebugging.h */,
-				34ECBD21184EEFC400960D4A /* NSNumber+JEDebugging.m */,
-				34ECBD22184EEFC400960D4A /* NSObject+JEDebugging.h */,
-				34ECBD23184EEFC400960D4A /* NSObject+JEDebugging.m */,
-				34ECBD24184EEFC400960D4A /* NSOrderedSet+JEDebugging.h */,
-				34ECBD25184EEFC400960D4A /* NSOrderedSet+JEDebugging.m */,
-				34ECBD26184EEFC400960D4A /* NSPointerArray+JEDebugging.h */,
-				34ECBD27184EEFC400960D4A /* NSPointerArray+JEDebugging.m */,
-				34ECBD28184EEFC400960D4A /* NSSet+JEDebugging.h */,
-				34ECBD29184EEFC400960D4A /* NSSet+JEDebugging.m */,
-				34ECBD2A184EEFC400960D4A /* NSString+JEDebugging.h */,
-				34ECBD2B184EEFC400960D4A /* NSString+JEDebugging.m */,
-				34ECBD2C184EEFC400960D4A /* NSValue+JEDebugging.h */,
-				34ECBD2D184EEFC400960D4A /* NSValue+JEDebugging.m */,
-			);
-			path = Categories;
 			sourceTree = "<group>";
 		};
 		34ECBD3D184EF09400960D4A /* Loggers Settings */ = {
@@ -427,7 +395,6 @@
 				34F124711844882E00856ACA /* JEDebugging.m */,
 				2F10BB6B1880ED6300739760 /* Views */,
 				34ECBD3D184EF09400960D4A /* Loggers Settings */,
-				34ECBD0F184EEFC400960D4A /* Categories */,
 			);
 			path = JEDebugging;
 			sourceTree = "<group>";
@@ -514,48 +481,43 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FF317891877DEDC002DFCE3 /* NSMutableString+JEDebugging.m in Sources */,
-				2FF317831877DEDC002DFCE3 /* NSArray+JEDebugging.m in Sources */,
 				2F1DCF7E17FF115700AFD8C7 /* NSObject+JEToolkit.m in Sources */,
-				2FF3178E1877DEDC002DFCE3 /* NSSet+JEDebugging.m in Sources */,
+				34FC084D18E3F8F3000B6BBC /* NSMutableString+JEToolkit.m in Sources */,
 				2F10BB721881124500739760 /* UILabel+JEToolkit.m in Sources */,
 				34ECBD49184EF13800960D4A /* JEFileLoggerSettings.m in Sources */,
 				2FA7B83B17E5FCC400D41011 /* UIColor+JEToolkit.m in Sources */,
+				34FC085F18E3FCE3000B6BBC /* NSPointerArray+JEToolkit.m in Sources */,
 				2FA7B82F17E49C3300D41011 /* NSDate+JEToolkit.m in Sources */,
+				34FC085618E3FB58000B6BBC /* NSHashTable+JEToolkit.m in Sources */,
 				2F10BB6E1880EDFA00739760 /* JEHUDLogView.m in Sources */,
 				2F8FC88E17B6608400C3C0F3 /* UIImage+JEToolkit.m in Sources */,
 				2FA7B83817E5F7DB00D41011 /* NSMutableArray+JEToolkit.m in Sources */,
 				34F124721844882E00856ACA /* JEDebugging.m in Sources */,
 				34ECBD46184EF12900960D4A /* JEHUDLoggerSettings.m in Sources */,
+				34FC085018E3FA0B000B6BBC /* NSDictionary+JEToolkit.m in Sources */,
+				34FC085318E3FAFE000B6BBC /* NSException+JEToolkit.m in Sources */,
 				2F1DCF8117FF186E00AFD8C7 /* NSIndexSet+JEToolkit.m in Sources */,
-				2FF3178F1877DEDC002DFCE3 /* NSString+JEDebugging.m in Sources */,
+				34FC086518E3FDB8000B6BBC /* NSValue+JEToolkit.m in Sources */,
+				34FC086218E3FD2E000B6BBC /* NSSet+JEToolkit.m in Sources */,
 				2FA7B82C17E498AC00D41011 /* NSArray+JEToolkit.m in Sources */,
 				2FA7B83517E5EFCC00D41011 /* NSCache+JEToolkit.m in Sources */,
 				34F035D51850211C004AD192 /* NSError+JEToolkit.m in Sources */,
 				2F1DCF8C180030FD00AFD8C7 /* UIView+JEToolkit.m in Sources */,
 				2F1DCF8417FF1CCA00AFD8C7 /* NSURL+JEToolkit.m in Sources */,
-				2FF317901877DEDC002DFCE3 /* NSValue+JEDebugging.m in Sources */,
 				2F6D775017E0CFEA00D3735D /* NSDateFormatter+JEToolkit.m in Sources */,
-				2FF317871877DEDC002DFCE3 /* NSHashTable+JEDebugging.m in Sources */,
-				2FF317851877DEDC002DFCE3 /* NSError+JEDebugging.m in Sources */,
-				2FF317881877DEDC002DFCE3 /* NSMapTable+JEDebugging.m in Sources */,
 				2F10BB751881125800739760 /* UITextView+JEToolkit.m in Sources */,
 				2FA7B83217E5E99800D41011 /* NSNumber+JEToolkit.m in Sources */,
 				2F1DCF8F1800341000AFD8C7 /* UIViewController+JEToolkit.m in Sources */,
 				2F27A69617F69A5500CE0230 /* JEDispatch.m in Sources */,
-				2FF3178A1877DEDC002DFCE3 /* NSNumber+JEDebugging.m in Sources */,
-				2FF3178D1877DEDC002DFCE3 /* NSPointerArray+JEDebugging.m in Sources */,
+				34FC085C18E3FC67000B6BBC /* NSOrderedSet+JEToolkit.m in Sources */,
 				34ECBD43184EF10B00960D4A /* JEConsoleLoggerSettings.m in Sources */,
 				34ECBD40184EF0DD00960D4A /* JEBaseLoggerSettings.m in Sources */,
-				2FF317841877DEDC002DFCE3 /* NSDictionary+JEDebugging.m in Sources */,
-				2FF3178B1877DEDC002DFCE3 /* NSObject+JEDebugging.m in Sources */,
-				2FF317861877DEDC002DFCE3 /* NSException+JEDebugging.m in Sources */,
 				2F2C84AE189E42EA000D2B1F /* JEWeakCache.m in Sources */,
 				2F8FC89917B669DE00C3C0F3 /* NSString+JEToolkit.m in Sources */,
-				2FF3178C1877DEDC002DFCE3 /* NSOrderedSet+JEDebugging.m in Sources */,
 				2F39821918122ACB007A843F /* JEOrderedDictionary.m in Sources */,
 				2F8FC89317B6638800C3C0F3 /* NSCalendar+JEToolkit.m in Sources */,
 				34FED5E018E2624600DF93CF /* UIScrollView+JEToolkit.m in Sources */,
+				34FC085918E3FBB0000B6BBC /* NSMapTable+JEToolkit.m in Sources */,
 				2F45151F18DBF4810072C11E /* JEAssociatedObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

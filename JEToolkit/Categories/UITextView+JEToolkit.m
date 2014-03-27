@@ -14,11 +14,12 @@
 
 - (CGSize)sizeForText
 {
+    CGSize contentSize = self.contentSize;
     if ([self respondsToSelector:@selector(textContainerInset)])
     {
         UIEdgeInsets containerInset = self.textContainerInset;
         CGSize sizeThatFits = [self sizeThatFits:(CGSize){
-            .width = self.contentSize.width,
+            .width = contentSize.width,
             .height = CGFLOAT_MAX
         }];
         return (CGSize){
@@ -27,7 +28,7 @@
         };
     }
     
-    return self.contentSize;
+    return contentSize;
 }
 
 @end

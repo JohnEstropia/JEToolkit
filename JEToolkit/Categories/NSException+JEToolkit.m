@@ -1,17 +1,18 @@
 //
-//  NSException+JEDebugging.m
+//  NSException+JEToolkit.m
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/27.
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
-#import "NSException+JEDebugging.h"
+#import "NSException+JEToolkit.h"
 
-#import "NSMutableString+JEDebugging.h"
+#import "NSMutableString+JEToolkit.h"
+#import "NSObject+JEToolkit.h"
 
 
-@implementation NSException (JEDebugging)
+@implementation NSException (JEToolkit)
 
 #pragma mark - NSObject
 
@@ -21,7 +22,7 @@
 }
 
 
-#pragma mark - NSObject+JEDebugging
+#pragma mark - NSObject+JEToolkit
 
 - (NSString *)loggingDescription
 {

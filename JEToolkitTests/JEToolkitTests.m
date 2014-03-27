@@ -295,6 +295,7 @@
     JEDump(&idArray);
     
     JEDump([NSNull null]);
+    JEDump([NSDate new]);
     
     JELog(@"Trace No Parameters");
     JELogNotice(@"Log No Parameters");
@@ -318,7 +319,22 @@
         
     });
     
-    UIImage *image = [UIImage imageFromColor:[UIColor blueColor] size:(CGSize){ 100, 200 }];
+    UIImage *image = [UIImage imageFromColor:[UIColor blueColor] size:(CGSize){ 100.5, 200.5 }];
+    JEDump(image);
+    image = [UIImage
+             animatedImageWithImages:@[ [UIImage
+                                         imageFromColor:[UIColor randomColor]
+                                         size:(CGSize){ 100, 200 }],
+                                        [UIImage
+                                         imageFromColor:[UIColor randomColor]
+                                         size:(CGSize){ 100, 200 }],
+                                        [UIImage
+                                         imageFromColor:[UIColor randomColor]
+                                         size:(CGSize){ 100, 200 }],
+                                        [UIImage
+                                         imageFromColor:[UIColor randomColor]
+                                         size:(CGSize){ 100, 200 }]]
+             duration:5.0f];
     JEDump(image);
     
     JEDump([UIColor blueColor]);
