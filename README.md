@@ -57,7 +57,7 @@ Main Features:
 
 ## Safety macros
 
-- **`KVC(...)`**: Returns and checks existence of a KVC (or KVO) keypath at runtime.
+- **`KVC(...)`**: Returns and checks existence of a KVC (or KVO) keypath during compile time.
 ```obj-c
 [obj setValue:@"John" forKey:KVC(Person *, name)];
 [obj setValue:@"John" forKey:KVC(typeof(self), name)]; // typeof() operator
