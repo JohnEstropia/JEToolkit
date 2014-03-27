@@ -22,19 +22,7 @@
     
     if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)])
     {
-        @autoreleasepool {
-            
-            return [self.text
-                    boundingRectWithSize:constainSize
-                    options:NSStringDrawingUsesLineFragmentOrigin
-                    attributes:@{ NSFontAttributeName : self.font }
-                    context:NULL].size;
-            
-        }
-        return [self sizeThatFits:(CGSize){
-            .width = boundsWidth,
-            .height = CGFLOAT_MAX
-        }];
+        return [self sizeThatFits:constainSize];
     }
     
     return [self.text

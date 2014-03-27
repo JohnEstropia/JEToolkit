@@ -1,5 +1,5 @@
 //
-//  NSException+JEDebugging.h
+//  NSException+JEToolkit.h
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/27.
@@ -8,9 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "NSObject+JEDebugging.h"
-
-
-@interface NSException (JEDebugging)
+@interface NSException (JEToolkit)
 
 @end

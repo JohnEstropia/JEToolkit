@@ -1,5 +1,5 @@
 //
-//  NSMutableString+JEDebugging.h
+//  NSMutableString+JEToolkit.h
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/26.

@@ -13,29 +13,38 @@
 
 @interface NSString (JEToolkit)
 
-#pragma mark - Paths
+#pragma mark - Directories
 
-/*! Convenience method to get the app Documents path
+/*! Convenience method to get the app Application Support path
  */
-+ (NSString *)documentsDirectory JE_CONST;
-
-/*! Convenience method to get the app Temporary path
- */
-+ (NSString *)temporaryDirectory JE_CONST;
++ (NSString *)applicationSupportDirectory JE_CONST;
 
 /*! Convenience method to get the app Caches path
  */
 + (NSString *)cachesDirectory JE_CONST;
 
-/*! Convenience method to get the app Application Support path
+/*! Convenience method to get the app Documents path
  */
-+ (NSString *)appSupportDirectory JE_CONST;
++ (NSString *)documentsDirectory JE_CONST;
+
+/*! Convenience method to get the app Downloads path
+ */
++ (NSString *)downloadsDirectory JE_CONST;
+
+/*! Convenience method to get the app Library path
+ */
++ (NSString *)libraryDirectory JE_CONST;
+
+/*! Convenience method to get the app Temporary path
+ */
++ (NSString *)temporaryDirectory JE_CONST;
 
 /*! Convenience method to build file path from components
  */
 + (NSString *)pathWithComponents:(NSArray *)components pathExtension:(NSString *)pathExtension;
 
-#pragma mark Constants
+
+#pragma mark - Constants
 
 /*! Convenience method to get the app short version string
  */
@@ -44,6 +53,7 @@
 /*! Convenience method to get the app bundle version string
  */
 + (NSString *)applicationBundleVersion JE_CONST;
+
 
 #pragma mark - String Manipulation
 

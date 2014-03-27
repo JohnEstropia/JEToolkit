@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 
+#import "JECompilerDefines.h"
+
 
 #if !__has_feature(objc_arc)
 #error JESynthesize() requires ARC be enabled
@@ -27,7 +29,7 @@
         { \
             if (_JEAssociationCompilerFlag_##ownership == _JEAssociationCompilerFlag_weak) \
             { \
-                id __attribute__((objc_precise_lifetime)) __strong _je_object = [(JEAssociatedObject *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) weakObject]; \
+                id __attribute__((objc_precise_lifetime)) __strong _je_object = [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) weakObject]; \
                 const void *_je_objectPointer = &_je_object; \
                 /* We will never reach here if the type is not an id, so we just ignore warnings. */ \
                 JE_PRAGMA_PUSH \
@@ -71,7 +73,7 @@
                 const void *_je_objectPointer = &getter; \
                 objc_setAssociatedObject(self, \
                                          _JESynthesizeKey_##getter, \
-                                         [JEAssociatedObject valueWithWeakObject:*(id __strong *)_je_objectPointer], \
+                                         [NSValue valueWithWeakObject:*(id __strong *)_je_objectPointer], \
                                          OBJC_ASSOCIATION_RETAIN_NONATOMIC); \
             } \
             else \
@@ -88,7 +90,7 @@
         { \
             objc_setAssociatedObject(self, \
                                      _JESynthesizeKey_##getter, \
-                                     [JEAssociatedObject valueWithBytes:&getter objCType:@encode(type)], \
+                                     [NSValue valueWithBytes:&getter objCType:@encode(type)], \
                                      OBJC_ASSOCIATION_RETAIN_NONATOMIC); \
         } \
     }
@@ -149,12 +151,12 @@
 #define _JESynthesize_get_copy      _JESynthesize_get_unsafe_unretained
 
 #define _JESynthesize_get_weak(type, getter) \
-    [(JEAssociatedObject *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter)) weakObject]
+    [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter)) weakObject]
 
 #define _JESynthesize_set_assign(type, getter) \
     objc_setAssociatedObject(self, \
                              _JESynthesizeKey_##getter, \
-                             [JEAssociatedObject valueWithBytes:&getter objCType:@encode(type)], \
+                             [NSValue valueWithBytes:&getter objCType:@encode(type)], \
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
 #define _JESynthesize_set_unsafe_unretained(type, getter) \
@@ -180,16 +182,16 @@
 #define _JESynthesize_set_weak(type, getter) \
     objc_setAssociatedObject(self, \
                              _JESynthesizeKey_##getter, \
-                             [JEAssociatedObject valueWithWeakObject:getter], \
+                             [NSValue valueWithWeakObject:getter], \
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
 
 #endif
 
 
-@interface JEAssociatedObject : NSValue
+@interface NSValue (JEAssociatedObject)
 
-+ (JEAssociatedObject *)valueWithWeakObject:(id)weakObject;
++ (NSValue *)valueWithWeakObject:(id)weakObject;
 - (id)weakObject;
 
 @end

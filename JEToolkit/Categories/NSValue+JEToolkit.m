@@ -1,20 +1,21 @@
 //
-//  NSValue+JEDebugging.m
+//  NSValue+JEToolkit.m
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/26.
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
-#import "NSValue+JEDebugging.h"
+#import "NSValue+JEToolkit.h"
 
 #import <objc/runtime.h>
 
+#import "NSMutableString+JEToolkit.h"
 #import "NSString+JEToolkit.h"
-#import "NSMutableString+JEDebugging.h"
+#import "NSObject+JEToolkit.h"
 
 
-@implementation NSValue (JEDebugging)
+@implementation NSValue (JEToolkit)
 
 #pragma mark - NSObject
 
@@ -24,7 +25,7 @@
 }
 
 
-#pragma mark - NSObject+JEDebugging
+#pragma mark - NSObject+JEToolkit
 
 - (NSString *)loggingDescription
 {
@@ -1127,6 +1128,5 @@
         [valueStringBuilder appendFormat:@"{ %@ }", description];
     }
 }
-
 
 @end

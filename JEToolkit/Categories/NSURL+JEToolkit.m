@@ -20,6 +20,50 @@
 
 #pragma mark - Public
 
+#pragma mark Directories
+
++ (NSURL *)applicationSupportDirectory
+{
+    return [[[NSFileManager defaultManager]
+             URLsForDirectory:NSApplicationSupportDirectory
+             inDomains:NSUserDomainMask] firstObject];
+}
+
++ (NSURL *)cachesDirectory
+{
+    return [[[NSFileManager defaultManager]
+             URLsForDirectory:NSCachesDirectory
+             inDomains:NSUserDomainMask] firstObject];
+}
+
++ (NSURL *)documentsDirectory
+{
+    return [[[NSFileManager defaultManager]
+             URLsForDirectory:NSDocumentDirectory
+             inDomains:NSUserDomainMask] firstObject];
+}
+
++ (NSURL *)downloadsDirectory
+{
+    return [[[NSFileManager defaultManager]
+             URLsForDirectory:NSDownloadsDirectory
+             inDomains:NSUserDomainMask] firstObject];
+}
+
++ (NSURL *)libraryDirectory
+{
+    return [[[NSFileManager defaultManager]
+             URLsForDirectory:NSLibraryDirectory
+             inDomains:NSUserDomainMask] firstObject];
+}
+
++ (NSURL *)temporaryDirectory
+{
+    return [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+}
+
+#pragma mark Inspecting URLs
+
 - (NSString *)UTI
 {
     return (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[self pathExtension], NULL);
@@ -42,6 +86,8 @@
     return [[self scheme] isEqualToString:@"data"];
 }
 
+#pragma mark Extended Attributes
+
 - (BOOL)getExtendedAttribute:(NSString *__autoreleasing *)extendedAttribute
                       forKey:(NSString *)key
                        error:(NSError *__autoreleasing *)error
@@ -53,7 +99,6 @@
     
     const char *keyString = [key UTF8String];
     const char *fileSystemRepresentation = [self fileSystemRepresentation];
-    
     const ssize_t bufferSize = getxattr(fileSystemRepresentation,
                                         keyString,
                                         NULL,

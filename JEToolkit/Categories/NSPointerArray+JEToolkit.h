@@ -1,5 +1,5 @@
 //
-//  NSError+JEDebugging.h
+//  NSPointerArray+JEToolkit.h
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/26.
@@ -8,9 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "NSObject+JEDebugging.h"
-
-
-@interface NSError (JEDebugging)
+@interface NSPointerArray (JEToolkit)
 
 @end

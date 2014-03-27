@@ -13,7 +13,6 @@
 #endif
 
 #import "JECompilerDefines.h"
-#import "NSObject+JEDebugging.h"
 
 #import "JEConsoleLoggerSettings.h"
 #import "JEHUDLoggerSettings.h"

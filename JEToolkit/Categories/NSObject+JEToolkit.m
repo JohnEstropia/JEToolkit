@@ -8,9 +8,22 @@
 
 #import "NSObject+JEToolkit.h"
 
+#import "NSMutableString+JEToolkit.h"
+
+
 @implementation NSObject (JEToolkit)
 
+#pragma mark - NSObject
+
+- (NSString *)debugDescription
+{
+    return [self loggingDescriptionIncludeClass:YES includeAddress:YES];
+}
+
+
 #pragma mark - Public
+
+#pragma mark Class Utilities
 
 + (NSString *)className
 {
@@ -38,5 +51,34 @@
 {
     return [[self classForIdiom] alloc];
 }
+
+
+#pragma mark Logging
+
+- (NSString *)loggingDescription
+{
+    return [self description];
+}
+
+- (NSString *)loggingDescriptionIncludeClass:(BOOL)includeClass
+                              includeAddress:(BOOL)includeAddress
+{
+    NSMutableString *description = [NSMutableString string];
+    @autoreleasepool {
+        
+        if (includeClass)
+        {
+            [description appendFormat:@"(%@ *) ", [self class]];
+        }
+        if (includeAddress)
+        {
+            [description appendFormat:@"<%p> ", self];
+        }
+        [description appendString:[self loggingDescription]];
+        
+    }
+    return description;
+}
+
 
 @end

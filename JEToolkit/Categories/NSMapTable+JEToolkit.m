@@ -1,17 +1,18 @@
 //
-//  NSError+JEDebugging.m
+//  NSMapTable+JEToolkit.m
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/26.
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
-#import "NSError+JEDebugging.h"
+#import "NSMapTable+JEToolkit.h"
 
-#import "NSMutableString+JEDebugging.h"
+#import "NSMutableString+JEToolkit.h"
+#import "NSObject+JEToolkit.h"
 
 
-@implementation NSError (JEDebugging)
+@implementation NSMapTable (JEToolkit)
 
 #pragma mark - NSObject
 
@@ -21,25 +22,37 @@
 }
 
 
-#pragma mark - NSObject+JEDebugging
+#pragma mark - NSObject+JEToolkit
 
 - (NSString *)loggingDescription
 {
-    NSMutableString *description = [NSMutableString stringWithFormat:
-                                    @"%@ (code %li)",
-                                    [self domain], (long)[self code]];
-    NSDictionary *userInfo = [self userInfo];
-    if ([userInfo count] <= 0)
+    NSMutableString *description = [NSMutableString string];
+    NSUInteger count = [self count];
+    if (count == 1)
     {
-        return description;
+        [description appendString:@"1 entry {"];
+    }
+    else
+    {
+        [description appendFormat:@"%lu entries {", (unsigned long)count];
+        
+        if (count <= 0)
+        {
+            [description appendString:@"}"];
+            return description;
+        }
     }
     
-    [description appendString:@" userInfo: {"];
-    
-    BOOL __block isFirstEntry = YES;
-    [userInfo enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        
+    BOOL isFirstEntry = YES;
+    for (id key in self)
+    {
         @autoreleasepool {
+            
+            id obj = [self objectForKey:key];
+            if (!obj)
+            {
+                continue;
+            }
             
             if (isFirstEntry)
             {
@@ -61,7 +74,7 @@
             
         }
         
-    }];
+    };
     
     [description indentByLevel:1];
     [description appendString:@"\n}"];

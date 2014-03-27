@@ -10,17 +10,33 @@
 
 @interface NSObject (JEToolkit)
 
+#pragma mark - Class Utilities
+
 /*! Convenience method for NSStringFromClass(self)
  */
 + (NSString *)className;
 
-/*! Returns the iPhone or iPad-specific subclass for the receiver
+/*! Returns the iPhone or iPad-specific subclass for the receiver if they exist. Device-specific subclass names are expected to have either the suffix "_iPad" or "_iPhone".
  */
 + (Class)classForIdiom;
 
 /*! Allocates an instance of the iPhone or iPad-specific subclass for the receiver
  */
 + (instancetype)allocForIdiom;
+
+
+#pragma mark - Logging
+
+/*! Returns a string with detailed information about the receiver.
+ Subclasses should override this method directly or with categories.
+ */
+- (NSString *)loggingDescription;
+
+/*! Returns a string with detailed information about the receiver, with options to include the class name and/or the object memory address.
+ Because this calls @p loggingDescription internally, subclasses typically don't need to override this method.
+ */
+- (NSString *)loggingDescriptionIncludeClass:(BOOL)includeClass
+                              includeAddress:(BOOL)includeAddress;
 
 
 @end

@@ -10,9 +10,32 @@
 
 #import "NSCalendar+JEToolkit.h"
 #import "NSDateFormatter+JEToolkit.h"
+#import "NSMutableString+JEToolkit.h"
+#import "NSObject+JEToolkit.h"
 
 
 @implementation NSDate (JEToolkit)
+
+#pragma mark - NSObject
+
+- (NSString *)debugDescription
+{
+    return [super debugDescription];
+}
+
+
+#pragma mark - NSObject+JEToolkit
+
+- (NSString *)loggingDescription
+{
+    return [NSString stringWithFormat:
+            @"%@ (%@)",
+            [self ISO8601String], [NSDateFormatter
+                                   localizedStringFromDate:self
+                                   dateStyle:NSDateFormatterMediumStyle
+                                   timeStyle:NSDateFormatterLongStyle]];
+}
+
 
 #pragma mark - Public
 
