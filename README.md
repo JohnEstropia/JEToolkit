@@ -47,15 +47,29 @@ Main Features:
 
 ## Categories
 
-- **``NSCache``**: Provides subscripting support similar to `NSDictionary`.
-- **``NSDate``**, **``NSNumber``**, **``NSString``**, **``NSDate``**: Provides utilities for converting to and from known data types.
-- **``NSURL``**: API for getting and setting extended attributes.
-- **``UIColor``**: Color creation from RGB or hex.
-- **``UILabel``**, **``UITextView``**: Provides utilities for computing sizes and heights for the display string.
-- **``UIScrollView``**: Automatic handling of keyboard events, including auto-scrolling to descendant `firstResponder`s. All you have to do is call `-addKeyboardObserver` on the scrollview instance.
+- **`NSCache`**: Provides subscripting support similar to `NSDictionary`.
+- **`NSDate`**, **`NSNumber`**, **`NSString`**, **`NSDate`**: Provides utilities for converting to and from known data types.
+- **`NSURL`**: API for getting and setting extended attributes.
+- **`UIColor`**: Color creation from RGB or hex.
+- **`UILabel`**, **`UITextView`**: Provides utilities for computing sizes and heights for the display string.
+- **`UIScrollView`**: Automatic handling of keyboard events, including auto-scrolling to descendant `firstResponder`s. All you have to do is call `-addKeyboardObserver` on the scrollview instance.
 
 
-## Other Utilities
+## Safety macros
+
+- **`KVC(...)`**: Returns and checks existence of a KVC (or KVO) keypath at runtime.
+```obj-c
+[obj setValue:@"John" forKey:KVC(Person *, name)];
+[obj setValue:@"John" forKey:KVC(typeof(self), name)]; // typeof() operator
+[obj setValue:@"John" forKey:KVC(Person *, friend.name)]; // dot notation
+```
+- **`L8N(...)`**: A shorthand for `NSLocalizedString(...)` or `NSLocalizedStringFromTable(...)` that asserts the existence of a localization string in a *.strings* file at runtime.
+```obj-c
+label.text = L8N(@"myviewcontroller.label.title"); // load from Localizable.strings
+label.text = L8N(@"myviewcontroller.label.title", "CustomStrings"); // load from CustomStrings.strings
+```
+
+## Other utilities
 
 - **`JEOrderedDictionary`**: An `NSMutableDictionary` subclass that remembers the order you inserted keys. Useful if you want to maintain chronological information or a constant ordering of keys.
 - **`JEWeakCache`**: A thread-safe caching mechanism that is similar to `NSCache`. The difference is `JEWeakCache` only keeps a weak reference of the objects, that is, it will keep a reference of objects until nothing else is retaining them.
