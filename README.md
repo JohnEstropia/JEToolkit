@@ -42,7 +42,7 @@ Main Features:
 - JEDump() is a magical macro can log anything you throw at it: compiler primitives, objects, blocks, etc.
 - Configurable behavior for the console logger, the file logger, and the HUD logger.
 
-* TODO: additional documentation, usage examples, screenshots *
+*TODO: additional documentation, usage examples, screenshots*
 
 
 ## Categories
