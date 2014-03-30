@@ -12,6 +12,27 @@
 #import "JECompilerDefines.h"
 
 
+#pragma mark - Clamp
+
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+double JEClamp(double min, double value, double max)
+{
+	return MIN(max, MAX(min, value));
+}
+
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+NSInteger JEClamp(NSInteger min, NSInteger value, NSInteger max)
+{
+	return MIN(max, MAX(min, value));
+}
+
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+NSUInteger JEClamp(NSUInteger min, NSUInteger value, NSUInteger max)
+{
+	return MIN(max, MAX(min, value));
+}
+
+
 #pragma mark - Geometry
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
@@ -52,22 +73,13 @@ CGSize JESizeScaled(CGSize size, CGFloat scale)
     return (CGSize){ .width = (size.width * scale), .height = (size.height * scale) };
 }
 
-JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-double JEClamp(double min, double value, double max)
-{
-	return MIN(max, MAX(min, value));
-}
 
-JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-NSInteger JEClamp(NSInteger min, NSInteger value, NSInteger max)
-{
-	return MIN(max, MAX(min, value));
-}
+#pragma mark - Random
 
-JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-NSUInteger JEClamp(NSUInteger min, NSUInteger value, NSUInteger max)
+JE_STATIC_INLINE
+NSInteger JERandom(NSInteger min, NSInteger max)
 {
-	return MIN(max, MAX(min, value));
+    return ((NSInteger)arc4random_uniform(max - min + 1) + min);
 }
 
 

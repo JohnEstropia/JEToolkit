@@ -11,7 +11,10 @@
 #import "JEFormulas.h"
 #import "UIImage+JEToolkit.h"
 #import "UILabel+JEToolkit.h"
+#import "UIView+JEToolkit.h"
 
+
+static NSString *const JEHUDCellReuseIdentifier = @"cell";
 
 static const CGFloat JEHUDLogViewButtonSize = 44.0f;
 static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
@@ -59,7 +62,7 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
         .size.height = JEHUDLogViewConsoleMinHeight
     }];
     [consoleView setTranslatesAutoresizingMaskIntoConstraints:YES];
-    consoleView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+    consoleView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.6f];
     [self addSubview:consoleView];
     self.consoleView = consoleView;
     
@@ -97,7 +100,7 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     menuView.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin
                                  | UIViewAutoresizingFlexibleBottomMargin);
     [menuView setTranslatesAutoresizingMaskIntoConstraints:YES];
-    menuView.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+    menuView.backgroundColor = consoleView.backgroundColor;
     
     CALayer *menuLayer = menuView.layer;
     menuLayer.rasterizationScale = [UIScreen mainScreen].scale;
@@ -178,7 +181,7 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
         .size.width = JEHUDLogViewButtonSize,
         .size.height = JEHUDLogViewButtonSize
     };
-    resizeButton.backgroundColor = [UIColor colorWithWhite:0.0f alpha:0.5f];
+    resizeButton.backgroundColor = consoleView.backgroundColor;
     resizeButton.showsTouchWhenHighlighted = YES;
     [resizeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [resizeButton setTitleColor:[UIColor colorWithWhite:0.6f alpha:1.0f] forState:UIControlStateHighlighted];
@@ -270,34 +273,24 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat boundsWidth = CGRectGetWidth(tableView.bounds);
-    CGSize constainSize = (CGSize){
-        .width = boundsWidth,
-        .height = CGFLOAT_MAX
-    };
-    NSString *logEntry = self.logEntries[indexPath.row];
-    CGFloat heightForLabel = 0.0f;
-    UIFont *font = [UIFont systemFontOfSize:10.0f];
-    if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)])
+    static UITableViewCell *dummyCell;
+    if (!dummyCell)
     {
-        constainSize.width -= 15.0f;
-        heightForLabel = [logEntry
-                          boundingRectWithSize:constainSize
-                          options:NSStringDrawingUsesLineFragmentOrigin
-                          attributes:@{ NSFontAttributeName : font,
-                                        NSParagraphStyleAttributeName : [NSParagraphStyle defaultParagraphStyle] }
-                          context:NULL].size.height;
-    }
-    else
-    {
-        constainSize.width -= 10.0f;
-        heightForLabel = [logEntry
-                          sizeWithFont:font
-                          constrainedToSize:constainSize
-                          lineBreakMode:NSLineBreakByWordWrapping].height;
+        dummyCell = [self cellForIndexPath:nil];
     }
     
-    return (15.0f + heightForLabel);
+    dummyCell.frame = (CGRect){
+        .size.width = CGRectGetHeight(tableView.bounds),
+        .size.height = 20.0f
+    };
+    
+    UILabel *textLabel = dummyCell.textLabel;
+    textLabel.text = self.logEntries[indexPath.row];
+    
+    return (CGRectGetHeight(dummyCell.bounds)
+            - CGRectGetHeight(textLabel.frame)
+            + [textLabel sizeForText].height
+            + 10.0f);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -488,17 +481,20 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 
 - (UITableViewCell *)cellForIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"cell"];
+    UITableViewCell *cell = (indexPath
+                             ? [self.tableView
+                                dequeueReusableCellWithIdentifier:JEHUDCellReuseIdentifier]
+                             : nil);
     if (!cell)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:JEHUDCellReuseIdentifier];
         cell.backgroundColor = [UIColor clearColor];
         cell.backgroundView = [[UIView alloc] init];
         cell.selectedBackgroundView = [[UIView alloc] init];
         
         UILabel *textLabel = cell.textLabel;
         textLabel.textColor = [UIColor whiteColor];
-        textLabel.font = [UIFont systemFontOfSize:10.0f];
+        textLabel.font = [UIFont fontWithName:@"Courier" size:10.0f];
         textLabel.backgroundColor = [UIColor clearColor];
         textLabel.numberOfLines = 0;
         textLabel.lineBreakMode = NSLineBreakByWordWrapping;
