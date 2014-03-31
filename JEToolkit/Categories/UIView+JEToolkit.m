@@ -8,6 +8,9 @@
 
 #import "UIView+JEToolkit.h"
 
+#import "JEDebugging.h"
+
+
 @implementation UIView (JEToolkit)
 
 #pragma mark - Public
@@ -200,7 +203,7 @@
 
 - (id)firstSubviewWithClass:(Class)class
 {
-    NSCParameterAssert([class isSubclassOfClass:[UIView class]]);
+    JEParameterAssert([class isSubclassOfClass:[UIView class]]);
     
     if ([self isKindOfClass:class])
     {
@@ -221,7 +224,7 @@
 
 - (id)firstSuperviewWithClass:(Class)class
 {
-    NSCParameterAssert([class isSubclassOfClass:[UIView class]]);
+    JEParameterAssert([class isSubclassOfClass:[UIView class]]);
     
     if ([self isKindOfClass:class])
     {

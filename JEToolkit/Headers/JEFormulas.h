@@ -12,7 +12,7 @@
 #import "JECompilerDefines.h"
 
 
-#pragma mark - Clamp
+#pragma mark - Clamping Values
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
 double JEClamp(double min, double value, double max)
@@ -79,7 +79,7 @@ CGSize JESizeScaled(CGSize size, CGFloat scale)
 JE_STATIC_INLINE
 NSInteger JERandom(NSInteger min, NSInteger max)
 {
-    return ((NSInteger)arc4random_uniform(max - min + 1) + min);
+    return ((NSInteger)arc4random_uniform((u_int32_t)(max - min + 1)) + min);
 }
 
 

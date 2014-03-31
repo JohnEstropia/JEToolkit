@@ -10,6 +10,8 @@
 
 @interface UILabel (JEToolkit)
 
+/*! Computes for the display size of the receiver's current text.
+ */
 - (CGSize)sizeForText;
 
 @end

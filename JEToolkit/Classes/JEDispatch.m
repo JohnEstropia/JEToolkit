@@ -10,44 +10,46 @@
 
 #import <objc/runtime.h>
 
+#import "JEDebugging.h"
 
-void JEDispatchConcurrent(dispatch_block_t block)
+
+void JEDispatchConcurrent(void (^block)(void))
 {
-    NSCParameterAssert(block);
+    JEParameterAssert(block != NULL);
     
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
 }
 
-void JEDispatchConcurrentAfter(NSTimeInterval delay, dispatch_block_t block)
+void JEDispatchConcurrentAfter(NSTimeInterval delay, void (^block)(void))
 {
-    NSCParameterAssert(delay >= 0.0f);
-    NSCParameterAssert(block);
+    JEParameterAssert(delay >= 0.0f);
+    JEParameterAssert(block != NULL);
     
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (delay * (typeof(delay))NSEC_PER_SEC)),
 				   dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
 				   block);
 }
 
-void JEDispatchUI(dispatch_block_t block)
+void JEDispatchUI(void (^block)(void))
 {
-    NSCParameterAssert(block);
+    JEParameterAssert(block != NULL);
     
 	dispatch_async(dispatch_get_main_queue(), block);
 }
 
-void JEDispatchUIAfter(NSTimeInterval delay, dispatch_block_t block)
+void JEDispatchUIAfter(NSTimeInterval delay, void (^block)(void))
 {
-    NSCParameterAssert(delay >= 0.0f);
-    NSCParameterAssert(block);
+    JEParameterAssert(delay >= 0.0f);
+    JEParameterAssert(block != NULL);
     
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (delay * (typeof(delay))NSEC_PER_SEC)),
 				   dispatch_get_main_queue(),
 				   block);
 }
 
-void JEDispatchUIASAP(dispatch_block_t block)
+void JEDispatchUIASAP(void (^block)(void))
 {
-    NSCParameterAssert(block);
+    JEParameterAssert(block != NULL);
     
     if ([NSThread isMainThread])
     {
@@ -59,10 +61,10 @@ void JEDispatchUIASAP(dispatch_block_t block)
     }
 }
 
-void JEDispatchSerial(id owner, dispatch_block_t block)
+void JEDispatchSerial(id owner, void (^block)(void))
 {
-    NSCParameterAssert(owner);
-    NSCParameterAssert(block);
+    JEParameterAssert(owner != nil);
+    JEParameterAssert(block != NULL);
     
     static const void *JESerialQueueKey = &JESerialQueueKey;
     dispatch_queue_t serialQueue = objc_getAssociatedObject(owner, JESerialQueueKey);

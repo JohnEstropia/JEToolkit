@@ -13,6 +13,8 @@
 #import "NSMutableString+JEToolkit.h"
 #import "NSObject+JEToolkit.h"
 
+#import "JEDebugging.h"
+
 
 @implementation NSDate (JEToolkit)
 
@@ -64,14 +66,14 @@
 
 + (NSDate *)dateWithISO8601String:(NSString *)ISO8601String
 {
-    NSCParameterAssert([ISO8601String isKindOfClass:[NSString class]]);
+    JEParameterAssert([ISO8601String isKindOfClass:[NSString class]]);
     
     return [[NSDateFormatter ISO8601UTCDateFormatter] dateFromString:ISO8601String];
 }
 
 + (NSDate *)dateWithEXIFString:(NSString *)EXIFString
 {
-    NSCParameterAssert([EXIFString isKindOfClass:[NSString class]]);
+    JEParameterAssert([EXIFString isKindOfClass:[NSString class]]);
     
     return [[NSDateFormatter EXIFDateFormatter] dateFromString:EXIFString];
 }

@@ -11,6 +11,8 @@
 #import "NSMutableString+JEToolkit.h"
 #import "NSObject+JEToolkit.h"
 
+#import "JEDebugging.h"
+
 
 @implementation NSString (JEToolkit)
 
@@ -138,7 +140,7 @@
 
 - (BOOL)containsSubstring:(NSString *)substring
 {
-    NSCParameterAssert([substring isKindOfClass:[NSString class]]);
+    JEParameterAssert([substring isKindOfClass:[NSString class]]);
     
     return [self containsSubstring:substring options:NSLiteralSearch];
 }
@@ -146,7 +148,7 @@
 - (BOOL)containsSubstring:(NSString *)substring
                   options:(NSStringCompareOptions)options
 {
-    NSCParameterAssert([substring isKindOfClass:[NSString class]]);
+    JEParameterAssert([substring isKindOfClass:[NSString class]]);
     
     return ([self rangeOfString:substring options:options].location != NSNotFound);
 }

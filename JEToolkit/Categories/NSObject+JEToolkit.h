@@ -39,4 +39,21 @@
                               includeAddress:(BOOL)includeAddress;
 
 
+#pragma mark - Method Swizzling
+
+/*! Swizzles a class method.
+ @param originalSelector The original method implementation
+ @param overrideSelector The overriding method implementation
+ */
++ (void)swizzleClassMethod:(SEL)originalSelector
+        withOverrideMethod:(SEL)overrideSelector;
+
+/*! Swizzles an instance method.
+ @param originalSelector The original method implementation
+ @param overrideSelector The overriding method implementation
+ */
++ (void)swizzleInstanceMethod:(SEL)originalSelector
+           withOverrideMethod:(SEL)overrideSelector;
+
+
 @end

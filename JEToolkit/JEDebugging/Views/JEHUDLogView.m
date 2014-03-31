@@ -287,10 +287,10 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     UILabel *textLabel = dummyCell.textLabel;
     textLabel.text = self.logEntries[indexPath.row];
     
-    return (CGRectGetHeight(dummyCell.bounds)
-            - CGRectGetHeight(textLabel.frame)
-            + [textLabel sizeForText].height
-            + 10.0f);
+    return ceilf((CGRectGetHeight(dummyCell.bounds)
+                  - CGRectGetHeight(textLabel.frame)
+                  + [textLabel sizeForText].height
+                  + 10.0f));
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -303,9 +303,13 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     return cell;
 }
 
+
 #pragma mark - UITableViewDelegate
 
-
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.textLabel.text = nil;
+}
 
 
 #pragma mark - @selector
@@ -562,8 +566,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 - (void)addLogString:(NSString *)logString
 withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings
 {
-    NSCParameterAssert(logString);
-    NSCParameterAssert(HUDLogSettings);
+    NSCParameterAssert(logString != nil);
+    NSCParameterAssert(HUDLogSettings != nil);
     NSCAssert([NSThread isMainThread],
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     

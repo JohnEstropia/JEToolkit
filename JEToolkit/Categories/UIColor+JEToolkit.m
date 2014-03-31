@@ -8,6 +8,9 @@
 
 #import "UIColor+JEToolkit.h"
 
+#import "JEDebugging.h"
+
+
 @implementation UIColor (JEToolkit)
 
 #pragma mark - Public
@@ -41,7 +44,7 @@
 
 + (UIColor *)colorWithHexString:(NSString *)hexString
 {
-    NSCParameterAssert([hexString isKindOfClass:[NSString class]]);
+    JEParameterAssert([hexString isKindOfClass:[NSString class]]);
     
     for (NSString *prefix in @[@"0x", @"#", @"0X"])
     {
@@ -88,7 +91,7 @@
 
 + (UIColor *)colorWithComponents:(NSArray *)components
 {
-    NSCParameterAssert([components isKindOfClass:[NSArray class]]);
+    JEParameterAssert([components isKindOfClass:[NSArray class]]);
     
     NSUInteger numberOfComponents = [components count];
     if (numberOfComponents < 1 || numberOfComponents > 4)

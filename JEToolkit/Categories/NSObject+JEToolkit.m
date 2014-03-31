@@ -8,7 +8,10 @@
 
 #import "NSObject+JEToolkit.h"
 
+#import <objc/runtime.h>
+
 #import "NSMutableString+JEToolkit.h"
+#import "JEDebugging.h"
 
 
 @implementation NSObject (JEToolkit)
@@ -80,5 +83,64 @@
     return description;
 }
 
+#pragma mark Method Swizzling
+
++ (void)swizzleClassMethod:(SEL)originalSelector
+        withOverrideMethod:(SEL)overrideSelector
+{
+    Class metaClass = object_getClass(self);
+    
+	Method originalMethod = class_getInstanceMethod(metaClass, originalSelector);
+    JEAssert(originalMethod != NULL,
+             @"Original method +[%@ %@] does not exist.",
+             NSStringFromClass(self),
+             NSStringFromSelector(originalSelector));
+    
+	Method overrideMethod = class_getInstanceMethod(metaClass, overrideSelector);
+    JEAssert(overrideMethod != NULL,
+             @"Override method +[%@ %@] does not exist.",
+             NSStringFromClass(self),
+             NSStringFromSelector(overrideSelector));
+    
+    class_addMethod(metaClass,
+					originalSelector,
+					class_getMethodImplementation(self, originalSelector),
+					method_getTypeEncoding(originalMethod));
+	class_addMethod(metaClass,
+					overrideSelector,
+					class_getMethodImplementation(self, overrideSelector),
+					method_getTypeEncoding(overrideMethod));
+    
+	method_exchangeImplementations(class_getInstanceMethod(metaClass, originalSelector),
+                                   class_getInstanceMethod(metaClass, overrideSelector));
+}
+
++ (void)swizzleInstanceMethod:(SEL)originalSelector
+           withOverrideMethod:(SEL)overrideSelector
+{
+	Method originalMethod = class_getInstanceMethod(self, originalSelector);
+    JEAssert(originalMethod != NULL,
+             @"Original method -[%@ %@] does not exist.",
+             NSStringFromClass(self),
+             NSStringFromSelector(originalSelector));
+    
+	Method overrideMethod = class_getInstanceMethod(self, overrideSelector);
+    JEAssert(overrideMethod != NULL,
+             @"Override method -[%@ %@] does not exist.",
+             NSStringFromClass(self),
+             NSStringFromSelector(overrideSelector));
+    
+    class_addMethod(self,
+					originalSelector,
+					class_getMethodImplementation(self, originalSelector),
+					method_getTypeEncoding(originalMethod));
+	class_addMethod(self,
+					overrideSelector,
+					class_getMethodImplementation(self, overrideSelector),
+					method_getTypeEncoding(overrideMethod));
+    
+	method_exchangeImplementations(class_getInstanceMethod(self, originalSelector),
+                                   class_getInstanceMethod(self, overrideSelector));
+}
 
 @end

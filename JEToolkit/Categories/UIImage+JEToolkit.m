@@ -63,7 +63,7 @@
             [description appendString:@"UIImageOrientationRightMirrored"];
             break;
         default:
-            [description appendFormat:@"%i", self.imageOrientation];
+            [description appendFormat:@"%li", (long)self.imageOrientation];
             break;
     }
     
@@ -77,7 +77,7 @@
             [description appendString:@"UIImageResizingModeStretch"];
             break;
         default:
-            [description appendFormat:@"%i", self.resizingMode];
+            [description appendFormat:@"%li", (long)self.resizingMode];
             break;
     }
     
