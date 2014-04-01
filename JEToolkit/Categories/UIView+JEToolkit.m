@@ -15,6 +15,8 @@
 
 #pragma mark - Public
 
+#pragma mark Geometry Helpers
+
 - (CGFloat)frameOriginX
 {
     return self.frame.origin.x;
@@ -182,6 +184,8 @@
     center.y = centerY;
     self.center = center;
 }
+
+#pragma mark Hierarchy Helpers
 
 - (UIView *)findFirstResponder
 {

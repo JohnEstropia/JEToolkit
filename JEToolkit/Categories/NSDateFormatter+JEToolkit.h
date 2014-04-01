@@ -11,8 +11,6 @@
 #import "JECompilerDefines.h"
 
 
-/*! NSDateFormatter category for caching date formatters, as creating NSDateFormatter objects is not very performant.
- */
 @interface NSDateFormatter (JEToolkit)
 
 #pragma mark - Shared Formatters

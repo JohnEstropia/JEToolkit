@@ -11,8 +11,6 @@
 #import "JECompilerDefines.h"
 
 
-/*! NSCalendar category for caching calendars, as creating NSCalendar objects is not very performant.
- */
 @interface NSCalendar (JEToolkit)
 
 /*! Create and caches the NSCalendar returned from [NSCalendar currentCalendar].
