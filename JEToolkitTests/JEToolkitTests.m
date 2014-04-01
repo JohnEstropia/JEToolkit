@@ -338,6 +338,11 @@
     JEDump(image);
     
     JEDump([UIColor blueColor]);
+    JEDump([UIColor redColor]);
+    JEDump([UIColor cyanColor]);
+    JEDump([UIColor whiteColor]);
+    JEDump([UIColor clearColor]);
+    JEDump([UIColor colorWithInt:0xFF0000 alpha:0.5f]);
     
     [JEDebugging enumerateFileLogsWithBlock:^(NSString *fileName, NSData *data, BOOL *stop) {
         
