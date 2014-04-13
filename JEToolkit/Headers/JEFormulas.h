@@ -44,9 +44,7 @@ double JEAngleRadians(double degrees)
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
 double JEAngleRadians(CGPoint point1, CGPoint point2)
 {
-	CGFloat height = (point2.y - point1.y);
-	CGFloat width = (point1.x - point2.x);
-	return atan(height / width);
+	return atan((point2.y - point1.y) / (point1.x - point2.x));
 }
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
@@ -62,6 +60,41 @@ double JEAngleDegrees(CGPoint point1, CGPoint point2)
 }
 
 JE_STATIC_INLINE JE_CONST
+CGPoint JEPoint(CGPoint startPoint, double angle, double distance)
+{
+    return (CGPoint){
+        .x = (startPoint.x + (sin(angle) * distance)),
+        .y = (startPoint.y + (cos(angle) * distance))
+    };
+}
+
+JE_STATIC_INLINE JE_CONST
+double JEDistance(CGPoint point1, CGPoint point2)
+{
+    return hypot((point1.x - point2.x), (point1.y - point2.y));
+}
+
+JE_STATIC_INLINE JE_CONST JE_CONST JE_OVERLOAD
+CGPoint JEPointMidpoint(CGPoint point1, CGPoint point2)
+{
+    return (CGPoint){
+        .x = ((point1.x + point2.x) * 0.5f),
+        .y = ((point1.y + point2.y) * 0.5f),
+    };
+}
+
+JE_STATIC_INLINE JE_CONST
+CGRect JERect(CGPoint midpoint, CGFloat width, CGFloat height)
+{
+    return (CGRect){
+        .origin.x = (midpoint.x - (width * 0.5f)),
+        .origin.y = (midpoint.y - (height * 0.5f)),
+        .size.width = width,
+        .size.height = height
+    };
+}
+
+JE_STATIC_INLINE JE_CONST JE_CONST JE_OVERLOAD
 CGPoint JERectCenter(CGRect rect)
 {
 	return (CGPoint){ .x = CGRectGetMidX(rect), .y = CGRectGetMidY(rect) };
