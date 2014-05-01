@@ -63,8 +63,7 @@ double JEAngleRadians(CGPoint point1, CGPoint point2, BOOL isTopToBottomCoordina
     {
         return atan2((point2.y - point1.y), (point1.x - point2.x));
     }
-    return atan2((point1.y - point2.y),
-                 (point2.x - point1.x));
+    return atan2((point1.y - point2.y), (point2.x - point1.x));
 }
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
