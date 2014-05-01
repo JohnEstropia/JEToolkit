@@ -180,6 +180,7 @@
     JEDump((CGSize){ 1.999, 2.999 });
     JEDump((CGRect){ {1.999, 2.999 }, { 3.999, 4.999 }});
     JEDump((CGAffineTransform){ 1.999, 2.999, 3.999, 4.999, 5.999, 6.999 });
+    JEDump((CGVector){ 1.999, 2.999 });
     JEDump((UIEdgeInsets){ 1.999, 2.999, 3.999, 4.999 });
     JEDump((UIOffset){ 1.999, 2.999 });
     JEDump((NSRange){ 1, 2 });

@@ -1023,6 +1023,17 @@
              affineTransform.tx, affineTransform.ty];
             
         } copy];
+#if CGVECTOR_DEFINED
+        blockDictionary[@(@encode(CGVector))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
+            
+            CGVector vector = {};
+            [structValue getValue:&vector];
+            [stringBuilder appendFormat:
+             @"{ dx:%g, dy:%g }",
+             vector.dx, vector.dy];
+            
+        } copy];
+#endif
         blockDictionary[@(@encode(UIEdgeInsets))] = [^(NSValue *structValue, NSMutableString *stringBuilder){
             
             UIEdgeInsets edgeInsets = [structValue UIEdgeInsetsValue];
