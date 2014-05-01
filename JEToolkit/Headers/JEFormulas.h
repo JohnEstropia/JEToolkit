@@ -12,6 +12,21 @@
 #import "JECompilerDefines.h"
 
 
+#pragma mark - Arithmetic
+
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+NSInteger JEModulo(NSInteger number, NSInteger divisor)
+{
+    return (((number % divisor) + divisor) % divisor);
+}
+
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+double JEModulo(double number, double divisor)
+{
+    return fmod((fmod(number, divisor) + divisor), divisor);
+}
+
+
 #pragma mark - Clamping Values
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
@@ -42,9 +57,14 @@ double JEAngleRadians(double degrees)
 }
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-double JEAngleRadians(CGPoint point1, CGPoint point2)
+double JEAngleRadians(CGPoint point1, CGPoint point2, BOOL isTopToBottomCoordinateSystem)
 {
-	return atan((point2.y - point1.y) / (point1.x - point2.x));
+    if (isTopToBottomCoordinateSystem)
+    {
+        return atan2((point2.y - point1.y), (point1.x - point2.x));
+    }
+    return atan2((point1.y - point2.y),
+                 (point2.x - point1.x));
 }
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
@@ -54,17 +74,24 @@ double JEAngleDegrees(double radians)
 }
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-double JEAngleDegrees(CGPoint point1, CGPoint point2)
+double JEAngleDegrees(CGPoint point1, CGPoint point2, BOOL isTopToBottomCoordinateSystem)
 {
-	return JEAngleDegrees(JEAngleRadians(point1, point2));
+	return JEAngleDegrees(JEAngleRadians(point1, point2, isTopToBottomCoordinateSystem));
 }
 
 JE_STATIC_INLINE JE_CONST
-CGPoint JEPoint(CGPoint startPoint, double angle, double distance)
+CGPoint JEPoint(CGPoint startPoint, double angle, double distance, BOOL isTopToBottomCoordinateSystem)
 {
+    if (isTopToBottomCoordinateSystem)
+    {
+        return (CGPoint){
+            .x = (startPoint.x + (sin(angle) * distance)),
+            .y = (startPoint.y + (cos(angle) * distance))
+        };
+    }
     return (CGPoint){
-        .x = (startPoint.x + (sin(angle) * distance)),
-        .y = (startPoint.y + (cos(angle) * distance))
+        .x = (startPoint.x + (cos(angle) * distance)),
+        .y = (startPoint.y - (sin(angle) * distance))
     };
 }
 
@@ -110,9 +137,15 @@ CGSize JESizeScaled(CGSize size, CGFloat scale)
 #pragma mark - Random
 
 JE_STATIC_INLINE
-NSInteger JERandom(NSInteger min, NSInteger max)
+int32_t JERandomInteger(int32_t min, int32_t max)
 {
-    return ((NSInteger)arc4random_uniform((u_int32_t)(max - min + 1)) + min);
+    return ((int32_t)arc4random_uniform((u_int32_t)(max - min + 1)) + min);
+}
+
+JE_STATIC_INLINE
+double JERandomDouble(double min, double max)
+{
+    return ((((double)arc4random() / (double)(UINT32_MAX + 1)) * (max - min)) + min);
 }
 
 
