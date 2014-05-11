@@ -17,7 +17,7 @@
 
 #if DEBUG
 
-#define KVC(type, property) \
+#define JEKeypath(type, property) \
     ({ \
         type _##property##_dummy; \
         _##property##_dummy.property, @#property; \
@@ -25,7 +25,7 @@
 
 #else
 
-#define KVC(class, property) \
+#define JEKeypath(class, property) \
     ( @#property )
 
 #endif
@@ -35,7 +35,7 @@
 #pragma mark - Localizable Strings
 
 JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *L8N(NSString *keyString)
+NSString *JEL8N(NSString *keyString)
 {
 	NSString *localizedString = NSLocalizedString(keyString, nil);
     JEAssert(keyString != localizedString,
@@ -45,7 +45,7 @@ NSString *L8N(NSString *keyString)
 }
 
 JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *L8N(NSString *keyString, NSString *stringsFile)
+NSString *JEL8N(NSString *keyString, NSString *stringsFile)
 {
 	NSString *localizedString = NSLocalizedStringFromTable(keyString, stringsFile, nil);
     JEAssert(keyString != localizedString,
@@ -56,9 +56,20 @@ NSString *L8N(NSString *keyString, NSString *stringsFile)
 }
 
 
+
 #pragma mark - Convenience
 
-#define IsEnumBitSet(enumVar, enumBit) ( (enumVar & enumBit) == enumBit )
+#define JEEnumBitmasked(enumVar, enumBit) ( (enumVar & enumBit) == enumBit )
+
+
+
+#pragma mark - ARC
+
+#define JEScopeWeak(object) \
+    typeof(object) __weak __je_scopeweak_##object = object
+
+#define JEScopeStrong(object) \
+    typeof(object) __strong object = __je_scopeweak_##object
 
 
 

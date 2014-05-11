@@ -10,6 +10,7 @@
 #import "UIView+JEToolkit.m"
 
 #import "JEAssociatedObject.h"
+#import "JESafetyHelpers.h"
 
 
 @interface UIScrollView (_JEToolkit)
@@ -35,8 +36,8 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
 	CGFloat originalContentInsetBottom = self.contentInset.bottom;
 	CGFloat originalScrollInsetBottom = self.scrollIndicatorInsets.bottom;
 	
+    JEScopeWeak(self);
 	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-	typeof(self) __weak weakSelf = self;
 	self.je_keyboardUpObserver =
     [center
      addObserverForName:UIKeyboardWillShowNotification
@@ -44,14 +45,14 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
      queue:nil
      usingBlock:^(NSNotification *note) {
          
-         typeof(self) strongSelf = weakSelf;
-         if (!strongSelf)
+         JEScopeStrong(self);
+         if (!self)
          {
              return;
          }
          
          NSDictionary *userInfo = [note userInfo];
-         CGRect keyboardFrameInScrollView = [strongSelf convertRect:[(NSValue *)userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:nil];
+         CGRect keyboardFrameInScrollView = [self convertRect:[(NSValue *)userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:nil];
          CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
          UIViewAnimationOptions animationCurve = kNilOptions;
          switch ([userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue])
@@ -70,19 +71,19 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
                  break;
          }
          
-         CGFloat coveredHeight = (CGRectGetMaxY(strongSelf.bounds)
+         CGFloat coveredHeight = (CGRectGetMaxY(self.bounds)
                                   - CGRectGetMinY(keyboardFrameInScrollView));
          
-         UIEdgeInsets contentInsets = strongSelf.contentInset;
+         UIEdgeInsets contentInsets = self.contentInset;
          contentInsets.bottom = (coveredHeight
                                  + originalContentInsetBottom);
          
-         UIEdgeInsets scrollInsets = strongSelf.scrollIndicatorInsets;
+         UIEdgeInsets scrollInsets = self.scrollIndicatorInsets;
          scrollInsets.bottom = (coveredHeight
                                 + originalScrollInsetBottom);
          
-         UIView *firstResponder = [strongSelf findFirstResponder];
-         CGRect textViewFrameInScrollView = [strongSelf
+         UIView *firstResponder = [self findFirstResponder];
+         CGRect textViewFrameInScrollView = [self
                                              convertRect:firstResponder.bounds
                                              fromView:firstResponder];
          
@@ -92,11 +93,11 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
           options:(UIViewAnimationOptionBeginFromCurrentState | animationCurve)
           animations:^{
               
-              strongSelf.contentInset = contentInsets;
-              strongSelf.scrollIndicatorInsets = scrollInsets;
+              self.contentInset = contentInsets;
+              self.scrollIndicatorInsets = scrollInsets;
               if (firstResponder)
               {
-                  [strongSelf scrollRectToVisible:textViewFrameInScrollView animated:NO];
+                  [self scrollRectToVisible:textViewFrameInScrollView animated:NO];
               }
               
           }
@@ -111,8 +112,8 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
      queue:nil
      usingBlock:^(NSNotification *note) {
          
-         typeof(self) strongSelf = weakSelf;
-         if (!strongSelf)
+         JEScopeStrong(self);
+         if (!self)
          {
              return;
          }
@@ -136,10 +137,10 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
                  break;
          }
          
-         UIEdgeInsets contentInsets = strongSelf.contentInset;
+         UIEdgeInsets contentInsets = self.contentInset;
          contentInsets.bottom = originalContentInsetBottom;
          
-         UIEdgeInsets scrollInsets = strongSelf.scrollIndicatorInsets;
+         UIEdgeInsets scrollInsets = self.scrollIndicatorInsets;
          scrollInsets.bottom = originalScrollInsetBottom;
          
          [UIView
@@ -148,8 +149,8 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
           options:(UIViewAnimationOptionBeginFromCurrentState | animationCurve)
           animations:^{
               
-              strongSelf.contentInset = contentInsets;
-              strongSelf.scrollIndicatorInsets = scrollInsets;
+              self.contentInset = contentInsets;
+              self.scrollIndicatorInsets = scrollInsets;
               
           }
           completion:NULL];

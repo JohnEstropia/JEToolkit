@@ -57,16 +57,16 @@ Main Features:
 
 ## Safety macros
 
-- **`KVC(...)`**: Returns and checks existence of a KVC (or KVO) keypath during compile time.
+- **`JEKeypath(...)`**: Returns and checks existence of a KVC (or KVO) keypath during compile time.
 ```obj-c
-[obj setValue:@"John" forKey:KVC(Person *, name)];
-[obj setValue:@"John" forKey:KVC(typeof(self), name)]; // typeof() operator
-[obj setValue:@"John" forKey:KVC(Person *, friend.name)]; // dot notation
+[obj setValue:@"John" forKey:JEKeypath(Person *, name)];
+[obj setValue:@"John" forKey:JEKeypath(typeof(self), name)]; // typeof() operator
+[obj setValue:@"John" forKey:JEKeypath(Person *, friend.name)]; // dot notation
 ```
-- **`L8N(...)`**: A shorthand for `NSLocalizedString(...)` or `NSLocalizedStringFromTable(...)` that asserts the existence of a localization string in a *.strings* file at runtime.
+- **`JEL8N(...)`**: A shorthand for `NSLocalizedString(...)` or `NSLocalizedStringFromTable(...)` that asserts the existence of a localization string in a *.strings* file at runtime.
 ```obj-c
-label.text = L8N(@"myviewcontroller.label.title"); // load from Localizable.strings
-label.text = L8N(@"myviewcontroller.label.title", "CustomStrings"); // load from CustomStrings.strings
+label.text = JEL8N(@"myviewcontroller.label.title"); // load from Localizable.strings
+label.text = JEL8N(@"myviewcontroller.label.title", @"CustomStrings"); // load from CustomStrings.strings
 ```
 
 ## Other utilities

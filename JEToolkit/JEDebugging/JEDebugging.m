@@ -98,7 +98,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 {
     [[UIApplication sharedApplication]
      removeObserver:self
-     forKeyPath:KVC(UIApplication *, keyWindow)
+     forKeyPath:JEKeypath(UIApplication *, keyWindow)
      context:NULL];
     
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
@@ -303,7 +303,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         [errorDescription indentByLevel:1];
     }
     
-    if (IsEnumBitSet(consoleLoggerSettings.logLevelMask, JELogLevelAlert))
+    if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelAlert))
     {
         dispatch_barrier_async([JEDebugging consoleLogQueue], ^{
             
@@ -334,7 +334,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
             
         });
     }
-    if (IsEnumBitSet(HUDLoggerSettings.logLevelMask, JELogLevelAlert))
+    if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelAlert))
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -376,21 +376,21 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     NSMutableDictionary * headerEntries = [[NSMutableDictionary alloc] init];
     
     headerEntries[@(JELogMessageHeaderDate)]
-    = (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderDate)
+    = (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderDate)
        ? [NSString stringWithFormat:@"%@ ", [[self consoleDateFormatter] stringFromDate:[[NSDate alloc] init]]]
        : [NSString string]);
     headerEntries[@(JELogMessageHeaderQueue)]
-    = (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderQueue)
+    = (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderQueue)
        ? [NSString stringWithFormat:@"[%s] ", dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)]
        : [NSString string]);
     headerEntries[@(JELogMessageHeaderSourceFile)]
-    = ((IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderSourceFile)
+    = ((JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderSourceFile)
         && location.fileName != NULL
         && location.lineNumber > 0)
        ? [NSString stringWithFormat:@"%s:%li ", location.fileName, (long)location.lineNumber]
        : [NSString string]);
     headerEntries[@(JELogMessageHeaderFunction)]
-    = ((IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderFunction) && location.functionName != NULL)
+    = ((JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderFunction) && location.functionName != NULL)
        ? [NSString stringWithFormat:@"%s ", location.functionName]
        : [NSString string]);
     
@@ -403,19 +403,19 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     JELogMessageHeaderMask logMessageHeaderMask = loggerSettings.logMessageHeaderMask;
     NSMutableString *messageHeader = [[NSMutableString alloc] init];
     
-    if (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderDate))
+    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderDate))
     {
         [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderDate)]];
     }
-    if (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderQueue))
+    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderQueue))
     {
         [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderQueue)]];
     }
-    if (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderSourceFile))
+    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderSourceFile))
     {
         [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderSourceFile)]];
     }
-    if (IsEnumBitSet(logMessageHeaderMask, JELogMessageHeaderFunction))
+    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderFunction))
     {
         [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderFunction)]];
     }
@@ -900,9 +900,9 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
             
         });
         
-        if (!IsEnumBitSet(consoleLoggerSettings.logLevelMask, level)
-            && !IsEnumBitSet(HUDLoggerSettings.logLevelMask, level)
-            && !IsEnumBitSet(fileLoggerSettings.logLevelMask, level))
+        if (!JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level)
+            && !JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level)
+            && !JEEnumBitmasked(fileLoggerSettings.logLevelMask, level))
         {
             return;
         }
@@ -922,11 +922,11 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                                                  | HUDLoggerSettings.logMessageHeaderMask
                                                  | fileLoggerSettings.logMessageHeaderMask)];
         NSString *bulletString;
-        if (IsEnumBitSet(level, JELogLevelAlert))
+        if (JEEnumBitmasked(level, JELogLevelAlert))
         {
             bulletString = [self defaultAlertBulletString];
         }
-        else if (IsEnumBitSet(level, JELogLevelNotice))
+        else if (JEEnumBitmasked(level, JELogLevelNotice))
         {
             bulletString = [self defaultLogBulletString];
         }
@@ -935,7 +935,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
             bulletString = [self defaultTraceBulletString];
         }
         
-        if (IsEnumBitSet(consoleLoggerSettings.logLevelMask, level))
+        if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level))
         {
             dispatch_sync([self consoleLogQueue], ^{
                 
@@ -953,7 +953,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (IsEnumBitSet(HUDLoggerSettings.logLevelMask, level))
+        if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level))
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -973,7 +973,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (IsEnumBitSet(fileLoggerSettings.logLevelMask, level))
+        if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, level))
         {
             dispatch_barrier_async([self fileLogQueue], ^{
                 
@@ -1020,9 +1020,9 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
             
         });
         
-        if (!IsEnumBitSet(consoleLoggerSettings.logLevelMask, level)
-            && !IsEnumBitSet(HUDLoggerSettings.logLevelMask, level)
-            && !IsEnumBitSet(fileLoggerSettings.logLevelMask, level))
+        if (!JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level)
+            && !JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level)
+            && !JEEnumBitmasked(fileLoggerSettings.logLevelMask, level))
         {
             return;
         }
@@ -1038,11 +1038,11 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                                                  | HUDLoggerSettings.logMessageHeaderMask
                                                  | fileLoggerSettings.logMessageHeaderMask)];
         NSString *bulletString;
-        if (IsEnumBitSet(level, JELogLevelAlert))
+        if (JEEnumBitmasked(level, JELogLevelAlert))
         {
             bulletString = [self defaultAlertBulletString];
         }
-        else if (IsEnumBitSet(level, JELogLevelNotice))
+        else if (JEEnumBitmasked(level, JELogLevelNotice))
         {
             bulletString = [self defaultLogBulletString];
         }
@@ -1051,7 +1051,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
             bulletString = [self defaultTraceBulletString];
         }
         
-        if (IsEnumBitSet(consoleLoggerSettings.logLevelMask, level))
+        if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level))
         {
             dispatch_sync([self consoleLogQueue], ^{
                 
@@ -1069,7 +1069,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (IsEnumBitSet(HUDLoggerSettings.logLevelMask, level))
+        if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level))
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -1089,7 +1089,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (IsEnumBitSet(fileLoggerSettings.logLevelMask, level))
+        if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, level))
         {
             dispatch_barrier_async([self fileLogQueue], ^{
                 
@@ -1135,9 +1135,9 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
             
         });
         
-        if (!IsEnumBitSet(consoleLoggerSettings.logLevelMask, JELogLevelAlert)
-            && !IsEnumBitSet(HUDLoggerSettings.logLevelMask, JELogLevelAlert)
-            && !IsEnumBitSet(fileLoggerSettings.logLevelMask, JELogLevelAlert))
+        if (!JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelAlert)
+            && !JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelAlert)
+            && !JEEnumBitmasked(fileLoggerSettings.logLevelMask, JELogLevelAlert))
         {
             return;
         }
@@ -1152,7 +1152,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                                      @"Assertion failed for condition: (%@)",
                                      conditionString];
         
-        if (IsEnumBitSet(consoleLoggerSettings.logLevelMask, JELogLevelAlert))
+        if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelAlert))
         {
             dispatch_sync([self consoleLogQueue], ^{
                 
@@ -1170,7 +1170,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (IsEnumBitSet(HUDLoggerSettings.logLevelMask, JELogLevelAlert))
+        if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelAlert))
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -1190,7 +1190,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (IsEnumBitSet(fileLoggerSettings.logLevelMask, JELogLevelAlert))
+        if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, JELogLevelAlert))
         {
             dispatch_barrier_async([self fileLogQueue], ^{
                 

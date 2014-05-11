@@ -130,16 +130,18 @@
         return nil;
     }
     
-    _dictionary = [aDecoder decodeObjectForKey:KVC(typeof(self), dictionary)];
-    _orderedKeys = [aDecoder decodeObjectForKey:KVC(typeof(self), orderedKeys)];
+    _dictionary = [[NSMutableDictionary alloc] initWithDictionary:
+                   [aDecoder decodeObjectForKey:JEKeypath(typeof(self), dictionary)]];
+    _orderedKeys = [[NSMutableOrderedSet alloc] initWithOrderedSet:
+                    [aDecoder decodeObjectForKey:JEKeypath(typeof(self), orderedKeys)]];
     
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:self.dictionary forKey:KVC(typeof(self), dictionary)];
-    [aCoder encodeObject:self.orderedKeys forKey:KVC(typeof(self), orderedKeys)];
+    [aCoder encodeObject:self.dictionary forKey:JEKeypath(typeof(self), dictionary)];
+    [aCoder encodeObject:self.orderedKeys forKey:JEKeypath(typeof(self), orderedKeys)];
 }
 
 
