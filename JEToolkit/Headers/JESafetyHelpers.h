@@ -69,7 +69,11 @@ NSString *JEL8N(NSString *keyString, NSString *stringsFile)
     typeof(object) __weak __je_scopeweak_##object = object
 
 #define JEScopeStrong(object) \
-    typeof(object) __strong object = __je_scopeweak_##object
+    JE_PRAGMA_PUSH \
+    JE_PRAGMA_IGNORE("-Wshadow") \
+    typeof(object) __strong object = __je_scopeweak_##object \
+    JE_PRAGMA_POP
+
 
 
 
