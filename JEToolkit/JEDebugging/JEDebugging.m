@@ -10,6 +10,10 @@
 
 #import <objc/runtime.h>
 
+#ifdef DEBUG
+#include <sys/sysctl.h>
+#endif
+
 #import "JESafetyHelpers.h"
 
 #import "NSCalendar+JEToolkit.h"
@@ -281,7 +285,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     
     JEConsoleLoggerSettings *__block consoleLoggerSettings;
     JEHUDLoggerSettings *__block HUDLoggerSettings;
-    dispatch_sync([self settingsQueue], ^{
+    dispatch_barrier_sync([self settingsQueue], ^{
         
         JEDebugging *instance = [self sharedInstance];
         consoleLoggerSettings = instance.consoleLoggerSettings;
@@ -784,7 +788,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     }
     
     JEHUDLoggerSettings *__block HUDLoggerSettings;
-    dispatch_sync([JEDebugging settingsQueue], ^{
+    dispatch_barrier_sync([JEDebugging settingsQueue], ^{
         
         HUDLoggerSettings = self.HUDLoggerSettings;
         
@@ -796,12 +800,50 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 #pragma mark - Public
 
+#pragma mark utilities
+
++ (BOOL)isDebugBuild
+{
+#ifdef DEBUG
+    return YES;
+#else
+    return NO;
+#endif
+}
+
++ (BOOL)isDebuggerRunning
+{
+#ifdef DEBUG
+    
+    // https://developer.apple.com/library/mac/qa/qa1361/_index.html
+    int mib[4] = {0};
+    mib[0] = CTL_KERN;
+    mib[1] = KERN_PROC;
+    mib[2] = KERN_PROC_PID;
+    mib[3] = getpid();
+    
+    struct kinfo_proc info = { .kp_proc.p_flag = 0 };
+    size_t infoSize = sizeof(info);
+    if (noErr == sysctl(mib, (sizeof(mib) / sizeof(*mib)), &info, &infoSize, NULL, 0))
+    {
+        return ((info.kp_proc.p_flag & P_TRACED) != 0);
+    }
+    
+    return NO;
+    
+#else
+    
+    return NO;
+    
+#endif
+}
+
 #pragma mark configuring
 
 + (JEConsoleLoggerSettings *)copyConsoleLoggerSettings
 {
     JEConsoleLoggerSettings *__block settings;
-    dispatch_sync([self settingsQueue], ^{
+    dispatch_barrier_sync([self settingsQueue], ^{
         
         settings = [[self sharedInstance].consoleLoggerSettings copy];
         
@@ -823,7 +865,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 + (JEHUDLoggerSettings *)copyHUDLoggerSettings
 {
     JEHUDLoggerSettings *__block settings;
-    dispatch_sync([self settingsQueue], ^{
+    dispatch_barrier_sync([self settingsQueue], ^{
         
         settings = [[self sharedInstance].HUDLoggerSettings copy];
         
@@ -845,7 +887,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 + (JEFileLoggerSettings *)copyFileLoggerSettings
 {
     JEFileLoggerSettings *__block settings;
-    dispatch_sync([self settingsQueue], ^{
+    dispatch_barrier_sync([self settingsQueue], ^{
         
         settings = [[self sharedInstance].fileLoggerSettings copy];
         
@@ -891,7 +933,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         JEConsoleLoggerSettings *__block consoleLoggerSettings;
         JEHUDLoggerSettings *__block HUDLoggerSettings;
         JEFileLoggerSettings *__block fileLoggerSettings;
-        dispatch_sync([self settingsQueue], ^{
+        dispatch_barrier_sync([self settingsQueue], ^{
             
             JEDebugging *instance = [self sharedInstance];
             consoleLoggerSettings = instance.consoleLoggerSettings;
@@ -937,7 +979,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         
         if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level))
         {
-            dispatch_sync([self consoleLogQueue], ^{
+            dispatch_barrier_sync([self consoleLogQueue], ^{
                 
                 @autoreleasepool {
                     
@@ -1011,7 +1053,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         JEConsoleLoggerSettings *__block consoleLoggerSettings;
         JEHUDLoggerSettings *__block HUDLoggerSettings;
         JEFileLoggerSettings *__block fileLoggerSettings;
-        dispatch_sync([self settingsQueue], ^{
+        dispatch_barrier_sync([self settingsQueue], ^{
             
             JEDebugging *instance = [self sharedInstance];
             consoleLoggerSettings = instance.consoleLoggerSettings;
@@ -1053,7 +1095,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         
         if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level))
         {
-            dispatch_sync([self consoleLogQueue], ^{
+            dispatch_barrier_sync([self consoleLogQueue], ^{
                 
                 @autoreleasepool {
                     
@@ -1126,7 +1168,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         JEConsoleLoggerSettings *__block consoleLoggerSettings;
         JEHUDLoggerSettings *__block HUDLoggerSettings;
         JEFileLoggerSettings *__block fileLoggerSettings;
-        dispatch_sync([self settingsQueue], ^{
+        dispatch_barrier_sync([self settingsQueue], ^{
             
             JEDebugging *instance = [self sharedInstance];
             consoleLoggerSettings = instance.consoleLoggerSettings;
@@ -1154,7 +1196,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         
         if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelAlert))
         {
-            dispatch_sync([self consoleLogQueue], ^{
+            dispatch_barrier_sync([self consoleLogQueue], ^{
                 
                 @autoreleasepool {
                     
@@ -1221,13 +1263,13 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     JEAssert(block != NULL, @"Enumeration block was NULL.");
     
     JEFileLoggerSettings *__block fileLoggerSettings;
-    dispatch_sync([JEDebugging settingsQueue], ^{
+    dispatch_barrier_sync([JEDebugging settingsQueue], ^{
         
         fileLoggerSettings = [self sharedInstance].fileLoggerSettings;
         
     });
     
-    dispatch_sync([self fileLogQueue], ^{
+    dispatch_barrier_sync([self fileLogQueue], ^{
         
         [[self sharedInstance] enumerateFileLogsWithThreadSafeSettings:fileLoggerSettings block:^(NSURL *fileURL, BOOL *stop) {
             

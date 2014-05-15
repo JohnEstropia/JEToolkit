@@ -18,4 +18,8 @@
  */
 - (NSInteger)indexOfInteger:(NSUInteger)integer;
 
+/*! Enumerates the integers and their corresponding positions in the receiver.
+ */
+- (void)enumerateIntegersForIndexesUsingBlock:(void (^)(NSUInteger idx, NSUInteger integer, BOOL *stop))block;
+
 @end

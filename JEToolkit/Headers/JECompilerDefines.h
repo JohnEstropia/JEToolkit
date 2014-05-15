@@ -46,17 +46,4 @@
 
 
 
-#pragma mark - Environment settings
-
-JE_STATIC_INLINE JE_CONST
-BOOL JEIsDebugMode()
-{
-#ifdef DEBUG
-    return YES;
-#else
-    return NO;
-#endif
-}
-
-
 #endif

@@ -90,7 +90,7 @@ typedef struct JELogLocation
              format:(formatString), ##__VA_ARGS__]; \
             JE_PRAGMA_POP \
         } \
-    } while(0)
+    } while(NO)
 
 #define JEParameterAssert(condition) \
     JEAssert((condition), @"Invalid parameter not satisfying: (%s)", #condition)
@@ -142,7 +142,7 @@ typedef struct JELogLocation
                         : _je_pointer); \
                 }) \
                 objCType:@encode(typeof(nonArrayExpression))]]; \
-    } while(0)
+    } while(NO)
 
 
 
@@ -172,13 +172,44 @@ typedef struct JELogLocation
          location:JELogLocationCurrent() \
          format:(formatString), ##__VA_ARGS__]; \
         JE_PRAGMA_POP \
-    } while(0)
+    } while(NO)
+
+
+
+#pragma mark - Breakpoint utility
+
+#define JEDebugBreakpoint() \
+    do \
+    { \
+        if (![JEDebugging isDebuggerRunning]) \
+        { \
+            break; \
+        } \
+        /* http://iphone.m20.nl/wp/2010/10/xcode-iphone-debugger-halt-assertions/ */ \
+        __asm__ __volatile__ ( \
+            "pushl %0\n" \
+            "pushl %1\n" \
+            "push $0\n" \
+            "movl %2, %%eax\n" \
+            "int $0x80\n" \
+            "add $12, %%esp" \
+            : \
+            : "g" (SIGINT), "g" (getpid()), "n" (37) \
+            : "eax", "cc" \
+        ); \
+    } while (0) \
 
 
 
 #pragma mark - JEDebugging class
 
 @interface JEDebugging : NSObject
+
+#pragma mark - utilities
+
++ (BOOL)isDebugBuild;
++ (BOOL)isDebuggerRunning;
+
 
 #pragma mark - configuring
 
@@ -209,7 +240,7 @@ typedef struct JELogLocation
                               location:(JELogLocation)location;
 
 
-#pragma mark retrieving
+#pragma mark - retrieving
 
 + (void)enumerateFileLogsWithBlock:(void (^)(NSString *fileName,
                                              NSData *data,

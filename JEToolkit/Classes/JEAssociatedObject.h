@@ -29,7 +29,7 @@
         { \
             if (_JEAssociationCompilerFlag_##ownership == _JEAssociationCompilerFlag_weak) \
             { \
-                id __attribute__((objc_precise_lifetime)) __strong _je_object = [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) weakObject]; \
+                id __attribute__((objc_precise_lifetime)) __strong _je_object = [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) weakObjectValue]; \
                 const void *_je_objectPointer = &_je_object; \
                 /* We will never reach here if the type is not an id, so we just ignore warnings. */ \
                 JE_PRAGMA_PUSH \
@@ -151,7 +151,7 @@
 #define _JESynthesize_get_copy      _JESynthesize_get_unsafe_unretained
 
 #define _JESynthesize_get_weak(type, getter) \
-    [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter)) weakObject]
+    [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter)) weakObjectValue]
 
 #define _JESynthesize_set_assign(type, getter) \
     objc_setAssociatedObject(self, \
@@ -192,6 +192,6 @@
 @interface NSValue (JEAssociatedObject)
 
 + (NSValue *)valueWithWeakObject:(id)weakObject;
-- (id)weakObject;
+- (id)weakObjectValue;
 
 @end

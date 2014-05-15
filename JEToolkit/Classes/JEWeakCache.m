@@ -44,7 +44,7 @@
 {
     id __block object;
     JEScopeWeak(self);
-    dispatch_sync(self.barrierQueue, ^{
+    dispatch_barrier_sync(self.barrierQueue, ^{
         
         JEScopeStrong(self);
         object = [self.mapTable objectForKey:key];

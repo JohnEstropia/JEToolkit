@@ -8,6 +8,9 @@
 
 #import "NSIndexSet+JEToolkit.h"
 
+#import "JEDebugging.h"
+
+
 @implementation NSIndexSet (JEToolkit)
 
 #pragma mark - Public
@@ -65,6 +68,19 @@
         
     }];
     return indexOfInteger;
+}
+
+- (void)enumerateIntegersForIndexesUsingBlock:(void (^)(NSUInteger idx, NSUInteger integer, BOOL *stop))block
+{
+    JEParameterAssert(block != NULL);
+    
+    NSInteger __block iteration = 0;
+    [self enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        
+        block(iteration, idx, stop);
+        ++iteration;
+        
+    }];
 }
 
 

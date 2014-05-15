@@ -20,6 +20,8 @@
 
 @implementation _JEWeakValue
 
+#pragma mark - NSObject
+
 - (instancetype)initWithWeakObject:(id)weakObject
 {
     self = [super init];
@@ -30,6 +32,26 @@
     
     _weakObject = weakObject;
     return self;
+}
+
+
+#pragma mark - NSValue
+
+- (void)getValue:(void *)value
+{
+#warning TODO: test memory leaks
+    id __autoreleasing weakObject = self.weakObject;
+    (*(id __autoreleasing *)value) = weakObject;
+}
+
+- (const char *)objCType
+{
+    return (const char *)_C_UNDEF;
+}
+
+- (BOOL)isEqualToValue:(NSValue *)value
+{
+    return [[NSValue valueWithNonretainedObject:self.weakObject] isEqualToValue:value];
 }
 
 @end
@@ -44,7 +66,7 @@
     return [[_JEWeakValue alloc] initWithWeakObject:weakObject];
 }
 
-- (id)weakObject
+- (id)weakObjectValue
 {
     if ([self isKindOfClass:[_JEWeakValue class]])
     {

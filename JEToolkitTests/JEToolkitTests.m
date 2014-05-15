@@ -29,7 +29,11 @@
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    JEFileLoggerSettings *fileLoggerSettings = [JEDebugging copyFileLoggerSettings];
+    fileLoggerSettings.logLevelMask = JELogLevelAll;
+    [JEDebugging setFileLoggerSettings:fileLoggerSettings];
+    [JEDebugging start];
 }
 
 - (void)tearDown
@@ -40,13 +44,19 @@
 
 - (void)testDumps
 {
-    JEFileLoggerSettings *fileLoggerSettings = [JEDebugging copyFileLoggerSettings];
-    fileLoggerSettings.logLevelMask = JELogLevelAll;
-    [JEDebugging setFileLoggerSettings:fileLoggerSettings];
-    [JEDebugging start];
+    NSObject *strongObject = [NSObject new];
+    NSValue *weakValue = [NSValue valueWithNonretainedObject:strongObject];
+    NSValue *weakValue2 = [NSValue valueWithPointer:(__bridge const void *)(strongObject)];
+    JEDump([weakValue weakObjectValue]);
+    JEDump([weakValue objCType]);
+    JEDump([weakValue isEqualToValue:weakValue2]);
+    
+    NSObject *weakObject;
+    [weakValue getValue:&weakObject];
+    JEDump(weakObject);
     
     JEDump(100);
-    JEDump("This how to annotate before printing", 1 + 1);
+    JEDump("This is how to annotate before printing", 1 + 1);
     int oneHundred = 100;
     JEDump(oneHundred);
     JEDump(&oneHundred);
@@ -340,16 +350,19 @@
     
     JEDump([UIColor blueColor]);
     JEDump([UIColor redColor]);
+    JEDebugBreakpoint();
     JEDump([UIColor cyanColor]);
     JEDump([UIColor whiteColor]);
     JEDump([UIColor clearColor]);
     JEDump([UIColor colorWithInt:0xFF0000 alpha:0.5f]);
+    
     
     [JEDebugging enumerateFileLogsWithBlock:^(NSString *fileName, NSData *data, BOOL *stop) {
         
         JELog(@"File log: \"%@\" (%@)", fileName, [NSString stringFromFileSize:[data length]]);
         
     }];
+    
 }
 
 JESynthesize(assign, void(^)(void), synthesizedCopy, setSynthesizedCopy);
