@@ -70,8 +70,8 @@ typedef struct JELogLocation
 
 #ifdef NS_BLOCK_ASSERTIONS
 
-#define JEAssert(condition, formatString, ...)  do {} while (0)
-#define JEParameterAssert(condition)            do {} while (0)
+#define JEAssert(condition, formatString, ...)  do {} while (NO)
+#define JEParameterAssert(condition)            do {} while (NO)
 
 #else
 
@@ -178,6 +178,8 @@ typedef struct JELogLocation
 
 #pragma mark - Breakpoint utility
 
+#if defined(DEBUG)
+
 #define JEDebugBreakpoint() \
     do \
     { \
@@ -197,7 +199,13 @@ typedef struct JELogLocation
             : "g" (SIGINT), "g" (getpid()), "n" (37) \
             : "eax", "cc" \
         ); \
-    } while (0) \
+    } while (NO)
+
+#else
+
+#define JEDebugBreakpoint()  do {} while (NO)
+
+#endif
 
 
 

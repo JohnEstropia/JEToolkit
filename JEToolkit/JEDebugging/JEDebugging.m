@@ -816,17 +816,13 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 #ifdef DEBUG
     
     // https://developer.apple.com/library/mac/qa/qa1361/_index.html
-    int mib[4] = {0};
-    mib[0] = CTL_KERN;
-    mib[1] = KERN_PROC;
-    mib[2] = KERN_PROC_PID;
-    mib[3] = getpid();
+    int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, getpid() };
     
     struct kinfo_proc info = { .kp_proc.p_flag = 0 };
     size_t infoSize = sizeof(info);
     if (noErr == sysctl(mib, (sizeof(mib) / sizeof(*mib)), &info, &infoSize, NULL, 0))
     {
-        return ((info.kp_proc.p_flag & P_TRACED) != 0);
+        return JEEnumBitmasked(info.kp_proc.p_flag, P_TRACED);
     }
     
     return NO;
