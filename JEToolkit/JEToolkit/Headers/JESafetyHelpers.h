@@ -76,5 +76,23 @@ NSString *JEL8N(NSString *keyString, NSString *stringsFile)
 
 
 
+#pragma mark - Blocks
+
+#define JEBlock(returnType, identifier, arguments, block...) \
+    returnType (^identifier)arguments = ({ \
+        typeof(identifier) __weak __block __je_block_weak_##identifier; \
+        typeof(identifier) __je_block_strong_##identifier; \
+        __je_block_weak_##identifier = __je_block_strong_##identifier = [^returnType(arguments){ \
+            JE_PRAGMA_PUSH \
+            JE_PRAGMA_IGNORE("-Wunused-variable") \
+            returnType (^identifier)arguments = __je_block_weak_##identifier; \
+            JE_PRAGMA_POP \
+            { block } \
+        } copy]; \
+        __je_block_strong_##identifier; \
+    })
+
+
+
 
 #endif

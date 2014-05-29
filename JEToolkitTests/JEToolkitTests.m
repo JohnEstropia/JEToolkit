@@ -402,6 +402,28 @@ JESynthesize(weak, id, synthesizedWeak, setSynthesizedWeak);
     JEDump("After nil", self.synthesizedWeak);
 }
 
+- (void)testBlocks
+{
+    JEBlock(void, simpleBlock, (NSString *text), {
+        
+        JEDump(text);
+        
+    });
+    
+    simpleBlock(@"test1");
+    
+    JEBlock(NSInteger, factorial, (NSInteger integer), {
+        
+        return (integer == 1
+                ? 1
+                : (factorial(integer - 1) * integer));
+        
+    });
+    JEDump(factorial(5));
+    
+    
+}
+
 
 @end
 
