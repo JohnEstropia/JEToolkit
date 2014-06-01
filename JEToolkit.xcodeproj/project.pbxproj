@@ -9,6 +9,38 @@
 /* Begin PBXBuildFile section */
 		2F10BB6E1880EDFA00739760 /* JEHUDLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F10BB6D1880EDFA00739760 /* JEHUDLogView.m */; };
 		2F1DCF8617FF1D4D00AFD8C7 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1DCF8517FF1D4D00AFD8C7 /* MobileCoreServices.framework */; };
+		2F3A87A21937839400AEA77E /* JEAssociatedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88101932C6D0001EF83C /* JEAssociatedObject.m */; };
+		2F3A87A31937839400AEA77E /* JEDispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88121932C6D0001EF83C /* JEDispatch.m */; };
+		2F3A87A41937839400AEA77E /* JEOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88141932C6D0001EF83C /* JEOrderedDictionary.m */; };
+		2F3A87A51937839400AEA77E /* JEWeakCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88161932C6D0001EF83C /* JEWeakCache.m */; };
+		2F3A87A61937839D00AEA77E /* NSArray+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87D71932C6D0001EF83C /* NSArray+JEToolkit.m */; };
+		2F3A87A71937839D00AEA77E /* NSCache+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87D91932C6D0001EF83C /* NSCache+JEToolkit.m */; };
+		2F3A87A81937839D00AEA77E /* NSCalendar+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87DB1932C6D0001EF83C /* NSCalendar+JEToolkit.m */; };
+		2F3A87A91937839D00AEA77E /* NSDate+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87DD1932C6D0001EF83C /* NSDate+JEToolkit.m */; };
+		2F3A87AA1937839D00AEA77E /* NSDateFormatter+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87DF1932C6D0001EF83C /* NSDateFormatter+JEToolkit.m */; };
+		2F3A87AB1937839D00AEA77E /* NSDictionary+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87E11932C6D0001EF83C /* NSDictionary+JEToolkit.m */; };
+		2F3A87AC1937839D00AEA77E /* NSError+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87E31932C6D0001EF83C /* NSError+JEToolkit.m */; };
+		2F3A87AD1937839D00AEA77E /* NSException+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87E51932C6D0001EF83C /* NSException+JEToolkit.m */; };
+		2F3A87AE1937839D00AEA77E /* NSHashTable+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87E71932C6D0001EF83C /* NSHashTable+JEToolkit.m */; };
+		2F3A87AF1937839D00AEA77E /* NSIndexSet+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87E91932C6D0001EF83C /* NSIndexSet+JEToolkit.m */; };
+		2F3A87B01937839D00AEA77E /* NSMapTable+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87EB1932C6D0001EF83C /* NSMapTable+JEToolkit.m */; };
+		2F3A87B11937839D00AEA77E /* NSMutableArray+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87ED1932C6D0001EF83C /* NSMutableArray+JEToolkit.m */; };
+		2F3A87B21937839D00AEA77E /* NSMutableString+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87EF1932C6D0001EF83C /* NSMutableString+JEToolkit.m */; };
+		2F3A87B31937839D00AEA77E /* NSNumber+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87F11932C6D0001EF83C /* NSNumber+JEToolkit.m */; };
+		2F3A87B41937839D00AEA77E /* NSObject+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87F31932C6D0001EF83C /* NSObject+JEToolkit.m */; };
+		2F3A87B51937839D00AEA77E /* NSOrderedSet+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87F51932C6D0001EF83C /* NSOrderedSet+JEToolkit.m */; };
+		2F3A87B61937839D00AEA77E /* NSPointerArray+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87F71932C6D0001EF83C /* NSPointerArray+JEToolkit.m */; };
+		2F3A87B71937839D00AEA77E /* NSSet+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87F91932C6D0001EF83C /* NSSet+JEToolkit.m */; };
+		2F3A87B81937839D00AEA77E /* NSString+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87FB1932C6D0001EF83C /* NSString+JEToolkit.m */; };
+		2F3A87B91937839D00AEA77E /* NSURL+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87FD1932C6D0001EF83C /* NSURL+JEToolkit.m */; };
+		2F3A87BA1937839D00AEA77E /* NSValue+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87FF1932C6D0001EF83C /* NSValue+JEToolkit.m */; };
+		2F3A87BB1937839D00AEA77E /* UIColor+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88011932C6D0001EF83C /* UIColor+JEToolkit.m */; };
+		2F3A87BC1937839D00AEA77E /* UIImage+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88031932C6D0001EF83C /* UIImage+JEToolkit.m */; };
+		2F3A87BD1937839D00AEA77E /* UILabel+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88051932C6D0001EF83C /* UILabel+JEToolkit.m */; };
+		2F3A87BE1937839D00AEA77E /* UIScrollView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88071932C6D0001EF83C /* UIScrollView+JEToolkit.m */; };
+		2F3A87BF1937839D00AEA77E /* UITextView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88091932C6D0001EF83C /* UITextView+JEToolkit.m */; };
+		2F3A87C01937839D00AEA77E /* UIView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC880B1932C6D0001EF83C /* UIView+JEToolkit.m */; };
+		2F3A87C11937839D00AEA77E /* UIViewController+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC880D1932C6D0001EF83C /* UIViewController+JEToolkit.m */; };
 		2F8FC86417B65DB500C3C0F3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC86317B65DB500C3C0F3 /* Foundation.framework */; };
 		2F8FC86917B65DB500C3C0F3 /* JEToolkit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F8FC86817B65DB500C3C0F3 /* JEToolkit.h */; };
 		2F8FC87217B65DB500C3C0F3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC87117B65DB500C3C0F3 /* XCTest.framework */; };
@@ -23,38 +55,6 @@
 		34ECBD49184EF13800960D4A /* JEFileLoggerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ECBD48184EF13800960D4A /* JEFileLoggerSettings.m */; };
 		34F124721844882E00856ACA /* JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F124711844882E00856ACA /* JEDebugging.m */; };
 		34FC084A18E3BA64000B6BBC /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 34FC084918E3BA64000B6BBC /* README.md */; };
-		34FC881D1932C6D0001EF83C /* NSArray+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87D71932C6D0001EF83C /* NSArray+JEToolkit.m */; };
-		34FC881E1932C6D0001EF83C /* NSCache+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87D91932C6D0001EF83C /* NSCache+JEToolkit.m */; };
-		34FC881F1932C6D0001EF83C /* NSCalendar+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87DB1932C6D0001EF83C /* NSCalendar+JEToolkit.m */; };
-		34FC88201932C6D0001EF83C /* NSDate+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87DD1932C6D0001EF83C /* NSDate+JEToolkit.m */; };
-		34FC88211932C6D0001EF83C /* NSDateFormatter+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87DF1932C6D0001EF83C /* NSDateFormatter+JEToolkit.m */; };
-		34FC88221932C6D0001EF83C /* NSDictionary+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87E11932C6D0001EF83C /* NSDictionary+JEToolkit.m */; };
-		34FC88231932C6D0001EF83C /* NSError+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87E31932C6D0001EF83C /* NSError+JEToolkit.m */; };
-		34FC88241932C6D0001EF83C /* NSException+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87E51932C6D0001EF83C /* NSException+JEToolkit.m */; };
-		34FC88251932C6D0001EF83C /* NSHashTable+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87E71932C6D0001EF83C /* NSHashTable+JEToolkit.m */; };
-		34FC88261932C6D0001EF83C /* NSIndexSet+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87E91932C6D0001EF83C /* NSIndexSet+JEToolkit.m */; };
-		34FC88271932C6D0001EF83C /* NSMapTable+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87EB1932C6D0001EF83C /* NSMapTable+JEToolkit.m */; };
-		34FC88281932C6D0001EF83C /* NSMutableArray+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87ED1932C6D0001EF83C /* NSMutableArray+JEToolkit.m */; };
-		34FC88291932C6D0001EF83C /* NSMutableString+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87EF1932C6D0001EF83C /* NSMutableString+JEToolkit.m */; };
-		34FC882A1932C6D0001EF83C /* NSNumber+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87F11932C6D0001EF83C /* NSNumber+JEToolkit.m */; };
-		34FC882B1932C6D0001EF83C /* NSObject+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87F31932C6D0001EF83C /* NSObject+JEToolkit.m */; };
-		34FC882C1932C6D0001EF83C /* NSOrderedSet+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87F51932C6D0001EF83C /* NSOrderedSet+JEToolkit.m */; };
-		34FC882D1932C6D0001EF83C /* NSPointerArray+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87F71932C6D0001EF83C /* NSPointerArray+JEToolkit.m */; };
-		34FC882E1932C6D0001EF83C /* NSSet+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87F91932C6D0001EF83C /* NSSet+JEToolkit.m */; };
-		34FC882F1932C6D0001EF83C /* NSString+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87FB1932C6D0001EF83C /* NSString+JEToolkit.m */; };
-		34FC88301932C6D0001EF83C /* NSURL+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87FD1932C6D0001EF83C /* NSURL+JEToolkit.m */; };
-		34FC88311932C6D0001EF83C /* NSValue+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87FF1932C6D0001EF83C /* NSValue+JEToolkit.m */; };
-		34FC88321932C6D0001EF83C /* UIColor+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88011932C6D0001EF83C /* UIColor+JEToolkit.m */; };
-		34FC88331932C6D0001EF83C /* UIImage+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88031932C6D0001EF83C /* UIImage+JEToolkit.m */; };
-		34FC88341932C6D0001EF83C /* UILabel+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88051932C6D0001EF83C /* UILabel+JEToolkit.m */; };
-		34FC88351932C6D0001EF83C /* UIScrollView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88071932C6D0001EF83C /* UIScrollView+JEToolkit.m */; };
-		34FC88361932C6D0001EF83C /* UITextView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88091932C6D0001EF83C /* UITextView+JEToolkit.m */; };
-		34FC88371932C6D0001EF83C /* UIView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC880B1932C6D0001EF83C /* UIView+JEToolkit.m */; };
-		34FC88381932C6D0001EF83C /* UIViewController+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC880D1932C6D0001EF83C /* UIViewController+JEToolkit.m */; };
-		34FC88391932C6D0001EF83C /* JEAssociatedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88101932C6D0001EF83C /* JEAssociatedObject.m */; };
-		34FC883A1932C6D0001EF83C /* JEDispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88121932C6D0001EF83C /* JEDispatch.m */; };
-		34FC883B1932C6D0001EF83C /* JEOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88141932C6D0001EF83C /* JEOrderedDictionary.m */; };
-		34FC883C1932C6D0001EF83C /* JEWeakCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88161932C6D0001EF83C /* JEWeakCache.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -491,12 +491,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F3A87BD1937839D00AEA77E /* UILabel+JEToolkit.m in Sources */,
 				34ECBD49184EF13800960D4A /* JEFileLoggerSettings.m in Sources */,
+				2F3A87C01937839D00AEA77E /* UIView+JEToolkit.m in Sources */,
+				2F3A87B21937839D00AEA77E /* NSMutableString+JEToolkit.m in Sources */,
 				2F10BB6E1880EDFA00739760 /* JEHUDLogView.m in Sources */,
 				34F124721844882E00856ACA /* JEDebugging.m in Sources */,
+				2F3A87B41937839D00AEA77E /* NSObject+JEToolkit.m in Sources */,
+				2F3A87B51937839D00AEA77E /* NSOrderedSet+JEToolkit.m in Sources */,
 				34ECBD46184EF12900960D4A /* JEHUDLoggerSettings.m in Sources */,
+				2F3A87AD1937839D00AEA77E /* NSException+JEToolkit.m in Sources */,
+				2F3A87AE1937839D00AEA77E /* NSHashTable+JEToolkit.m in Sources */,
+				2F3A87AC1937839D00AEA77E /* NSError+JEToolkit.m in Sources */,
 				34ECBD43184EF10B00960D4A /* JEConsoleLoggerSettings.m in Sources */,
+				2F3A87BB1937839D00AEA77E /* UIColor+JEToolkit.m in Sources */,
+				2F3A87B61937839D00AEA77E /* NSPointerArray+JEToolkit.m in Sources */,
 				34ECBD40184EF0DD00960D4A /* JEBaseLoggerSettings.m in Sources */,
+				2F3A87A91937839D00AEA77E /* NSDate+JEToolkit.m in Sources */,
+				2F3A87A31937839400AEA77E /* JEDispatch.m in Sources */,
+				2F3A87BC1937839D00AEA77E /* UIImage+JEToolkit.m in Sources */,
+				2F3A87A71937839D00AEA77E /* NSCache+JEToolkit.m in Sources */,
+				2F3A87A51937839400AEA77E /* JEWeakCache.m in Sources */,
+				2F3A87B11937839D00AEA77E /* NSMutableArray+JEToolkit.m in Sources */,
+				2F3A87BA1937839D00AEA77E /* NSValue+JEToolkit.m in Sources */,
+				2F3A87AB1937839D00AEA77E /* NSDictionary+JEToolkit.m in Sources */,
+				2F3A87BF1937839D00AEA77E /* UITextView+JEToolkit.m in Sources */,
+				2F3A87AF1937839D00AEA77E /* NSIndexSet+JEToolkit.m in Sources */,
+				2F3A87B91937839D00AEA77E /* NSURL+JEToolkit.m in Sources */,
+				2F3A87B81937839D00AEA77E /* NSString+JEToolkit.m in Sources */,
+				2F3A87B31937839D00AEA77E /* NSNumber+JEToolkit.m in Sources */,
+				2F3A87B71937839D00AEA77E /* NSSet+JEToolkit.m in Sources */,
+				2F3A87B01937839D00AEA77E /* NSMapTable+JEToolkit.m in Sources */,
+				2F3A87A21937839400AEA77E /* JEAssociatedObject.m in Sources */,
+				2F3A87C11937839D00AEA77E /* UIViewController+JEToolkit.m in Sources */,
+				2F3A87BE1937839D00AEA77E /* UIScrollView+JEToolkit.m in Sources */,
+				2F3A87AA1937839D00AEA77E /* NSDateFormatter+JEToolkit.m in Sources */,
+				2F3A87A41937839400AEA77E /* JEOrderedDictionary.m in Sources */,
+				2F3A87A61937839D00AEA77E /* NSArray+JEToolkit.m in Sources */,
+				2F3A87A81937839D00AEA77E /* NSCalendar+JEToolkit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,39 +536,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34FC88291932C6D0001EF83C /* NSMutableString+JEToolkit.m in Sources */,
-				34FC88271932C6D0001EF83C /* NSMapTable+JEToolkit.m in Sources */,
-				34FC88301932C6D0001EF83C /* NSURL+JEToolkit.m in Sources */,
-				34FC882D1932C6D0001EF83C /* NSPointerArray+JEToolkit.m in Sources */,
-				34FC882E1932C6D0001EF83C /* NSSet+JEToolkit.m in Sources */,
-				34FC88201932C6D0001EF83C /* NSDate+JEToolkit.m in Sources */,
-				34FC88311932C6D0001EF83C /* NSValue+JEToolkit.m in Sources */,
-				34FC88331932C6D0001EF83C /* UIImage+JEToolkit.m in Sources */,
-				34FC88231932C6D0001EF83C /* NSError+JEToolkit.m in Sources */,
-				34FC881F1932C6D0001EF83C /* NSCalendar+JEToolkit.m in Sources */,
-				34FC882F1932C6D0001EF83C /* NSString+JEToolkit.m in Sources */,
-				34FC881D1932C6D0001EF83C /* NSArray+JEToolkit.m in Sources */,
-				34FC88381932C6D0001EF83C /* UIViewController+JEToolkit.m in Sources */,
-				34FC88241932C6D0001EF83C /* NSException+JEToolkit.m in Sources */,
-				34FC882B1932C6D0001EF83C /* NSObject+JEToolkit.m in Sources */,
-				34FC88371932C6D0001EF83C /* UIView+JEToolkit.m in Sources */,
-				34FC88281932C6D0001EF83C /* NSMutableArray+JEToolkit.m in Sources */,
-				34FC882C1932C6D0001EF83C /* NSOrderedSet+JEToolkit.m in Sources */,
-				34FC88251932C6D0001EF83C /* NSHashTable+JEToolkit.m in Sources */,
-				34FC883C1932C6D0001EF83C /* JEWeakCache.m in Sources */,
-				34FC881E1932C6D0001EF83C /* NSCache+JEToolkit.m in Sources */,
 				2F8FC88017B65DB500C3C0F3 /* JEToolkitTests.m in Sources */,
-				34FC88261932C6D0001EF83C /* NSIndexSet+JEToolkit.m in Sources */,
-				34FC88221932C6D0001EF83C /* NSDictionary+JEToolkit.m in Sources */,
-				34FC88391932C6D0001EF83C /* JEAssociatedObject.m in Sources */,
-				34FC883A1932C6D0001EF83C /* JEDispatch.m in Sources */,
-				34FC88321932C6D0001EF83C /* UIColor+JEToolkit.m in Sources */,
-				34FC883B1932C6D0001EF83C /* JEOrderedDictionary.m in Sources */,
-				34FC88211932C6D0001EF83C /* NSDateFormatter+JEToolkit.m in Sources */,
-				34FC88361932C6D0001EF83C /* UITextView+JEToolkit.m in Sources */,
-				34FC882A1932C6D0001EF83C /* NSNumber+JEToolkit.m in Sources */,
-				34FC88341932C6D0001EF83C /* UILabel+JEToolkit.m in Sources */,
-				34FC88351932C6D0001EF83C /* UIScrollView+JEToolkit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
