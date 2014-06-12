@@ -8,33 +8,8 @@
 
 #import "NSString+JEToolkit.h"
 
-#import "NSMutableString+JEToolkit.h"
-#import "NSObject+JEToolkit.h"
-
-#import "JEDebugging.h"
-
 
 @implementation NSString (JEToolkit)
-
-#pragma mark - NSObject
-
-- (NSString *)debugDescription
-{
-    return [super debugDescription];
-}
-
-
-#pragma mark - NSObject+JEToolkit
-
-- (NSString *)loggingDescription
-{
-    NSMutableString *description = [NSMutableString stringWithString:self];
-    [description escapeWithUTF8CStringRepresentation];
-    [description insertString:@"@" atIndex:0];
-    
-    return description;
-}
-
 
 #pragma mark - Public
 
@@ -140,17 +115,15 @@
 
 - (BOOL)containsSubstring:(NSString *)substring
 {
-    JEParameterAssert([substring isKindOfClass:[NSString class]]);
-    
     return [self containsSubstring:substring options:NSLiteralSearch];
 }
 
 - (BOOL)containsSubstring:(NSString *)substring
                   options:(NSStringCompareOptions)options
 {
-    JEParameterAssert([substring isKindOfClass:[NSString class]]);
-    
-    return ([self rangeOfString:substring options:options].location != NSNotFound);
+    return (!substring
+            ? NO
+            : [self rangeOfString:substring options:options].location != NSNotFound);
 }
 
 #pragma mark Conversion

@@ -1,18 +1,18 @@
 //
-//  NSSet+JEToolkit.m
+//  NSArray+JEDebugging.m
 //  JEToolkit
 //
-//  Created by John Rommel Estropia on 2013/11/26.
+//  Created by John Rommel Estropia on 2013/09/14.
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
-#import "NSSet+JEToolkit.h"
+#import "NSArray+JEDebugging.h"
 
-#import "NSMutableString+JEToolkit.h"
-#import "NSObject+JEToolkit.h"
+#import "NSMutableString+JEDebugging.h"
+#import "NSObject+JEDebugging.h"
 
 
-@implementation NSSet (JEToolkit)
+@implementation NSArray (JEDebugging)
 
 #pragma mark - NSObject
 
@@ -22,7 +22,7 @@
 }
 
 
-#pragma mark - NSObject+JEToolkit
+#pragma mark - NSObject+JEDebugging
 
 - (NSString *)loggingDescription
 {
@@ -30,34 +30,29 @@
     NSUInteger count = [self count];
     if (count == 1)
     {
-        [description appendString:@"1 entry ("];
+        [description appendString:@"1 entry ["];
     }
     else
     {
-        [description appendFormat:@"%lu entries (", (unsigned long)count];
+        [description appendFormat:@"%lu entries [", (unsigned long)count];
         
         if (count <= 0)
         {
-            [description appendString:@")"];
+            [description appendString:@"]"];
             return description;
         }
     }
     
-    BOOL __block isFirstEntry = YES;
-    [self enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+    [self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
         @autoreleasepool {
             
-            if (isFirstEntry)
+            if (idx > 0)
             {
-                [description appendString:@"\n"];
-                isFirstEntry = NO;
-            }
-            else
-            {
-                [description appendString:@",\n"];
+                [description appendString:@","];
             }
             
+            [description appendFormat:@"\n[%lu]: ", (unsigned long)idx];
             [description appendString:[obj
                                        loggingDescriptionIncludeClass:YES
                                        includeAddress:NO]];
@@ -67,9 +62,10 @@
     }];
     
     [description indentByLevel:1];
-    [description appendString:@"\n)"];
+    [description appendString:@"\n]"];
     
     return description;
 }
+
 
 @end

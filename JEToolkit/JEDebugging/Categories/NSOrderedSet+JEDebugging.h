@@ -1,5 +1,5 @@
 //
-//  NSPointerArray+JEToolkit.h
+//  NSOrderedSet+JEDebugging.h
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/26.
@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSPointerArray (JEToolkit)
+@interface NSOrderedSet (JEDebugging)
 
 @end

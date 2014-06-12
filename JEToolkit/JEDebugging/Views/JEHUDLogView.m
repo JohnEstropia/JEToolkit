@@ -407,8 +407,6 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     CGRect bounds = [UIScreen mainScreen].bounds;
     switch ([UIApplication sharedApplication].statusBarOrientation)
     {
-        case UIInterfaceOrientationPortrait:
-            break;
         case UIInterfaceOrientationPortraitUpsideDown:
             transform = CGAffineTransformMakeRotation(M_PI);
             break;
@@ -419,6 +417,9 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
         case UIInterfaceOrientationLandscapeRight:
             transform = CGAffineTransformMakeRotation(M_PI_2);
             bounds.size = (CGSize){ .width = CGRectGetHeight(bounds), .height = CGRectGetWidth(bounds) };
+            break;
+        case UIInterfaceOrientationPortrait:
+        default:
             break;
     }
     self.transform = transform;

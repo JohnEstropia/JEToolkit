@@ -10,7 +10,6 @@
 
 #import "JECompilerDefines.h"
 #import "JESafetyHelpers.h"
-#import "JEAssociatedObject.h"
 #import "JEFormulas.h"
 #import "JEUIMetrics.h"
 
@@ -22,19 +21,11 @@
 #import "NSCalendar+JEToolkit.h"
 #import "NSDate+JEToolkit.h"
 #import "NSDateFormatter+JEToolkit.h"
-#import "NSDictionary+JEToolkit.h"
 #import "NSError+JEToolkit.h"
-#import "NSException+JEToolkit.h"
-#import "NSHashTable+JEToolkit.h"
 #import "NSIndexSet+JEToolkit.h"
-#import "NSMapTable+JEToolkit.h"
 #import "NSMutableArray+JEToolkit.h"
-#import "NSMutableString+JEToolkit.h"
 #import "NSNumber+JEToolkit.h"
 #import "NSObject+JEToolkit.h"
-#import "NSOrderedSet+JEToolkit.h"
-#import "NSPointerArray+JEToolkit.h"
-#import "NSSet+JEToolkit.h"
 #import "NSString+JEToolkit.h"
 #import "NSURL+JEToolkit.h"
 #import "NSValue+JEToolkit.h"
@@ -47,9 +38,10 @@
 #import "UIViewController+JEToolkit.h"
 
 
-#pragma mark - Classes
+#pragma mark - Submodules
 
-#import "JEDispatch.h"
 #import "JEDebugging.h"
+#import "JEDispatch.h"
 #import "JEOrderedDictionary.h"
+#import "JESynthesize.h"
 #import "JEWeakCache.h"

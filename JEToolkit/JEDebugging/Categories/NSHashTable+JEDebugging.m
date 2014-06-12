@@ -1,18 +1,18 @@
 //
-//  NSOrderedSet+JEToolkit.m
+//  NSHashTable+JEDebugging.m
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/26.
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
-#import "NSOrderedSet+JEToolkit.h"
+#import "NSHashTable+JEDebugging.h"
 
-#import "NSMutableString+JEToolkit.h"
-#import "NSObject+JEToolkit.h"
+#import "NSMutableString+JEDebugging.h"
+#import "NSObject+JEDebugging.h"
 
 
-@implementation NSOrderedSet (JEToolkit)
+@implementation NSHashTable (JEDebugging)
 
 #pragma mark - NSObject
 
@@ -22,7 +22,7 @@
 }
 
 
-#pragma mark - NSObject+JEToolkit
+#pragma mark - NSObject+JEDebugging
 
 - (NSString *)loggingDescription
 {
@@ -30,41 +30,47 @@
     NSUInteger count = [self count];
     if (count == 1)
     {
-        [description appendString:@"1 entry ["];
+        [description appendString:@"1 entry ("];
     }
     else
     {
-        [description appendFormat:@"%lu entries [", (unsigned long)count];
+        [description appendFormat:@"%lu entries (", (unsigned long)count];
         
         if (count <= 0)
         {
-            [description appendString:@"]"];
+            [description appendString:@")"];
             return description;
         }
     }
     
-    [self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        
+    BOOL isFirstEntry = YES;
+    for (id obj in self)
+    {
         @autoreleasepool {
             
-            if (idx > 0)
+            if (isFirstEntry)
             {
-                [description appendString:@","];
+                [description appendString:@"\n"];
+                isFirstEntry = NO;
+            }
+            else
+            {
+                [description appendString:@",\n"];
             }
             
-            [description appendFormat:@"\n[%lu]: ", (unsigned long)idx];
             [description appendString:[obj
                                        loggingDescriptionIncludeClass:YES
                                        includeAddress:NO]];
             
         }
         
-    }];
+    };
     
     [description indentByLevel:1];
-    [description appendString:@"\n]"];
+    [description appendString:@"\n)"];
     
     return description;
 }
+
 
 @end

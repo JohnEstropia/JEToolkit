@@ -8,68 +8,8 @@
 
 #import "NSError+JEToolkit.h"
 
-#import "NSMutableString+JEToolkit.h"
-#import "NSObject+JEToolkit.h"
-
 
 @implementation NSError (JEToolkit)
-
-#pragma mark - NSObject
-
-- (NSString *)debugDescription
-{
-    return [super debugDescription];
-}
-
-
-#pragma mark - NSObject+JEToolkit
-
-- (NSString *)loggingDescription
-{
-    NSMutableString *description = [NSMutableString stringWithFormat:
-                                    @"%@ (code %li)",
-                                    [self domain], (long)[self code]];
-    NSDictionary *userInfo = [self userInfo];
-    if ([userInfo count] <= 0)
-    {
-        return description;
-    }
-    
-    [description appendString:@" userInfo: {"];
-    
-    BOOL __block isFirstEntry = YES;
-    [userInfo enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        
-        @autoreleasepool {
-            
-            if (isFirstEntry)
-            {
-                [description appendString:@"\n["];
-                isFirstEntry = NO;
-            }
-            else
-            {
-                [description appendString:@",\n["];
-            }
-            
-            [description appendString:[key
-                                       loggingDescriptionIncludeClass:NO
-                                       includeAddress:NO]];
-            [description appendString:@"]: "];
-            [description appendString:[obj
-                                       loggingDescriptionIncludeClass:YES
-                                       includeAddress:NO]];
-            
-        }
-        
-    }];
-    
-    [description indentByLevel:1];
-    [description appendString:@"\n}"];
-    
-    return description;
-}
-
 
 #pragma mark - Public
 

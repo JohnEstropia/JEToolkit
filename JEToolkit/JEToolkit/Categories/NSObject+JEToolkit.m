@@ -10,19 +10,10 @@
 
 #import <objc/runtime.h>
 
-#import "NSMutableString+JEToolkit.h"
 #import "JEDebugging.h"
 
 
 @implementation NSObject (JEToolkit)
-
-#pragma mark - NSObject
-
-- (NSString *)debugDescription
-{
-    return [self loggingDescriptionIncludeClass:YES includeAddress:YES];
-}
-
 
 #pragma mark - Public
 
@@ -55,33 +46,6 @@
     return [[self classForIdiom] alloc];
 }
 
-
-#pragma mark Logging
-
-- (NSString *)loggingDescription
-{
-    return [self description];
-}
-
-- (NSString *)loggingDescriptionIncludeClass:(BOOL)includeClass
-                              includeAddress:(BOOL)includeAddress
-{
-    NSMutableString *description = [NSMutableString string];
-    @autoreleasepool {
-        
-        if (includeClass)
-        {
-            [description appendFormat:@"(%@ *) ", [self class]];
-        }
-        if (includeAddress)
-        {
-            [description appendFormat:@"<%p> ", self];
-        }
-        [description appendString:[self loggingDescription]];
-        
-    }
-    return description;
-}
 
 #pragma mark Method Swizzling
 

@@ -8,39 +8,8 @@
 
 #import "NSNumber+JEToolkit.h"
 
-#import "NSObject+JEToolkit.h"
-
 
 @implementation NSNumber (JEToolkit)
-
-#pragma mark - NSObject
-
-- (NSString *)debugDescription
-{
-    return [super debugDescription];
-}
-
-
-#pragma mark - NSObject+JEToolkit
-
-- (NSString *)loggingDescription
-{
-    if (self == (id)kCFBooleanTrue)
-    {
-        return @"@YES";
-    }
-    else if (self == (id)kCFBooleanFalse)
-    {
-        return @"@NO";
-    }
-    else
-    {
-        return [NSString stringWithFormat:
-                @"@(%@)",
-                [super loggingDescription]];
-    }
-}
-
 
 #pragma mark - Private
 

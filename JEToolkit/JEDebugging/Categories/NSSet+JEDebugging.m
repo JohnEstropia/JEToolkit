@@ -1,18 +1,18 @@
 //
-//  NSHashTable+JEToolkit.m
+//  NSSet+JEDebugging.m
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/26.
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
-#import "NSHashTable+JEToolkit.h"
+#import "NSSet+JEDebugging.h"
 
-#import "NSMutableString+JEToolkit.h"
-#import "NSObject+JEToolkit.h"
+#import "NSMutableString+JEDebugging.h"
+#import "NSObject+JEDebugging.h"
 
 
-@implementation NSHashTable (JEToolkit)
+@implementation NSSet (JEDebugging)
 
 #pragma mark - NSObject
 
@@ -22,7 +22,7 @@
 }
 
 
-#pragma mark - NSObject+JEToolkit
+#pragma mark - NSObject+JEDebugging
 
 - (NSString *)loggingDescription
 {
@@ -43,9 +43,9 @@
         }
     }
     
-    BOOL isFirstEntry = YES;
-    for (id obj in self)
-    {
+    BOOL __block isFirstEntry = YES;
+    [self enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+        
         @autoreleasepool {
             
             if (isFirstEntry)
@@ -64,12 +64,13 @@
             
         }
         
-    };
+    }];
     
     [description indentByLevel:1];
     [description appendString:@"\n)"];
     
     return description;
 }
+
 
 @end

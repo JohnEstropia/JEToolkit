@@ -9,7 +9,7 @@
 #import "UIScrollView+JEToolkit.h"
 #import "UIView+JEToolkit.m"
 
-#import "JEAssociatedObject.h"
+#import "JESynthesize.h"
 #import "JESafetyHelpers.h"
 
 

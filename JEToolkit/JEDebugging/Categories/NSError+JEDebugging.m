@@ -1,18 +1,18 @@
 //
-//  NSMapTable+JEToolkit.m
+//  NSError+JEDebugging.m
 //  JEToolkit
 //
-//  Created by John Rommel Estropia on 2013/11/26.
+//  Created by John Rommel Estropia on 2013/12/05.
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
-#import "NSMapTable+JEToolkit.h"
+#import "NSError+JEDebugging.h"
 
-#import "NSMutableString+JEToolkit.h"
-#import "NSObject+JEToolkit.h"
+#import "NSMutableString+JEDebugging.h"
+#import "NSObject+JEDebugging.h"
 
 
-@implementation NSMapTable (JEToolkit)
+@implementation NSError (JEDebugging)
 
 #pragma mark - NSObject
 
@@ -22,37 +22,25 @@
 }
 
 
-#pragma mark - NSObject+JEToolkit
+#pragma mark - NSObject+JEDebugging
 
 - (NSString *)loggingDescription
 {
-    NSMutableString *description = [NSMutableString string];
-    NSUInteger count = [self count];
-    if (count == 1)
+    NSMutableString *description = [NSMutableString stringWithFormat:
+                                    @"%@ (code %li)",
+                                    [self domain], (long)[self code]];
+    NSDictionary *userInfo = [self userInfo];
+    if ([userInfo count] <= 0)
     {
-        [description appendString:@"1 entry {"];
-    }
-    else
-    {
-        [description appendFormat:@"%lu entries {", (unsigned long)count];
-        
-        if (count <= 0)
-        {
-            [description appendString:@"}"];
-            return description;
-        }
+        return description;
     }
     
-    BOOL isFirstEntry = YES;
-    for (id key in self)
-    {
+    [description appendString:@" userInfo: {"];
+    
+    BOOL __block isFirstEntry = YES;
+    [userInfo enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        
         @autoreleasepool {
-            
-            id obj = [self objectForKey:key];
-            if (!obj)
-            {
-                continue;
-            }
             
             if (isFirstEntry)
             {
@@ -74,12 +62,13 @@
             
         }
         
-    };
+    }];
     
     [description indentByLevel:1];
     [description appendString:@"\n}"];
     
     return description;
 }
+
 
 @end

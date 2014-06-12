@@ -8,6 +8,7 @@
 
 #import "NSCache+JEToolkit.h"
 
+
 @implementation NSCache (JEToolkit)
 
 #pragma mark - Public

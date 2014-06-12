@@ -1,5 +1,5 @@
 //
-//  JEAssociatedObject.h
+//  JESynthesize.h
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2014/03/21.
@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 
 #import "JECompilerDefines.h"
+#import "NSValue+JEToolkit.h"
 
 
 #if !__has_feature(objc_arc)
@@ -189,9 +190,3 @@
 #endif
 
 
-@interface NSValue (JEAssociatedObject)
-
-+ (NSValue *)valueWithWeakObject:(id)weakObject;
-- (id)weakObjectValue;
-
-@end

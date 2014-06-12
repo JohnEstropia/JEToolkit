@@ -1,18 +1,18 @@
 //
-//  NSDictionary+JEToolkit.m
+//  NSDictionary+JEDebugging.m
 //  JEToolkit
 //
 //  Created by John Rommel Estropia on 2013/11/26.
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
-#import "NSDictionary+JEToolkit.h"
+#import "NSDictionary+JEDebugging.h"
 
-#import "NSMutableString+JEToolkit.h"
-#import "NSObject+JEToolkit.h"
+#import "NSMutableString+JEDebugging.h"
+#import "NSObject+JEDebugging.h"
 
 
-@implementation NSDictionary (JEToolkit)
+@implementation NSDictionary (JEDebugging)
 
 #pragma mark - NSObject
 
@@ -22,7 +22,7 @@
 }
 
 
-#pragma mark - NSObject+JEToolkit
+#pragma mark - NSObject+JEDebugging
 
 - (NSString *)loggingDescription
 {
@@ -75,5 +75,6 @@
     
     return description;
 }
+
 
 @end

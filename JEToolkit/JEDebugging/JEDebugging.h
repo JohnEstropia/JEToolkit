@@ -8,6 +8,26 @@
 
 #import <Foundation/Foundation.h>
 
+#import "NSArray+JEDebugging.h"
+#import "NSDate+JEDebugging.h"
+#import "NSDictionary+JEDebugging.h"
+#import "NSError+JEDebugging.h"
+#import "NSException+JEDebugging.h"
+#import "NSHashTable+JEDebugging.h"
+#import "NSMapTable+JEDebugging.h"
+#import "NSMutableString+JEDebugging.h"
+#import "NSNumber+JEDebugging.h"
+#import "NSObject+JEDebugging.h"
+#import "NSOrderedSet+JEDebugging.h"
+#import "NSPointerArray+JEDebugging.h"
+#import "NSSet+JEDebugging.h"
+#import "NSString+JEDebugging.h"
+#import "NSValue+JEDebugging.h"
+#import "UIColor+JEDebugging.h"
+#import "UIImage+JEDebugging.h"
+
+
+
 #if !__has_feature(objc_arc)
 #error JEDump() and JELog() requires ARC be enabled
 #endif
@@ -180,6 +200,7 @@ typedef struct JELogLocation
 
 #if defined(DEBUG)
 
+#warning TODO: Not working on 64-bit builds
 #define JEDebugBreakpoint() \
     do \
     { \
