@@ -198,9 +198,34 @@ typedef struct JELogLocation
 
 #pragma mark - Breakpoint utility
 
-#if defined(DEBUG)
+#if !defined(DEBUG)
+#define JEDebugBreakpoint()  do {} while (NO)
 
-#warning TODO: Not working on 64-bit builds
+#elif TARGET_CPU_ARM
+#define JEDebugBreakpoint() \
+    do \
+    { \
+        if (![JEDebugging isDebuggerRunning]) \
+        { \
+            break; \
+        } \
+        /* http://iphone.m20.nl/wp/2010/10/xcode-iphone-debugger-halt-assertions/ */ \
+        __asm__ __volatile__ ( \
+            "mov r0, %0\n" \
+            "mov r1, %1\n" \
+            "mov r12, #37\n" \
+            "swi 128\n" \
+            "nop\n" \
+            : \
+            : "r" (getpid()), "r" (SIGINT) \
+            : "r12", "r0", "r1", "cc" \
+        ); \
+    } while (NO)
+
+#elif TARGET_CPU_ARM64
+#define JEDebugBreakpoint()  do {} while (NO)
+
+#elif TARGET_CPU_X86
 #define JEDebugBreakpoint() \
     do \
     { \
@@ -222,8 +247,28 @@ typedef struct JELogLocation
         ); \
     } while (NO)
 
-#else
+#elif TARGET_CPU_X86_64
+#define JEDebugBreakpoint() \
+    do \
+    { \
+        if (![JEDebugging isDebuggerRunning]) \
+        { \
+            break; \
+        } \
+        __asm__ __volatile__ ( \
+            "pushq %0\n" \
+            "pushq %1\n" \
+            "push $0\n" \
+            "movq %2, %%rax\n" \
+            "syscall\n" \
+            "addq $24, %%rsp" \
+            : \
+            : "g" (SIGINT), "g" (getpid()), "n" (37) \
+            : "rax", "cc" \
+        ); \
+    } while (NO)
 
+#else
 #define JEDebugBreakpoint()  do {} while (NO)
 
 #endif

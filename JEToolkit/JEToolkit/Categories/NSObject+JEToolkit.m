@@ -66,6 +66,11 @@
              NSStringFromClass(self),
              NSStringFromSelector(overrideSelector));
     
+    if (originalMethod == overrideMethod)
+    {
+        return;
+    }
+    
     class_addMethod(metaClass,
 					originalSelector,
 					class_getMethodImplementation(self, originalSelector),
@@ -93,6 +98,11 @@
              @"Override method -[%@ %@] does not exist.",
              NSStringFromClass(self),
              NSStringFromSelector(overrideSelector));
+    
+    if (originalMethod == overrideMethod)
+    {
+        return;
+    }
     
     class_addMethod(self,
 					originalSelector,
