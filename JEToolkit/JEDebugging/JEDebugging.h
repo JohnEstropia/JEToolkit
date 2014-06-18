@@ -223,7 +223,24 @@ typedef struct JELogLocation
     } while (NO)
 
 #elif TARGET_CPU_ARM64
-#define JEDebugBreakpoint()  do {} while (NO)
+#define JEDebugBreakpoint() \
+    do \
+    { \
+        if (![JEDebugging isDebuggerRunning]) \
+        { \
+            break; \
+        } \
+        __asm__ __volatile__ ( \
+            "movq r0, %0\n" \
+            "movq r1, %1\n" \
+            "movq r12, #37\n" \
+            "swi 128\n" \
+            "nop\n" \
+            : \
+            : "r" (getpid()), "r" (SIGINT) \
+            : "r12", "r0", "r1", "cc" \
+        ); \
+    } while (NO)
 
 #elif TARGET_CPU_X86
 #define JEDebugBreakpoint() \

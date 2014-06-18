@@ -8,6 +8,7 @@
 
 #pragma mark - Headers
 
+#import "JEAvailability.h"
 #import "JECompilerDefines.h"
 #import "JESafetyHelpers.h"
 #import "JEFormulas.h"

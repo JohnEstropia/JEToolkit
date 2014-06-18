@@ -203,6 +203,7 @@
 		34FC881A1932C6D0001EF83C /* JEFormulas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEFormulas.h; sourceTree = "<group>"; };
 		34FC881B1932C6D0001EF83C /* JESafetyHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JESafetyHelpers.h; sourceTree = "<group>"; };
 		34FC881C1932C6D0001EF83C /* JEUIMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEUIMetrics.h; sourceTree = "<group>"; };
+		34FE6E8219500F1500BCA861 /* JEAvailability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JEAvailability.h; sourceTree = "<group>"; };
 		34FEB4EB194E82D800B01ADE /* JEToolkit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JEToolkit.podspec; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -482,6 +483,7 @@
 				34FC881A1932C6D0001EF83C /* JEFormulas.h */,
 				34FC881B1932C6D0001EF83C /* JESafetyHelpers.h */,
 				34FC881C1932C6D0001EF83C /* JEUIMetrics.h */,
+				34FE6E8219500F1500BCA861 /* JEAvailability.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";

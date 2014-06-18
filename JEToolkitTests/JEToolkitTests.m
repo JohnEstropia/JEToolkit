@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
+#import "JEAvailability.h"
+
 #import <XCTest/XCTest.h>
 
 #import <Foundation/Foundation.h>
-#import <objc/NSObjCRuntime.h>
-
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
@@ -44,17 +44,6 @@
 
 - (void)testDumps
 {
-    NSObject *strongObject = [NSObject new];
-    NSValue *weakValue = [NSValue valueWithNonretainedObject:strongObject];
-    NSValue *weakValue2 = [NSValue valueWithPointer:(__bridge const void *)(strongObject)];
-    JEDump([weakValue weakObjectValue]);
-    JEDump([weakValue objCType]);
-    JEDump([weakValue isEqualToValue:weakValue2]);
-    
-    NSObject *weakObject;
-    [weakValue getValue:&weakObject];
-    JEDump(weakObject);
-    
     JEDump(100);
     JEDump("This is how to annotate before printing", 1 + 1);
     int oneHundred = 100;
@@ -356,13 +345,24 @@
     JEDump([UIColor clearColor]);
     JEDump([UIColor colorWithInt:0xFF0000 alpha:0.5f]);
     
-    
     [JEDebugging enumerateFileLogsWithBlock:^(NSString *fileName, NSData *data, BOOL *stop) {
         
         JELog(@"File log: \"%@\" (%@)", fileName, [NSString stringFromFileSize:[data length]]);
         
     }];
     
+    NSObject *strongObject = [NSObject new];
+    NSValue *weakValue = [NSValue valueWithWeakObject:strongObject];
+    NSValue *weakValue2 = [NSValue valueWithNonretainedObject:strongObject];
+    JEDump([weakValue weakObjectValue]);
+    JEDump([weakValue2 nonretainedObjectValue]);
+    JEDump([weakValue objCType]);
+    JEDump([weakValue2 objCType]);
+    JEDump([weakValue isEqualToValue:weakValue2]);
+    
+    NSObject *__autoreleasing weakObject;
+    [weakValue getValue:&weakObject];
+    JEDump(weakObject);
 }
 
 JESynthesize(assign, void(^)(void), synthesizedCopy, setSynthesizedCopy);
