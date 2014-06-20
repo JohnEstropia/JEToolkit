@@ -849,7 +849,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 + (void)setConsoleLoggerSettings:(JEConsoleLoggerSettings *)consoleLoggerSettings
 {
-    JEParameterAssert(consoleLoggerSettings != nil);
+    JEAssertParameter(consoleLoggerSettings != nil);
     
     dispatch_barrier_async([self settingsQueue], ^{
         
@@ -871,7 +871,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 + (void)setHUDLoggerSettings:(JEHUDLoggerSettings *)HUDLoggerSettings
 {
-    JEParameterAssert(HUDLoggerSettings != nil);
+    JEAssertParameter(HUDLoggerSettings != nil);
     
     dispatch_barrier_async([self settingsQueue], ^{
         
@@ -893,7 +893,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 + (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings
 {
-    JEParameterAssert(fileLoggerSettings != nil);
+    JEAssertParameter(fileLoggerSettings != nil);
     
     dispatch_barrier_async([self settingsQueue], ^{
         

@@ -92,8 +92,8 @@
                       forKey:(NSString *)key
                        error:(NSError *__autoreleasing *)error
 {
-    JEParameterAssert([self isFileURL]);
-    JEParameterAssert(![NSString isNilOrEmptyString:key]);
+    JEAssertParameter([self isFileURL]);
+    JEAssertParameter(![NSString isNilOrEmptyString:key]);
     JEAssert([key length] <= XATTR_MAXNAMELEN,
              @"Keys for extended attributes should be less than or equal to %d", XATTR_MAXNAMELEN);
     
@@ -113,7 +113,7 @@
         }
         if (error)
         {
-            (*error) = [NSError lastPOSIXErrorWithUserInfo:@{ NSURLErrorKey : self }];
+            (*error) = [NSError errorWithLastPOSIXErrorAndUserInfo:@{ NSURLErrorKey : self }];
         }
         return NO;
     }
@@ -134,7 +134,7 @@
         }
         if (error)
         {
-            (*error) = [NSError lastPOSIXErrorWithUserInfo:@{ NSURLErrorKey : self }];
+            (*error) = [NSError errorWithLastPOSIXErrorAndUserInfo:@{ NSURLErrorKey : self }];
         }
         return NO;
     }
@@ -160,8 +160,8 @@
                       forKey:(NSString *)key
                        error:(NSError *__autoreleasing *)error
 {
-    JEParameterAssert([self isFileURL]);
-    JEParameterAssert(![NSString isNilOrEmptyString:key]);
+    JEAssertParameter([self isFileURL]);
+    JEAssertParameter(![NSString isNilOrEmptyString:key]);
     JEAssert([key length] <= XATTR_MAXNAMELEN,
              @"Keys for extended attributes should be less than or equal to %d", XATTR_MAXNAMELEN);
     
@@ -190,7 +190,7 @@
     
     if (errorCode < 0)
     {
-        (*error) = [NSError lastPOSIXErrorWithUserInfo:@{ NSURLErrorKey : self }];
+        (*error) = [NSError errorWithLastPOSIXErrorAndUserInfo:@{ NSURLErrorKey : self }];
         return NO;
     }
     

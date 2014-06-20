@@ -33,6 +33,13 @@ Pod::Spec.new do |s|
     ss.dependency "#{s.name}/JEDebugging"
   end
   
+  s.subspec "JEKeychain" do |ss|
+    ss.source_files         = "#{s.name}/JEKeychain/**/*.{h,m,c}"
+    ss.ios.frameworks       = 'Foundation'
+    ss.dependency "#{s.name}/JEToolkit"
+    ss.dependency "#{s.name}/JEDebugging"
+  end
+  
   s.subspec "JEOrderedDictionary" do |ss|
     ss.source_files         = "#{s.name}/JEOrderedDictionary/**/*.{h,m,c}"
     ss.ios.frameworks       = 'Foundation'

@@ -44,7 +44,7 @@
 
 + (UIColor *)colorWithHexString:(NSString *)hexString
 {
-    JEParameterAssert([hexString isKindOfClass:[NSString class]]);
+    JEAssertParameter([hexString isKindOfClass:[NSString class]]);
     
     for (NSString *prefix in @[@"0x", @"#", @"0X"])
     {
@@ -91,7 +91,7 @@
 
 + (UIColor *)colorWithComponents:(NSArray *)components
 {
-    JEParameterAssert([components isKindOfClass:[NSArray class]]);
+    JEAssertParameter([components isKindOfClass:[NSArray class]]);
     
     NSUInteger numberOfComponents = [components count];
     if (numberOfComponents < 1 || numberOfComponents > 4)

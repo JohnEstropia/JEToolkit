@@ -72,7 +72,7 @@
 
 - (void)enumerateIntegersForIndexesUsingBlock:(void (^)(NSUInteger idx, NSUInteger integer, BOOL *stop))block
 {
-    JEParameterAssert(block != NULL);
+    JEAssertParameter(block != NULL);
     
     NSInteger __block iteration = 0;
     [self enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {

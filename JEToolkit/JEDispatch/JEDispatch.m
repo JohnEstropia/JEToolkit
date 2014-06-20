@@ -15,15 +15,15 @@
 
 void JEDispatchConcurrent(void (^block)(void))
 {
-    JEParameterAssert(block != NULL);
+    JEAssertParameter(block != NULL);
     
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
 }
 
 void JEDispatchConcurrentAfter(NSTimeInterval delay, void (^block)(void))
 {
-    JEParameterAssert(delay >= 0.0f);
-    JEParameterAssert(block != NULL);
+    JEAssertParameter(delay >= 0.0f);
+    JEAssertParameter(block != NULL);
     
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (delay * (typeof(delay))NSEC_PER_SEC)),
 				   dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
@@ -32,15 +32,15 @@ void JEDispatchConcurrentAfter(NSTimeInterval delay, void (^block)(void))
 
 void JEDispatchUI(void (^block)(void))
 {
-    JEParameterAssert(block != NULL);
+    JEAssertParameter(block != NULL);
     
 	dispatch_async(dispatch_get_main_queue(), block);
 }
 
 void JEDispatchUIAfter(NSTimeInterval delay, void (^block)(void))
 {
-    JEParameterAssert(delay >= 0.0f);
-    JEParameterAssert(block != NULL);
+    JEAssertParameter(delay >= 0.0f);
+    JEAssertParameter(block != NULL);
     
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (delay * (typeof(delay))NSEC_PER_SEC)),
 				   dispatch_get_main_queue(),
@@ -49,7 +49,7 @@ void JEDispatchUIAfter(NSTimeInterval delay, void (^block)(void))
 
 void JEDispatchUIASAP(void (^block)(void))
 {
-    JEParameterAssert(block != NULL);
+    JEAssertParameter(block != NULL);
     
     if ([NSThread isMainThread])
     {
@@ -63,8 +63,8 @@ void JEDispatchUIASAP(void (^block)(void))
 
 void JEDispatchSerial(id owner, void (^block)(void))
 {
-    JEParameterAssert(owner != nil);
-    JEParameterAssert(block != NULL);
+    JEAssertParameter(owner != nil);
+    JEAssertParameter(block != NULL);
     
     static const void *JESerialQueueKey = &JESerialQueueKey;
     dispatch_queue_t serialQueue = objc_getAssociatedObject(owner, JESerialQueueKey);

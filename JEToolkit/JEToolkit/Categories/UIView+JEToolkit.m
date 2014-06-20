@@ -207,7 +207,7 @@
 
 - (id)firstSubviewWithClass:(Class)class
 {
-    JEParameterAssert([class isSubclassOfClass:[UIView class]]);
+    JEAssertParameter([class isSubclassOfClass:[UIView class]]);
     
     if ([self isKindOfClass:class])
     {
@@ -228,7 +228,7 @@
 
 - (id)firstSuperviewWithClass:(Class)class
 {
-    JEParameterAssert([class isSubclassOfClass:[UIView class]]);
+    JEAssertParameter([class isSubclassOfClass:[UIView class]]);
     
     if ([self isKindOfClass:class])
     {

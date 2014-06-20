@@ -91,7 +91,7 @@ typedef struct JELogLocation
 #ifdef NS_BLOCK_ASSERTIONS
 
 #define JEAssert(condition, formatString, ...)  do {} while (NO)
-#define JEParameterAssert(condition)            do {} while (NO)
+#define JEAssertParameter(condition)            do {} while (NO)
 
 #else
 
@@ -112,8 +112,9 @@ typedef struct JELogLocation
         } \
     } while(NO)
 
-#define JEParameterAssert(condition) \
+#define JEAssertParameter(condition) \
     JEAssert((condition), @"Invalid parameter not satisfying: (%s)", #condition)
+
 
 #endif
 
@@ -199,10 +200,10 @@ typedef struct JELogLocation
 #pragma mark - Breakpoint utility
 
 #if !defined(DEBUG)
-#define JEDebugBreakpoint()  do {} while (NO)
+#define JEDebugBreak()  do {} while (NO)
 
 #elif TARGET_CPU_ARM
-#define JEDebugBreakpoint() \
+#define JEDebugBreak() \
     do \
     { \
         if (![JEDebugging isDebuggerRunning]) \
@@ -223,7 +224,7 @@ typedef struct JELogLocation
     } while (NO)
 
 #elif TARGET_CPU_ARM64
-#define JEDebugBreakpoint() \
+#define JEDebugBreak() \
     do \
     { \
         if (![JEDebugging isDebuggerRunning]) \
@@ -243,7 +244,7 @@ typedef struct JELogLocation
     } while (NO)
 
 #elif TARGET_CPU_X86
-#define JEDebugBreakpoint() \
+#define JEDebugBreak() \
     do \
     { \
         if (![JEDebugging isDebuggerRunning]) \
@@ -265,7 +266,7 @@ typedef struct JELogLocation
     } while (NO)
 
 #elif TARGET_CPU_X86_64
-#define JEDebugBreakpoint() \
+#define JEDebugBreak() \
     do \
     { \
         if (![JEDebugging isDebuggerRunning]) \
@@ -286,9 +287,18 @@ typedef struct JELogLocation
     } while (NO)
 
 #else
-#define JEDebugBreakpoint()  do {} while (NO)
+#define JEDebugBreak()  do {} while (NO)
 
 #endif
+
+#define JEDebugBreakIf(condition) \
+    do \
+    { \
+        if (condition) \
+        { \
+            JEDebugBreak(); \
+        } \
+    } while(NO)
 
 
 

@@ -43,14 +43,14 @@
 
 + (NSDate *)dateWithISO8601String:(NSString *)ISO8601String
 {
-    JEParameterAssert([ISO8601String isKindOfClass:[NSString class]]);
+    JEAssertParameter([ISO8601String isKindOfClass:[NSString class]]);
     
     return [[NSDateFormatter ISO8601UTCDateFormatter] dateFromString:ISO8601String];
 }
 
 + (NSDate *)dateWithEXIFString:(NSString *)EXIFString
 {
-    JEParameterAssert([EXIFString isKindOfClass:[NSString class]]);
+    JEAssertParameter([EXIFString isKindOfClass:[NSString class]]);
     
     return [[NSDateFormatter EXIFDateFormatter] dateFromString:EXIFString];
 }

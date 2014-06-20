@@ -37,6 +37,8 @@
 		2F8FC87E17B65DB500C3C0F3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2F8FC87C17B65DB500C3C0F3 /* InfoPlist.strings */; };
 		2F8FC88017B65DB500C3C0F3 /* JEToolkitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC87F17B65DB500C3C0F3 /* JEToolkitTests.m */; };
 		2F8FC89017B660C300C3C0F3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC88F17B660C300C3C0F3 /* UIKit.framework */; };
+		3401CB4919542B3400D33CDC /* JEKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 3401CB4819542B3400D33CDC /* JEKeychain.m */; };
+		3401CB4A19542B3400D33CDC /* JEKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 3401CB4819542B3400D33CDC /* JEKeychain.m */; };
 		349B324D194979C20077692A /* NSObject+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 349B324C194979C20077692A /* NSObject+JEDebugging.m */; };
 		349B325019497AC90077692A /* NSArray+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 349B324F19497AC90077692A /* NSArray+JEDebugging.m */; };
 		349B325319497B390077692A /* NSMutableString+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 349B325219497B390077692A /* NSMutableString+JEDebugging.m */; };
@@ -107,6 +109,8 @@
 		2F8FC87D17B65DB500C3C0F3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2F8FC87F17B65DB500C3C0F3 /* JEToolkitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JEToolkitTests.m; sourceTree = "<group>"; };
 		2F8FC88F17B660C300C3C0F3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		3401CB4719542B3400D33CDC /* JEKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEKeychain.h; sourceTree = "<group>"; };
+		3401CB4819542B3400D33CDC /* JEKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEKeychain.m; sourceTree = "<group>"; };
 		349B324B194979C20077692A /* NSObject+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+JEDebugging.h"; sourceTree = "<group>"; };
 		349B324C194979C20077692A /* NSObject+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JEDebugging.m"; sourceTree = "<group>"; };
 		349B324E19497AC90077692A /* NSArray+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+JEDebugging.h"; sourceTree = "<group>"; };
@@ -280,6 +284,7 @@
 				34FC87D41932C6D0001EF83C /* JEToolkit */,
 				34F1246F1844874D00856ACA /* JEDebugging */,
 				349B328419498B320077692A /* JEDispatch */,
+				3401CB4619542B1200D33CDC /* JEKeychain */,
 				349B328119498AD90077692A /* JEOrderedDictionary */,
 				349B328219498AD90077692A /* JESynthesize */,
 				349B328319498AD90077692A /* JEWeakCache */,
@@ -315,6 +320,15 @@
 				2F8FC87C17B65DB500C3C0F3 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3401CB4619542B1200D33CDC /* JEKeychain */ = {
+			isa = PBXGroup;
+			children = (
+				3401CB4719542B3400D33CDC /* JEKeychain.h */,
+				3401CB4819542B3400D33CDC /* JEKeychain.m */,
+			);
+			path = JEKeychain;
 			sourceTree = "<group>";
 		};
 		3484A990194978AF0011E060 /* Categories */ = {
@@ -609,6 +623,7 @@
 				349B326B194982850077692A /* NSOrderedSet+JEDebugging.m in Sources */,
 				349B3271194983660077692A /* NSSet+JEDebugging.m in Sources */,
 				2F3A87C11937839D00AEA77E /* UIViewController+JEToolkit.m in Sources */,
+				3401CB4919542B3400D33CDC /* JEKeychain.m in Sources */,
 				2F3A87BE1937839D00AEA77E /* UIScrollView+JEToolkit.m in Sources */,
 				349B328719498B580077692A /* JEOrderedDictionary.m in Sources */,
 				2F3A87AA1937839D00AEA77E /* NSDateFormatter+JEToolkit.m in Sources */,
@@ -624,6 +639,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3401CB4A19542B3400D33CDC /* JEKeychain.m in Sources */,
 				2F8FC88017B65DB500C3C0F3 /* JEToolkitTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

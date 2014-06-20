@@ -12,6 +12,10 @@
 
 /*! Returns an NSError from @p errno.
  */
-+ (instancetype)lastPOSIXErrorWithUserInfo:(NSDictionary *)userInfo;
++ (instancetype)errorWithLastPOSIXErrorAndUserInfo:(NSDictionary *)userInfo;
+
+/*! Returns an NSError from @p status.
+ */
++ (instancetype)errorWithOSStatus:(OSStatus)status userInfo:(NSDictionary *)userInfo;
 
 @end
