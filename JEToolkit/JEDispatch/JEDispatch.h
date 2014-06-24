@@ -35,8 +35,3 @@ void JEDispatchUIAfter(NSTimeInterval delay, dispatch_block_t block);
  */
 JE_EXTERN JE_NONNULL_ALL
 void JEDispatchUIASAP(dispatch_block_t block);
-
-/*! Dispatches a block to a serial queue unique to an owning instance object. Each owner can only have one serial queue. Call JEDispatchSerial with the same owner each time to dispatch blocks to the same queue.
- */
-JE_EXTERN JE_NONNULL_ALL
-void JEDispatchSerial(id owner, dispatch_block_t block);

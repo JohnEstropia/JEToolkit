@@ -37,9 +37,9 @@ typedef NS_ENUM(NSInteger, JEKeychainAccess)
 + (NSString *)stringForKey:(NSString *)key
              inAccessGroup:(NSString *)accessGroup
                      error:(NSError *__autoreleasing *)error;
-+ (void)setString:(NSString *)string
++ (BOOL)setString:(NSString *)string
            forKey:(NSString *)key;
-+ (void)setString:(NSString *)string
++ (BOOL)setString:(NSString *)string
            forKey:(NSString *)key
     inAccessGroup:(NSString *)accessGroup
             error:(NSError *__autoreleasing *)error;

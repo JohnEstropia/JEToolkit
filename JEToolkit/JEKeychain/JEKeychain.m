@@ -150,13 +150,13 @@
             encoding:NSUTF8StringEncoding];
 }
 
-+ (void)setString:(NSString *)string
++ (BOOL)setString:(NSString *)string
            forKey:(NSString *)key
 {
-    [self setString:string forKey:key inAccessGroup:nil error:NULL];
+    return [self setString:string forKey:key inAccessGroup:nil error:NULL];
 }
 
-+ (void)setString:(NSString *)string
++ (BOOL)setString:(NSString *)string
            forKey:(NSString *)key
     inAccessGroup:(NSString *)accessGroup
             error:(NSError *__autoreleasing *)error
@@ -165,7 +165,7 @@
     
     if (!key)
     {
-        return;
+        return NO;
     }
     
     JEKeychain *instance = [self sharedInstance];
@@ -194,7 +194,7 @@
             {
                 (*error) = [NSError errorWithOSStatus:status userInfo:nil];
             }
-            return;
+            return NO;
         }
         
         CFTypeRef accessibilityAttribute = NULL;
@@ -226,23 +226,34 @@
         query[(__bridge NSString *)kSecAttrAccessible] = (__bridge id)accessibilityAttribute;
         
         status = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
-        if (error)
+        if (status != errSecSuccess)
         {
-            (*error) = (status == errSecSuccess
-                        ? nil
-                        : [NSError errorWithOSStatus:status userInfo:nil]);
+            if (error)
+            {
+                (*error) = [NSError errorWithOSStatus:status userInfo:nil];
+            }
+            return NO;
         }
     }
     else
     {
         OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
-        if (error)
+        if (status != errSecSuccess)
         {
-            (*error) = (status == errSecSuccess || status == errSecItemNotFound
-                        ? nil
-                        : [NSError errorWithOSStatus:status userInfo:nil]);
+            if (error)
+            {
+                (*error) = [NSError errorWithOSStatus:status userInfo:nil];
+            }
+            return NO;
         }
     }
+    
+    
+    if (error)
+    {
+        (*error) = nil;
+    }
+    return YES;
 }
 
 

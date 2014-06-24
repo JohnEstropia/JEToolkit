@@ -17,7 +17,8 @@ void JEDispatchConcurrent(void (^block)(void))
 {
     JEAssertParameter(block != NULL);
     
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                   ^{ @autoreleasepool { block(); } });
 }
 
 void JEDispatchConcurrentAfter(NSTimeInterval delay, void (^block)(void))
@@ -27,14 +28,15 @@ void JEDispatchConcurrentAfter(NSTimeInterval delay, void (^block)(void))
     
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (delay * (typeof(delay))NSEC_PER_SEC)),
 				   dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-				   block);
+				   ^{ @autoreleasepool { block(); } });
 }
 
 void JEDispatchUI(void (^block)(void))
 {
     JEAssertParameter(block != NULL);
     
-	dispatch_async(dispatch_get_main_queue(), block);
+	dispatch_async(dispatch_get_main_queue(),
+                   ^{ @autoreleasepool { block(); } });
 }
 
 void JEDispatchUIAfter(NSTimeInterval delay, void (^block)(void))
@@ -44,7 +46,7 @@ void JEDispatchUIAfter(NSTimeInterval delay, void (^block)(void))
     
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (delay * (typeof(delay))NSEC_PER_SEC)),
 				   dispatch_get_main_queue(),
-				   block);
+				   ^{ @autoreleasepool { block(); } });
 }
 
 void JEDispatchUIASAP(void (^block)(void))
@@ -53,30 +55,13 @@ void JEDispatchUIASAP(void (^block)(void))
     
     if ([NSThread isMainThread])
     {
-        block();
+        @autoreleasepool { block(); }
     }
     else
     {
-        dispatch_async(dispatch_get_main_queue(), block);
+        dispatch_async(dispatch_get_main_queue(),
+                       ^{ @autoreleasepool { block(); } });
     }
 }
 
-void JEDispatchSerial(id owner, void (^block)(void))
-{
-    JEAssertParameter(owner != nil);
-    JEAssertParameter(block != NULL);
-    
-    static const void *JESerialQueueKey = &JESerialQueueKey;
-    dispatch_queue_t serialQueue = objc_getAssociatedObject(owner, JESerialQueueKey);
-    if (!serialQueue)
-    {
-        serialQueue = dispatch_queue_create(NULL, DISPATCH_QUEUE_SERIAL);
-        objc_setAssociatedObject(owner,
-                                 JESerialQueueKey,
-                                 serialQueue,
-                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    
-    dispatch_async(serialQueue, block);
-}
 

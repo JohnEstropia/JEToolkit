@@ -19,8 +19,8 @@
 
 #define JEKeypath(type, property) \
     ({ \
-        type _##property##_dummy; \
-        _##property##_dummy.property, @#property; \
+        type _je_keypath_dummy; \
+        _je_keypath_dummy.property, @#property; \
     })
 
 #else
