@@ -152,7 +152,7 @@
 #define _JESynthesize_get_copy      _JESynthesize_get_unsafe_unretained
 
 #define _JESynthesize_get_weak(type, getter) \
-    [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter)) weakObjectValue]
+    [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) weakObjectValue]
 
 #define _JESynthesize_set_assign(type, getter) \
     objc_setAssociatedObject(self, \

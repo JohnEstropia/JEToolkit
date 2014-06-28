@@ -23,10 +23,19 @@
         _je_keypath_dummy.property, @#property; \
     })
 
+#define JEKeypathOperator(operator, type, property) \
+    ({ \
+        type _je_keypath_dummy; \
+        _je_keypath_dummy.property, @"@" #operator "." #property; \
+    })
+
 #else
 
 #define JEKeypath(class, property) \
     ( @#property )
+
+#define JEKeypathOperator(class, property) \
+    ( @"@" #operator "." #property )
 
 #endif
 
