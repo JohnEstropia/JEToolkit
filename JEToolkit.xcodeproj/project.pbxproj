@@ -38,7 +38,6 @@
 		2F8FC88017B65DB500C3C0F3 /* JEToolkitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8FC87F17B65DB500C3C0F3 /* JEToolkitTests.m */; };
 		2F8FC89017B660C300C3C0F3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC88F17B660C300C3C0F3 /* UIKit.framework */; };
 		3401CB4919542B3400D33CDC /* JEKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 3401CB4819542B3400D33CDC /* JEKeychain.m */; };
-		3401CB4A19542B3400D33CDC /* JEKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 3401CB4819542B3400D33CDC /* JEKeychain.m */; };
 		349B324D194979C20077692A /* NSObject+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 349B324C194979C20077692A /* NSObject+JEDebugging.m */; };
 		349B325019497AC90077692A /* NSArray+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 349B324F19497AC90077692A /* NSArray+JEDebugging.m */; };
 		349B325319497B390077692A /* NSMutableString+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 349B325219497B390077692A /* NSMutableString+JEDebugging.m */; };
@@ -639,7 +638,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3401CB4A19542B3400D33CDC /* JEKeychain.m in Sources */,
 				2F8FC88017B65DB500C3C0F3 /* JEToolkitTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
