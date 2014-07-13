@@ -15,11 +15,11 @@
 
 #pragma mark - Public
 
-- (NSUInteger)integerAtIndex:(NSInteger)index
-{
+- (NSUInteger)integerAtIndex:(NSInteger)index {
+    
     NSUInteger count = [self count];
-    if (index >= count)
-    {
+    if (index >= count) {
+        
         [[NSException
           exceptionWithName:NSRangeException
           reason:[[NSString alloc] initWithFormat:
@@ -47,10 +47,10 @@
     return integerAtIndex;
 }
 
-- (NSInteger)indexOfInteger:(NSUInteger)integer
-{
-    if (![self containsIndex:integer])
-    {
+- (NSInteger)indexOfInteger:(NSUInteger)integer {
+    
+    if (![self containsIndex:integer]) {
+        
         return NSNotFound;
     }
     
@@ -58,8 +58,8 @@
     __block NSInteger indexOfInteger = NSNotFound;
     [self enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
         
-        if (idx == integer)
-        {
+        if (idx == integer) {
+            
             indexOfInteger = iteration;
             (*stop) = YES;
             return;
@@ -70,8 +70,8 @@
     return indexOfInteger;
 }
 
-- (void)enumerateIntegersForIndexesUsingBlock:(void (^)(NSUInteger idx, NSUInteger integer, BOOL *stop))block
-{
+- (void)enumerateIntegersForIndexesUsingBlock:(void (^)(NSUInteger idx, NSUInteger integer, BOOL *stop))block {
+    
     JEAssertParameter(block != NULL);
     
     NSInteger __block iteration = 0;

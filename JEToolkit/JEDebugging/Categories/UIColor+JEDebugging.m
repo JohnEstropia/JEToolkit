@@ -16,29 +16,30 @@
 
 #pragma mark - NSObject
 
-- (NSString *)debugDescription
-{
+- (NSString *)debugDescription {
+    
+    // override any existing implementation
     return [super debugDescription];
 }
 
 
 #pragma mark - NSObject+JEDebugging
 
-- (NSUInteger)RGBCodeAndAlpha:(CGFloat *)alpha
-{
+- (NSUInteger)RGBCodeAndAlpha:(CGFloat *)alpha {
+    
     CGFloat redFloat = 0.0f;
     CGFloat greenFloat = 0.0f;
     CGFloat blueFloat = 0.0f;
     CGFloat alphaFloat = 0.0f;
     
-    if (![self getRed:&redFloat green:&greenFloat blue:&blueFloat alpha:&alphaFloat])
-    {
+    if (![self getRed:&redFloat green:&greenFloat blue:&blueFloat alpha:&alphaFloat]) {
+        
         CGColorRef CGColor = self.CGColor;
         CGColorSpaceRef colorSpace = CGColorGetColorSpace(CGColor);
         const CGFloat *colorComponents = CGColorGetComponents(CGColor);
         
-        switch (CGColorSpaceGetModel(colorSpace))
-        {
+        switch (CGColorSpaceGetModel(colorSpace)) {
+                
             case kCGColorSpaceModelMonochrome:
                 NSCParameterAssert(CGColorGetNumberOfComponents(CGColor) >= 2);
                 redFloat = colorComponents[0];
@@ -46,6 +47,7 @@
                 blueFloat = colorComponents[0];
                 alphaFloat = colorComponents[1];
                 break;
+                
             case kCGColorSpaceModelRGB:
                 NSCParameterAssert(CGColorGetNumberOfComponents(CGColor) >= 4);
                 redFloat = colorComponents[0];
@@ -53,6 +55,7 @@
                 blueFloat = colorComponents[2];
                 alphaFloat = colorComponents[3];
                 break;
+                
             case kCGColorSpaceModelCMYK:
                 NSCParameterAssert(CGColorGetNumberOfComponents(CGColor) >= 5);
                 redFloat = (1.0f - (colorComponents[0]
@@ -66,6 +69,7 @@
                                      + colorComponents[3]));
                 alphaFloat = colorComponents[4];
                 break;
+                
             default:
                 break;
         }
@@ -75,16 +79,16 @@
     NSUInteger greenInt = ceilf(greenFloat * 255.0f);
     NSUInteger blueInt = ceilf(blueFloat * 255.0f);
     
-    if (alpha)
-    {
+    if (alpha) {
+        
         (*alpha) = alphaFloat;
     }
     
     return ((redInt << 16) | (greenInt << 8) | blueInt);
 }
 
-- (NSString *)loggingDescription
-{
+- (NSString *)loggingDescription {
+    
     CGFloat red = 0.0f;
     CGFloat green = 0.0f;
     CGFloat blue = 0.0f;
@@ -100,8 +104,8 @@
     CGColorSpaceRef colorSpace = CGColorGetColorSpace(CGColor);
     const CGFloat *colorComponents = CGColorGetComponents(CGColor);
     CGColorSpaceModel colorSpaceModel = CGColorSpaceGetModel(colorSpace);
-    switch (colorSpaceModel)
-    {
+    switch (colorSpaceModel) {
+            
         case kCGColorSpaceModelMonochrome:
             NSCParameterAssert(CGColorGetNumberOfComponents(CGColor) >= 2);
             red = colorComponents[0];
@@ -110,6 +114,7 @@
             alpha = colorComponents[1];
             colorSpaceString = @"kCGColorSpaceModelMonochrome";
             break;
+            
         case kCGColorSpaceModelRGB:
             NSCParameterAssert(CGColorGetNumberOfComponents(CGColor) >= 4);
             red = colorComponents[0];
@@ -118,6 +123,7 @@
             alpha = colorComponents[3];
             colorSpaceString = @"kCGColorSpaceModelRGB";
             break;
+            
         case kCGColorSpaceModelCMYK:
             NSCParameterAssert(CGColorGetNumberOfComponents(CGColor) >= 5);
             cyan = colorComponents[0];
@@ -130,21 +136,27 @@
             blue = (1.0f - (yellow - (yellow * black) + black));
             colorSpaceString = @"kCGColorSpaceModelCMYK";
             break;
+            
         case kCGColorSpaceModelLab:
             colorSpaceString = @"kCGColorSpaceModelLab";
             break;
+            
         case kCGColorSpaceModelDeviceN:
             colorSpaceString = @"kCGColorSpaceModelDeviceN";
             break;
+            
         case kCGColorSpaceModelIndexed:
             colorSpaceString = @"kCGColorSpaceModelIndexed";
             break;
+            
         case kCGColorSpaceModelPattern:
             colorSpaceString = @"kCGColorSpaceModelPattern";
             break;
+            
         case kCGColorSpaceModelUnknown:
             colorSpaceString = @"kCGColorSpaceModelUnknown";
             break;
+            
         default:
             colorSpaceString = [NSString string];
             break;
@@ -159,14 +171,14 @@
     [description appendFormat:@"\ncolor space: %@", colorSpaceString];
     
     CGFloat white = 0.0f;
-    if ([self getWhite:&white alpha:&alpha])
-    {
+    if ([self getWhite:&white alpha:&alpha]) {
+        
         [description appendFormat:
          @",\ngrayscale: (%g%%, %.01f)",
          roundf(white * 100.0f), alpha];
     }
-    if ([self getRed:&red green:&green blue:&blue alpha:&alpha])
-    {
+    if ([self getRed:&red green:&green blue:&blue alpha:&alpha]) {
+        
         [description appendFormat:
          @",\nRGBA: (%u, %u, %u, %.01f)",
          (unsigned int)ceilf(red * 255.0f),
@@ -178,8 +190,8 @@
     CGFloat hue = 0.0f;
     CGFloat saturation = 0.0f;
     CGFloat brightness = 0.0f;
-    if ([self getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha])
-    {
+    if ([self getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha]) {
+        
         [description appendFormat:
          @",\nHSBA: (%u°, %.01f, %.01f, %.01f)",
          (unsigned int)ceil(fmod(hue, 360.0)),
@@ -188,8 +200,8 @@
          alpha];
     }
     
-    if (colorSpaceModel == kCGColorSpaceModelCMYK)
-    {
+    if (colorSpaceModel == kCGColorSpaceModelCMYK) {
+        
         [description appendFormat:
          @",\nCMYKA: (%.01f, %.01f, %.01f, %.01f, %.01f)",
          cyan, magenta, yellow, black, alpha];

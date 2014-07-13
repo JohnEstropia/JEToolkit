@@ -15,11 +15,11 @@
 
 #pragma mark - NSObject
 
-- (instancetype)init
-{
+- (instancetype)init {
+    
     self = [super init];
-    if (!self)
-    {
+    if (!self) {
+        
         return nil;
     }
     
@@ -39,8 +39,8 @@
 
 #pragma mark - NSCopying
 
-- (instancetype)copyWithZone:(NSZone *)zone
-{
+- (instancetype)copyWithZone:(NSZone *)zone {
+    
     typeof(self) copy = [super copyWithZone:zone];
     copy->_fileLogsDirectoryURL = [_fileLogsDirectoryURL copyWithZone:zone];
     copy->_numberOfBytesInMemoryBeforeWritingToFile = _numberOfBytesInMemoryBeforeWritingToFile;

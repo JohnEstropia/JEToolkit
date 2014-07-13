@@ -22,6 +22,7 @@
 #define JE_NONNULL_ALL              __attribute__((nonnull))
 #define JE_NONNULL(...)             __attribute__((nonnull(__VA_ARGS__)))
 #define JE_OVERLOAD                 __attribute__((overloadable))
+#define JE_PRECISE_LIFETIME         __attribute__((objc_precise_lifetime))
 #define JE_STATIC                   static
 #define JE_STATIC_INLINE            static inline
 #define JE_REQUIRES_NIL_TERMINATION NS_REQUIRES_NIL_TERMINATION

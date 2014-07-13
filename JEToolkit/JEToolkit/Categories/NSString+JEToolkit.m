@@ -15,41 +15,41 @@
 
 #pragma mark Directories
 
-+ (NSString *)applicationSupportDirectory
-{
++ (NSString *)applicationSupportDirectory {
+    
     return [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
 }
 
-+ (NSString *)cachesDirectory
-{
++ (NSString *)cachesDirectory {
+    
     return [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
 }
 
-+ (NSString *)documentsDirectory
-{
++ (NSString *)documentsDirectory {
+    
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
 }
 
-+ (NSString *)downloadsDirectory
-{
++ (NSString *)downloadsDirectory {
+    
     return [NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES) firstObject];
 }
 
-+ (NSString *)libraryDirectory
-{
++ (NSString *)libraryDirectory {
+    
     return [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
 }
 
-+ (NSString *)temporaryDirectory
-{
++ (NSString *)temporaryDirectory {
+    
     return NSTemporaryDirectory();
 }
 
-+ (NSString *)pathWithComponents:(NSArray *)components pathExtension:(NSString *)pathExtension
-{
++ (NSString *)pathWithComponents:(NSArray *)components pathExtension:(NSString *)pathExtension {
+    
     NSString *path = [NSString pathWithComponents:components];
-    if (pathExtension)
-    {
+    if (pathExtension) {
+        
         path = [path stringByAppendingPathExtension:pathExtension];
     }
     return path;
@@ -57,25 +57,25 @@
 
 #pragma mark Constants
 
-+ (NSString *)applicationVersion
-{
++ (NSString *)applicationVersion {
+    
     return [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
 }
 
-+ (NSString *)applicationBundleVersion
-{
++ (NSString *)applicationBundleVersion {
+    
     return [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
 }
 
 #pragma mark String Manipulation
 
-- (NSString *)trimmedString
-{
+- (NSString *)trimmedString {
+    
     return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
-- (NSArray *)glyphs
-{
+- (NSArray *)glyphs {
+    
 	NSInteger length = [self length];
 	NSMutableArray *characters = [[NSMutableArray alloc] initWithCapacity:length];
     [self
@@ -89,21 +89,21 @@
 	return [characters copy];
 }
 
-- (NSRange)range
-{
+- (NSRange)range {
+    
     return (NSRange){ .location = 0, .length = [self length] };
 }
 
 #pragma mark Validation
 
-+ (BOOL)isNilOrEmptyString:(id)valueOrNil
-{
++ (BOOL)isNilOrEmptyString:(id)valueOrNil {
+    
     return (![valueOrNil isKindOfClass:[NSString class]]
             || [[(NSString *)valueOrNil trimmedString] length] <= 0);
 }
 
-+ (NSString *)nonEmptyStringOrNil:(id)valueOrNil
-{
++ (NSString *)nonEmptyStringOrNil:(id)valueOrNil {
+    
     if (![valueOrNil isKindOfClass:[NSString class]])
     {
         return nil;
@@ -113,14 +113,14 @@
     return ([trimmedString length] > 0 ? trimmedString : nil);
 }
 
-- (BOOL)containsSubstring:(NSString *)substring
-{
+- (BOOL)containsSubstring:(NSString *)substring {
+    
     return [self containsSubstring:substring options:NSLiteralSearch];
 }
 
 - (BOOL)containsSubstring:(NSString *)substring
-                  options:(NSStringCompareOptions)options
-{
+                  options:(NSStringCompareOptions)options {
+    
     return (!substring
             ? NO
             : [self rangeOfString:substring options:options].location != NSNotFound);
@@ -128,42 +128,42 @@
 
 #pragma mark Conversion
 
-+ (NSString *)stringFromValue:(id)valueOrNil
-{
-    if (valueOrNil)
-    {
-        if ([valueOrNil isKindOfClass:[NSString class]])
-        {
++ (NSString *)stringFromValue:(id)valueOrNil {
+    
+    if (valueOrNil) {
+        
+        if ([valueOrNil isKindOfClass:[NSString class]]) {
+            
             return valueOrNil;
         }
-        if ([valueOrNil isKindOfClass:[NSNumber class]])
-        {
+        if ([valueOrNil isKindOfClass:[NSNumber class]]) {
+            
             return [(NSNumber *)valueOrNil stringValue];
         }
-        if ([valueOrNil isKindOfClass:[NSData class]])
-        {
+        if ([valueOrNil isKindOfClass:[NSData class]]) {
+            
             return [[self alloc] initWithData:valueOrNil encoding:NSUTF8StringEncoding];
         }
     }
     return nil;
 }
 
-+ (NSString *)stringFromFileSize:(int64_t)fileSize
-{
-	if (fileSize < 1023)
-    {
++ (NSString *)stringFromFileSize:(int64_t)fileSize {
+    
+	if (fileSize < 1023) {
+        
 		return [NSString stringWithFormat:@"%llu bytes", fileSize];
     }
     
 	double decimalSize = ((double)fileSize / 1024.0);
-	if (decimalSize < 1023.0)
-    {
+	if (decimalSize < 1023.0) {
+        
 		return [NSString stringWithFormat:@"%1.1f KB", decimalSize];
     }
     
 	decimalSize /= 1024.0;
-	if (decimalSize < 1023.0)
-    {
+	if (decimalSize < 1023.0) {
+        
 		return [NSString stringWithFormat:@"%1.1f MB", decimalSize];
     }
     

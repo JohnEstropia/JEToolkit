@@ -18,19 +18,17 @@
 #endif
 
 
+/* Why do we have separate Debug and Release implementations? Because syntax coloring! */
 #ifdef DEBUG
 
 #define JESynthesize(ownership, type, getter, setter) \
     static const void *_JESynthesizeKey_##getter = &_JESynthesizeKey_##getter; \
     \
-    - (type)getter \
-    { \
+    - (type)getter { \
         /* If assign/unsafe_unretained semantics are set, then we treat the object as a value. This if/else (and actually all the pointer voodoo we're doing) will be optimized out by the compiler. */ \
-        if (@encode(type)[0] == '@')\
-        { \
-            if (_JEAssociationCompilerFlag_##ownership == _JEAssociationCompilerFlag_weak) \
-            { \
-                id __attribute__((objc_precise_lifetime)) __strong _je_object = [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) weakObjectValue]; \
+        if (@encode(type)[0] == '@') { \
+            if (_JEAssociationCompilerFlag_##ownership == _JEAssociationCompilerFlag_weak) { \
+                id JE_PRECISE_LIFETIME __strong _je_object = [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) weakObjectValue]; \
                 const void *_je_objectPointer = &_je_object; \
                 /* We will never reach here if the type is not an id, so we just ignore warnings. */ \
                 JE_PRAGMA_PUSH \
@@ -38,9 +36,8 @@
                 return *(typeof(type) __strong *)_je_objectPointer; \
                 JE_PRAGMA_POP \
             } \
-            else \
-            { \
-                id __attribute__((objc_precise_lifetime)) __strong _je_object = objc_getAssociatedObject(self, _JESynthesizeKey_##getter); \
+            else { \
+                id JE_PRECISE_LIFETIME __strong _je_object = objc_getAssociatedObject(self, _JESynthesizeKey_##getter); \
                 const void *_je_objectPointer = &_je_object; \
                 /* We will never reach here if the type is not an id, so we just ignore warnings. */ \
                 JE_PRAGMA_PUSH \
@@ -49,8 +46,7 @@
                 JE_PRAGMA_POP \
             } \
         } \
-        else \
-        { \
+        else { \
             /* We use an array so the initializer syntax will give us a nice zeroed-out value as default. */ \
             JE_PRAGMA_PUSH \
             JE_PRAGMA_ERROR("-Wignored-attributes") \
@@ -64,21 +60,17 @@
         } \
     } \
     \
-    - (void)setter:(type)getter \
-    { \
+    - (void)setter:(type)getter { \
         /* If assign/unsafe_unretained semantics are set, then we treat the object as a value. This if/else (and actually all the pointer voodoo we're doing) will be optimized out by the compiler. */ \
-        if (@encode(type)[0] == '@') \
-        { \
-            if (_JEAssociationCompilerFlag_##ownership == _JEAssociationCompilerFlag_weak) \
-            { \
+        if (@encode(type)[0] == '@') { \
+            if (_JEAssociationCompilerFlag_##ownership == _JEAssociationCompilerFlag_weak) { \
                 const void *_je_objectPointer = &getter; \
                 objc_setAssociatedObject(self, \
                                          _JESynthesizeKey_##getter, \
                                          [NSValue valueWithWeakObject:*(id __strong *)_je_objectPointer], \
                                          OBJC_ASSOCIATION_RETAIN_NONATOMIC); \
             } \
-            else \
-            { \
+            else { \
                 const void *_je_objectPointer = &getter; \
                 objc_setAssociatedObject(self, \
                                          _JESynthesizeKey_##getter, \
@@ -87,8 +79,7 @@
                                          _JEAssociationOwnership_##ownership); \
             } \
         } \
-        else \
-        { \
+        else { \
             objc_setAssociatedObject(self, \
                                      _JESynthesizeKey_##getter, \
                                      [NSValue valueWithBytes:&getter objCType:@encode(type)], \
@@ -118,24 +109,22 @@
 #define _JEAssociationAttribute_weak                __weak
 
 
-#else
+/* On release builds we don't need syntax coloring so we use the simpler implementation. */
+#else // NDEBUG
 
 #define JESynthesize(ownership, type, getter, setter) \
     static const void *_JESynthesizeKey_##getter = &_JESynthesizeKey_##getter; \
     \
-    - (type)getter \
-    { \
+    - (type)getter { \
         return _JESynthesize_get_##ownership(type, getter); \
     } \
     \
-    - (void)setter:(type)getter \
-    { \
+    - (void)setter:(type)getter { \
         _JESynthesize_set_##ownership(type, getter); \
     }
 
 
-#define _JESynthesize_get_assign(type, getter) \
-    ({ \
+#define _JESynthesize_get_assign(type, getter) ({ \
         /* We use an array so the initializer syntax will give us a nice zeroed-out value as default. */ \
         typeof(type) _je_value[1] = {}; \
         [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) getValue:_je_value]; \

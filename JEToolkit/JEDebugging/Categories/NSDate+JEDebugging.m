@@ -15,16 +15,17 @@
 
 #pragma mark - NSObject
 
-- (NSString *)debugDescription
-{
+- (NSString *)debugDescription {
+    
+    // override any existing implementation
     return [super debugDescription];
 }
 
 
 #pragma mark - NSObject+JEDebugging
 
-- (NSString *)loggingDescription
-{
+- (NSString *)loggingDescription {
+    
     return [NSString stringWithFormat:
             @"%@ (%@)",
             [self ISO8601String], [NSDateFormatter

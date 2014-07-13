@@ -13,8 +13,8 @@
 
 #pragma mark - Public
 
-+ (NSCalendar *)cachedLocalizedCalendar
-{
++ (NSCalendar *)cachedLocalizedCalendar {
+    
     static NSCalendar *calendar;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -25,8 +25,8 @@
     return calendar;
 }
 
-+ (NSCalendar *)gregorianCalendar
-{
++ (NSCalendar *)gregorianCalendar {
+    
     static NSCalendar *calendar;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

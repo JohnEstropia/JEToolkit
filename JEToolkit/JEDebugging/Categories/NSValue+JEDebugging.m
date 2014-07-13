@@ -19,16 +19,17 @@
 
 #pragma mark - NSObject
 
-- (NSString *)debugDescription
-{
+- (NSString *)debugDescription {
+    
+    // override any existing implementation
     return [super debugDescription];
 }
 
 
 #pragma mark - NSObject+JEDebugging
 
-- (NSString *)loggingDescription
-{
+- (NSString *)loggingDescription {
+    
     NSMutableString *typeNameBuilder = [[NSMutableString alloc] init];
     NSMutableString *valueStringBuilder = [[NSMutableString alloc] init];
     
@@ -46,8 +47,8 @@
 
 #pragma mark - Private
 
-+ (NSNumberFormatter *)integerFormatter
-{
++ (NSNumberFormatter *)integerFormatter {
+    
     static NSNumberFormatter *integerFormatter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -63,16 +64,16 @@
 + (void)appendDetailsForForValue:(NSValue *)wrappedValue
                 expectedObjCType:(const char [])objCType
                  typeNameBuilder:(NSMutableString *)typeNameBuilder
-              valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
-    if (!objCType || strlen(objCType) < 1)
-    {
+              valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
+    if (!objCType || strlen(objCType) < 1) {
+        
         [self appendDetailsForForUndefinedValueWithTypeNameBuilder:typeNameBuilder];
         return;
     }
     
-    switch (objCType[0])
-    {
+    switch (objCType[0]) {
+            
         case _C_ID:
             [self
              appendDetailsForForIdValue:wrappedValue
@@ -256,37 +257,37 @@
 + (void)appendDetailsForForIdValue:(NSValue *)wrappedValue
                   expectedObjCType:(const char [])objCType
                    typeNameBuilder:(NSMutableString *)typeNameBuilder
-                valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     id __unsafe_unretained idValue = nil;
     [wrappedValue getValue:&idValue];
     
-    if (idValue)
-    {
+    if (idValue) {
+        
         [typeNameBuilder appendFormat:@"%@ *", [idValue class]];
     }
-    else
-    {
+    else {
+        
         [typeNameBuilder appendString:@"id"];
     }
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
-    if (!idValue)
-    {
+    if (!idValue) {
+        
         [valueStringBuilder appendString:@"nil"];
         return;
     }
     
-    if ((strlen(objCType) > 1) && (objCType[1] == _C_UNDEF))
-    {
+    if ((strlen(objCType) > 1) && (objCType[1] == _C_UNDEF)) {
+        
         [valueStringBuilder appendFormat:@"<%p> ", idValue];
         
-        struct _JEBlockLiteral
-        {
+        struct _JEBlockLiteral {
+            
             Class isa;
             int flags;
             int reserved;
@@ -301,8 +302,8 @@
             } *descriptor;
         };
         
-        typedef NS_OPTIONS(NSUInteger, _JEBlockDescriptionFlags)
-        {
+        typedef NS_OPTIONS(NSUInteger, _JEBlockDescriptionFlags) {
+            
             _JEBlockDescriptionFlagsHasCopyDispose  = (1 << 25),
             _JEBlockDescriptionFlagsHasCtor         = (1 << 26), // helpers have C++ code
             _JEBlockDescriptionFlagsIsGlobal        = (1 << 28),
@@ -313,13 +314,14 @@
         struct _JEBlockLiteral *blockRef = (__bridge struct _JEBlockLiteral *)idValue;
         _JEBlockDescriptionFlags blockFlags = blockRef->flags;
         
-        if (blockFlags & _JEBlockDescriptionFlagsHasSignature)
-        {
+        if (blockFlags & _JEBlockDescriptionFlagsHasSignature) {
+            
             const void *signatureLocation = blockRef->descriptor;
             signatureLocation += sizeof(typeof(blockRef->descriptor->reserved));
             signatureLocation += sizeof(typeof(blockRef->descriptor->size));
             
             if (blockFlags & _JEBlockDescriptionFlagsHasCopyDispose) {
+                
                 signatureLocation += sizeof(typeof(blockRef->descriptor->copyHelper));
                 signatureLocation += sizeof(typeof(blockRef->descriptor->disposeHelper));
             }
@@ -339,20 +341,20 @@
             }
             
             NSUInteger argCount = [blockSignature numberOfArguments];
-            if (argCount <= 1)
-            {
+            if (argCount <= 1) {
+                
                 [valueStringBuilder appendFormat:@"(void)"];
             }
-            else
-            {
+            else {
+                
                 [valueStringBuilder appendString:@"("];
                 
-                for (NSUInteger i = 1; i < argCount; ++i)
-                {
+                for (NSUInteger i = 1; i < argCount; ++i) {
+                    
                     @autoreleasepool {
                         
-                        if (i > 1)
-                        {
+                        if (i > 1) {
+                            
                             [valueStringBuilder appendString:@", "];
                         }
                         
@@ -368,8 +370,8 @@
             }
         }
     }
-    else
-    {
+    else {
+        
         [valueStringBuilder appendString:[idValue
                                           loggingDescriptionIncludeClass:NO
                                           includeAddress:YES]];
@@ -378,12 +380,12 @@
 
 + (void)appendDetailsForForClassValue:(NSValue *)wrappedValue
                       typeNameBuilder:(NSMutableString *)typeNameBuilder
-                   valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                   valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"Class"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -394,12 +396,12 @@
 
 + (void)appendDetailsForForSelectorValue:(NSValue *)wrappedValue
                          typeNameBuilder:(NSMutableString *)typeNameBuilder
-                      valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                      valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"SEL"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -410,12 +412,12 @@
 
 + (void)appendDetailsForForCharValue:(NSValue *)wrappedValue
                      typeNameBuilder:(NSMutableString *)typeNameBuilder
-                  valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                  valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"char"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -444,28 +446,28 @@
     NSString *charMapping = replacementMapping[[[NSString alloc]
                                                 initWithCharacters:(unichar[]){ charValue }
                                                 length:1]];
-    if (charMapping)
-    {
+    if (charMapping) {
+        
         [valueStringBuilder appendFormat:@"'%@' (%i)", charMapping, charValue];
     }
-    else if (charValue < ' ' || charValue > '~')
-    {
+    else if (charValue < ' ' || charValue > '~') {
+        
         [valueStringBuilder appendFormat:@"'\\x%1$02u' (%1$i)", charValue];
     }
-    else
-    {
+    else {
+        
         [valueStringBuilder appendFormat:@"'%1$c' (%1$i)", charValue];
     }
 }
 
 + (void)appendDetailsForForUnsignedCharValue:(NSValue *)wrappedValue
                              typeNameBuilder:(NSMutableString *)typeNameBuilder
-                          valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                          valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"unsigned char"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -476,12 +478,12 @@
 
 + (void)appendDetailsForForShortValue:(NSValue *)wrappedValue
                       typeNameBuilder:(NSMutableString *)typeNameBuilder
-                   valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                   valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"short"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -492,12 +494,12 @@
 
 + (void)appendDetailsForForUnsignedShortValue:(NSValue *)wrappedValue
                               typeNameBuilder:(NSMutableString *)typeNameBuilder
-                           valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                           valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"unsigned short"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -508,12 +510,12 @@
 
 + (void)appendDetailsForForIntValue:(NSValue *)wrappedValue
                     typeNameBuilder:(NSMutableString *)typeNameBuilder
-                 valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                 valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"int"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -524,12 +526,12 @@
 
 + (void)appendDetailsForForUnsignedIntValue:(NSValue *)wrappedValue
                             typeNameBuilder:(NSMutableString *)typeNameBuilder
-                         valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                         valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"unsigned int"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -540,12 +542,12 @@
 
 + (void)appendDetailsForForLongValue:(NSValue *)wrappedValue
                      typeNameBuilder:(NSMutableString *)typeNameBuilder
-                  valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                  valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"long"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -556,12 +558,12 @@
 
 + (void)appendDetailsForForUnsignedLongValue:(NSValue *)wrappedValue
                              typeNameBuilder:(NSMutableString *)typeNameBuilder
-                          valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                          valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"unsigned long"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -572,12 +574,12 @@
 
 + (void)appendDetailsForForLongLongValue:(NSValue *)wrappedValue
                          typeNameBuilder:(NSMutableString *)typeNameBuilder
-                      valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                      valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"long long"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -588,12 +590,12 @@
 
 + (void)appendDetailsForForUnsignedLongLongValue:(NSValue *)wrappedValue
                                  typeNameBuilder:(NSMutableString *)typeNameBuilder
-                              valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                              valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"unsigned long long"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -604,12 +606,12 @@
 
 + (void)appendDetailsForForFloatValue:(NSValue *)wrappedValue
                       typeNameBuilder:(NSMutableString *)typeNameBuilder
-                   valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                   valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"float"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -618,24 +620,24 @@
     
     static const int _JREDecimalDigits = 9;
     
-    if (floatValue >= (powf(10.0f, (_JREDecimalDigits - 1))))
-    {
+    if (floatValue >= (powf(10.0f, (_JREDecimalDigits - 1)))) {
+        
         [valueStringBuilder appendFormat:@"%.*e", FLT_DIG, floatValue];
     }
-    else
-    {
+    else {
+        
         [valueStringBuilder appendFormat:@"%.*g", _JREDecimalDigits, floatValue];
     }
 }
 
 + (void)appendDetailsForForDoubleValue:(NSValue *)wrappedValue
                        typeNameBuilder:(NSMutableString *)typeNameBuilder
-                    valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                    valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"double"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -644,24 +646,24 @@
     
     static const int _JREDecimalDigits = 17;
     
-    if (doubleValue >= (pow(10.0, (_JREDecimalDigits - 1))))
-    {
+    if (doubleValue >= (pow(10.0, (_JREDecimalDigits - 1)))) {
+        
         [valueStringBuilder appendFormat:@"%.*e", DBL_DIG, doubleValue];
     }
-    else
-    {
+    else {
+        
         [valueStringBuilder appendFormat:@"%.*g", _JREDecimalDigits, doubleValue];
     }
 }
 
 + (void)appendDetailsForForLongDoubleValue:(NSValue *)wrappedValue
                            typeNameBuilder:(NSMutableString *)typeNameBuilder
-                        valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                        valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"long double"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -670,12 +672,12 @@
     
     static const int _JREDecimalDigits = 21;
     
-    if (longDoubleValue >= (powl(10.0l, (_JREDecimalDigits - 1))))
-    {
+    if (longDoubleValue >= (powl(10.0l, (_JREDecimalDigits - 1)))) {
+        
         [valueStringBuilder appendFormat:@"%.*Le", LDBL_DIG, longDoubleValue];
     }
-    else
-    {
+    else {
+        
         [valueStringBuilder appendFormat:@"%.*Lg", _JREDecimalDigits, longDoubleValue];
     }
 }
@@ -683,8 +685,8 @@
 + (void)appendDetailsForForBitFieldValue:(NSValue *)wrappedValue
                         expectedObjCType:(const char [])objCType
                          typeNameBuilder:(NSMutableString *)typeNameBuilder
-                      valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                      valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     // Note that currently it is impossible to reach this code.
     // A bug(?) with NSGetSizeAndAlignment prevents structs and unions with bitfields to be wrapped in NSValue, in which case the NSValue for the containing struct will be nil in the first place.
     // The code below is for future reference only.
@@ -696,8 +698,8 @@
     
     [typeNameBuilder appendFormat:@"%llubit", bitCount];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -713,12 +715,12 @@
 
 + (void)appendDetailsForForBoolValue:(NSValue *)wrappedValue
                      typeNameBuilder:(NSMutableString *)typeNameBuilder
-                  valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                  valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"bool"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -727,23 +729,23 @@
     [valueStringBuilder appendString:(boolValue ? @"true" : @"false")];
 }
 
-+ (void)appendDetailsForForVoidValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
-{
++ (void)appendDetailsForForVoidValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder {
+    
     [typeNameBuilder appendString:@"void"];
 }
 
-+ (void)appendDetailsForForUndefinedValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
-{
++ (void)appendDetailsForForUndefinedValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder {
+    
     [typeNameBuilder appendString:@"?"];
 }
 
 + (void)appendDetailsForForPointerValue:(NSValue *)wrappedValue
                        expectedObjCType:(const char [])objCType
                         typeNameBuilder:(NSMutableString *)typeNameBuilder
-                     valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
-    if (strlen(objCType) < 2)
-    {
+                     valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
+    if (strlen(objCType) < 2) {
+        
         [self appendDetailsForForUndefinedValueWithTypeNameBuilder:typeNameBuilder];
         return;
     }
@@ -752,32 +754,32 @@
     [wrappedValue getValue:&pointerValue];
     
     objCType++;
-    if (objCType[0] == _C_UNDEF)
-    {
+    if (objCType[0] == _C_UNDEF) {
+        
         [typeNameBuilder appendString:@"func *"];
         
-        if (!valueStringBuilder)
-        {
+        if (!valueStringBuilder) {
+            
             return;
         }
         
-        if (pointerValue)
-        {
+        if (pointerValue) {
+            
             [valueStringBuilder appendFormat:@"<%p>", pointerValue];
         }
-        else
-        {
+        else {
+            
             [valueStringBuilder appendString:@"NULL"];
         }
     }
-    else
-    {
-        if (pointerValue)
-        {
+    else {
+        
+        if (pointerValue) {
+            
             [valueStringBuilder appendFormat:@"<%p> ", pointerValue];
         }
-        else
-        {
+        else {
+            
             [valueStringBuilder appendString:@"NULL"];
         }
         
@@ -797,42 +799,42 @@
 
 + (void)appendDetailsForForCStringValue:(NSValue *)wrappedValue
                         typeNameBuilder:(NSMutableString *)typeNameBuilder
-                     valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
+                     valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
     [typeNameBuilder appendString:@"char *"];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
     const char *cstringValue = NULL;
     [wrappedValue getValue:&cstringValue];
     
-    if (cstringValue)
-    {
+    if (cstringValue) {
+        
         NSMutableString *escapedString = [[NSMutableString alloc] initWithUTF8String:cstringValue];
         [escapedString escapeWithUTF8CStringRepresentation];
         [valueStringBuilder appendFormat:@"<%p> %@", cstringValue, escapedString];
     }
-    else
-    {
+    else {
+        
         [valueStringBuilder appendString:@"NULL"];
     }
 }
 
-+ (void)appendDetailsForForAtomValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder
-{
++ (void)appendDetailsForForAtomValueWithTypeNameBuilder:(NSMutableString *)typeNameBuilder {
+    
     [typeNameBuilder appendString:@"atom"];
 }
 
 + (void)appendDetailsForForArrayValue:(NSValue *)wrappedValue
                      expectedObjCType:(const char [])objCType
                       typeNameBuilder:(NSMutableString *)typeNameBuilder
-                   valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
-    if (strlen(objCType) < 2)
-    {
+                   valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
+    if (strlen(objCType) < 2) {
+        
         [self appendDetailsForForUndefinedValueWithTypeNameBuilder:typeNameBuilder];
         return;
     }
@@ -859,13 +861,13 @@
     
     [typeNameBuilder appendFormat:@"[%llu]", count];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
-    if (count <= 0)
-    {
+    if (count <= 0) {
+        
         [valueStringBuilder appendString:@"[]"];
         return;
     }
@@ -880,14 +882,14 @@
     [wrappedValue getValue:arrayValue];
     
     NSMutableString *valueString = [[NSMutableString alloc] initWithString:@"["];
-    for (unsigned long long i = 0; i < count; ++i)
-    {
-        if (i > 0)
-        {
+    for (unsigned long long i = 0; i < count; ++i) {
+        
+        if (i > 0) {
+            
             [valueString appendString:@",\n"];
         }
-        else
-        {
+        else {
+            
             [valueString appendString:@"\n"];
         }
         
@@ -921,10 +923,10 @@
 + (void)appendDetailsForForUnionValue:(NSValue *)wrappedValue
                      expectedObjCType:(const char [])objCType
                       typeNameBuilder:(NSMutableString *)typeNameBuilder
-                   valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
-    if (strlen(objCType) < 2)
-    {
+                   valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
+    if (strlen(objCType) < 2) {
+        
         [self appendDetailsForForUndefinedValueWithTypeNameBuilder:typeNameBuilder];
         return;
     }
@@ -940,16 +942,16 @@
     
     [typeNameBuilder appendFormat:@"union %@", structName];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
     NSString *description = [wrappedValue description];
-    if (([NSString isNilOrEmptyString:description] || [description length] == 2 )
+    if (([NSString isNilOrEmptyString:description] || [description length] == 2)
         && [description hasPrefix:@"<"]
-        && [description hasSuffix:@">"])
-    {
+        && [description hasSuffix:@">"]) {
+        
         description = @"...";
     }
     [valueStringBuilder appendFormat:@"{ %@ }", description];
@@ -958,10 +960,10 @@
 + (void)appendDetailsForStructValue:(NSValue *)wrappedValue
                    expectedObjCType:(const char [])objCType
                     typeNameBuilder:(NSMutableString *)typeNameBuilder
-                 valueStringBuilder:(NSMutableString *)valueStringBuilder
-{
-    if (strlen(objCType) < 2)
-    {
+                 valueStringBuilder:(NSMutableString *)valueStringBuilder {
+    
+    if (strlen(objCType) < 2) {
+        
         [self appendDetailsForForUndefinedValueWithTypeNameBuilder:typeNameBuilder];
         return;
     }
@@ -977,8 +979,8 @@
     
     [typeNameBuilder appendFormat:@"struct %@", structName];
     
-    if (!valueStringBuilder)
-    {
+    if (!valueStringBuilder) {
+        
         return;
     }
     
@@ -1123,17 +1125,17 @@
     });
     
     void (^getStructString)(NSValue *structValue, NSMutableString *stringBuilder) = structHandlers[@(objCType)];
-    if (getStructString)
-    {
+    if (getStructString) {
+        
         getStructString(wrappedValue, valueStringBuilder);
     }
-    else
-    {
+    else {
+        
         NSString *description = [wrappedValue description];
         if (([NSString isNilOrEmptyString:description] || [description length] == 2 )
             && [description hasPrefix:@"<"]
-            && [description hasSuffix:@">"])
-        {
+            && [description hasSuffix:@">"]) {
+            
             description = @"...";
         }
         [valueStringBuilder appendFormat:@"{ %@ }", description];

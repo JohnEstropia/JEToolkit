@@ -17,14 +17,12 @@
 
 #if DEBUG
 
-#define JEKeypath(type, property) \
-    ({ \
+#define JEKeypath(type, property) ({ \
         type _je_keypath_dummy; \
         _je_keypath_dummy.property, @#property; \
     })
 
-#define JEKeypathOperator(operator, type, property) \
-    ({ \
+#define JEKeypathOperator(operator, type, property) ({ \
         type _je_keypath_dummy; \
         _je_keypath_dummy.property, @"@" #operator "." #property; \
     })
@@ -44,8 +42,8 @@
 #pragma mark - Localizable Strings
 
 JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *JEL8N(NSString *keyString)
-{
+NSString *JEL8N(NSString *keyString) {
+    
 	NSString *localizedString = NSLocalizedString(keyString, nil);
     JEAssert(keyString != localizedString,
               @"\"%@\" not found in Localizable.strings",
@@ -54,8 +52,8 @@ NSString *JEL8N(NSString *keyString)
 }
 
 JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *JEL8N(NSString *keyString, NSString *stringsFile)
-{
+NSString *JEL8N(NSString *keyString, NSString *stringsFile) {
+    
 	NSString *localizedString = NSLocalizedStringFromTable(keyString, stringsFile, nil);
     JEAssert(keyString != localizedString,
               @"\"%@\" not found in %@.strings",
@@ -87,7 +85,7 @@ NSString *JEL8N(NSString *keyString, NSString *stringsFile)
 
 #pragma mark - Blocks
 
-#define JEBlock(returnType, identifier, arguments, block...) \
+#define JEBlockCreate(returnType, identifier, arguments, block...) \
     returnType (^identifier)arguments = ({ \
         typeof(identifier) __weak __block __je_block_weak_##identifier; \
         typeof(identifier) __je_block_strong_##identifier; \

@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
-typedef NS_OPTIONS(NSUInteger, JELogLevelMask)
-{
+typedef NS_OPTIONS(NSUInteger, JELogLevelMask) {
+    
     JELogLevelNone      = 0,
     JELogLevelTrace     = (1 << 0),
     JELogLevelNotice    = (1 << 1),
@@ -20,8 +20,8 @@ typedef NS_OPTIONS(NSUInteger, JELogLevelMask)
     JELogLevelAll       = ~0u
 };
 
-typedef NS_OPTIONS(NSUInteger, JELogMessageHeaderMask)
-{
+typedef NS_OPTIONS(NSUInteger, JELogMessageHeaderMask) {
+    
     JELogMessageHeaderNone          = 0,
     JELogMessageHeaderDate          = (1 << 0),
     JELogMessageHeaderQueue         = (1 << 1),

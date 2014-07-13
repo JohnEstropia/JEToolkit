@@ -15,15 +15,15 @@
 
 + (instancetype)imageFromFile:(NSString *)filePath
                         scale:(CGFloat)scale
-                  orientation:(UIImageOrientation)orientation
-{
+                  orientation:(UIImageOrientation)orientation {
+    
     NSParameterAssert(filePath);
     NSParameterAssert(scale > 0.0f);
     
     NSData *data = [[NSData alloc] initWithContentsOfFile:filePath];
     UIImage *image = [[self alloc] initWithData:data scale:scale];
-    if (image.imageOrientation != orientation)
-    {
+    if (image.imageOrientation != orientation) {
+        
         image = [[self alloc] initWithCGImage:image.CGImage
                                         scale:scale
                                   orientation:orientation];
@@ -31,8 +31,8 @@
     return image;
 }
 
-+ (UIImage *)imageFromColor:(UIColor *)color size:(CGSize)size
-{
++ (UIImage *)imageFromColor:(UIColor *)color size:(CGSize)size {
+    
 	CGRect rect = (CGRect){ .origin = CGPointZero, .size = size };
 	UIGraphicsBeginImageContextWithOptions(size, NO, 0.0f);
 	CGContextRef context = UIGraphicsGetCurrentContext();
@@ -46,12 +46,12 @@
 	return image;
 }
 
-+ (UIImage *)screenshot
-{
++ (UIImage *)screenshot {
+    
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     CGSize imageSize = [UIScreen mainScreen].bounds.size;
-    if (UIInterfaceOrientationIsLandscape(orientation))
-    {
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
+        
         imageSize = (CGSize){
             .width = imageSize.height,
             .height = imageSize.width
@@ -60,8 +60,8 @@
     
     UIGraphicsBeginImageContextWithOptions(imageSize, YES, 0.0f);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    for (UIWindow *window in [[UIApplication sharedApplication] windows])
-    {
+    for (UIWindow *window in [[UIApplication sharedApplication] windows]) {
+        
         CGRect windowBounds = window.bounds;
         CGContextSaveGState(context);
         CGContextTranslateCTM(context,
@@ -71,27 +71,28 @@
         CGContextTranslateCTM(context,
                               (-windowBounds.size.width * window.layer.anchorPoint.x),
                               (-windowBounds.size.height * window.layer.anchorPoint.y));
-        if (orientation == UIInterfaceOrientationLandscapeLeft)
-        {
+        if (orientation == UIInterfaceOrientationLandscapeLeft) {
+            
             CGContextRotateCTM(context, M_PI_2);
             CGContextTranslateCTM(context, 0, -imageSize.width);
         }
-        else if (orientation == UIInterfaceOrientationLandscapeRight)
-        {
+        else if (orientation == UIInterfaceOrientationLandscapeRight) {
+            
             CGContextRotateCTM(context, -M_PI_2);
             CGContextTranslateCTM(context, -imageSize.height, 0);
         }
-        else if (orientation == UIInterfaceOrientationPortraitUpsideDown)
-        {
+        else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+            
             CGContextRotateCTM(context, M_PI);
             CGContextTranslateCTM(context, -imageSize.width, -imageSize.height);
         }
-        if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)])
-        {
+        
+        if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+            
             [window drawViewHierarchyInRect:windowBounds afterScreenUpdates:YES];
         }
-        else
-        {
+        else {
+            
             [window.layer renderInContext:context];
         }
         CGContextRestoreGState(context);
@@ -102,8 +103,8 @@
     return image;
 }
 
-- (instancetype)decodedImage
-{
+- (instancetype)decodedImage {
+    
     CGImageRef CGImage = self.CGImage;
     CGSize imageSize = CGSizeMake(CGImageGetWidth(CGImage), CGImageGetHeight(CGImage));
     CGRect imageRect = (CGRect){ .size = imageSize };
@@ -118,14 +119,16 @@
     
     // CGBitmapContextCreate doesn't support kCGImageAlphaNone with RGB.
     // https://developer.apple.com/library/mac/#qa/qa1037/_index.html
-    if (infoMask == kCGImageAlphaNone && CGColorSpaceGetNumberOfComponents(colorSpace) > 1)
-    {
+    if (infoMask == kCGImageAlphaNone
+        && CGColorSpaceGetNumberOfComponents(colorSpace) > 1) {
+        
         bitmapInfo &= ~kCGBitmapAlphaInfoMask;
         bitmapInfo |= kCGImageAlphaNoneSkipFirst;
     }
     // Some PNGs tell us they have alpha but only 3 components. Odd.
-    else if (!anyNonAlpha && CGColorSpaceGetNumberOfComponents(colorSpace) == 3)
-    {
+    else if (!anyNonAlpha
+             && CGColorSpaceGetNumberOfComponents(colorSpace) == 3) {
+        
         bitmapInfo &= ~kCGBitmapAlphaInfoMask;
         bitmapInfo |= kCGImageAlphaPremultipliedFirst;
     }
@@ -139,8 +142,8 @@
                                                  bitmapInfo);
     CGColorSpaceRelease(colorSpace);
     
-    if (!context)
-    {
+    if (!context) {
+        
         return self;
     }
     

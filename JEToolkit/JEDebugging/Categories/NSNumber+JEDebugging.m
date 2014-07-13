@@ -15,26 +15,27 @@
 
 #pragma mark - NSObject
 
-- (NSString *)debugDescription
-{
+- (NSString *)debugDescription {
+    
+    // override any existing implementation
     return [super debugDescription];
 }
 
 
 #pragma mark - NSObject+JEDebugging
 
-- (NSString *)loggingDescription
-{
-    if (self == (id)kCFBooleanTrue)
-    {
+- (NSString *)loggingDescription {
+    
+    if (self == (id)kCFBooleanTrue) {
+        
         return @"@YES";
     }
-    else if (self == (id)kCFBooleanFalse)
-    {
+    else if (self == (id)kCFBooleanFalse) {
+        
         return @"@NO";
     }
-    else
-    {
+    else {
+        
         return [NSString stringWithFormat:
                 @"@(%@)",
                 [super loggingDescription]];

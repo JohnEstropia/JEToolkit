@@ -23,11 +23,11 @@
 
 #pragma mark - NSObject
 
-- (instancetype)init
-{
+- (instancetype)init {
+    
     self = [super init];
-    if (!self)
-    {
+    if (!self) {
+        
         return nil;
     }
     
@@ -40,8 +40,8 @@
 
 #pragma mark - Public
 
-- (id)objectForKey:(id)key
-{
+- (id)objectForKey:(id)key {
+    
     id __block object;
     JEScopeWeak(self);
     dispatch_barrier_sync(self.barrierQueue, ^{
@@ -53,26 +53,26 @@
     return object;
 }
 
-- (void)setObject:(id)obj forKey:(id)key
-{
+- (void)setObject:(id)obj forKey:(id)key {
+    
     JEScopeWeak(self);
     dispatch_barrier_async(self.barrierQueue, ^{
         
         JEScopeStrong(self);
-        if (obj)
-        {
+        if (obj) {
+            
             [self.mapTable setObject:obj forKey:key];
         }
-        else
-        {
+        else {
+            
             [self.mapTable removeObjectForKey:key];
         }
         
     });
 }
 
-- (void)removeObjectForKey:(id)key
-{
+- (void)removeObjectForKey:(id)key {
+    
     JEScopeWeak(self);
     dispatch_barrier_async(self.barrierQueue, ^{
         
@@ -82,13 +82,13 @@
     });
 }
 
-- (id)objectForKeyedSubscript:(id)key
-{
+- (id)objectForKeyedSubscript:(id)key {
+    
     return [self objectForKey:key];
 }
 
-- (void)setObject:(id)obj forKeyedSubscript:(id)key
-{
+- (void)setObject:(id)obj forKeyedSubscript:(id)key {
+    
     [self setObject:obj forKey:key];
 }
 

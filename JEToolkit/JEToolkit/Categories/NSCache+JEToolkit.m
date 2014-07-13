@@ -13,13 +13,13 @@
 
 #pragma mark - Public
 
-- (id)objectForKeyedSubscript:(id)key
-{
+- (id)objectForKeyedSubscript:(id)key {
+    
     return [self objectForKey:key];
 }
 
-- (void)setObject:(id)obj forKeyedSubscript:(id)key
-{
+- (void)setObject:(id)obj forKeyedSubscript:(id)key {
+    
     [self setObject:obj forKey:key];
 }
 

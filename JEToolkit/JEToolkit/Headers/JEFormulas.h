@@ -15,14 +15,14 @@
 #pragma mark - Arithmetic
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-NSInteger JEModulo(NSInteger number, NSInteger divisor)
-{
+NSInteger JEModulo(NSInteger number, NSInteger divisor) {
+    
     return (((number % divisor) + divisor) % divisor);
 }
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-double JEModulo(double number, double divisor)
-{
+double JEModulo(double number, double divisor) {
+    
     return fmod((fmod(number, divisor) + divisor), divisor);
 }
 
@@ -30,20 +30,20 @@ double JEModulo(double number, double divisor)
 #pragma mark - Clamping Values
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-double JEClamp(double min, double value, double max)
-{
+double JEClamp(double min, double value, double max) {
+    
 	return MIN(max, MAX(min, value));
 }
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-NSInteger JEClamp(NSInteger min, NSInteger value, NSInteger max)
-{
+NSInteger JEClamp(NSInteger min, NSInteger value, NSInteger max) {
+    
 	return MIN(max, MAX(min, value));
 }
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-NSUInteger JEClamp(NSUInteger min, NSUInteger value, NSUInteger max)
-{
+NSUInteger JEClamp(NSUInteger min, NSUInteger value, NSUInteger max) {
+    
 	return MIN(max, MAX(min, value));
 }
 
@@ -51,38 +51,38 @@ NSUInteger JEClamp(NSUInteger min, NSUInteger value, NSUInteger max)
 #pragma mark - Geometry
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-double JEAngleRadians(double degrees)
-{
+double JEAngleRadians(double degrees) {
+    
 	return (M_PI * degrees / 180.0);
 }
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-double JEAngleRadians(CGPoint point1, CGPoint point2, BOOL isTopToBottomCoordinateSystem)
-{
-    if (isTopToBottomCoordinateSystem)
-    {
+double JEAngleRadians(CGPoint point1, CGPoint point2, BOOL isTopToBottomCoordinateSystem) {
+    
+    if (isTopToBottomCoordinateSystem) {
+        
         return atan2((point2.y - point1.y), (point1.x - point2.x));
     }
     return atan2((point1.y - point2.y), (point2.x - point1.x));
 }
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-double JEAngleDegrees(double radians)
-{
+double JEAngleDegrees(double radians) {
+    
 	return (180.0 * radians / M_PI);
 }
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
-double JEAngleDegrees(CGPoint point1, CGPoint point2, BOOL isTopToBottomCoordinateSystem)
-{
+double JEAngleDegrees(CGPoint point1, CGPoint point2, BOOL isTopToBottomCoordinateSystem) {
+    
 	return JEAngleDegrees(JEAngleRadians(point1, point2, isTopToBottomCoordinateSystem));
 }
 
 JE_STATIC_INLINE JE_CONST
-CGPoint JEPoint(CGPoint startPoint, double angle, double distance, BOOL isTopToBottomCoordinateSystem)
-{
-    if (isTopToBottomCoordinateSystem)
-    {
+CGPoint JEPoint(CGPoint startPoint, double angle, double distance, BOOL isTopToBottomCoordinateSystem) {
+    
+    if (isTopToBottomCoordinateSystem) {
+        
         return (CGPoint){
             .x = (startPoint.x + (sin(angle) * distance)),
             .y = (startPoint.y + (cos(angle) * distance))
@@ -95,14 +95,14 @@ CGPoint JEPoint(CGPoint startPoint, double angle, double distance, BOOL isTopToB
 }
 
 JE_STATIC_INLINE JE_CONST
-double JEDistance(CGPoint point1, CGPoint point2)
-{
+double JEDistance(CGPoint point1, CGPoint point2) {
+    
     return hypot((point1.x - point2.x), (point1.y - point2.y));
 }
 
 JE_STATIC_INLINE JE_CONST JE_CONST JE_OVERLOAD
-CGPoint JEPointMidpoint(CGPoint point1, CGPoint point2)
-{
+CGPoint JEPointMidpoint(CGPoint point1, CGPoint point2) {
+    
     return (CGPoint){
         .x = ((point1.x + point2.x) * 0.5f),
         .y = ((point1.y + point2.y) * 0.5f),
@@ -110,8 +110,8 @@ CGPoint JEPointMidpoint(CGPoint point1, CGPoint point2)
 }
 
 JE_STATIC_INLINE JE_CONST
-CGRect JERect(CGPoint midpoint, CGFloat width, CGFloat height)
-{
+CGRect JERect(CGPoint midpoint, CGFloat width, CGFloat height) {
+    
     return (CGRect){
         .origin.x = (midpoint.x - (width * 0.5f)),
         .origin.y = (midpoint.y - (height * 0.5f)),
@@ -121,14 +121,14 @@ CGRect JERect(CGPoint midpoint, CGFloat width, CGFloat height)
 }
 
 JE_STATIC_INLINE JE_CONST JE_CONST JE_OVERLOAD
-CGPoint JERectCenter(CGRect rect)
-{
+CGPoint JERectCenter(CGRect rect) {
+    
 	return (CGPoint){ .x = CGRectGetMidX(rect), .y = CGRectGetMidY(rect) };
 }
 
 JE_STATIC_INLINE JE_CONST
-CGSize JESizeScaled(CGSize size, CGFloat scale)
-{
+CGSize JESizeScaled(CGSize size, CGFloat scale) {
+    
     return (CGSize){ .width = (size.width * scale), .height = (size.height * scale) };
 }
 
@@ -136,14 +136,14 @@ CGSize JESizeScaled(CGSize size, CGFloat scale)
 #pragma mark - Random
 
 JE_STATIC_INLINE
-int32_t JERandomInteger(int32_t min, int32_t max)
-{
+int32_t JERandomInteger(int32_t min, int32_t max) {
+    
     return ((int32_t)arc4random_uniform((u_int32_t)(max - min + 1)) + min);
 }
 
 JE_STATIC_INLINE
-double JERandomDouble(double min, double max)
-{
+double JERandomDouble(double min, double max) {
+    
     return ((((double)arc4random() / (double)(UINT32_MAX + 1)) * (max - min)) + min);
 }
 

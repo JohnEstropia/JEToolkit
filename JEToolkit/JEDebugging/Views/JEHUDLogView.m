@@ -43,11 +43,11 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 #pragma mark - NSObject
 
 - (instancetype)initWithFrame:(CGRect)frame
-           threadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings
-{
+           threadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings {
+    
     self = [super initWithFrame:frame];
-    if (!self)
-    {
+    if (!self) {
+        
         return nil;
     }
     
@@ -81,8 +81,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     tableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     tableView.separatorColor = [UIColor colorWithWhite:1.0f alpha:0.1f];
-    if ([tableView respondsToSelector:@selector(setSeparatorInset:)])
-    {
+    if ([tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        
         tableView.separatorInset = (UIEdgeInsets){ .left = 10.0f, .right = 10.0f };
     }
     tableView.contentInset = tableView.scrollIndicatorInsets;
@@ -224,8 +224,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
+    
     [[NSNotificationCenter defaultCenter]
      removeObserver:self
      name:UIApplicationDidChangeStatusBarOrientationNotification
@@ -235,8 +235,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 
 #pragma mark - UIResponder
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
-{
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    
     UIView *view = [super hitTest:point withEvent:event];
     return (view == self ? nil : view);
 }
@@ -244,8 +244,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 
 #pragma mark - UIView
 
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
+    
     [super layoutSubviews];
     
     UIView *menuView = self.menuView;
@@ -266,16 +266,16 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
     return [self.logEntries count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     static UITableViewCell *dummyCell;
-    if (!dummyCell)
-    {
+    if (!dummyCell) {
+        
         dummyCell = [self cellForIndexPath:nil];
     }
     
@@ -293,8 +293,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
                   + 10.0f));
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     UITableViewCell *cell = [self cellForIndexPath:indexPath];
     
     UILabel *textLabel = cell.textLabel;
@@ -306,18 +306,18 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     cell.textLabel.text = nil;
 }
 
 
 #pragma mark - @selector
 
-- (void)toggleButtonTouchUpInside:(UIButton *)sender
-{
-    if (self.isDraggingToggleButton)
-    {
+- (void)toggleButtonTouchUpInside:(UIButton *)sender {
+    
+    if (self.isDraggingToggleButton) {
+        
         self.isDraggingToggleButton = NO;
         return;
     }
@@ -326,13 +326,13 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     [self didUpdateHUDVisibility];
 }
 
-- (void)toggleButtonTouchEnd:(UIButton *)sender
-{
+- (void)toggleButtonTouchEnd:(UIButton *)sender {
+    
     self.isDraggingToggleButton = NO;
 }
 
-- (void)toggleButtonTouchDrag:(UIButton *)sender withEvent:(UIEvent *)event
-{
+- (void)toggleButtonTouchDrag:(UIButton *)sender withEvent:(UIEvent *)event {
+    
     self.isDraggingToggleButton = YES;
     
     UITouch *touch = [[event touchesForView:sender] anyObject];
@@ -354,8 +354,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     [self layoutConsoleView];
 }
 
-- (void)screenshotButtonTouchUpInside:(UIButton *)sender
-{
+- (void)screenshotButtonTouchUpInside:(UIButton *)sender {
+    
     UIView *menuView = self.menuView;
     UIView *consoleView = self.consoleView;
     UIButton *resizeButton = self.resizeButton;
@@ -376,13 +376,13 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     resizeButton.hidden = resizeButtonHidden;
 }
 
-- (void)resizeButtonTouchEnd:(UIButton *)sender
-{
+- (void)resizeButtonTouchEnd:(UIButton *)sender {
+    
     self.isDraggingResizeButton = NO;
 }
 
-- (void)resizeButtonTouchDrag:(UIButton *)sender withEvent:(UIEvent *)event
-{
+- (void)resizeButtonTouchDrag:(UIButton *)sender withEvent:(UIEvent *)event {
+    
     self.isDraggingResizeButton = YES;
     
     UITouch *touch = [[event touchesForView:sender] anyObject];
@@ -401,8 +401,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     [self layoutConsoleView];
 }
 
-- (void)applicationDidChangeStatusBarOrientation:(NSNotification *)note
-{
+- (void)applicationDidChangeStatusBarOrientation:(NSNotification *)note {
+    
     CGAffineTransform transform = CGAffineTransformIdentity;
     CGRect bounds = [UIScreen mainScreen].bounds;
     switch ([UIApplication sharedApplication].statusBarOrientation)
@@ -410,14 +410,17 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
         case UIInterfaceOrientationPortraitUpsideDown:
             transform = CGAffineTransformMakeRotation(M_PI);
             break;
+            
         case UIInterfaceOrientationLandscapeLeft:
             transform = CGAffineTransformMakeRotation(-M_PI_2);
             bounds.size = (CGSize){ .width = CGRectGetHeight(bounds), .height = CGRectGetWidth(bounds) };
             break;
+            
         case UIInterfaceOrientationLandscapeRight:
             transform = CGAffineTransformMakeRotation(M_PI_2);
             bounds.size = (CGSize){ .width = CGRectGetHeight(bounds), .height = CGRectGetWidth(bounds) };
             break;
+            
         case UIInterfaceOrientationPortrait:
         default:
             break;
@@ -429,8 +432,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 
 #pragma mark - Private
 
-- (void)didUpdateHUDVisibility
-{
+- (void)didUpdateHUDVisibility {
+    
     BOOL consoleHidden = !self.toggleButton.selected;
     self.consoleView.hidden = consoleHidden;
     self.resizeButton.hidden = consoleHidden;
@@ -442,8 +445,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     CGRect menuFrame = menuView.frame;
     
     CAShapeLayer *menuMaskLayer = self.menuMaskLayer;
-    if (consoleHidden)
-    {
+    if (consoleHidden) {
+        
         menuView.frame = (CGRect){
             .origin = menuFrame.origin,
             .size.width = CGRectGetMinX(screenshotButton.frame),
@@ -472,8 +475,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     [tableView reloadData];
     
     NSUInteger numberOfLogEntries = [self.logEntries count];
-    if (numberOfLogEntries <= 0)
-    {
+    if (numberOfLogEntries <= 0) {
+        
         return;
     }
     
@@ -484,14 +487,14 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     [tableView flashScrollIndicators];
 }
 
-- (UITableViewCell *)cellForIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)cellForIndexPath:(NSIndexPath *)indexPath {
+    
     UITableViewCell *cell = (indexPath
                              ? [self.tableView
                                 dequeueReusableCellWithIdentifier:JEHUDCellReuseIdentifier]
                              : nil);
-    if (!cell)
-    {
+    if (!cell) {
+        
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:JEHUDCellReuseIdentifier];
         cell.backgroundColor = [UIColor clearColor];
         cell.backgroundView = [[UIView alloc] init];
@@ -508,8 +511,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     return cell;
 }
 
-- (void)layoutConsoleView
-{
+- (void)layoutConsoleView {
+    
     CGRect bounds = self.bounds;
     CGFloat boundsHeight = CGRectGetHeight(bounds);
     
@@ -521,11 +524,11 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     CGRect resizeButtonFrame = resizeButton.frame;
     
     UIView *consoleView = self.consoleView;
-    if (self.isDraggingResizeButton)
-    {
+    if (self.isDraggingResizeButton) {
+        
         CGFloat resizeButtonTop = CGRectGetMinY(resizeButtonFrame);
-        if (resizeButtonTop > (boundsHeight - CGRectGetHeight(resizeButtonFrame)))
-        {
+        if (resizeButtonTop > (boundsHeight - CGRectGetHeight(resizeButtonFrame))) {
+            
             resizeButtonTop = boundsHeight;
         }
         resizeButton.frame = (CGRect){
@@ -542,8 +545,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
             .size.height = (CGRectGetMinY(resizeButton.frame) - menuBottom)
         };
     }
-    else
-    {
+    else {
+        
         consoleView.frame = (CGRect){
             .origin.x = 0.0f,
             .origin.y = menuBottom,
@@ -565,8 +568,8 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 #pragma mark - Public
 
 - (void)addLogString:(NSString *)logString
-withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings
-{
+withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings {
+    
     NSCParameterAssert(logString != nil);
     NSCParameterAssert(HUDLogSettings != nil);
     NSCAssert([NSThread isMainThread],
@@ -583,8 +586,8 @@ withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings
     
     NSMutableArray *indexPathsToDelete;
     NSUInteger maxNumberOfLogEntriesInMemory = HUDLogSettings.numberOfLogEntriesInMemory;
-    if (numberOfLogEntries >= maxNumberOfLogEntriesInMemory)
-    {
+    if (numberOfLogEntries >= maxNumberOfLogEntriesInMemory) {
+        
         NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:(NSRange){
             .location = 0,
             .length = (numberOfLogEntries - maxNumberOfLogEntriesInMemory)
@@ -601,22 +604,22 @@ withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings
     
     [logEntries addObject:logString];
     
-    if (self.consoleView.hidden)
-    {
+    if (self.consoleView.hidden) {
+        
         return;
     }
     
     NSUInteger newNumberOfLogEntries = [logEntries count];
     NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:(newNumberOfLogEntries - 1) inSection:0];
-    if (numberOfLogEntries == newNumberOfLogEntries)
-    {
+    if (numberOfLogEntries == newNumberOfLogEntries) {
+        
         [tableView reloadData];
     }
-    else
-    {
+    else {
+        
         [tableView beginUpdates];
-        if (indexPathsToDelete)
-        {
+        if (indexPathsToDelete) {
+            
             [tableView
              deleteRowsAtIndexPaths:indexPathsToDelete
              withRowAnimation:UITableViewRowAnimationNone];
@@ -627,8 +630,8 @@ withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings
         [tableView endUpdates];
     }
     
-    if (shouldScrollToBottom)
-    {
+    if (shouldScrollToBottom) {
+        
         [tableView
          scrollToRowAtIndexPath:newIndexPath
          atScrollPosition:UITableViewScrollPositionBottom

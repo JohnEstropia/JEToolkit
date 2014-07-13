@@ -26,8 +26,8 @@
 
 @implementation JEToolkitTests
 
-- (void)setUp
-{
+- (void)setUp {
+    
     [super setUp];
     
     JEFileLoggerSettings *fileLoggerSettings = [JEDebugging copyFileLoggerSettings];
@@ -36,14 +36,14 @@
     [JEDebugging start];
 }
 
-- (void)tearDown
-{
+- (void)tearDown {
+    
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-- (void)testDumps
-{
+- (void)testDumps {
+    
     JEDump(100);
     JEDump("This is how to annotate before printing", 1 + 1);
     int oneHundred = 100;
@@ -86,8 +86,8 @@
     JEDump(&cstringArray);
     JEDump([NSValue valueWithBytes:cstringArray objCType:@encode(typeof(cstringArray))]);
     char asciiArray[CHAR_MAX + 1] = {};
-    for(int i = 0; i <= CHAR_MAX; ++i)
-    {
+    for(int i = 0; i <= CHAR_MAX; ++i) {
+        
         asciiArray[i] = i;
     }
     JEDump(asciiArray);
@@ -373,8 +373,8 @@ JESynthesize(unsafe_unretained, id, synthesizedAssign, setSynthesizedAssign);
 JESynthesize(assign, CGRect, synthesizedRect, setSynthesizedRect);
 JESynthesize(weak, id, synthesizedWeak, setSynthesizedWeak);
 
-- (void)testSynthesized
-{
+- (void)testSynthesized {
+    
     JEDump("Before assignment", self.synthesizedId);
     self.synthesizedId = [NSMutableString new];
     JEDump("After assignment", self.synthesizedId);
@@ -391,21 +391,21 @@ JESynthesize(weak, id, synthesizedWeak, setSynthesizedWeak);
     self.synthesizedRect = (CGRect){ {1, 2}, {3, 4} };
     JEDump("After assignment", self.synthesizedRect);
     
-    NSObject *obj = [NSObject new];
+    NSObject JE_PRECISE_LIFETIME *obj = [NSObject new];
     JEDump("Before assign", self.synthesizedWeak);
     self.synthesizedWeak = obj;
     @autoreleasepool {
         
         JEDump("Before nil", self.synthesizedWeak);
-        
+
     }
     obj = nil;
     JEDump("After nil", self.synthesizedWeak);
 }
 
-- (void)testBlocks
-{
-    JEBlock(void, simpleBlock, (NSString *text), {
+- (void)testBlocks {
+    
+    JEBlockCreate(void, simpleBlock, (NSString *text), {
         
         JEDump(text);
         
@@ -413,16 +413,18 @@ JESynthesize(weak, id, synthesizedWeak, setSynthesizedWeak);
     
     simpleBlock(@"test1");
     
-    JEBlock(NSInteger, factorial, (NSInteger integer), {
+    JEBlockCreate(NSInteger, factorial, (NSInteger integer), {
         
         return (integer == 1
                 ? 1
                 : (factorial(integer - 1) * integer));
-        
+
     });
+    JEDump(factorial(1));
+    JEDump(factorial(2));
+    JEDump(factorial(3));
+    JEDump(factorial(4));
     JEDump(factorial(5));
-    
-    
 }
 
 

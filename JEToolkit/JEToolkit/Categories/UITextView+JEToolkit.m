@@ -12,11 +12,11 @@
 
 #pragma mark - Public
 
-- (CGSize)sizeForText
-{
+- (CGSize)sizeForText {
+    
     CGSize contentSize = self.contentSize;
-    if ([self respondsToSelector:@selector(textContainerInset)])
-    {
+    if ([self respondsToSelector:@selector(textContainerInset)]) {
+        
         UIEdgeInsets containerInset = self.textContainerInset;
         CGSize sizeThatFits = [self sizeThatFits:(CGSize){
             .width = contentSize.width,

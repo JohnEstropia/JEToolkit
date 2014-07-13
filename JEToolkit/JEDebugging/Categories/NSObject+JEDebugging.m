@@ -13,8 +13,8 @@
 
 #pragma mark - NSObject
 
-- (NSString *)debugDescription
-{
+- (NSString *)debugDescription {
+    
     return [self loggingDescriptionIncludeClass:YES includeAddress:YES];
 }
 
@@ -23,23 +23,23 @@
 
 #pragma mark Logging
 
-- (NSString *)loggingDescription
-{
+- (NSString *)loggingDescription {
+    
     return [self description];
 }
 
 - (NSString *)loggingDescriptionIncludeClass:(BOOL)includeClass
-                              includeAddress:(BOOL)includeAddress
-{
+                              includeAddress:(BOOL)includeAddress {
+    
     NSMutableString *description = [NSMutableString string];
     @autoreleasepool {
         
-        if (includeClass)
-        {
+        if (includeClass) {
+            
             [description appendFormat:@"(%@ *) ", [self class]];
         }
-        if (includeAddress)
-        {
+        if (includeAddress) {
+            
             [description appendFormat:@"<%p> ", self];
         }
         [description appendString:[self loggingDescription]];

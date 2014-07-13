@@ -13,8 +13,8 @@
 
 #pragma mark - Private
 
-+ (NSNumberFormatter *)decimalFormatter
-{
++ (NSNumberFormatter *)decimalFormatter {
+    
 	static NSNumberFormatter *formatter;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
@@ -31,21 +31,21 @@
 
 #pragma mark Conversion
 
-+ (NSNumber *)numberFromValue:(id)valueOrNil
-{
-    if (valueOrNil)
-    {
-        if ([valueOrNil isKindOfClass:[NSNumber class]])
-        {
++ (NSNumber *)numberFromValue:(id)valueOrNil {
+    
+    if (valueOrNil) {
+        
+        if ([valueOrNil isKindOfClass:[NSNumber class]]) {
+            
             return valueOrNil;
         }
-        if ([valueOrNil isKindOfClass:[NSString class]])
-        {
+        if ([valueOrNil isKindOfClass:[NSString class]]) {
+            
             return ([[self decimalFormatter] numberFromString:valueOrNil]
                     ?: @([(NSString *)valueOrNil doubleValue]));
         }
-        if ([valueOrNil isKindOfClass:[NSDate class]])
-        {
+        if ([valueOrNil isKindOfClass:[NSDate class]]) {
+            
             return @([(NSDate *)valueOrNil timeIntervalSince1970]);
         }
     }
@@ -54,8 +54,8 @@
 
 #pragma mark Displaying to user
 
-- (NSString *)displayString
-{
+- (NSString *)displayString {
+    
     return [[NSNumber decimalFormatter] stringFromNumber:self];
 }
 

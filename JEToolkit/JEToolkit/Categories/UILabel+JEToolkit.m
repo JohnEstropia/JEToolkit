@@ -12,16 +12,16 @@
 
 #pragma mark - Public
 
-- (CGSize)sizeForText
-{
+- (CGSize)sizeForText {
+    
     CGFloat boundsWidth = self.bounds.size.width;
     CGSize constainSize = (CGSize){
         .width = boundsWidth,
         .height = CGFLOAT_MAX
     };
     
-    if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)])
-    {
+    if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
+        
         return [self sizeThatFits:constainSize];
     }
     

@@ -16,8 +16,8 @@
 
 #pragma mark - Public
 
-+ (NSDateFormatter *)ISO8601UTCDateFormatter
-{
++ (NSDateFormatter *)ISO8601UTCDateFormatter {
+    
     static NSDateFormatter *ISO8601UTCDateFormatter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -36,8 +36,8 @@
     return ISO8601UTCDateFormatter;
 }
 
-+ (NSDateFormatter *)EXIFDateFormatter
-{
++ (NSDateFormatter *)EXIFDateFormatter {
+    
     static NSDateFormatter *EXIFDateFormatter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

@@ -16,22 +16,23 @@
 
 #pragma mark - NSObject
 
-- (NSString *)debugDescription
-{
+- (NSString *)debugDescription {
+    
+    // override any existing implementation
     return [super debugDescription];
 }
 
 
 #pragma mark - NSObject+JEDebugging
 
-- (NSString *)loggingDescription
-{
+- (NSString *)loggingDescription {
+    
     NSMutableString *description = [NSMutableString stringWithFormat:
                                     @"%@ (code %li)",
                                     [self domain], (long)[self code]];
     NSDictionary *userInfo = [self userInfo];
-    if ([userInfo count] <= 0)
-    {
+    if ([userInfo count] <= 0) {
+        
         return description;
     }
     
@@ -42,13 +43,13 @@
         
         @autoreleasepool {
             
-            if (isFirstEntry)
-            {
+            if (isFirstEntry) {
+                
                 [description appendString:@"\n["];
                 isFirstEntry = NO;
             }
-            else
-            {
+            else {
+                
                 [description appendString:@",\n["];
             }
             

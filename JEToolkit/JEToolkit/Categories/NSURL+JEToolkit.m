@@ -22,67 +22,67 @@
 
 #pragma mark Directories
 
-+ (NSURL *)applicationSupportDirectory
-{
++ (NSURL *)applicationSupportDirectory {
+    
     return [[[NSFileManager defaultManager]
              URLsForDirectory:NSApplicationSupportDirectory
              inDomains:NSUserDomainMask] firstObject];
 }
 
-+ (NSURL *)cachesDirectory
-{
++ (NSURL *)cachesDirectory {
+    
     return [[[NSFileManager defaultManager]
              URLsForDirectory:NSCachesDirectory
              inDomains:NSUserDomainMask] firstObject];
 }
 
-+ (NSURL *)documentsDirectory
-{
++ (NSURL *)documentsDirectory {
+    
     return [[[NSFileManager defaultManager]
              URLsForDirectory:NSDocumentDirectory
              inDomains:NSUserDomainMask] firstObject];
 }
 
-+ (NSURL *)downloadsDirectory
-{
++ (NSURL *)downloadsDirectory {
+    
     return [[[NSFileManager defaultManager]
              URLsForDirectory:NSDownloadsDirectory
              inDomains:NSUserDomainMask] firstObject];
 }
 
-+ (NSURL *)libraryDirectory
-{
++ (NSURL *)libraryDirectory {
+    
     return [[[NSFileManager defaultManager]
              URLsForDirectory:NSLibraryDirectory
              inDomains:NSUserDomainMask] firstObject];
 }
 
-+ (NSURL *)temporaryDirectory
-{
++ (NSURL *)temporaryDirectory {
+    
     return [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
 }
 
 #pragma mark Inspecting URLs
 
-- (NSString *)UTI
-{
+- (NSString *)UTI {
+    
     return (__bridge_transfer NSString *)UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[self pathExtension], NULL);
 }
 
-- (NSString *)mimeType
-{
+- (NSString *)mimeType {
+    
     NSString *mimeType = (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass((__bridge CFStringRef)([self UTI]), kUTTagClassMIMEType);
     
     return (mimeType ?: @"application/octet-stream");
 }
 
-- (BOOL)isAssetsLibraryURL
-{
+- (BOOL)isAssetsLibraryURL {
+    
     return [[self scheme] isEqualToString:@"assets-library"];
 }
 
-- (BOOL)isDataURL
-{
+- (BOOL)isDataURL {
+    
     return [[self scheme] isEqualToString:@"data"];
 }
 
@@ -90,8 +90,8 @@
 
 - (BOOL)getExtendedAttribute:(NSString *__autoreleasing *)extendedAttribute
                       forKey:(NSString *)key
-                       error:(NSError *__autoreleasing *)error
-{
+                       error:(NSError *__autoreleasing *)error {
+    
     JEAssertParameter([self isFileURL]);
     JEAssertParameter(![NSString isNilOrEmptyString:key]);
     JEAssert([key length] <= XATTR_MAXNAMELEN,
@@ -105,14 +105,14 @@
                                         0,
                                         0,
                                         kNilOptions);
-    if (bufferSize < 0)
-    {
-        if (extendedAttribute)
-        {
+    if (bufferSize < 0) {
+        
+        if (extendedAttribute) {
+            
             (*extendedAttribute) = nil;
         }
-        if (error)
-        {
+        if (error) {
+            
             (*error) = [NSError errorWithLastPOSIXErrorAndUserInfo:@{ NSURLErrorKey : self }];
         }
         return NO;
@@ -124,16 +124,16 @@
                  buffer,
                  bufferSize,
                  0,
-                 kNilOptions) < 0)
-    {
+                 kNilOptions) < 0) {
+        
         free(buffer);
         
-        if (extendedAttribute)
-        {
+        if (extendedAttribute) {
+            
             (*extendedAttribute) = nil;
         }
-        if (error)
-        {
+        if (error) {
+            
             (*error) = [NSError errorWithLastPOSIXErrorAndUserInfo:@{ NSURLErrorKey : self }];
         }
         return NO;
@@ -145,12 +145,12 @@
                            encoding:NSUTF8StringEncoding];
     free(buffer);
     
-    if (extendedAttribute)
-    {
+    if (extendedAttribute) {
+        
         (*extendedAttribute) = attribute;
     }
-    if (error)
-    {
+    if (error) {
+        
         (*error) = nil;
     }
     return YES;
@@ -158,16 +158,16 @@
 
 - (BOOL)setExtendedAttribute:(NSString *)extendedAttribute
                       forKey:(NSString *)key
-                       error:(NSError *__autoreleasing *)error
-{
+                       error:(NSError *__autoreleasing *)error {
+    
     JEAssertParameter([self isFileURL]);
     JEAssertParameter(![NSString isNilOrEmptyString:key]);
     JEAssert([key length] <= XATTR_MAXNAMELEN,
              @"Keys for extended attributes should be less than or equal to %d", XATTR_MAXNAMELEN);
     
     int errorCode = 0;
-    if (extendedAttribute)
-    {
+    if (extendedAttribute) {
+        
         const char *valueString = [extendedAttribute UTF8String];
         errorCode = setxattr([self fileSystemRepresentation],
                              [key UTF8String],
@@ -176,20 +176,20 @@
                              0,
                              kNilOptions);
     }
-    else
-    {
+    else {
+        
         errorCode = removexattr([self fileSystemRepresentation],
                                 [key UTF8String],
                                 kNilOptions);
     }
     
-    if (!error)
-    {
+    if (!error) {
+        
         return (errorCode >= 0);
     }
     
-    if (errorCode < 0)
-    {
+    if (errorCode < 0) {
+        
         (*error) = [NSError errorWithLastPOSIXErrorAndUserInfo:@{ NSURLErrorKey : self }];
         return NO;
     }

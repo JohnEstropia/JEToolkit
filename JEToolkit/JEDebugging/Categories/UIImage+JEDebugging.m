@@ -16,16 +16,17 @@
 
 #pragma mark - NSObject
 
-- (NSString *)debugDescription
-{
+- (NSString *)debugDescription {
+    
+    // override any existing implementation
     return [super debugDescription];
 }
 
 
 #pragma mark - NSObject+JEDebugging
 
-- (NSString *)loggingDescription
-{
+- (NSString *)loggingDescription {
+    
     CGSize size = self.size;
     CGFloat scale = self.scale;
     NSMutableString *description = [NSMutableString stringWithFormat:
@@ -36,46 +37,56 @@
      (size.width * scale), (size.height * scale)];
     
     [description appendString:@"\norientation: "];
-    switch (self.imageOrientation)
-    {
+    switch (self.imageOrientation) {
+            
         case UIImageOrientationUp:
             [description appendString:@"UIImageOrientationUp"];
             break;
+            
         case UIImageOrientationDown:
             [description appendString:@"UIImageOrientationDown"];
             break;
+            
         case UIImageOrientationLeft:
             [description appendString:@"UIImageOrientationLeft"];
             break;
+            
         case UIImageOrientationRight:
             [description appendString:@"UIImageOrientationRight"];
             break;
+            
         case UIImageOrientationUpMirrored:
             [description appendString:@"UIImageOrientationUpMirrored"];
             break;
+            
         case UIImageOrientationDownMirrored:
             [description appendString:@"UIImageOrientationDownMirrored"];
             break;
+            
         case UIImageOrientationLeftMirrored:
             [description appendString:@"UIImageOrientationLeftMirrored"];
             break;
+            
         case UIImageOrientationRightMirrored:
             [description appendString:@"UIImageOrientationRightMirrored"];
             break;
+            
         default:
             [description appendFormat:@"%li", (long)self.imageOrientation];
             break;
     }
     
     [description appendString:@"\nresizing mode: "];
-    switch (self.resizingMode)
-    {
+    switch (self.resizingMode) {
+            
         case UIImageResizingModeTile:
             [description appendString:@"UIImageResizingModeTile"];
             break;
+            
         case UIImageResizingModeStretch:
             [description appendString:@"UIImageResizingModeStretch"];
             break;
+            
         default:
             [description appendFormat:@"%li", (long)self.resizingMode];
             break;
@@ -87,8 +98,8 @@
      capInsets.top, capInsets.left, capInsets.bottom, capInsets.right];
     
     NSArray *images = self.images;
-    if (images)
-    {
+    if (images) {
+        
         [description appendFormat:
          @"\nanimation duration: %.3g seconds",
          self.duration];

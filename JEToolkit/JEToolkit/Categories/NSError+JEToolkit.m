@@ -13,8 +13,8 @@
 
 #pragma mark - Public
 
-+ (instancetype)errorWithLastPOSIXErrorAndUserInfo:(NSDictionary *)userInfo
-{
++ (instancetype)errorWithLastPOSIXErrorAndUserInfo:(NSDictionary *)userInfo {
+    
     const errno_t posixErrorCode = errno;
     NSString *errorDescription = [[NSString alloc] initWithUTF8String:(strerror(posixErrorCode) ?: "")];
     NSMutableDictionary *additionalInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
@@ -31,16 +31,16 @@
             userInfo:additionalInfo];
 }
 
-+ (instancetype)errorWithOSStatus:(OSStatus)status userInfo:(NSDictionary *)userInfo
-{
++ (instancetype)errorWithOSStatus:(OSStatus)status userInfo:(NSDictionary *)userInfo {
+    
     char message[5] = {0};
     (*(UInt32 *)message) = CFSwapInt32HostToBig(status);
     NSString *errorDescription = [NSString stringWithCString:message encoding:NSASCIIStringEncoding];
     
     NSMutableDictionary *additionalInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
     if ([errorDescription length] > 0
-        && ![additionalInfo objectForKey:NSLocalizedDescriptionKey])
-    {
+        && ![additionalInfo objectForKey:NSLocalizedDescriptionKey]) {
+        
         additionalInfo[NSLocalizedDescriptionKey] = errorDescription;
     }
     

@@ -16,35 +16,36 @@
 
 #pragma mark - NSObject
 
-- (NSString *)debugDescription
-{
+- (NSString *)debugDescription {
+    
+    // override any existing implementation
     return [super debugDescription];
 }
 
 
 #pragma mark - NSObject+JEDebugging
 
-- (NSString *)loggingDescription
-{
+- (NSString *)loggingDescription {
+    
     NSMutableString *description = [NSMutableString string];
     NSUInteger count = [self count];
-    if (count == 1)
-    {
+    if (count == 1) {
+        
         [description appendString:@"1 entry ["];
     }
-    else
-    {
+    else {
+        
         [description appendFormat:@"%lu entries [", (unsigned long)count];
         
-        if (count <= 0)
-        {
+        if (count <= 0) {
+            
             [description appendString:@"]"];
             return description;
         }
     }
     
-    for (NSInteger idx = 0; idx < count; ++idx)
-    {
+    for (NSInteger idx = 0; idx < count; ++idx) {
+        
         @autoreleasepool {
             
             if (idx > 0)

@@ -19,13 +19,13 @@
 
 #pragma mark Class Utilities
 
-+ (NSString *)className
-{
++ (NSString *)className {
+    
     return NSStringFromClass(self);
 }
 
-+ (Class)classForIdiom
-{
++ (Class)classForIdiom {
+    
     static NSString *idiom;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -41,8 +41,8 @@
             ?: NSClassFromString(className));
 }
 
-+ (instancetype)allocForIdiom
-{
++ (instancetype)allocForIdiom {
+    
     return [[self classForIdiom] alloc];
 }
 
@@ -50,8 +50,8 @@
 #pragma mark Method Swizzling
 
 + (void)swizzleClassMethod:(SEL)originalSelector
-        withOverrideMethod:(SEL)overrideSelector
-{
+        withOverrideMethod:(SEL)overrideSelector {
+    
     Class metaClass = object_getClass(self);
     
 	Method originalMethod = class_getInstanceMethod(metaClass, originalSelector);
@@ -66,8 +66,8 @@
              NSStringFromClass(self),
              NSStringFromSelector(overrideSelector));
     
-    if (originalMethod == overrideMethod)
-    {
+    if (originalMethod == overrideMethod) {
+        
         return;
     }
     
@@ -85,8 +85,8 @@
 }
 
 + (void)swizzleInstanceMethod:(SEL)originalSelector
-           withOverrideMethod:(SEL)overrideSelector
-{
+           withOverrideMethod:(SEL)overrideSelector {
+    
 	Method originalMethod = class_getInstanceMethod(self, originalSelector);
     JEAssert(originalMethod != NULL,
              @"Original method -[%@ %@] does not exist.",
@@ -99,8 +99,8 @@
              NSStringFromClass(self),
              NSStringFromSelector(overrideSelector));
     
-    if (originalMethod == overrideMethod)
-    {
+    if (originalMethod == overrideMethod) {
+        
         return;
     }
     

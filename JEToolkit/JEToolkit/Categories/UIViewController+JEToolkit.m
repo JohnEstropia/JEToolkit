@@ -12,26 +12,26 @@
 
 #pragma mark - Public
 
-- (BOOL)hasWindow
-{
+- (BOOL)hasWindow {
+    
     return ([self isViewLoaded] && self.view.window != nil);
 }
 
-- (UIViewController *)topmostPresentedViewController
-{
+- (UIViewController *)topmostPresentedViewController {
+    
     UIViewController *presentedViewController = self.presentedViewController;
-    if (presentedViewController)
-    {
+    if (presentedViewController) {
+        
         return [presentedViewController topmostPresentedViewController];
     }
     return self;
 }
 
-- (UIViewController *)rootParentViewController
-{
+- (UIViewController *)rootParentViewController {
+    
     UIViewController *parentViewController = self.parentViewController;
-    if (parentViewController)
-    {
+    if (parentViewController) {
+        
         return [parentViewController rootParentViewController];
     }
     return self;

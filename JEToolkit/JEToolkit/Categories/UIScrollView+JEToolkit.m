@@ -31,8 +31,8 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
 
 #pragma mark - Public
 
-- (void)addKeyboardObserver
-{
+- (void)addKeyboardObserver {
+    
 	CGFloat originalContentInsetBottom = self.contentInset.bottom;
 	CGFloat originalScrollInsetBottom = self.scrollIndicatorInsets.bottom;
 	
@@ -46,8 +46,8 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
      usingBlock:^(NSNotification *note) {
          
          JEScopeStrong(self);
-         if (!self)
-         {
+         if (!self) {
+             
              return;
          }
          
@@ -55,8 +55,8 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
          CGRect keyboardFrameInScrollView = [self convertRect:[(NSValue *)userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue] fromView:nil];
          CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
          UIViewAnimationOptions animationCurve = kNilOptions;
-         switch ([userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue])
-         {
+         switch ([userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]) {
+                 
              case UIViewAnimationCurveEaseInOut:
                  animationCurve = UIViewAnimationOptionCurveEaseInOut;
                  break;
@@ -95,8 +95,8 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
               
               self.contentInset = contentInsets;
               self.scrollIndicatorInsets = scrollInsets;
-              if (firstResponder)
-              {
+              if (firstResponder) {
+                  
                   [self scrollRectToVisible:textViewFrameInScrollView animated:NO];
               }
               
@@ -113,16 +113,16 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
      usingBlock:^(NSNotification *note) {
          
          JEScopeStrong(self);
-         if (!self)
-         {
+         if (!self) {
+             
              return;
          }
          
          NSDictionary *userInfo = [note userInfo];
          CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
          UIViewAnimationOptions animationCurve = kNilOptions;
-         switch ([userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue])
-         {
+         switch ([userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]) {
+                 
              case UIViewAnimationCurveEaseInOut:
                  animationCurve = UIViewAnimationOptionCurveEaseInOut;
                  break;
@@ -158,22 +158,22 @@ JESynthesize(strong, id, je_keyboardDownObserver, setJe_keyboardDownObserver);
      }];
 }
 
-- (void)removeKeyboardObserver
-{
+- (void)removeKeyboardObserver {
+    
 	id keyboardUpObserver = self.je_keyboardUpObserver;
 	id keyboardDownObserver = self.je_keyboardDownObserver;
 	
 	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    if (keyboardUpObserver)
-    {
+    if (keyboardUpObserver) {
+        
         [center
          removeObserver:keyboardUpObserver
          name:UIKeyboardWillShowNotification
          object:nil];
         self.je_keyboardUpObserver = nil;
     }
-    if (keyboardDownObserver)
-    {
+    if (keyboardDownObserver) {
+        
         [center
          removeObserver:keyboardDownObserver
          name:UIKeyboardWillHideNotification

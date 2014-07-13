@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
-typedef NS_ENUM(NSInteger, JEKeychainAccess)
-{
+typedef NS_ENUM(NSInteger, JEKeychainAccess) {
+    
     JEKeychainAccessWhenUnlocked = 0,
     JEKeychainAccessAfterFirstUnlock,
     JEKeychainAccessAlways,

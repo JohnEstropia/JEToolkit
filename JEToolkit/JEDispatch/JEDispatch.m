@@ -13,16 +13,16 @@
 #import "JEDebugging.h"
 
 
-void JEDispatchConcurrent(void (^block)(void))
-{
+void JEDispatchConcurrent(void (^block)(void)) {
+    
     JEAssertParameter(block != NULL);
     
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                    ^{ @autoreleasepool { block(); } });
 }
 
-void JEDispatchConcurrentAfter(NSTimeInterval delay, void (^block)(void))
-{
+void JEDispatchConcurrentAfter(NSTimeInterval delay, void (^block)(void)) {
+    
     JEAssertParameter(delay >= 0.0f);
     JEAssertParameter(block != NULL);
     
@@ -31,16 +31,16 @@ void JEDispatchConcurrentAfter(NSTimeInterval delay, void (^block)(void))
 				   ^{ @autoreleasepool { block(); } });
 }
 
-void JEDispatchUI(void (^block)(void))
-{
+void JEDispatchUI(void (^block)(void)) {
+    
     JEAssertParameter(block != NULL);
     
 	dispatch_async(dispatch_get_main_queue(),
                    ^{ @autoreleasepool { block(); } });
 }
 
-void JEDispatchUIAfter(NSTimeInterval delay, void (^block)(void))
-{
+void JEDispatchUIAfter(NSTimeInterval delay, void (^block)(void)) {
+    
     JEAssertParameter(delay >= 0.0f);
     JEAssertParameter(block != NULL);
     
@@ -49,16 +49,16 @@ void JEDispatchUIAfter(NSTimeInterval delay, void (^block)(void))
 				   ^{ @autoreleasepool { block(); } });
 }
 
-void JEDispatchUIASAP(void (^block)(void))
-{
+void JEDispatchUIASAP(void (^block)(void)) {
+    
     JEAssertParameter(block != NULL);
     
-    if ([NSThread isMainThread])
-    {
+    if ([NSThread isMainThread]) {
+        
         @autoreleasepool { block(); }
     }
-    else
-    {
+    else {
+        
         dispatch_async(dispatch_get_main_queue(),
                        ^{ @autoreleasepool { block(); } });
     }

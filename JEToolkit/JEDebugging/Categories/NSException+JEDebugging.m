@@ -16,16 +16,17 @@
 
 #pragma mark - NSObject
 
-- (NSString *)debugDescription
-{
+- (NSString *)debugDescription {
+    
+    // override any existing implementation
     return [super debugDescription];
 }
 
 
 #pragma mark - NSObject+JEDebugging
 
-- (NSString *)loggingDescription
-{
+- (NSString *)loggingDescription {
+    
     NSMutableString *description = [NSMutableString stringWithString:
                                     [[self name]
                                      loggingDescriptionIncludeClass:NO

@@ -24,11 +24,11 @@
 
 #pragma mark - NSObject
 
-- (instancetype)initWithWeakObject:(id)weakObject
-{
+- (instancetype)initWithWeakObject:(id)weakObject {
+    
     self = [super init];
-    if (!self)
-    {
+    if (!self) {
+        
         return nil;
     }
     
@@ -39,19 +39,19 @@
 
 #pragma mark - NSValue
 
-- (void)getValue:(void *)value
-{
+- (void)getValue:(void *)value {
+    
     id __autoreleasing weakObject = self.weakObject;
     (*(id __autoreleasing *)value) = weakObject;
 }
 
-- (const char *)objCType
-{
+- (const char *)objCType {
+    
     return (const char *)_C_UNDEF;
 }
 
-- (BOOL)isEqualToValue:(NSValue *)value
-{
+- (BOOL)isEqualToValue:(NSValue *)value {
+    
     return [[NSValue valueWithNonretainedObject:self.weakObject] isEqualToValue:value];
 }
 
@@ -63,13 +63,13 @@
 
 #pragma mark - Public
 
-+ (NSValue *)valueWithWeakObject:(id)weakObject
-{
++ (NSValue *)valueWithWeakObject:(id)weakObject {
+    
     return [[_JEWeakValue alloc] initWithWeakObject:weakObject];
 }
 
-- (id)weakObjectValue
-{
+- (id)weakObjectValue {
+    
     if ([self isKindOfClass:[_JEWeakValue class]])
     {
         return ((_JEWeakValue *)self).weakObject;

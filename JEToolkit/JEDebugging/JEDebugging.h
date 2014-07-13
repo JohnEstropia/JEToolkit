@@ -54,11 +54,12 @@
 
 #pragma mark - Log message header constants container
 
-typedef struct JELogLocation
-{
+typedef struct JELogLocation {
+    
     const char *fileName;
     const char *functionName;
     int lineNumber;
+    
 } JELogLocation;
 
 #define JELogLocationCurrent()  ((JELogLocation){ \
@@ -98,10 +99,8 @@ typedef struct JELogLocation
 #else
 
 #define JEAssert(condition, formatString, ...) \
-    do \
-    { \
-        if (!(condition)) \
-        { \
+    do { \
+        if (!(condition)) { \
             [JEDebugging \
              logFailureInAssertionCondition:@"" #condition \
              location:JELogLocationCurrent()]; \
@@ -149,8 +148,7 @@ typedef struct JELogLocation
     JEDumpLevel(JELogLevelAlert, ##nonArrayExpression)
 
 #define JEDumpLevel(level, nonArrayExpression...) \
-    do \
-    { \
+    do { \
         JE_PRAGMA_PUSH \
         JE_PRAGMA_IGNORE("-Wunused-value") \
         /* We need to assign the expression to a variable in case it is an rvalue. */ \
@@ -191,8 +189,7 @@ typedef struct JELogLocation
     JELogLevel(JELogLevelAlert, (formatString), ##__VA_ARGS__)
 
 #define JELogLevel(level, formatString, ...) \
-    do \
-    { \
+    do { \
         JE_PRAGMA_PUSH \
         JE_PRAGMA_IGNORE("-Wformat-extra-args") \
         [JEDebugging \
@@ -211,10 +208,8 @@ typedef struct JELogLocation
 
 #elif TARGET_CPU_ARM
 #define JEDebugBreak() \
-    do \
-    { \
-        if (![JEDebugging isDebuggerRunning]) \
-        { \
+    do { \
+        if (![JEDebugging isDebuggerRunning]) { \
             break; \
         } \
         /* http://iphone.m20.nl/wp/2010/10/xcode-iphone-debugger-halt-assertions/ */ \
@@ -232,10 +227,8 @@ typedef struct JELogLocation
 
 #elif TARGET_CPU_ARM64
 #define JEDebugBreak() \
-    do \
-    { \
-        if (![JEDebugging isDebuggerRunning]) \
-        { \
+    do { \
+        if (![JEDebugging isDebuggerRunning]) { \
             break; \
         } \
         __asm__ __volatile__ ( \
@@ -252,10 +245,8 @@ typedef struct JELogLocation
 
 #elif TARGET_CPU_X86
 #define JEDebugBreak() \
-    do \
-    { \
-        if (![JEDebugging isDebuggerRunning]) \
-        { \
+    do { \
+        if (![JEDebugging isDebuggerRunning]) { \
             break; \
         } \
         /* http://iphone.m20.nl/wp/2010/10/xcode-iphone-debugger-halt-assertions/ */ \
@@ -274,10 +265,8 @@ typedef struct JELogLocation
 
 #elif TARGET_CPU_X86_64
 #define JEDebugBreak() \
-    do \
-    { \
-        if (![JEDebugging isDebuggerRunning]) \
-        { \
+    do { \
+        if (![JEDebugging isDebuggerRunning]) { \
             break; \
         } \
         __asm__ __volatile__ ( \
@@ -299,10 +288,8 @@ typedef struct JELogLocation
 #endif
 
 #define JEDebugBreakIf(condition) \
-    do \
-    { \
-        if (condition) \
-        { \
+    do { \
+        if (condition) { \
             JEDebugBreak(); \
         } \
     } while(NO)

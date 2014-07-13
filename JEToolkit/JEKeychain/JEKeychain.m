@@ -27,11 +27,11 @@
 
 #pragma mark - NSObject
 
-- (id)init
-{
+- (id)init {
+    
     self = [super init];
-    if (self)
-    {
+    if (self) {
+        
         self.defaultService = [[NSBundle mainBundle] bundleIdentifier];
         self.defaultAccessGroup = nil;
         self.defaultAccessType = JEKeychainAccessAfterFirstUnlock;
@@ -42,8 +42,8 @@
 
 #pragma mark - Private
 
-+ (JEKeychain *)sharedInstance
-{
++ (JEKeychain *)sharedInstance {
+    
     static JEKeychain *instance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -57,61 +57,58 @@
 
 #pragma mark - Public
 
-+ (NSString *)defaultService
-{
++ (NSString *)defaultService {
+    
     return [self sharedInstance].defaultService;
 }
 
-+ (void)setDefaultService:(NSString *)defaultService
-{
++ (void)setDefaultService:(NSString *)defaultService {
+    
     JEAssertParameter(defaultService != nil);
-    [self sharedInstance].defaultService = defaultService;
+    [self sharedInstance].defaultService = (defaultService ?: [[NSBundle mainBundle] bundleIdentifier]);
 }
 
-+ (NSString *)defaultAccessGroup
-{
++ (NSString *)defaultAccessGroup {
+    
     return [self sharedInstance].defaultAccessGroup;
 }
 
-+ (void)setDefaultAccessGroup:(NSString *)defaultAccessGroup
-{
++ (void)setDefaultAccessGroup:(NSString *)defaultAccessGroup {
+    
     [self sharedInstance].defaultAccessGroup = defaultAccessGroup;
 }
 
-+ (JEKeychainAccess)defaultAccessType
-{
++ (JEKeychainAccess)defaultAccessType {
+    
     return [self sharedInstance].defaultAccessType;
 }
 
-+ (void)setDefaultAccessType:(JEKeychainAccess)defaultAccessType
-{
++ (void)setDefaultAccessType:(JEKeychainAccess)defaultAccessType {
+    
     JEAssertParameter(defaultAccessType >= 0
                       && defaultAccessType < _JEKeychainAccessCount);
     [self sharedInstance].defaultAccessType = defaultAccessType;
 }
 
-
-#pragma mark - public
-
-+ (NSString *)stringForKey:(NSString *)key
-{
++ (NSString *)stringForKey:(NSString *)key {
+    
     return [self stringForKey:key inAccessGroup:nil error:NULL];
 }
 
 + (NSString *)stringForKey:(NSString *)key
              inAccessGroup:(NSString *)accessGroup
-                     error:(NSError *__autoreleasing *)error
-{
+                     error:(NSError *__autoreleasing *)error {
+    
     JEAssertParameter(key != nil);
     
-    if (!key)
-    {
+    if (!key) {
+        
         return nil;
     }
     
     JEKeychain *instance = [self sharedInstance];
-    if (!accessGroup)
-    {
+    if (!accessGroup) {
+        
         accessGroup = instance.defaultAccessGroup;
     }
     
@@ -123,25 +120,25 @@
         (__bridge NSString *)kSecAttrAccount : key,
     }];
     
-    if (accessGroup)
-    {
+    if (accessGroup) {
+        
         query[(__bridge NSString *)kSecAttrAccessGroup] = accessGroup;
     }
     
 	CFTypeRef result = NULL;
     OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
     
-	if (status != errSecSuccess)
-    {
-        if (error)
-        {
+	if (status != errSecSuccess) {
+        
+        if (error) {
+            
             (*error) = [NSError errorWithOSStatus:status userInfo:nil];
         }
 		return nil;
 	}
     
-    if (error)
-    {
+    if (error) {
+        
         (*error) = nil;
     }
     
@@ -151,26 +148,26 @@
 }
 
 + (BOOL)setString:(NSString *)string
-           forKey:(NSString *)key
-{
+           forKey:(NSString *)key {
+    
     return [self setString:string forKey:key inAccessGroup:nil error:NULL];
 }
 
 + (BOOL)setString:(NSString *)string
            forKey:(NSString *)key
     inAccessGroup:(NSString *)accessGroup
-            error:(NSError *__autoreleasing *)error
-{
+            error:(NSError *__autoreleasing *)error {
+    
     JEAssertParameter(key != nil);
     
-    if (!key)
-    {
+    if (!key) {
+        
         return NO;
     }
     
     JEKeychain *instance = [self sharedInstance];
-    if (!accessGroup)
-    {
+    if (!accessGroup) {
+        
         accessGroup = instance.defaultAccessGroup;
     }
     
@@ -180,44 +177,50 @@
         (__bridge NSString *)kSecAttrAccount : key,
     }];
     
-    if (accessGroup)
-    {
+    if (accessGroup) {
+        
         query[(__bridge NSString *)kSecAttrAccessGroup] = accessGroup;
     }
     
-    if (string)
-    {
+    if (string) {
+        
         OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
-        if (status != errSecSuccess)
-        {
-            if (error)
-            {
+        if (status != errSecSuccess) {
+            
+            if (error) {
+                
                 (*error) = [NSError errorWithOSStatus:status userInfo:nil];
             }
             return NO;
         }
         
         CFTypeRef accessibilityAttribute = NULL;
-        switch (instance.defaultAccessType)
-        {
+        switch (instance.defaultAccessType) {
+                
             case JEKeychainAccessWhenUnlocked:
                 accessibilityAttribute = kSecAttrAccessibleWhenUnlocked;
                 break;
+                
             case JEKeychainAccessAfterFirstUnlock:
                 accessibilityAttribute = kSecAttrAccessibleAfterFirstUnlock;
                 break;
+                
             case JEKeychainAccessAlways:
                 accessibilityAttribute = kSecAttrAccessibleAlways;
                 break;
+                
             case JEKeychainAccessWhenUnlockedThisDeviceOnly:
                 accessibilityAttribute = kSecAttrAccessibleWhenUnlockedThisDeviceOnly;
                 break;
+                
             case JEKeychainAccessAfterFirstUnlockThisDeviceOnly:
                 accessibilityAttribute = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly;
                 break;
+                
             case JEKeychainAccessAlwaysThisDeviceOnly:
                 accessibilityAttribute = kSecAttrAccessibleAlwaysThisDeviceOnly;
                 break;
+                
             default:
                 accessibilityAttribute = kSecAttrAccessibleAfterFirstUnlock;
                 break;
@@ -226,10 +229,10 @@
         query[(__bridge NSString *)kSecAttrAccessible] = (__bridge id)accessibilityAttribute;
         
         status = SecItemAdd((__bridge CFDictionaryRef)query, NULL);
-        if (status != errSecSuccess)
-        {
-            if (error)
-            {
+        if (status != errSecSuccess) {
+            
+            if (error) {
+                
                 (*error) = [NSError errorWithOSStatus:status userInfo:nil];
             }
             return NO;
@@ -238,10 +241,10 @@
     else
     {
         OSStatus status = SecItemDelete((__bridge CFDictionaryRef)query);
-        if (status != errSecSuccess)
-        {
-            if (error)
-            {
+        if (status != errSecSuccess) {
+            
+            if (error) {
+                
                 (*error) = [NSError errorWithOSStatus:status userInfo:nil];
             }
             return NO;
@@ -249,8 +252,8 @@
     }
     
     
-    if (error)
-    {
+    if (error) {
+        
         (*error) = nil;
     }
     return YES;

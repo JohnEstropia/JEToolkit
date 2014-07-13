@@ -17,8 +17,8 @@
 
 #pragma mark Container Tools
 
-- (NSArray *)shuffledArray
-{
+- (NSArray *)shuffledArray {
+    
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:self];
     [array shuffle];
     return [array copy];

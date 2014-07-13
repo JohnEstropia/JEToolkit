@@ -61,11 +61,11 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 #pragma mark - NSObject
 
-- (instancetype)init
-{
+- (instancetype)init {
+    
     self = [super init];
-    if (!self)
-    {
+    if (!self) {
+        
         return nil;
     }
     
@@ -98,8 +98,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
+    
     [[UIApplication sharedApplication]
      removeObserver:self
      forKeyPath:JEKeypath(UIApplication *, keyWindow)
@@ -129,8 +129,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 #pragma mark shared objects
 
-+ (JEDebugging *)sharedInstance
-{
++ (JEDebugging *)sharedInstance {
+    
     static JEDebugging *sharedInstance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -141,8 +141,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     return sharedInstance;
 }
 
-+ (NSDictionary *)characterEscapeMapping
-{
++ (NSDictionary *)characterEscapeMapping {
+    
     static NSDictionary *escapeMapping;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -163,8 +163,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     return escapeMapping;
 }
 
-+ (NSDateFormatter *)consoleDateFormatter
-{
++ (NSDateFormatter *)consoleDateFormatter {
+    
     static NSDateFormatter *consoleDateFormatter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -180,8 +180,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     return consoleDateFormatter;
 }
 
-+ (NSDateFormatter *)fileNameDateFormatter
-{
++ (NSDateFormatter *)fileNameDateFormatter {
+    
     static NSDateFormatter *consoleDateFormatter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -197,8 +197,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     return consoleDateFormatter;
 }
 
-+ (dispatch_queue_t)settingsQueue
-{
++ (dispatch_queue_t)settingsQueue {
+    
     static dispatch_queue_t settingsQueue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -213,8 +213,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     return settingsQueue;
 }
 
-+ (dispatch_queue_t)consoleLogQueue
-{
++ (dispatch_queue_t)consoleLogQueue {
+    
     static dispatch_queue_t consoleLogQueue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -229,8 +229,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     return consoleLogQueue;
 }
 
-+ (dispatch_queue_t)fileLogQueue
-{
++ (dispatch_queue_t)fileLogQueue {
+    
     static dispatch_queue_t fileLogQueue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -247,28 +247,28 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 #pragma mark default bullets
 
-+ (NSString *)defaultTraceBulletString
-{
++ (NSString *)defaultTraceBulletString {
+    
     return @"🔹";
 }
 
-+ (NSString *)defaultLogBulletString
-{
++ (NSString *)defaultLogBulletString {
+    
     return @"🔸";
 }
 
-+ (NSString *)defaultDumpBulletString
-{
++ (NSString *)defaultDumpBulletString {
+    
     return @"↪︎";
 }
 
-+ (NSString *)defaultAlertBulletString
-{
++ (NSString *)defaultAlertBulletString {
+    
     return @"⚠️";
 }
 
-+ (NSString *)defaultAssertBulletString
-{
++ (NSString *)defaultAssertBulletString {
+    
     return @"❗";
 }
 
@@ -276,10 +276,10 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 + (void)logFileError:(id)errorOrException
             location:(JELogLocation)location
-             message:(NSString *)message
-{
-    if (![self sharedInstance].isStarted)
-    {
+             message:(NSString *)message {
+    
+    if (![self sharedInstance].isStarted) {
+        
         return;
     }
     
@@ -302,21 +302,21 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                                          [errorOrException
                                           loggingDescriptionIncludeClass:YES
                                           includeAddress:YES]];
-    if (errorDescription)
-    {
+    if (errorDescription) {
+        
         [errorDescription indentByLevel:1];
     }
     
-    if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelAlert))
-    {
+    if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelAlert)) {
+        
         dispatch_barrier_async([JEDebugging consoleLogQueue], ^{
             
             @autoreleasepool {
                 
                 NSMutableString *logString = [self messageHeaderFromEntries:headerEntries
                                                                withSettings:consoleLoggerSettings];
-                if (errorDescription)
-                {
+                if (errorDescription) {
+                    
                     [logString appendFormat:
                      @"%@ %@\n  %@ %@\n",
                      [JEDebugging defaultAlertBulletString],
@@ -324,8 +324,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                      [JEDebugging defaultDumpBulletString],
                      errorDescription];
                 }
-                else
-                {
+                else {
+                    
                     [logString appendFormat:
                      @"%@ %@\n",
                      [JEDebugging defaultAlertBulletString],
@@ -338,8 +338,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
             
         });
     }
-    if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelAlert))
-    {
+    if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelAlert)) {
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             
             @autoreleasepool {
@@ -347,8 +347,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 NSMutableString *logString = [self
                                               messageHeaderFromEntries:headerEntries
                                               withSettings:HUDLoggerSettings];
-                if (errorDescription)
-                {
+                if (errorDescription) {
+                    
                     [logString appendFormat:
                      @"%@ %@\n  %@ %@",
                      [JEDebugging defaultAlertBulletString],
@@ -356,8 +356,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                      [JEDebugging defaultDumpBulletString],
                      errorDescription];
                 }
-                else
-                {
+                else {
+                    
                     [logString appendFormat:
                      @"%@ %@",
                      [JEDebugging defaultAlertBulletString],
@@ -375,8 +375,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 }
 
 + (NSDictionary *)headerEntriesForLocation:(JELogLocation)location
-                                  withMask:(JELogMessageHeaderMask)logMessageHeaderMask
-{
+                                  withMask:(JELogMessageHeaderMask)logMessageHeaderMask {
+    
     NSMutableDictionary * headerEntries = [[NSMutableDictionary alloc] init];
     
     headerEntries[@(JELogMessageHeaderDate)]
@@ -402,49 +402,49 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 }
 
 + (NSMutableString *)messageHeaderFromEntries:(NSDictionary *)logMessageHeaderEntries
-                                 withSettings:(JEBaseLoggerSettings *)loggerSettings
-{
+                                 withSettings:(JEBaseLoggerSettings *)loggerSettings {
+    
     JELogMessageHeaderMask logMessageHeaderMask = loggerSettings.logMessageHeaderMask;
     NSMutableString *messageHeader = [[NSMutableString alloc] init];
     
-    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderDate))
-    {
+    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderDate)) {
+        
         [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderDate)]];
     }
-    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderQueue))
-    {
+    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderQueue)) {
+        
         [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderQueue)]];
     }
-    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderSourceFile))
-    {
+    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderSourceFile)) {
+        
         [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderSourceFile)]];
     }
-    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderFunction))
-    {
+    if (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderFunction)) {
+        
         [messageHeader appendString:logMessageHeaderEntries[@(JELogMessageHeaderFunction)]];
     }
     
-    if ([messageHeader length] > 0)
-    {
+    if ([messageHeader length] > 0) {
+        
         [messageHeader appendString:@"\n"];
     }
     
     return messageHeader;
 }
 
-- (NSFileHandle *)cachedFileHandleWithThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings
-{
+- (NSFileHandle *)cachedFileHandleWithThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings {
+    
     NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
     NSFileHandle *fileHandle = self.fileLogHandle;
-    if (fileHandle)
-    {
+    if (fileHandle) {
+        
         return fileHandle;
     }
     
-    if (self.fileLogIsDisabled)
-    {
+    if (self.fileLogIsDisabled) {
+        
         // We don't want to keep making IO's if we already failed creating the file handle once.
         return nil;
     }
@@ -463,8 +463,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     };
     
     NSURL *fileURL = self.fileLogURL;
-    if (!fileURL)
-    {
+    if (!fileURL) {
+        
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSURL *fileLogsDirectoryURL = fileLoggerSettings.fileLogsDirectoryURL;
         NSError *directoryCreateError;
@@ -472,8 +472,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
               createDirectoryAtURL:fileLogsDirectoryURL
               withIntermediateDirectories:YES
               attributes:nil
-              error:&directoryCreateError])
-        {
+              error:&directoryCreateError]) {
+            
             failure(JELogLocationCurrent(),
                     @"Failed to create logs directory because of error:",
                     directoryCreateError);
@@ -488,10 +488,10 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                    isDirectory:NO];
         
         NSString *filePath = [fileURL path];
-        if (![fileManager fileExistsAtPath:filePath])
-        {
-            if (![fileManager createFileAtPath:filePath contents:nil attributes:nil])
-            {
+        if (![fileManager fileExistsAtPath:filePath]) {
+            
+            if (![fileManager createFileAtPath:filePath contents:nil attributes:nil]) {
+                
                 failure(JELogLocationCurrent(),
                         @"Failed to create log file.",
                         nil);
@@ -503,8 +503,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         if (![fileURL
               setExtendedAttribute:_JEDebuggingFileLogAttributeValue
               forKey:_JEDebuggingFileLogAttributeKey
-              error:&attributeError])
-        {
+              error:&attributeError]) {
+            
             failure(JELogLocationCurrent(),
                     @"Failed to attach extended attribute to log file because of error:",
                     attributeError);
@@ -519,16 +519,16 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     if (![fileURL
           getExtendedAttribute:&attributeString
           forKey:_JEDebuggingFileLogAttributeKey
-          error:&attributeError])
-    {
+          error:&attributeError]) {
+        
         failure(JELogLocationCurrent(),
                 @"Failed to read extended attribute from log file because of error:",
                 attributeError);
         return nil;
     }
     
-    if (![_JEDebuggingFileLogAttributeValue isEqualToString:attributeString])
-    {
+    if (![_JEDebuggingFileLogAttributeValue isEqualToString:attributeString]) {
+        
         failure(JELogLocationCurrent(),
                 @"Extended attribute read from log file is incorrect.",
                 nil);
@@ -537,8 +537,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     
     NSError *fileHandleError;
     fileHandle = [NSFileHandle fileHandleForWritingToURL:fileURL error:&fileHandleError];
-    if (!fileHandle)
-    {
+    if (!fileHandle) {
+        
         failure(JELogLocationCurrent(),
                 @"Failed to open log file handle because of error:",
                 fileHandleError);
@@ -556,8 +556,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 }
 
 - (void)enumerateFileLogsWithThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings
-                                          block:(void (^)(NSURL *fileURL, BOOL *stop))block
-{
+                                          block:(void (^)(NSURL *fileURL, BOOL *stop))block {
+    
     NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
@@ -571,14 +571,19 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                                   | NSDirectoryEnumerationSkipsPackageDescendants
                                   | NSDirectoryEnumerationSkipsHiddenFiles)
                          error:&fileEnumerationError];
-    if (!fileURLs)
-    {
+    if (!fileURLs) {
+        
         [JEDebugging
          logFileError:fileEnumerationError
          location:JELogLocationCurrent()
          message:@"Failed enumerating log files because of exception:"];
         return;
     }
+    
+    fileURLs = [fileURLs
+                sortedArrayUsingDescriptors:@[[NSSortDescriptor
+                                               sortDescriptorWithKey:JEKeypath(NSURL *, path)
+                                               ascending:NO]]];
     
     [fileURLs enumerateObjectsUsingBlock:^(NSURL *fileURL, NSUInteger idx, BOOL *stop) {
         
@@ -589,8 +594,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
              getResourceValue:&isRegularFile
              forKey:(__bridge NSString *)kCFURLIsRegularFileKey
              error:NULL];
-            if (![isRegularFile boolValue])
-            {
+            if (![isRegularFile boolValue]) {
+                
                 return;
             }
             
@@ -599,8 +604,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
              getExtendedAttribute:&extendedAttribute
              forKey:_JEDebuggingFileLogAttributeKey
              error:NULL];
-            if (![_JEDebuggingFileLogAttributeValue isEqualToString:extendedAttribute])
-            {
+            if (![_JEDebuggingFileLogAttributeValue isEqualToString:extendedAttribute]) {
+                
                 return;
             }
             
@@ -611,14 +616,14 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     }];
 }
 
-- (void)deleteOldFileLogsWithThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings
-{
+- (void)deleteOldFileLogsWithThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings {
+    
     NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
     NSURL *currentFileURL = self.fileLogURL;
-    if (!currentFileURL)
-    {
+    if (!currentFileURL) {
+        
         return;
     }
     
@@ -633,8 +638,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [self enumerateFileLogsWithThreadSafeSettings:fileLoggerSettings block:^(NSURL *fileURL, BOOL *stop) {
         
-        if ([fileURL isEqual:currentFileURL])
-        {
+        if ([fileURL isEqual:currentFileURL]) {
+            
             return;
         }
         
@@ -644,8 +649,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
          forKey:(__bridge NSString *)kCFURLCreationDateKey
          error:NULL];
         
-        if ([creationDate compare:earliestAllowedDate] != NSOrderedAscending)
-        {
+        if ([creationDate compare:earliestAllowedDate] != NSOrderedAscending) {
+            
             return;
         }
         
@@ -655,8 +660,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 }
 
 - (void)appendStringToFile:(NSString *)string
-    withThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings
-{
+    withThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings {
+    
     NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
@@ -678,42 +683,42 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 }
 
 - (void)flushFileHandleIfNeededOrForced:(BOOL)forceSave
-                 withThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings
-{
+                 withThreadSafeSettings:(JEFileLoggerSettings *)fileLoggerSettings {
+    
     NSCAssert(dispatch_get_specific(_JEDebuggingQueueIDKey) == _JEDebuggingFileLogQueueID,
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
     NSFileHandle *fileHandle = self.fileLogHandle;
-    if (!fileHandle)
-    {
+    if (!fileHandle) {
+        
         return;
     }
     
     unsigned long long offsetInFile = [fileHandle offsetInFile];
     unsigned long long lastSynchronizedOffset = self.fileLogLastSynchronizedOffset;
     
-    if (offsetInFile == lastSynchronizedOffset)
-    {
+    if (offsetInFile == lastSynchronizedOffset) {
+        
         return;
     }
     
     if (forceSave
-        || (offsetInFile - lastSynchronizedOffset) >= fileLoggerSettings.numberOfBytesInMemoryBeforeWritingToFile)
-    {
+        || (offsetInFile - lastSynchronizedOffset) >= fileLoggerSettings.numberOfBytesInMemoryBeforeWritingToFile) {
+        
         [fileHandle synchronizeFile];
         self.fileLogLastSynchronizedOffset = offsetInFile;
     }
 }
 
-- (void)moveHUDLoggerToKeyWindowIfNeededWithThreadSafeSettings:(JEHUDLoggerSettings *)HUDLoggerSettings
-{
+- (void)moveHUDLoggerToKeyWindowIfNeededWithThreadSafeSettings:(JEHUDLoggerSettings *)HUDLoggerSettings {
+    
     NSCAssert([NSThread isMainThread],
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
     JEHUDLogView *view = self.HUDLogView;
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-    if (!view)
-    {
+    if (!view) {
+        
         view = [[JEHUDLogView alloc]
                 initWithFrame:[keyWindow
                                convertRect:[UIScreen mainScreen].bounds
@@ -721,8 +726,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 threadSafeSettings:HUDLoggerSettings];
         self.HUDLogView = view;
     }
-    if (view.window != keyWindow)
-    {
+    if (view.window != keyWindow) {
+        
         [view removeFromSuperview];
         view.frame = keyWindow.frame;
         [keyWindow addSubview:view];
@@ -730,8 +735,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 }
 
 - (void)appendStringToHUD:(NSString *)string
-   withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLoggerSettings
-{
+   withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLoggerSettings {
+    
     NSCAssert([NSThread isMainThread],
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
@@ -742,8 +747,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 #pragma mark @selector
 
-- (void)applicationWillResignActive:(NSNotification *)note
-{
+- (void)applicationWillResignActive:(NSNotification *)note {
+    
     JEFileLoggerSettings *fileLoggerSettings = [JEDebugging copyFileLoggerSettings];
     dispatch_barrier_async([JEDebugging fileLogQueue], ^{
         
@@ -752,8 +757,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     });
 }
 
-- (void)applicationDidEnterBackground:(NSNotification *)note
-{
+- (void)applicationDidEnterBackground:(NSNotification *)note {
+    
     JEFileLoggerSettings *fileLoggerSettings = [JEDebugging copyFileLoggerSettings];
     dispatch_barrier_sync([JEDebugging fileLogQueue], ^{
     
@@ -762,8 +767,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     });
 }
 
-- (void)applicationWillTerminate:(NSNotification *)note
-{
+- (void)applicationWillTerminate:(NSNotification *)note {
+    
     JEFileLoggerSettings *fileLoggerSettings = [JEDebugging copyFileLoggerSettings];
     dispatch_barrier_sync([JEDebugging fileLogQueue], ^{
         
@@ -772,18 +777,18 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     });
 }
 
-- (void)windowDidBecomeKeyWindow:(NSNotification *)note
-{
+- (void)windowDidBecomeKeyWindow:(NSNotification *)note {
+    
     NSCAssert([NSThread isMainThread], @"UIApplication's keyWindow was set on a background thread.");
     
     JEHUDLogView *view = self.HUDLogView;
-    if (!view)
-    {
+    if (!view) {
+        
         return;
     }
     
-    if (view.window == [UIApplication sharedApplication].keyWindow)
-    {
+    if (view.window == [UIApplication sharedApplication].keyWindow) {
+        
         return;
     }
     
@@ -802,8 +807,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 #pragma mark utilities
 
-+ (BOOL)isDebugBuild
-{
++ (BOOL)isDebugBuild {
+    
 #ifdef DEBUG
     return YES;
 #else
@@ -811,8 +816,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 #endif
 }
 
-+ (BOOL)isDebuggerRunning
-{
++ (BOOL)isDebuggerRunning {
+    
 #ifdef DEBUG
     
     // https://developer.apple.com/library/mac/qa/qa1361/_index.html
@@ -820,8 +825,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     
     struct kinfo_proc info = { .kp_proc.p_flag = 0 };
     size_t infoSize = sizeof(info);
-    if (noErr == sysctl(mib, (sizeof(mib) / sizeof(*mib)), &info, &infoSize, NULL, 0))
-    {
+    if (noErr == sysctl(mib, (sizeof(mib) / sizeof(*mib)), &info, &infoSize, NULL, 0)) {
+        
         return JEEnumBitmasked(info.kp_proc.p_flag, P_TRACED);
     }
     
@@ -836,8 +841,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 #pragma mark configuring
 
-+ (JEConsoleLoggerSettings *)copyConsoleLoggerSettings
-{
++ (JEConsoleLoggerSettings *)copyConsoleLoggerSettings {
+    
     JEConsoleLoggerSettings *__block settings;
     dispatch_barrier_sync([self settingsQueue], ^{
         
@@ -847,8 +852,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     return settings;
 }
 
-+ (void)setConsoleLoggerSettings:(JEConsoleLoggerSettings *)consoleLoggerSettings
-{
++ (void)setConsoleLoggerSettings:(JEConsoleLoggerSettings *)consoleLoggerSettings {
+    
     JEAssertParameter(consoleLoggerSettings != nil);
     
     dispatch_barrier_async([self settingsQueue], ^{
@@ -858,8 +863,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     });
 }
 
-+ (JEHUDLoggerSettings *)copyHUDLoggerSettings
-{
++ (JEHUDLoggerSettings *)copyHUDLoggerSettings {
+    
     JEHUDLoggerSettings *__block settings;
     dispatch_barrier_sync([self settingsQueue], ^{
         
@@ -869,8 +874,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     return settings;
 }
 
-+ (void)setHUDLoggerSettings:(JEHUDLoggerSettings *)HUDLoggerSettings
-{
++ (void)setHUDLoggerSettings:(JEHUDLoggerSettings *)HUDLoggerSettings {
+    
     JEAssertParameter(HUDLoggerSettings != nil);
     
     dispatch_barrier_async([self settingsQueue], ^{
@@ -880,8 +885,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     });
 }
 
-+ (JEFileLoggerSettings *)copyFileLoggerSettings
-{
++ (JEFileLoggerSettings *)copyFileLoggerSettings {
+    
     JEFileLoggerSettings *__block settings;
     dispatch_barrier_sync([self settingsQueue], ^{
         
@@ -891,8 +896,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     return settings;
 }
 
-+ (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings
-{
++ (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings {
+    
     JEAssertParameter(fileLoggerSettings != nil);
     
     dispatch_barrier_async([self settingsQueue], ^{
@@ -902,8 +907,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
     });
 }
 
-+ (void)start
-{
++ (void)start {
+    
     [self sharedInstance].isStarted = YES;
     
     [self
@@ -917,10 +922,10 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 + (void)dumpLevel:(JELogLevelMask)level
          location:(JELogLocation)location
             label:(NSString *)label
-            value:(NSValue *)wrappedValue
-{
-    if (![self sharedInstance].isStarted)
-    {
+            value:(NSValue *)wrappedValue {
+    
+    if (![self sharedInstance].isStarted) {
+        
         return;
     }
     
@@ -940,8 +945,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         
         if (!JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level)
             && !JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level)
-            && !JEEnumBitmasked(fileLoggerSettings.logLevelMask, level))
-        {
+            && !JEEnumBitmasked(fileLoggerSettings.logLevelMask, level)) {
+            
             return;
         }
         
@@ -960,21 +965,21 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                                                  | HUDLoggerSettings.logMessageHeaderMask
                                                  | fileLoggerSettings.logMessageHeaderMask)];
         NSString *bulletString;
-        if (JEEnumBitmasked(level, JELogLevelAlert))
-        {
+        if (JEEnumBitmasked(level, JELogLevelAlert)) {
+            
             bulletString = [self defaultAlertBulletString];
         }
-        else if (JEEnumBitmasked(level, JELogLevelNotice))
-        {
+        else if (JEEnumBitmasked(level, JELogLevelNotice)) {
+            
             bulletString = [self defaultLogBulletString];
         }
-        else
-        {
+        else {
+            
             bulletString = [self defaultTraceBulletString];
         }
         
-        if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level))
-        {
+        if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level)) {
+            
             dispatch_barrier_sync([self consoleLogQueue], ^{
                 
                 @autoreleasepool {
@@ -991,8 +996,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level))
-        {
+        if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level)) {
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 @autoreleasepool {
@@ -1011,8 +1016,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, level))
-        {
+        if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, level)) {
+            
             dispatch_barrier_async([self fileLogQueue], ^{
                 
                 @autoreleasepool {
@@ -1037,10 +1042,10 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
-          format:(NSString *)format, ...
-{
-    if (![self sharedInstance].isStarted)
-    {
+          format:(NSString *)format, ... {
+    
+    if (![self sharedInstance].isStarted) {
+        
         return;
     }
     
@@ -1060,8 +1065,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         
         if (!JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level)
             && !JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level)
-            && !JEEnumBitmasked(fileLoggerSettings.logLevelMask, level))
-        {
+            && !JEEnumBitmasked(fileLoggerSettings.logLevelMask, level)) {
+            
             return;
         }
         
@@ -1076,21 +1081,21 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                                                  | HUDLoggerSettings.logMessageHeaderMask
                                                  | fileLoggerSettings.logMessageHeaderMask)];
         NSString *bulletString;
-        if (JEEnumBitmasked(level, JELogLevelAlert))
-        {
+        if (JEEnumBitmasked(level, JELogLevelAlert)) {
+            
             bulletString = [self defaultAlertBulletString];
         }
-        else if (JEEnumBitmasked(level, JELogLevelNotice))
-        {
+        else if (JEEnumBitmasked(level, JELogLevelNotice)) {
+            
             bulletString = [self defaultLogBulletString];
         }
-        else
-        {
+        else {
+            
             bulletString = [self defaultTraceBulletString];
         }
         
-        if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level))
-        {
+        if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level)) {
+            
             dispatch_barrier_sync([self consoleLogQueue], ^{
                 
                 @autoreleasepool {
@@ -1107,8 +1112,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level))
-        {
+        if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level)) {
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 @autoreleasepool {
@@ -1127,8 +1132,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, level))
-        {
+        if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, level)) {
+            
             dispatch_barrier_async([self fileLogQueue], ^{
                 
                 @autoreleasepool {
@@ -1152,10 +1157,10 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 }
 
 + (void)logFailureInAssertionCondition:(NSString *)conditionString
-                              location:(JELogLocation)location
-{
-    if (![self sharedInstance].isStarted)
-    {
+                              location:(JELogLocation)location {
+    
+    if (![self sharedInstance].isStarted) {
+        
         return;
     }
     
@@ -1175,8 +1180,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         
         if (!JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelAlert)
             && !JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelAlert)
-            && !JEEnumBitmasked(fileLoggerSettings.logLevelMask, JELogLevelAlert))
-        {
+            && !JEEnumBitmasked(fileLoggerSettings.logLevelMask, JELogLevelAlert)) {
+            
             return;
         }
         
@@ -1190,8 +1195,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                                      @"Assertion failed for condition: (%@)",
                                      conditionString];
         
-        if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelAlert))
-        {
+        if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelAlert)) {
+            
             dispatch_barrier_sync([self consoleLogQueue], ^{
                 
                 @autoreleasepool {
@@ -1208,8 +1213,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelAlert))
-        {
+        if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelAlert)) {
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 @autoreleasepool {
@@ -1228,8 +1233,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                 
             });
         }
-        if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, JELogLevelAlert))
-        {
+        if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, JELogLevelAlert)) {
+            
             dispatch_barrier_async([self fileLogQueue], ^{
                 
                 @autoreleasepool {
@@ -1254,8 +1259,8 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 #pragma mark retrieving
 
-+ (void)enumerateFileLogsWithBlock:(void (^)(NSString *fileName, NSData *data, BOOL *stop))block
-{
++ (void)enumerateFileLogsWithBlock:(void (^)(NSString *fileName, NSData *data, BOOL *stop))block {
+    
     JEAssert(block != NULL, @"Enumeration block was NULL.");
     
     JEFileLoggerSettings *__block fileLoggerSettings;
@@ -1273,15 +1278,15 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
                             initWithContentsOfURL:fileURL
                             options:kNilOptions
                             error:NULL];
-            if (!data)
-            {
+            if (!data) {
+                
                 return;
             }
             
             BOOL shouldStop = NO;
             block([fileURL lastPathComponent], data, &shouldStop);
-            if (shouldStop)
-            {
+            if (shouldStop) {
+                
                 (*stop) = YES;
             }
             

@@ -15,61 +15,61 @@
 
 #pragma mark - Public
 
-+ (UIColor *)colorWithValue:(id)valueOrNil
-{
-    if (!valueOrNil)
-    {
++ (UIColor *)colorWithValue:(id)valueOrNil {
+    
+    if (!valueOrNil) {
+        
         return nil;
     }
     
-    if ([valueOrNil isKindOfClass:[UIColor class]])
-    {
+    if ([valueOrNil isKindOfClass:[UIColor class]]) {
+        
         return valueOrNil;
     }
-    if ([valueOrNil isKindOfClass:[NSNumber class]])
-    {
+    if ([valueOrNil isKindOfClass:[NSNumber class]]) {
+        
         return [self colorWithInt:[(NSNumber *)valueOrNil unsignedIntegerValue] alpha:1.0f];
     }
-    if ([valueOrNil isKindOfClass:[NSString class]])
-    {
+    if ([valueOrNil isKindOfClass:[NSString class]]) {
+        
         return [self colorWithHexString:valueOrNil];
     }
-    if ([valueOrNil isKindOfClass:[NSArray class]])
-    {
+    if ([valueOrNil isKindOfClass:[NSArray class]]) {
+        
         return [self colorWithComponents:valueOrNil];
     }
     
     return nil;
 }
 
-+ (UIColor *)colorWithHexString:(NSString *)hexString
-{
++ (UIColor *)colorWithHexString:(NSString *)hexString {
+    
     JEAssertParameter([hexString isKindOfClass:[NSString class]]);
     
-    for (NSString *prefix in @[@"0x", @"#", @"0X"])
-    {
-        if ([hexString hasPrefix:prefix])
-        {
+    for (NSString *prefix in @[@"0x", @"#", @"0X"]) {
+        
+        if ([hexString hasPrefix:prefix]) {
+            
             hexString = [hexString substringFromIndex:[prefix length]];
             break;
         }
     }
     
     NSUInteger hexStringLength = [hexString length];
-    if (hexStringLength != 6 && hexStringLength != 8)
-    {
+    if (hexStringLength != 6 && hexStringLength != 8) {
+        
         return nil;
     }
     
     NSScanner *scanner = [[NSScanner alloc] initWithString:hexString];
     unsigned long long hexInt = 0;
-    if (![scanner scanHexLongLong:&hexInt])
-    {
+    if (![scanner scanHexLongLong:&hexInt]) {
+        
         return nil;
     }
     
-    switch ([hexString length])
-    {
+    switch ([hexString length]) {
+            
         case 6: return [self
                         colorWithInt:(NSUInteger)hexInt
                         alpha:1.0f];
@@ -80,8 +80,8 @@
     return nil;
 }
 
-+ (UIColor *)colorWithInt:(NSUInteger)RGBInt alpha:(CGFloat)alpha
-{
++ (UIColor *)colorWithInt:(NSUInteger)RGBInt alpha:(CGFloat)alpha {
+    
     return [UIColor
             colorWithRed:(((CGFloat)((RGBInt & 0xFF0000) >> 16)) / 255.0f)
             green:(((CGFloat)((RGBInt & 0xFF00) >> 8)) / 255.0f)
@@ -89,25 +89,25 @@
             alpha:alpha];
 }
 
-+ (UIColor *)colorWithComponents:(NSArray *)components
-{
++ (UIColor *)colorWithComponents:(NSArray *)components {
+    
     JEAssertParameter([components isKindOfClass:[NSArray class]]);
     
     NSUInteger numberOfComponents = [components count];
-    if (numberOfComponents < 1 || numberOfComponents > 4)
-    {
+    if (numberOfComponents < 1 || numberOfComponents > 4) {
+        
         return nil;
     }
-    for (id component in components)
-    {
-        if (![component isKindOfClass:[NSNumber class]])
-        {
+    for (id component in components) {
+        
+        if (![component isKindOfClass:[NSNumber class]]) {
+            
             return nil;
         }
     }
     
-    switch (numberOfComponents)
-    {
+    switch (numberOfComponents) {
+            
         case 1: return [UIColor
                         colorWithWhite:[components[0] floatValue]
                         alpha:1.0f];
@@ -128,8 +128,8 @@
     return nil;
 }
 
-+ (UIColor *)randomColor
-{
++ (UIColor *)randomColor {
+    
     return [UIColor colorWithInt:arc4random_uniform(0x01000000) alpha:1.0f];
 }
 
