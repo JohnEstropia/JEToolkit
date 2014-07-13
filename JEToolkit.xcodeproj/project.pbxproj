@@ -95,7 +95,6 @@
 		2F10BB6D1880EDFA00739760 /* JEHUDLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEHUDLogView.m; sourceTree = "<group>"; };
 		2F1DCF8517FF1D4D00AFD8C7 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		2F36590C17F0A62300794CC0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
-		2F36590D17F0A62300794CC0 /* JEToolkit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JEToolkit.podspec; sourceTree = SOURCE_ROOT; };
 		2F5566F2184104F000098714 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		2F5566F4184104F800098714 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2F8FC86017B65DB500C3C0F3 /* libJEToolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJEToolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -280,6 +279,8 @@
 			children = (
 				2F8FC86817B65DB500C3C0F3 /* JEToolkit.h */,
 				34FEB4EB194E82D800B01ADE /* JEToolkit.podspec */,
+				2F36590C17F0A62300794CC0 /* LICENSE */,
+				34FC084918E3BA64000B6BBC /* README.md */,
 				34FC87D41932C6D0001EF83C /* JEToolkit */,
 				34F1246F1844874D00856ACA /* JEDebugging */,
 				349B328419498B320077692A /* JEDispatch */,
@@ -296,9 +297,6 @@
 			isa = PBXGroup;
 			children = (
 				2F8FC86717B65DB500C3C0F3 /* JEToolkit-Prefix.pch */,
-				2F36590C17F0A62300794CC0 /* LICENSE */,
-				34FC084918E3BA64000B6BBC /* README.md */,
-				2F36590D17F0A62300794CC0 /* JEToolkit.podspec */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

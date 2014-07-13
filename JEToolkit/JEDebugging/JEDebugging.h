@@ -92,6 +92,8 @@ typedef struct JELogLocation
 
 #define JEAssert(condition, formatString, ...)  do {} while (NO)
 #define JEAssertParameter(condition)            do {} while (NO)
+#define JEAssertMainThread()                    do {} while (NO)
+#define JEAssertBackgroundThread()              do {} while (NO)
 
 #else
 
@@ -115,6 +117,11 @@ typedef struct JELogLocation
 #define JEAssertParameter(condition) \
     JEAssert((condition), @"Invalid parameter not satisfying: (%s)", #condition)
 
+#define JEAssertMainThread() \
+    JEAssert([NSThread isMainThread], @"Code expected to run on the main thread")
+
+#define JEAssertBackgroundThread() \
+    JEAssert(![NSThread isMainThread], @"Code expected to run on a background thread")
 
 #endif
 
