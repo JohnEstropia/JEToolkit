@@ -10,6 +10,17 @@
 
 #import "JECompilerDefines.h"
 
+/*! Execute a block once and only once.
+ */
+#define JEDispatchOnce(block) \
+    do { \
+        static dispatch_once_t __je_dispatch_once_onceToken; \
+        dispatch_once(&__je_dispatch_once_onceToken, block); \
+    } while(NO)
+
+
+JE_EXTERN JE_NONNULL_ALL
+void JEDispatchConcurrent(dispatch_block_t block);
 
 /*! Dispatches a block to a concurrent global queue. Convenience method equivalent to calling dispatch_async() with dispatch_get_global_queue()
  */
