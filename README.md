@@ -45,7 +45,7 @@ Main Features:
 
 ## Safety macros
 
-- **`JEKeypath(...)`**: Returns and checks existence of a KVC (or KVO) keypath during compile time. For KVC operators, you can also use the `JEKeypathOperator(...)` variant.
+- **`JEKeypath(...)`**: Returns and checks existence of a KVC (or KVO) keypath during compile time. For KVC operators, you can also use the `JEKeypathOperator(...)` variant. If the keypath doesn't exist, compilation will fail.
 ```obj-c
 [obj setValue:@"John" forKey:JEKeypath(Person *, name)];
 [obj setValue:@"John" forKey:JEKeypath(typeof(self), name)]; // typeof() operator
@@ -56,6 +56,22 @@ NSArray *names = [friends valueForKeypath:JEKeypathOperator(unionOfObjects, Pers
 ```obj-c
 label.text = JEL8N(@"myviewcontroller.label.title"); // load from Localizable.strings
 label.text = JEL8N(@"myviewcontroller.label.title", @"CustomStrings"); // load from CustomStrings.strings
+```
+- **`JEScopeWeak(...) and JEScopeStrong(...)`**: Tired of writing `weakSelf`, `strongSelf`, `weakSomething`, `strongSomething`, etc? With `JEScopeWeak` and `JEScopeStrong` you can turn this
+```obj-c
+typeof(self) __weak weakSelf = self;
+[request downloadSomethingWithCompletion:^{
+    typeof(self) __strong strongSelf = weakSelf;
+    [strongSelf doSomethingElse];
+}];
+```
+to this
+```obj-c
+JEScopeWeak(self);
+[request downloadSomethingWithCompletion:^{
+    JEScopeStrong(self);
+    [self doSomethingElse];
+}];
 ```
 
 ## Other utility classes
