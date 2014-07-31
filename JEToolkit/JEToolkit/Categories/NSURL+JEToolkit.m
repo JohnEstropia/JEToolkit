@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
+#import "JEAvailability.h"
 #import "NSURL+JEToolkit.h"
 
 #import <sys/xattr.h>
@@ -17,6 +18,16 @@
 
 
 @implementation NSURL (JEToolkit)
+
+#pragma mark - Private
+
+- (const char *)je_fileSystemRepresentation NS_RETURNS_INNER_POINTER {
+    
+    return ([self respondsToSelector:@selector(fileSystemRepresentation)]
+            ? [self fileSystemRepresentation]
+            : [[self path] fileSystemRepresentation]);
+}
+
 
 #pragma mark - Public
 
@@ -98,7 +109,7 @@
              @"Keys for extended attributes should be less than or equal to %d", XATTR_MAXNAMELEN);
     
     const char *keyString = [key UTF8String];
-    const char *fileSystemRepresentation = [self fileSystemRepresentation];
+    const char *fileSystemRepresentation = [self je_fileSystemRepresentation];
     const ssize_t bufferSize = getxattr(fileSystemRepresentation,
                                         keyString,
                                         NULL,
@@ -169,7 +180,7 @@
     if (extendedAttribute) {
         
         const char *valueString = [extendedAttribute UTF8String];
-        errorCode = setxattr([self fileSystemRepresentation],
+        errorCode = setxattr([self je_fileSystemRepresentation],
                              [key UTF8String],
                              valueString,
                              strlen(valueString),
@@ -178,7 +189,7 @@
     }
     else {
         
-        errorCode = removexattr([self fileSystemRepresentation],
+        errorCode = removexattr([self je_fileSystemRepresentation],
                                 [key UTF8String],
                                 kNilOptions);
     }

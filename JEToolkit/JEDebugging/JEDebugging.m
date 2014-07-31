@@ -377,6 +377,14 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 + (NSDictionary *)headerEntriesForLocation:(JELogLocation)location
                                   withMask:(JELogMessageHeaderMask)logMessageHeaderMask {
     
+    static float OSVersion;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        OSVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+        
+    });
+    
     NSMutableDictionary * headerEntries = [[NSMutableDictionary alloc] init];
     
     headerEntries[@(JELogMessageHeaderDate)]
@@ -385,7 +393,15 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
        : [NSString string]);
     headerEntries[@(JELogMessageHeaderQueue)]
     = (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderQueue)
-       ? [NSString stringWithFormat:@"[%s] ", dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)]
+       ? [NSString stringWithFormat:@"[%s] ",
+          (OSVersion >= 7.0
+           ? dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)
+           : (OSVersion >= 6.1
+              JE_PRAGMA_PUSH
+              JE_PRAGMA_IGNORE("-Wdeprecated-declarations")
+              ? dispatch_queue_get_label(dispatch_get_current_queue())
+              JE_PRAGMA_POP
+              : ""))]
        : [NSString string]);
     headerEntries[@(JELogMessageHeaderSourceFile)]
     = ((JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderSourceFile)
