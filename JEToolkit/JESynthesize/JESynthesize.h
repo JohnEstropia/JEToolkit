@@ -14,7 +14,7 @@
 
 
 #if !__has_feature(objc_arc)
-#error JESynthesize() requires ARC be enabled
+#warning JESynthesize() requires ARC be enabled
 #endif
 
 

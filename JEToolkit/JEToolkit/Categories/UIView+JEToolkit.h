@@ -77,10 +77,10 @@
 
 /*! Returns the first subview that is a subclass of class. Searches recursively, and may return the receiver itself.
  */
-- (id)firstSubviewWithClass:(Class)class;
+- (id)firstSubviewWithClass:(Class)viewClass;
 
 /*! Returns the first superview that is a subclass of class. Searches recursively, and may return the receiver itself.
  */
-- (id)firstSuperviewWithClass:(Class)class;
+- (id)firstSuperviewWithClass:(Class)viewClass;
 
 @end

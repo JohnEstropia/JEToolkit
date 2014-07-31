@@ -205,18 +205,18 @@
     return nil;
 }
 
-- (id)firstSubviewWithClass:(Class)class {
+- (id)firstSubviewWithClass:(Class)viewClass {
     
-    JEAssertParameter([class isSubclassOfClass:[UIView class]]);
+    JEAssertParameter([viewClass isSubclassOfClass:[UIView class]]);
     
-    if ([self isKindOfClass:class]) {
+    if ([self isKindOfClass:viewClass]) {
         
         return self;
     }
     
     for (UIView *subview in self.subviews) {
         
-        UIView *subviewWithClass = [subview firstSubviewWithClass:class];
+        UIView *subviewWithClass = [subview firstSubviewWithClass:viewClass];
         if (subviewWithClass) {
             
             return subviewWithClass;
@@ -226,16 +226,16 @@
     return nil;
 }
 
-- (id)firstSuperviewWithClass:(Class)class {
+- (id)firstSuperviewWithClass:(Class)viewClass {
     
-    JEAssertParameter([class isSubclassOfClass:[UIView class]]);
+    JEAssertParameter([viewClass isSubclassOfClass:[UIView class]]);
     
-    if ([self isKindOfClass:class]) {
+    if ([self isKindOfClass:viewClass]) {
         
         return self;
     }
     
-    return [self.superview firstSuperviewWithClass:class];
+    return [self.superview firstSuperviewWithClass:viewClass];
 }
 
 

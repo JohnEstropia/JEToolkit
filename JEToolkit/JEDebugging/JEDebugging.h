@@ -29,7 +29,7 @@
 
 
 #if !__has_feature(objc_arc)
-#error JEDump() and JELog() requires ARC be enabled
+#warning JEDump() and JELog() requires ARC be enabled
 #endif
 
 #import "JECompilerDefines.h"
