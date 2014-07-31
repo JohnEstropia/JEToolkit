@@ -80,10 +80,20 @@
  */
 + (NSString *)nonEmptyStringOrNil:(id)valueOrNil;
 
+/*! Checks if a string is a substring of the receiver.
+ */
 - (BOOL)containsSubstring:(NSString *)substring JE_NONNULL_ALL;
 
+/*! Checks if a string is a substring of the receiver.
+ */
 - (BOOL)containsSubstring:(NSString *)substring
                   options:(NSStringCompareOptions)options JE_NONNULL(1);
+
+/*! Returns an NSComparisonResult value that indicates the version ordering of the receiver and another version string.
+ @param versionString The version string with which to compare the receiver.
+ @return NSOrderedAscending if the value of versionString is greater than the receiver; NSOrderedSame if they’re equal; and NSOrderedDescending if the value of versionString is less than the receiver or if versionString is nil.
+ */
+- (NSComparisonResult)compareWithVersion:(NSString *)versionString;
 
 
 #pragma mark - Conversion

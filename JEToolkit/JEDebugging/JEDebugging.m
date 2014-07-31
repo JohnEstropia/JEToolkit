@@ -377,12 +377,35 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 + (NSDictionary *)headerEntriesForLocation:(JELogLocation)location
                                   withMask:(JELogMessageHeaderMask)logMessageHeaderMask {
     
-    static float OSVersion;
+    static const char *(^getQueueLabel)(void);
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        OSVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-        
+        NSString *systemVersion = [UIDevice currentDevice].systemVersion;
+        if ([systemVersion compareWithVersion:@"7.0"] != NSOrderedAscending) {
+            
+            getQueueLabel = ^const char *{
+                
+                return dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL);
+            };
+        }
+        else if ([systemVersion compareWithVersion:@"6.1"] != NSOrderedAscending) {
+            
+            getQueueLabel = ^const char *{
+                
+                JE_PRAGMA_PUSH
+                JE_PRAGMA_IGNORE("-Wdeprecated-declarations")
+                return dispatch_queue_get_label(dispatch_get_current_queue());
+                JE_PRAGMA_POP
+            };
+        }
+        else {
+            
+            getQueueLabel = ^const char *{
+                
+                return "";
+            };
+        }
     });
     
     NSMutableDictionary * headerEntries = [[NSMutableDictionary alloc] init];
@@ -393,15 +416,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
        : [NSString string]);
     headerEntries[@(JELogMessageHeaderQueue)]
     = (JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderQueue)
-       ? [NSString stringWithFormat:@"[%s] ",
-          (OSVersion >= 7.0
-           ? dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)
-           : (OSVersion >= 6.1
-              JE_PRAGMA_PUSH
-              JE_PRAGMA_IGNORE("-Wdeprecated-declarations")
-              ? dispatch_queue_get_label(dispatch_get_current_queue())
-              JE_PRAGMA_POP
-              : ""))]
+       ? [NSString stringWithFormat:@"[%s] ", getQueueLabel()]
        : [NSString string]);
     headerEntries[@(JELogMessageHeaderSourceFile)]
     = ((JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderSourceFile)

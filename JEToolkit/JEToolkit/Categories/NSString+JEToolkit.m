@@ -126,6 +126,49 @@
             : [self rangeOfString:substring options:options].location != NSNotFound);
 }
 
+- (NSComparisonResult)compareWithVersion:(NSString *)versionString {
+    
+    if (!versionString)
+    {
+        return NSOrderedDescending;
+    }
+    
+    NSArray *components1 = [self componentsSeparatedByString:@"."];
+    NSArray *components2 = [versionString componentsSeparatedByString:@"."];
+    
+    NSUInteger components1Count = [components1 count];
+    NSUInteger components2Count = [components2 count];
+    NSUInteger partCount = MAX(components1Count, components2Count);
+    
+    for (NSInteger part = 0; part < partCount; ++part)
+    {
+        if (part >= components1Count)
+        {
+            return NSOrderedAscending;
+        }
+        
+        if (part >= components2Count)
+        {
+            return NSOrderedDescending;
+        }
+        
+        NSString *part1String = components1[part];
+        NSString *part2String = components2[part];
+        NSInteger part1 = [part1String integerValue];
+        NSInteger part2 = [part2String integerValue];
+        
+        if (part1 > part2)
+        {
+            return NSOrderedDescending;
+        }
+        if (part1 < part2)
+        {
+            return NSOrderedAscending;
+        }
+    }
+    return NSOrderedSame;
+}
+
 #pragma mark Conversion
 
 + (NSString *)stringFromValue:(id)valueOrNil {
