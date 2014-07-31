@@ -33,7 +33,7 @@
     ( @#property )
 
 #define JEKeypathOperator(class, property) \
-    ( @"@" #operator "." #property )
+    ( @"@" #class "." #property )
 
 #endif
 
