@@ -18,6 +18,7 @@ static NSString *const JEHUDCellReuseIdentifier = @"cell";
 
 static const CGFloat JEHUDLogViewButtonSize = 44.0f;
 static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
+static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
 
 
 @interface JEHUDLogView () <UITableViewDataSource, UITableViewDelegate>
@@ -280,17 +281,18 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
     }
     
     dummyCell.frame = (CGRect){
-        .size.width = CGRectGetHeight(tableView.bounds),
-        .size.height = 20.0f
+        .size.width = CGRectGetWidth(tableView.bounds),
+        .size.height = tableView.rowHeight
     };
     
     UILabel *textLabel = dummyCell.textLabel;
     textLabel.text = self.logEntries[indexPath.row];
+    [dummyCell layoutIfNeeded];
     
     return ceilf((CGRectGetHeight(dummyCell.bounds)
                   - CGRectGetHeight(textLabel.frame)
                   + [textLabel sizeForText].height
-                  + 10.0f));
+                  + (JEHUDLogViewConsolePadding * 2.0f)));
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
