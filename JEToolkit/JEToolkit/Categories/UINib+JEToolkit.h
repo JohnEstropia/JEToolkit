@@ -10,6 +10,8 @@
 
 @interface UINib (JEToolkit)
 
++ (BOOL)nibWithNameExists:(NSString *)nibName;
+
 + (UINib *)cachedNibWithName:(NSString *)nibName;
 
 @end

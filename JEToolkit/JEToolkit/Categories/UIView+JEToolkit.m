@@ -193,7 +193,7 @@
 + (instancetype)viewFromNib {
     
     NSString *className = [self className];
-    if(![[NSBundle mainBundle] pathForResource:className ofType:@"nib"]) {
+    if(![UINib nibWithNameExists:className]) {
         
         return nil;
     }

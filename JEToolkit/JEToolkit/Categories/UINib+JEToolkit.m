@@ -10,6 +10,13 @@
 
 @implementation UINib (JEToolkit)
 
+#pragma mark - Public
+
++ (BOOL)nibWithNameExists:(NSString *)nibName {
+    
+    return ([[NSBundle mainBundle] pathForResource:nibName ofType:@"nib"] != nil);
+}
+
 + (UINib *)cachedNibWithName:(NSString *)nibName {
     
     static NSCache *nibCache;
