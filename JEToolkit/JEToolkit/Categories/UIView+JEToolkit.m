@@ -8,6 +8,9 @@
 
 #import "UIView+JEToolkit.h"
 
+#import "NSObject+JEToolkit.h"
+#import "UINib+JEToolkit.h"
+
 #import "JEDebugging.h"
 
 
@@ -183,6 +186,19 @@
     CGPoint center = self.center;
     center.y = centerY;
     self.center = center;
+}
+
+#pragma mark Factory
+
++ (instancetype)viewFromNib {
+    
+    NSString *className = [self className];
+    if(![[NSBundle mainBundle] pathForResource:className ofType:@"nib"]) {
+        
+        return nil;
+    }
+    
+    return [[[UINib cachedNibWithName:className] instantiateWithOwner:nil options:nil] firstObject];
 }
 
 #pragma mark Hierarchy Helpers
