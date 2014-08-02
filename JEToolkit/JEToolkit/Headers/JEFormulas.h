@@ -132,6 +132,40 @@ CGSize JESizeScaled(CGSize size, CGFloat scale) {
     return (CGSize){ .width = (size.width * scale), .height = (size.height * scale) };
 }
 
+JE_STATIC_INLINE JE_CONST
+CGRect JERectAspectFill(CGRect screenRect, CGSize fromSize) {
+    
+	double hfactor = ((double)fromSize.width / (double)screenRect.size.width);
+	double vfactor = ((double)fromSize.height / (double)screenRect.size.height);
+	
+	double factor = MIN(hfactor, vfactor);
+	
+	double newWidth = ((double)fromSize.width / factor);
+	double newHeight = ((double)fromSize.height / factor);
+	
+	double leftOffset = (((double)screenRect.size.width - newWidth) * 0.5);
+	double topOffset = (((double)screenRect.size.height - newHeight) * 0.5);
+	
+	return CGRectMake(leftOffset, topOffset, newWidth, newHeight);
+}
+
+JE_STATIC_INLINE JE_CONST
+CGRect JERectAspectFit(CGRect screenRect, CGSize fromSize) {
+    
+	double hfactor = ((double)fromSize.width / (double)screenRect.size.width);
+	double vfactor = ((double)fromSize.height / (double)screenRect.size.height);
+	
+	double factor = MAX(hfactor, vfactor);
+	
+	double newWidth = ((double)fromSize.width / factor);
+	double newHeight = ((double)fromSize.height / factor);
+	
+	double leftOffset = (((double)screenRect.size.width - newWidth) * 0.5);
+	double topOffset = (((double)screenRect.size.height - newHeight) * 0.5);
+	
+	return CGRectMake(leftOffset, topOffset, newWidth, newHeight);
+}
+
 
 #pragma mark - Random
 
