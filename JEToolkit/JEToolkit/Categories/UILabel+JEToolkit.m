@@ -14,21 +14,34 @@
 
 - (CGSize)sizeForText {
     
-    CGFloat boundsWidth = self.bounds.size.width;
-    CGSize constainSize = (CGSize){
-        .width = boundsWidth,
+    CGSize constrainSize = (CGSize){
+        .width = CGRectGetWidth(self.bounds),
         .height = CGFLOAT_MAX
     };
     
     if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
         
-        return [self sizeThatFits:constainSize];
+        return [self sizeThatFits:constrainSize];
     }
     
     return [self.text
             sizeWithFont:self.font
-            constrainedToSize:constainSize
+            constrainedToSize:constrainSize
             lineBreakMode:self.lineBreakMode];
+}
+
+- (CGSize)sizeForAttributedText {
+    
+    CGSize size = [self.attributedText
+                   boundingRectWithSize:CGSizeMake(CGRectGetWidth(self.bounds), CGFLOAT_MAX)
+                   options:(NSStringDrawingUsesLineFragmentOrigin
+                            | NSStringDrawingUsesFontLeading)
+                   context:nil].size;
+    return (CGSize){
+        .width = ceilf(size.width),
+        .height = ceilf(size.height)
+    };
+    
 }
 
 @end

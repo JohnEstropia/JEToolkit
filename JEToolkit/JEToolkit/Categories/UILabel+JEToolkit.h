@@ -14,4 +14,8 @@
  */
 - (CGSize)sizeForText;
 
+/*! Computes for the display size of the receiver's current attributesText.
+ */
+- (CGSize)sizeForAttributedText;
+
 @end
