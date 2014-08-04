@@ -9,6 +9,9 @@
 #import "NSObject+JEDebugging.h"
 
 
+static NSString *const JEDebuggingEmptyDescription = @"<No Objective-C description available>";
+
+
 @implementation NSObject (JEDebugging)
 
 #pragma mark - NSObject
@@ -25,7 +28,7 @@
 
 - (NSString *)loggingDescription {
     
-    return [self description];
+    return ([self description] ?: JEDebuggingEmptyDescription);
 }
 
 - (NSString *)loggingDescriptionIncludeClass:(BOOL)includeClass
@@ -42,7 +45,7 @@
             
             [description appendFormat:@"<%p> ", self];
         }
-        [description appendString:[self loggingDescription]];
+        [description appendString:([self loggingDescription] ?: JEDebuggingEmptyDescription)];
         
     }
     return description;
