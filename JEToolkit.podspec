@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
 
   s.subspec "JEDebugging" do |ss|
     ss.source_files         = "#{s.name}/JEDebugging/**/*.{h,m,c}"
-    ss.ios.frameworks       = 'Foundation', 'UIKit'
+    ss.ios.frameworks       = 'Foundation', 'UIKit', 'MessageUI'
     ss.dependency "#{s.name}/JEToolkit"
   end
   

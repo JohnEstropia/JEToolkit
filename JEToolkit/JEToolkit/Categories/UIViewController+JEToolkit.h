@@ -10,6 +10,10 @@
 
 @interface UIViewController (JEToolkit)
 
+/*! Returns the recursive presentedViewController for the application
+ */
++ (UIViewController *)topmostPresentedViewController;
+
 /*! Checks if the receiver's view currently is in a window (i.e. currently in the view heirarchy)
  */
 - (BOOL)hasWindow;

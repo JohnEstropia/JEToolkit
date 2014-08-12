@@ -57,14 +57,24 @@
 
 #pragma mark Constants
 
++ (NSString *)applicationName {
+    
+    return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+}
+
 + (NSString *)applicationVersion {
     
-    return [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+    return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+}
+
++ (NSString *)applicationBuild {
+    
+    return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 }
 
 + (NSString *)applicationBundleVersion {
     
-    return [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+    return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 }
 
 #pragma mark String Manipulation

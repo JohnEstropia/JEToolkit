@@ -32,6 +32,7 @@
 #import "NSValue+JEToolkit.h"
 #import "UICollectionView+JEToolkit.h"
 #import "UIColor+JEToolkit.h"
+#import "UIDevice+JEToolkit.h"
 #import "UIImage+JEToolkit.h"
 #import "UILabel+JEToolkit.h"
 #import "UINib+JEToolkit.h"

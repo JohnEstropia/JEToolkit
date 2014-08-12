@@ -17,27 +17,27 @@
 
 /*! Convenience method to get the app Application Support path
  */
-+ (NSString *)applicationSupportDirectory JE_CONST;
++ (NSString *)applicationSupportDirectory;
 
 /*! Convenience method to get the app Caches path
  */
-+ (NSString *)cachesDirectory JE_CONST;
++ (NSString *)cachesDirectory;
 
 /*! Convenience method to get the app Documents path
  */
-+ (NSString *)documentsDirectory JE_CONST;
++ (NSString *)documentsDirectory;
 
 /*! Convenience method to get the app Downloads path
  */
-+ (NSString *)downloadsDirectory JE_CONST;
++ (NSString *)downloadsDirectory;
 
 /*! Convenience method to get the app Library path
  */
-+ (NSString *)libraryDirectory JE_CONST;
++ (NSString *)libraryDirectory;
 
 /*! Convenience method to get the app Temporary path
  */
-+ (NSString *)temporaryDirectory JE_CONST;
++ (NSString *)temporaryDirectory;
 
 /*! Convenience method to build file path from components
  */
@@ -46,13 +46,21 @@
 
 #pragma mark - Constants
 
+/*! Convenience method to get the app name string
+ */
++ (NSString *)applicationName;
+
 /*! Convenience method to get the app short version string
  */
-+ (NSString *)applicationVersion JE_CONST;
++ (NSString *)applicationVersion;
+
+/*! Convenience method to get the app build version string
+ */
++ (NSString *)applicationBuild;
 
 /*! Convenience method to get the app bundle version string
  */
-+ (NSString *)applicationBundleVersion JE_CONST;
++ (NSString *)applicationBundleVersion;
 
 
 #pragma mark - String Manipulation

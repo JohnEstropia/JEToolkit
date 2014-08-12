@@ -12,6 +12,7 @@
 		2F21ADE1198BC866002799E1 /* UINib+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F21ADE0198BC866002799E1 /* UINib+JEToolkit.m */; };
 		2F21ADE4198BCA20002799E1 /* UITableView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F21ADE3198BCA20002799E1 /* UITableView+JEToolkit.m */; };
 		2F21ADE7198BCA2E002799E1 /* UICollectionView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F21ADE6198BCA2E002799E1 /* UICollectionView+JEToolkit.m */; };
+		2F381EAC19990779006B379A /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F381EAB19990779006B379A /* MessageUI.framework */; };
 		2F3A87A61937839D00AEA77E /* NSArray+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87D71932C6D0001EF83C /* NSArray+JEToolkit.m */; };
 		2F3A87A71937839D00AEA77E /* NSCache+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87D91932C6D0001EF83C /* NSCache+JEToolkit.m */; };
 		2F3A87A81937839D00AEA77E /* NSCalendar+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC87DB1932C6D0001EF83C /* NSCalendar+JEToolkit.m */; };
@@ -32,6 +33,7 @@
 		2F3A87BF1937839D00AEA77E /* UITextView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC88091932C6D0001EF83C /* UITextView+JEToolkit.m */; };
 		2F3A87C01937839D00AEA77E /* UIView+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC880B1932C6D0001EF83C /* UIView+JEToolkit.m */; };
 		2F3A87C11937839D00AEA77E /* UIViewController+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FC880D1932C6D0001EF83C /* UIViewController+JEToolkit.m */; };
+		2F629532199A4956003174DD /* UIDevice+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F629531199A4956003174DD /* UIDevice+JEToolkit.m */; };
 		2F8FC86417B65DB500C3C0F3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC86317B65DB500C3C0F3 /* Foundation.framework */; };
 		2F8FC86917B65DB500C3C0F3 /* JEToolkit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F8FC86817B65DB500C3C0F3 /* JEToolkit.h */; };
 		2F8FC87217B65DB500C3C0F3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8FC87117B65DB500C3C0F3 /* XCTest.framework */; };
@@ -104,8 +106,11 @@
 		2F21ADE5198BCA2E002799E1 /* UICollectionView+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+JEToolkit.h"; sourceTree = "<group>"; };
 		2F21ADE6198BCA2E002799E1 /* UICollectionView+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+JEToolkit.m"; sourceTree = "<group>"; };
 		2F36590C17F0A62300794CC0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
+		2F381EAB19990779006B379A /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		2F5566F2184104F000098714 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		2F5566F4184104F800098714 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		2F629530199A4956003174DD /* UIDevice+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+JEToolkit.h"; sourceTree = "<group>"; };
+		2F629531199A4956003174DD /* UIDevice+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+JEToolkit.m"; sourceTree = "<group>"; };
 		2F8FC86017B65DB500C3C0F3 /* libJEToolkit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJEToolkit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F8FC86317B65DB500C3C0F3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2F8FC86717B65DB500C3C0F3 /* JEToolkit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JEToolkit-Prefix.pch"; sourceTree = "<group>"; };
@@ -223,6 +228,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F381EAC19990779006B379A /* MessageUI.framework in Frameworks */,
 				2F1DCF8617FF1D4D00AFD8C7 /* MobileCoreServices.framework in Frameworks */,
 				2F8FC89017B660C300C3C0F3 /* UIKit.framework in Frameworks */,
 				2F8FC86417B65DB500C3C0F3 /* Foundation.framework in Frameworks */,
@@ -273,11 +279,12 @@
 		2F8FC86217B65DB500C3C0F3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2F5566F4184104F800098714 /* MapKit.framework */,
 				2F5566F2184104F000098714 /* CoreLocation.framework */,
+				2F8FC86317B65DB500C3C0F3 /* Foundation.framework */,
+				2F5566F4184104F800098714 /* MapKit.framework */,
+				2F381EAB19990779006B379A /* MessageUI.framework */,
 				2F1DCF8517FF1D4D00AFD8C7 /* MobileCoreServices.framework */,
 				2F8FC88F17B660C300C3C0F3 /* UIKit.framework */,
-				2F8FC86317B65DB500C3C0F3 /* Foundation.framework */,
 				2F8FC87117B65DB500C3C0F3 /* XCTest.framework */,
 			);
 			name = Frameworks;
@@ -480,6 +487,8 @@
 				34FC87FF1932C6D0001EF83C /* NSValue+JEToolkit.m */,
 				34FC88001932C6D0001EF83C /* UIColor+JEToolkit.h */,
 				34FC88011932C6D0001EF83C /* UIColor+JEToolkit.m */,
+				2F629530199A4956003174DD /* UIDevice+JEToolkit.h */,
+				2F629531199A4956003174DD /* UIDevice+JEToolkit.m */,
 				34FC88021932C6D0001EF83C /* UIImage+JEToolkit.h */,
 				34FC88031932C6D0001EF83C /* UIImage+JEToolkit.m */,
 				34FC88041932C6D0001EF83C /* UILabel+JEToolkit.h */,
@@ -622,6 +631,7 @@
 				2F3A87BC1937839D00AEA77E /* UIImage+JEToolkit.m in Sources */,
 				2F3A87A71937839D00AEA77E /* NSCache+JEToolkit.m in Sources */,
 				349B325F19497EB30077692A /* NSException+JEDebugging.m in Sources */,
+				2F629532199A4956003174DD /* UIDevice+JEToolkit.m in Sources */,
 				2F3A87B11937839D00AEA77E /* NSMutableArray+JEToolkit.m in Sources */,
 				2F3A87BA1937839D00AEA77E /* NSValue+JEToolkit.m in Sources */,
 				349B325619497C2D0077692A /* NSDate+JEDebugging.m in Sources */,

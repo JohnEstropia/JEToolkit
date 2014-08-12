@@ -21,6 +21,7 @@
 #import "NSObject+JEToolkit.h"
 #import "NSString+JEToolkit.h"
 #import "NSURL+JEToolkit.h"
+#import "UIDevice+JEToolkit.h"
 
 #import "JEHUDLogView.h"
 
@@ -39,6 +40,7 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 @interface JEDebugging ()
 
+@property (nonatomic, strong, readonly) NSString *deviceDescription;
 @property (nonatomic, assign) BOOL isStarted;
 
 @property (nonatomic, strong) JEConsoleLoggerSettings *consoleLoggerSettings;
@@ -54,7 +56,30 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 // HUD log attributes
 @property (nonatomic, strong) JEHUDLogView *HUDLogView;
 
+
++ (JEDebugging *)sharedInstance;
+
 @end
+
+
+static NSUncaughtExceptionHandler *_je_previousExceptionHandler;
+
+JE_STATIC
+void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
+    
+    JELogAlert(@"Application (%@) crashed with exception: %@",
+               [JEDebugging sharedInstance].deviceDescription,
+               [exception loggingDescriptionIncludeClass:YES includeAddress:NO]);
+    
+    NSUncaughtExceptionHandler *previousExceptionHandler = _je_previousExceptionHandler;
+    if (previousExceptionHandler == NULL
+        || previousExceptionHandler == _JEDebuggingUncaughtExceptionHandler) {
+        
+        return;
+    }
+    
+    previousExceptionHandler(exception);
+}
 
 
 @implementation JEDebugging
@@ -68,6 +93,16 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         
         return nil;
     }
+    
+    UIDevice *device = [UIDevice currentDevice];
+    _deviceDescription = [[NSString alloc] initWithFormat:
+                          @"%@ %@(%@), iOS %@, %@ %@",
+                          [NSString applicationName],
+                          [NSString applicationVersion],
+                          [NSString applicationBuild],
+                          device.systemVersion,
+                          device.platform,
+                          device.hardwareName];
     
     _consoleLoggerSettings = [[JEConsoleLoggerSettings alloc] init];
     _HUDLoggerSettings = [[JEHUDLoggerSettings alloc] init];
@@ -513,8 +548,9 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
         
         fileURL = [fileLogsDirectoryURL
                    URLByAppendingPathComponent:
-                   [[NSString alloc] initWithFormat:@"%@ %@.log",
-                    ([NSString applicationBundleVersion] ?: [NSString string]),
+                   [[NSString alloc] initWithFormat:@"%@ %@ %@.log",
+                    [NSString applicationName],
+                    ([NSString applicationBundleVersion] ?: @"-"),
                     [[JEDebugging fileNameDateFormatter] stringFromDate:[[NSDate alloc] init]]]
                    isDirectory:NO];
         
@@ -940,12 +976,21 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 + (void)start {
     
-    [self sharedInstance].isStarted = YES;
+    JEDebugging *instance = [self sharedInstance];
+    if (instance.isStarted) {
+        
+        return;
+    }
+    
+    instance.isStarted = YES;
+    
+    _je_previousExceptionHandler = NSGetUncaughtExceptionHandler();
+    NSSetUncaughtExceptionHandler(_JEDebuggingUncaughtExceptionHandler);
     
     [self
      logLevel:JELogLevelNotice
      location:(JELogLocation){ NULL, NULL, 0 }
-     format:@"Debugging session started."];
+     format:@"Debugging session started. (%@)", instance.deviceDescription];
 }
 
 #pragma mark logging

@@ -12,6 +12,13 @@
 
 #pragma mark - Public
 
++ (UIViewController *)topmostPresentedViewController {
+    
+    UIApplication *application = [UIApplication sharedApplication];
+    UIViewController *rootViewController = (((NSObject<UIApplicationDelegate> *)application.delegate).window.rootViewController ?: application.keyWindow.rootViewController);
+    return [rootViewController topmostPresentedViewController];
+}
+
 - (BOOL)hasWindow {
     
     return ([self isViewLoaded] && self.view.window != nil);

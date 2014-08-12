@@ -8,10 +8,16 @@
 
 #import "JEHUDLogView.h"
 
+#import <MessageUI/MessageUI.h>
+
 #import "JEFormulas.h"
-#import "UIImage+JEToolkit.h"
+
+#import "JEDebugging.h"
+
+#import "NSString+JEToolkit.h"
 #import "UILabel+JEToolkit.h"
 #import "UIView+JEToolkit.h"
+#import "UIViewController+JEToolkit.h"
 
 
 static NSString *const JEHUDCellReuseIdentifier = @"cell";
@@ -21,14 +27,14 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
 
 
-@interface JEHUDLogView () <UITableViewDataSource, UITableViewDelegate>
+@interface JEHUDLogView () <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong, readonly) NSMutableArray *logEntries;
 
 @property (nonatomic, weak) UIView *menuView;
 @property (nonatomic, weak) CAShapeLayer *menuMaskLayer;
 @property (nonatomic, weak) UIButton *toggleButton;
-@property (nonatomic, weak) UIButton *screenshotButton;
+@property (nonatomic, weak) UIButton *reportButton;
 @property (nonatomic, weak) UIButton *resizeButton;
 @property (nonatomic, weak) UIView *consoleView;
 @property (nonatomic, weak) UITableView *tableView;
@@ -150,26 +156,26 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     self.toggleButton = toggleButton;
     
     
-    UIButton *screenshotButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    screenshotButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin
-                                         | UIViewAutoresizingFlexibleBottomMargin);
-    [screenshotButton setTranslatesAutoresizingMaskIntoConstraints:YES];
-    screenshotButton.frame = (CGRect){
+    UIButton *reportButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    reportButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin
+                                     | UIViewAutoresizingFlexibleBottomMargin);
+    [reportButton setTranslatesAutoresizingMaskIntoConstraints:YES];
+    reportButton.frame = (CGRect){
         .origin.x = CGRectGetMaxX(toggleButton.frame),
         .size.width = JEHUDLogViewButtonSize,
         .size.height = JEHUDLogViewButtonSize
     };
-    screenshotButton.backgroundColor = [UIColor clearColor];
-    screenshotButton.showsTouchWhenHighlighted = YES;
-    [screenshotButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [screenshotButton setTitleColor:[UIColor colorWithWhite:0.6f alpha:1.0f] forState:UIControlStateHighlighted];
-    [screenshotButton setTitle:@"📷" forState:UIControlStateNormal];
-    [screenshotButton
+    reportButton.backgroundColor = [UIColor clearColor];
+    reportButton.showsTouchWhenHighlighted = YES;
+    [reportButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [reportButton setTitleColor:[UIColor colorWithWhite:0.6f alpha:1.0f] forState:UIControlStateHighlighted];
+    [reportButton setTitle:@"✉️" forState:UIControlStateNormal];
+    [reportButton
      addTarget:self
-     action:@selector(screenshotButtonTouchUpInside:)
+     action:@selector(reportButtonTouchUpInside:)
      forControlEvents:UIControlEventTouchUpInside];
-    [menuView addSubview:screenshotButton];
-    self.screenshotButton = screenshotButton;
+    [menuView addSubview:reportButton];
+    self.reportButton = reportButton;
     
     
     UIButton *resizeButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -314,6 +320,14 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
 }
 
 
+#pragma mark - MFMailComposeViewControllerDelegate
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 #pragma mark - @selector
 
 - (void)toggleButtonTouchUpInside:(UIButton *)sender {
@@ -356,26 +370,47 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     [self layoutConsoleView];
 }
 
-- (void)screenshotButtonTouchUpInside:(UIButton *)sender {
+- (void)reportButtonTouchUpInside:(UIButton *)sender {
     
-    UIView *menuView = self.menuView;
-    UIView *consoleView = self.consoleView;
-    UIButton *resizeButton = self.resizeButton;
+    if (![MFMailComposeViewController canSendMail]) {
+        
+        return;
+    }
     
-    BOOL menuHidden = menuView.hidden;
-    BOOL consoleHidden = consoleView.hidden;
-    BOOL resizeButtonHidden = resizeButton.hidden;
+    UIViewController *viewController = [UIViewController topmostPresentedViewController];
+    if (!viewController) {
+        
+        return;
+    }
     
-    menuView.hidden = YES;
-    consoleView.hidden = YES;
-    resizeButton.hidden = YES;
+    MFMailComposeViewController *controller = [[MFMailComposeViewController alloc] init];
+    if (!controller) {
+        
+        return;
+    }
     
-    UIImage *screenshot = [UIImage screenshot];
-    UIImageWriteToSavedPhotosAlbum(screenshot, nil, NULL, NULL);
+    BOOL __block didAttachData = NO;
+    [JEDebugging enumerateFileLogsWithBlock:^(NSString *fileName, NSData *data, BOOL *stop) {
+        
+        didAttachData = YES;
+        [controller addAttachmentData:data mimeType:@"text/plain" fileName:fileName];
+        
+    }];
     
-    menuView.hidden = menuHidden;
-    consoleView.hidden = consoleHidden;
-    resizeButton.hidden = resizeButtonHidden;
+    if (!didAttachData) {
+        
+        return;
+    }
+    
+    controller.mailComposeDelegate = self;
+    [controller setSubject:[NSString stringWithFormat:
+                            @"%@ device logs",
+                            [NSString applicationName]]];
+    
+    [viewController presentViewController:controller animated:YES completion:nil];
+    
+    self.toggleButton.selected = NO;
+    [self didUpdateHUDVisibility];
 }
 
 - (void)resizeButtonTouchEnd:(UIButton *)sender {
@@ -440,8 +475,8 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     self.consoleView.hidden = consoleHidden;
     self.resizeButton.hidden = consoleHidden;
     
-    UIButton *screenshotButton = self.screenshotButton;
-    screenshotButton.hidden = consoleHidden;
+    UIButton *reportButton = self.reportButton;
+    reportButton.hidden = consoleHidden;
     
     UIView *menuView = self.menuView;
     CGRect menuFrame = menuView.frame;
@@ -451,7 +486,7 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
         
         menuView.frame = (CGRect){
             .origin = menuFrame.origin,
-            .size.width = CGRectGetMinX(screenshotButton.frame),
+            .size.width = CGRectGetMinX(reportButton.frame),
             .size.height = CGRectGetHeight(menuFrame)
         };
         menuMaskLayer.frame = menuView.layer.bounds;
@@ -464,7 +499,7 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     
     menuView.frame = (CGRect){
         .origin = menuFrame.origin,
-        .size.width = CGRectGetMaxX(screenshotButton.frame),
+        .size.width = CGRectGetMaxX(reportButton.frame),
         .size.height = CGRectGetHeight(menuFrame)
     };
     menuMaskLayer.frame = menuView.layer.bounds;
