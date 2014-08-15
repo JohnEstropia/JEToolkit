@@ -45,8 +45,13 @@
 
 #pragma mark - Submodules
 
-#import "JEDebugging.h"
-#import "JEDispatch.h"
-#import "JEOrderedDictionary.h"
 #import "JESynthesize.h"
+
+#import "JEDebugging.h"
+
+#import "JEDispatch.h"
+#import "NSObject+JEDispatch.h"
+
+#import "JEOrderedDictionary.h"
+
 #import "JEWeakCache.h"

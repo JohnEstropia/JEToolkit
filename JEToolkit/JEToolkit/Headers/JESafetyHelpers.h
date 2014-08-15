@@ -41,8 +41,11 @@
 
 #pragma mark - Localizable Strings
 
+// legacy
+#define JEL8N(args...)   JEL10n(args)
+
 JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *JEL8N(NSString *keyString) {
+NSString *JEL10n(NSString *keyString) {
     
 	NSString *localizedString = NSLocalizedString(keyString, nil);
     JEAssert(keyString != localizedString,
@@ -52,7 +55,7 @@ NSString *JEL8N(NSString *keyString) {
 }
 
 JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *JEL8N(NSString *keyString, NSString *stringsFile) {
+NSString *JEL10n(NSString *keyString, NSString *stringsFile) {
     
 	NSString *localizedString = NSLocalizedStringFromTable(keyString, stringsFile, nil);
     JEAssert(keyString != localizedString,

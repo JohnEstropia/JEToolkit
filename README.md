@@ -52,10 +52,10 @@ Main Features:
 [obj setValue:@"John" forKey:JEKeypath(Person *, friend.name)]; // dot notation
 NSArray *names = [friends valueForKeypath:JEKeypathOperator(unionOfObjects, Person *, name)];
 ```
-- **`JEL8N(...)`**: A shorthand for `NSLocalizedString(...)` or `NSLocalizedStringFromTable(...)` that asserts the existence of a localization string in a *.strings* file at runtime.
+- **`JEL10n(...)`**: A shorthand for `NSLocalizedString(...)` or `NSLocalizedStringFromTable(...)` that asserts the existence of a localization string in a *.strings* file at runtime.
 ```obj-c
-label.text = JEL8N(@"myviewcontroller.label.title"); // load from Localizable.strings
-label.text = JEL8N(@"myviewcontroller.label.title", @"CustomStrings"); // load from CustomStrings.strings
+label.text = JEL10n(@"myviewcontroller.label.title"); // load from Localizable.strings
+label.text = JEL10n(@"myviewcontroller.label.title", @"CustomStrings"); // load from CustomStrings.strings
 ```
 - **`JEScopeWeak(...) and JEScopeStrong(...)`**: Tired of writing `weakSelf`, `strongSelf`, `weakSomething`, `strongSomething`, etc? With `JEScopeWeak` and `JEScopeStrong` you can turn this
 ```obj-c

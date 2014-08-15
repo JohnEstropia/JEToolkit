@@ -19,6 +19,12 @@ Pod::Spec.new do |s|
     ss.source_files         = "#{s.name}/JEToolkit/**/*.{h,m,c}"
     ss.ios.frameworks       = 'Foundation', 'MobileCoreServices', 'UIKit'
   end
+  
+  s.subspec "JESynthesize" do |ss|
+    ss.source_files         = "#{s.name}/JESynthesize/**/*.{h,m,c}"
+    ss.ios.frameworks       = 'Foundation'
+    ss.dependency "#{s.name}/JEToolkit"
+  end
 
   s.subspec "JEDebugging" do |ss|
     ss.source_files         = "#{s.name}/JEDebugging/**/*.{h,m,c}"
@@ -31,6 +37,7 @@ Pod::Spec.new do |s|
     ss.ios.frameworks       = 'Foundation'
     ss.dependency "#{s.name}/JEToolkit"
     ss.dependency "#{s.name}/JEDebugging"
+    ss.dependency "#{s.name}/JESynthesize"
   end
   
   s.subspec "JEKeychain" do |ss|
@@ -42,12 +49,6 @@ Pod::Spec.new do |s|
   
   s.subspec "JEOrderedDictionary" do |ss|
     ss.source_files         = "#{s.name}/JEOrderedDictionary/**/*.{h,m,c}"
-    ss.ios.frameworks       = 'Foundation'
-    ss.dependency "#{s.name}/JEToolkit"
-  end
-  
-  s.subspec "JESynthesize" do |ss|
-    ss.source_files         = "#{s.name}/JESynthesize/**/*.{h,m,c}"
     ss.ios.frameworks       = 'Foundation'
     ss.dependency "#{s.name}/JEToolkit"
   end
