@@ -126,7 +126,12 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
      object:nil];
     [center
      addObserver:self
-     selector:@selector(windowDidBecomeKeyWindow:)
+     selector:@selector(windowDidBecomeTopmost:)
+     name:UIWindowDidBecomeVisibleNotification
+     object:nil];
+    [center
+     addObserver:self
+     selector:@selector(windowDidBecomeTopmost:)
      name:UIWindowDidBecomeKeyNotification
      object:nil];
     
@@ -152,6 +157,10 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     [center
      removeObserver:self
      name:UIApplicationWillTerminateNotification
+     object:nil];
+    [center
+     removeObserver:self
+     name:UIWindowDidBecomeVisibleNotification
      object:nil];
     [center
      removeObserver:self
@@ -777,27 +786,27 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     }
 }
 
-- (void)moveHUDLoggerToKeyWindowIfNeededWithThreadSafeSettings:(JEHUDLoggerSettings *)HUDLoggerSettings {
+- (void)moveHUDLoggerToTopmostWindowIfNeededWithThreadSafeSettings:(JEHUDLoggerSettings *)HUDLoggerSettings {
     
     NSCAssert([NSThread isMainThread],
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
     JEHUDLogView *view = self.HUDLogView;
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    UIWindow *topmostWindow = [[UIApplication sharedApplication].windows lastObject];
     if (!view) {
         
         view = [[JEHUDLogView alloc]
-                initWithFrame:[keyWindow
+                initWithFrame:[topmostWindow
                                convertRect:[UIScreen mainScreen].bounds
                                fromWindow:nil]
                 threadSafeSettings:HUDLoggerSettings];
         self.HUDLogView = view;
     }
-    if (view.window != keyWindow) {
+    if (view.window != topmostWindow) {
         
         [view removeFromSuperview];
-        view.frame = keyWindow.frame;
-        [keyWindow addSubview:view];
+        view.frame = topmostWindow.frame;
+        [topmostWindow addSubview:view];
     }
 }
 
@@ -807,7 +816,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     NSCAssert([NSThread isMainThread],
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
-    [self moveHUDLoggerToKeyWindowIfNeededWithThreadSafeSettings:HUDLoggerSettings];
+    [self moveHUDLoggerToTopmostWindowIfNeededWithThreadSafeSettings:HUDLoggerSettings];
     [self.HUDLogView addLogString:string withThreadSafeSettings:HUDLoggerSettings];
 }
 
@@ -844,7 +853,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     });
 }
 
-- (void)windowDidBecomeKeyWindow:(NSNotification *)note {
+- (void)windowDidBecomeTopmost:(NSNotification *)note {
     
     NSCAssert([NSThread isMainThread], @"UIApplication's keyWindow was set on a background thread.");
     
@@ -854,7 +863,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
         return;
     }
     
-    if (view.window == [UIApplication sharedApplication].keyWindow) {
+    if (view.window == [[UIApplication sharedApplication].windows lastObject]) {
         
         return;
     }
@@ -866,7 +875,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
         
     });
     
-    [self moveHUDLoggerToKeyWindowIfNeededWithThreadSafeSettings:HUDLoggerSettings];
+    [self moveHUDLoggerToTopmostWindowIfNeededWithThreadSafeSettings:HUDLoggerSettings];
 }
 
 
