@@ -12,10 +12,10 @@
 
 /*! Execute a block once and only once.
  */
-#define JEDispatchOnce(block) \
+#define JEDispatchOnce(block...) \
     do { \
         static dispatch_once_t __je_dispatch_once_onceToken; \
-        dispatch_once(&__je_dispatch_once_onceToken, block); \
+        dispatch_once(&__je_dispatch_once_onceToken, (block)); \
     } while(NO)
 
 
