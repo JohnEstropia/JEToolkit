@@ -140,7 +140,7 @@
     JE_PRAGMA_IGNORE("-Wdeprecated-declarations")
 
 #define __JE_AVAILABILITY_WARN_REGRESSION(ver) \
-    __attribute__((deprecated("API not available before iOS "ver"!"))) \
+    __attribute__((deprecated("API not available before iOS " ver "!"))) \
     __attribute__((weak_import))
 
 #ifndef JE_AVAILABILITY_MAX_REQUIRED_VERSION

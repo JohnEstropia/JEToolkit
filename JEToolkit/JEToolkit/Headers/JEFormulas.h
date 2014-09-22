@@ -84,13 +84,13 @@ CGPoint JEPoint(CGPoint startPoint, double angle, double distance, BOOL isTopToB
     if (isTopToBottomCoordinateSystem) {
         
         return (CGPoint){
-            .x = (startPoint.x + (sin(angle) * distance)),
-            .y = (startPoint.y + (cos(angle) * distance))
+            .x = (CGFloat)(startPoint.x + (sin(angle) * distance)),
+            .y = (CGFloat)(startPoint.y + (cos(angle) * distance))
         };
     }
     return (CGPoint){
-        .x = (startPoint.x + (cos(angle) * distance)),
-        .y = (startPoint.y - (sin(angle) * distance))
+        .x = (CGFloat)(startPoint.x + (cos(angle) * distance)),
+        .y = (CGFloat)(startPoint.y - (sin(angle) * distance))
     };
 }
 
