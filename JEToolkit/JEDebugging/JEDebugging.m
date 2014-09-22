@@ -1357,7 +1357,9 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     
     dispatch_barrier_sync([self fileLogQueue], ^{
         
-        [[self sharedInstance] enumerateFileLogsWithThreadSafeSettings:fileLoggerSettings block:^(NSURL *fileURL, BOOL *stop) {
+        JEDebugging *instance = [self sharedInstance];
+        [instance flushFileHandleIfNeededOrForced:YES withThreadSafeSettings:fileLoggerSettings];
+        [instance enumerateFileLogsWithThreadSafeSettings:fileLoggerSettings block:^(NSURL *fileURL, BOOL *stop) {
             
             NSData *data = [[NSData alloc]
                             initWithContentsOfURL:fileURL
