@@ -19,17 +19,19 @@
 
 #define JEKeypath(type, property) ({ \
         JE_PRAGMA_PUSH \
-        JE_PRAGMA_IGNORE("-Wunused-value") \
+        JE_PRAGMA_IGNORE("-Wunused-variable") \
         type _je_keypath_dummy; \
-        _je_keypath_dummy.property, @#property; \
+        typeof(_je_keypath_dummy.property) _je_keypath_dummy_property; \
+        @#property; \
         JE_PRAGMA_POP \
     })
 
 #define JEKeypathOperator(operator, type, property) ({ \
         JE_PRAGMA_PUSH \
-        JE_PRAGMA_IGNORE("-Wunused-value") \
+        JE_PRAGMA_IGNORE("-Wunused-variable") \
         type _je_keypath_dummy; \
-        _je_keypath_dummy.property, @"@" #operator "." #property; \
+        typeof(_je_keypath_dummy.property) _je_keypath_dummy_property; \
+        @"@" #operator "." #property; \
         JE_PRAGMA_POP \
     })
 
