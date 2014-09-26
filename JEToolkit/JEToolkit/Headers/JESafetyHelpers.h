@@ -18,13 +18,19 @@
 #if DEBUG
 
 #define JEKeypath(type, property) ({ \
+        JE_PRAGMA_PUSH \
+        JE_PRAGMA_IGNORE("-Wunused-value") \
         type _je_keypath_dummy; \
         _je_keypath_dummy.property, @#property; \
+        JE_PRAGMA_POP \
     })
 
 #define JEKeypathOperator(operator, type, property) ({ \
+        JE_PRAGMA_PUSH \
+        JE_PRAGMA_IGNORE("-Wunused-value") \
         type _je_keypath_dummy; \
         _je_keypath_dummy.property, @"@" #operator "." #property; \
+        JE_PRAGMA_POP \
     })
 
 #else
