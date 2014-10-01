@@ -18,21 +18,15 @@
 #if DEBUG
 
 #define JEKeypath(type, property) ({ \
-        JE_PRAGMA_PUSH \
-        JE_PRAGMA_IGNORE("-Wunused-variable") \
-        type _je_keypath_dummy; \
-        typeof(_je_keypath_dummy.property) _je_keypath_dummy_property; \
+        type _je_keypath_dummy __attribute__((unused)); \
+        typeof(_je_keypath_dummy.property) _je_keypath_dummy_property __attribute__((unused)); \
         @#property; \
-        JE_PRAGMA_POP \
     })
 
 #define JEKeypathOperator(operator, type, property) ({ \
-        JE_PRAGMA_PUSH \
-        JE_PRAGMA_IGNORE("-Wunused-variable") \
-        type _je_keypath_dummy; \
-        typeof(_je_keypath_dummy.property) _je_keypath_dummy_property; \
+        type _je_keypath_dummy __attribute__((unused)); \
+        typeof(_je_keypath_dummy.property) _je_keypath_dummy_property __attribute__((unused)); \
         @"@" #operator "." #property; \
-        JE_PRAGMA_POP \
     })
 
 #else
