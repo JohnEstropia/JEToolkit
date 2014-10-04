@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
 //
 
-#import "JEAvailability.h"
 #import "NSURL+JEToolkit.h"
 
 #import <sys/xattr.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
+#import "JEAvailability.h"
 #import "JEDebugging.h"
 #import "NSError+JEToolkit.h"
 #import "NSString+JEToolkit.h"

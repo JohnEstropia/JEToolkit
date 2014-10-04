@@ -52,6 +52,8 @@
 #import "JEDispatch.h"
 #import "NSObject+JEDispatch.h"
 
+#import "JEKeychain.h"
+
 #import "JEOrderedDictionary.h"
 
 #import "JEWeakCache.h"

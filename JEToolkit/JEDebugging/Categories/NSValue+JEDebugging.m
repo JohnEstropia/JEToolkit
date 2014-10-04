@@ -9,6 +9,7 @@
 #import "NSValue+JEDebugging.h"
 
 #import <objc/runtime.h>
+#import <UIKit/UIKit.h>
 
 #import "NSString+JEToolkit.h"
 #import "NSMutableString+JEDebugging.h"
