@@ -23,8 +23,7 @@
         return nil;
     }
     
-    self.logLevelMask = (JELogLevelNotice
-                         | JELogLevelAlert);
+    self.logLevelMask = (JELogLevelNotice | JELogLevelAlert);
     self.logMessageHeaderMask = JELogMessageHeaderAll;
     
     self.fileLogsDirectoryURL = [[NSURL alloc]

@@ -62,23 +62,12 @@ static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 @end
 
 
-static NSUncaughtExceptionHandler *_je_previousExceptionHandler;
-
 JE_STATIC
 void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     
     JELogAlert(@"Application (%@) crashed with exception: %@",
                [JEDebugging sharedInstance].deviceDescription,
                [exception loggingDescriptionIncludeClass:YES includeAddress:NO]);
-    
-    NSUncaughtExceptionHandler *previousExceptionHandler = _je_previousExceptionHandler;
-    if (previousExceptionHandler == NULL
-        || previousExceptionHandler == _JEDebuggingUncaughtExceptionHandler) {
-        
-        return;
-    }
-    
-    previousExceptionHandler(exception);
 }
 
 
@@ -983,6 +972,11 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     });
 }
 
++ (void)setAsExceptionHandler {
+    
+    NSSetUncaughtExceptionHandler(_JEDebuggingUncaughtExceptionHandler);
+}
+
 + (void)start {
     
     JEDebugging *instance = [self sharedInstance];
@@ -992,9 +986,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     }
     
     instance.isStarted = YES;
-    
-    _je_previousExceptionHandler = NSGetUncaughtExceptionHandler();
-    NSSetUncaughtExceptionHandler(_JEDebuggingUncaughtExceptionHandler);
     
     [self
      logLevel:JELogLevelNotice

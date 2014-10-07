@@ -25,6 +25,24 @@
 + (instancetype)allocForIdiom;
 
 
+#pragma mark - Observing
+
+- (void)registerForNotificationsWithName:(NSString *)notificationName
+                             targetBlock:(void (^)(NSNotification *note))block;
+
+- (void)registerForNotificationsWithName:(NSString *)notificationName
+                              fromObject:(id)objectOrNil
+                             targetBlock:(void (^)(NSNotification *note))block;
+
+- (void)registerForNotificationsWithName:(NSString *)notificationName
+                              fromObject:(id)objectOrNil
+                             targetQueue:(NSOperationQueue *)queueOrNil
+                             targetBlock:(void (^)(NSNotification *note))block;
+
+- (void)unregisterForNotificationsWithName:(NSString *)notificationName
+                                fromObject:(id)objectOrNil;
+
+
 #pragma mark - Method Swizzling
 
 /*! Swizzles a class method.

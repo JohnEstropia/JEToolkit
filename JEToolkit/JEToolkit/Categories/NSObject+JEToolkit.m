@@ -10,10 +10,80 @@
 
 #import <objc/runtime.h>
 
+#import "JESynthesize.h"
 #import "JEDebugging.h"
 
 
+@interface _JE_NSNotificationObserver : NSObject
+
+@property (nonatomic, copy, readonly) NSString *notificationName;
+@property (nonatomic, weak, readonly) id object;
+@property (nonatomic, weak, readonly) id<NSObject> observer;
+
+@end
+
+@implementation _JE_NSNotificationObserver
+
+- (instancetype)initWithName:(NSString *)notificationName
+                      object:(id)objectOrNil
+                       queue:(NSOperationQueue *)queue
+                  usingBlock:(void (^)(NSNotification *note))block {
+    
+    self = [super init];
+    if (!self) {
+        
+        return nil;
+    }
+    
+    _notificationName = notificationName;
+    _object = objectOrNil;
+    _observer = [[NSNotificationCenter defaultCenter]
+                 addObserverForName:notificationName
+                 object:objectOrNil
+                 queue:queue
+                 usingBlock:block];
+    return self;
+}
+
+- (void)dealloc {
+    
+    [self stopObserving];
+}
+
+- (void)stopObserving {
+    
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:self.observer
+     name:self.notificationName
+     object:self.object];
+}
+
+@end
+
+
 @implementation NSObject (JEToolkit)
+
+#pragma mark - Private
+
+JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNotificationObservers)
+
++ (NSString *)je_keyForObserverWithNotificationName:(NSString *)notificationName
+                                             object:(id)objectOrNil {
+    
+    return [[NSString alloc] initWithFormat:@"%p:%@", objectOrNil, notificationName];
+}
+
+- (NSMutableDictionary *)je_notificationObservers {
+    
+    NSMutableDictionary *observers = [self _je_notificationObservers];
+    if (!observers) {
+        
+        observers = [[NSMutableDictionary alloc] init];
+        [self _je_setNotificationObservers:observers];
+    }
+    return observers;
+}
+
 
 #pragma mark - Public
 
@@ -44,6 +114,53 @@
 + (instancetype)allocForIdiom {
     
     return [[self classForIdiom] alloc];
+}
+
+
+#pragma mark Observing
+
+- (void)registerForNotificationsWithName:(NSString *)notificationName
+                             targetBlock:(void (^)(NSNotification *note))block {
+    
+    [self
+     registerForNotificationsWithName:notificationName
+     fromObject:nil
+     targetQueue:nil
+     targetBlock:block];
+}
+
+- (void)registerForNotificationsWithName:(NSString *)notificationName
+                              fromObject:(id)objectOrNil
+                             targetBlock:(void (^)(NSNotification *note))block {
+    
+    [self
+     registerForNotificationsWithName:notificationName
+     fromObject:objectOrNil
+     targetQueue:nil
+     targetBlock:block];
+}
+
+- (void)registerForNotificationsWithName:(NSString *)notificationName
+                              fromObject:(id)objectOrNil
+                             targetQueue:(NSOperationQueue *)queueOrNil
+                             targetBlock:(void (^)(NSNotification *note))block {
+    
+    NSMutableDictionary *je_notificationObservers = [self je_notificationObservers];
+    NSString *key = [NSObject je_keyForObserverWithNotificationName:notificationName object:objectOrNil];
+    
+    [(_JE_NSNotificationObserver *)je_notificationObservers[key] stopObserving];
+    je_notificationObservers[key] = [[_JE_NSNotificationObserver alloc]
+                                     initWithName:notificationName
+                                     object:objectOrNil
+                                     queue:queueOrNil
+                                     usingBlock:block];
+}
+
+- (void)unregisterForNotificationsWithName:(NSString *)notificationName
+                                fromObject:(id)objectOrNil {
+    
+    [[self _je_notificationObservers] removeObjectForKey:
+     [NSObject je_keyForObserverWithNotificationName:notificationName object:objectOrNil]];
 }
 
 

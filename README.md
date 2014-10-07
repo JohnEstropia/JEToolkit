@@ -2,6 +2,20 @@
 JEToolkit is a collection of common utilities for iOS development.
 
 
+## JEDebugging class and friends
+
+`JEDebugging` is the bread and butter of JEToolkit. It's a logging framework that will surely help you (the iOS developer), your testers, and even your web development teammates.
+
+### Main Features
+- More informative `debugDescription`s for common NSFoundation objects. For example, printing an `NSDictionary` also tells what types the keys and values are.
+- Provides clean and readable logs. Log messages are indented and marked by log level-specific markers.
+- All logging are thread-safe.
+- Option to save logs to files. Log files are separated by date, and there is an API to enumerate the `NSData`s for the files.
+- Option to display a lightweight, inline HUD console from within the app itself. You can toggle the HUD with a draggable button, and you can stretch the size of the view. The HUD also stays on top of all other views/windows, even if you open a modal view or if you create your own window. The view also provides a way to take a screenshot with the console view hidden.
+- JEDump() is a magical macro can log anything you throw at it: compiler primitives, objects, blocks, etc. Run the *JEToolkitTests* unit test to view sample outputs and sample usages.
+- Configurable behavior for the console logger, the file logger, and the HUD logger.
+
+
 ## JESynthesize() macro
 
 The `JESynthesize()` macro declares the proper accessor and setter methods for you depending on the data type and the access modifier (`assign`, `strong`, etc) you set. And as an extension for associated objects, `JESynthesize` also supports `weak`.
@@ -27,20 +41,6 @@ JESynthesize(strong, NSString *, readonlyID, changeReadonlyID);
 ```
 
 If you want to know how the macro works, you can check the file *JESynthesize/JESynthesize.h*, or a more extensive explanation [here](http://nspicks.com/2013/12/15/cleaner-properties-implementation-in-categories/).
-
-
-## JEDebugging class and friends
-
-`JEDebugging` is just another logging tool that provides several new functionalities.
-
-Main Features:
-- All logging are thread-safe.
-- Provides clean and readable XCode console logs by overriding `debugDescription`. Log messages are indented, and marked by icons (emoji).
-- More informative `debugDescription`s for common NSFoundation objects. For example, printing an `NSDictionary` also tells what class the keys and values are.
-- Option to save logs to files. Log files are separated by date, and there is an API to enumerate the `NSData`s for the files.
-- Option to display a lightweight, inline HUD console from within the app itself. You can toggle the HUD with a draggable button, and you can stretch the size of the view. The HUD also stays on top of all other views/windows, even if you open a modal view or if you create your own window. The view also provides a way to take a screenshot with the console view hidden.
-- JEDump() is a magical macro can log anything you throw at it: compiler primitives, objects, blocks, etc. Run the *JEToolkitTests* unit test to view sample outputs and sample usages.
-- Configurable behavior for the console logger, the file logger, and the HUD logger.
 
 
 ## Safety macros

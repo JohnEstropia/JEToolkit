@@ -317,6 +317,7 @@ typedef struct JELogLocation {
 + (JEFileLoggerSettings *)copyFileLoggerSettings JE_WARN_UNUSED_RESULT;
 + (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings;
 
++ (void)setAsExceptionHandler;
 + (void)start;
 
 

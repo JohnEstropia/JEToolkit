@@ -20,7 +20,12 @@
         return nil;
     }
     
+#if DEBUG
     self.logLevelMask = JELogLevelAll;
+#else
+    self.logLevelMask = (JELogLevelNotice | JELogLevelAlert);
+#endif
+    
     self.logMessageHeaderMask = (JELogMessageHeaderQueue
                                  | JELogMessageHeaderSourceFile
                                  | JELogMessageHeaderFunction);

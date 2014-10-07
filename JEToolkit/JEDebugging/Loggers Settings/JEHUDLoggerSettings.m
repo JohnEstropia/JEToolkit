@@ -20,10 +20,15 @@
         return nil;
     }
     
+#if DEBUG
     self.logLevelMask = JELogLevelAll;
+#else
+    self.logLevelMask = JELogLevelNone;
+#endif
+    
+    self.visibleOnStart = NO;
     self.logMessageHeaderMask = (JELogMessageHeaderSourceFile
                                  | JELogMessageHeaderFunction);
-    self.visibleOnStart = NO;
     self.numberOfLogEntriesInMemory = 200;
     
     return self;

@@ -11,6 +11,7 @@
 #import <MessageUI/MessageUI.h>
 
 #import "JEFormulas.h"
+#import "JEUIMetrics.h"
 
 #import "JEDebugging.h"
 
@@ -259,7 +260,7 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     CGRect menuFrame = menuView.frame;
     menuView.frame = (CGRect){
         .origin.x = CGRectGetMinX(menuFrame),
-        .origin.y = JEClamp(0.0f,
+        .origin.y = JEClamp(JEUIStatusBarHeight,
                             CGRectGetMinY(menuFrame),
                             (CGRectGetHeight(self.bounds)
                              - JEHUDLogViewConsoleMinHeight
@@ -359,7 +360,7 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     CGFloat menuHeight = CGRectGetHeight(menuFrame);
     menuView.frame = (CGRect){
         .origin.x = CGRectGetMinX(menuFrame),
-        .origin.y = JEClamp(0.0f,
+        .origin.y = JEClamp(JEUIStatusBarHeight,
                             (location.y - (menuHeight * 0.5f)),
                             (CGRectGetHeight(self.bounds)
                              - JEHUDLogViewConsoleMinHeight

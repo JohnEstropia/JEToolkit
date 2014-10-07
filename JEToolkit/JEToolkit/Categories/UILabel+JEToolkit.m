@@ -14,7 +14,20 @@
 
 - (CGSize)sizeForText {
     
-    return [self sizeThatFits:CGSizeMake(CGRectGetWidth(self.bounds), CGFLOAT_MAX)];
+    CGSize constrainSize = (CGSize){
+        .width = CGRectGetWidth(self.bounds),
+        .height = CGFLOAT_MAX
+    };
+    
+    if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
+        
+        return [self sizeThatFits:constrainSize];
+    }
+    
+    return [self.text
+            sizeWithFont:self.font
+            constrainedToSize:constrainSize
+            lineBreakMode:self.lineBreakMode];
 }
 
 - (CGSize)sizeForAttributedText {
