@@ -42,9 +42,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         JEDebugging.setFileLoggerSettings(fileLoggerSettings)
         
         // Note that this will detach previously set exception handlers, such as handlers provided by analytics frameworks or other debugging frameworks.
-        JEDebugging.setAsExceptionHandler()
+        JEDebugging.setExceptionLoggingEnabled(true)
+        JEDebugging.setApplicationLifecycleLoggingEnabled(true)
         
         JEDebugging.start()
+        
+        JEDebugging.logLevel(
+            .Notice,
+            location:JELogLocation(fileName: nil, functionName: nil, lineNumber: 0),
+            format: "isDebugBuild = %@, isDebuggerRunning = %@",
+            arguments: getVaList([JEDebugging.isDebugBuild(), JEDebugging.isDebuggerAttached()]))
         
         return true
     }

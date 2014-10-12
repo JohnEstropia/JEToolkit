@@ -345,7 +345,7 @@
     JEDump([UIColor clearColor]);
     JEDump([UIColor colorWithInt:0xFF0000 alpha:0.5f]);
     
-    [JEDebugging enumerateFileLogsWithBlock:^(NSString *fileName, NSData *data, BOOL *stop) {
+    [JEDebugging enumerateFileLogDataWithBlock:^(NSString *fileName, NSData *data, BOOL *stop) {
         
         JELog(@"File log: \"%@\" (%@)", fileName, [NSString stringFromFileSize:[data length]]);
         

@@ -28,7 +28,7 @@ static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
 
 
-@interface JEHUDLogView () <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
+@interface JEHUDLogView () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong, readonly) NSMutableArray *logEntries;
 
@@ -36,6 +36,7 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
 @property (nonatomic, weak) CAShapeLayer *menuMaskLayer;
 @property (nonatomic, weak) UIButton *toggleButton;
 @property (nonatomic, weak) UIButton *reportButton;
+@property (nonatomic, weak) UIButton *clearButton;
 @property (nonatomic, weak) UIButton *resizeButton;
 @property (nonatomic, weak) UIView *consoleView;
 @property (nonatomic, weak) UITableView *tableView;
@@ -177,6 +178,28 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
      forControlEvents:UIControlEventTouchUpInside];
     [menuView addSubview:reportButton];
     self.reportButton = reportButton;
+    
+    
+    UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    clearButton.autoresizingMask = (UIViewAutoresizingFlexibleRightMargin
+                                    | UIViewAutoresizingFlexibleBottomMargin);
+    [clearButton setTranslatesAutoresizingMaskIntoConstraints:YES];
+    clearButton.frame = (CGRect){
+        .origin.x = CGRectGetMaxX(reportButton.frame),
+        .size.width = JEHUDLogViewButtonSize,
+        .size.height = JEHUDLogViewButtonSize
+    };
+    clearButton.backgroundColor = [UIColor clearColor];
+    clearButton.showsTouchWhenHighlighted = YES;
+    [clearButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [clearButton setTitleColor:[UIColor colorWithWhite:0.6f alpha:1.0f] forState:UIControlStateHighlighted];
+    [clearButton setTitle:@"⬛️" forState:UIControlStateNormal];
+    [clearButton
+     addTarget:self
+     action:@selector(clearButtonTouchUpInside:)
+     forControlEvents:UIControlEventTouchUpInside];
+    [menuView addSubview:clearButton];
+    self.clearButton = clearButton;
     
     
     UIButton *resizeButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -321,14 +344,6 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
 }
 
 
-#pragma mark - MFMailComposeViewControllerDelegate
-
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    
-    [controller dismissViewControllerAnimated:YES completion:nil];
-}
-
-
 #pragma mark - @selector
 
 - (void)toggleButtonTouchUpInside:(UIButton *)sender {
@@ -384,34 +399,34 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
         return;
     }
     
-    MFMailComposeViewController *controller = [[MFMailComposeViewController alloc] init];
-    if (!controller) {
+    NSMutableArray *activityItems = [[NSMutableArray alloc] init];
+    [JEDebugging enumerateFileLogURLsWithBlock:^(NSURL *fileURL, BOOL *stop) {
         
-        return;
-    }
-    
-    BOOL __block didAttachData = NO;
-    [JEDebugging enumerateFileLogsWithBlock:^(NSString *fileName, NSData *data, BOOL *stop) {
-        
-        didAttachData = YES;
-        [controller addAttachmentData:data mimeType:@"text/plain" fileName:fileName];
+        [activityItems addObject:fileURL];
         
     }];
     
-    if (!didAttachData) {
+    if ([activityItems count] <= 0) {
         
         return;
     }
-    
-    controller.mailComposeDelegate = self;
-    [controller setSubject:[NSString stringWithFormat:
-                            @"%@ device logs",
-                            [NSString applicationName]]];
+
+    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+    controller.excludedActivityTypes = @[ UIActivityTypePostToFacebook,
+                                          UIActivityTypePostToTwitter,
+                                          UIActivityTypePostToWeibo,
+                                          UIActivityTypePostToTencentWeibo ];
     
     [viewController presentViewController:controller animated:YES completion:nil];
     
     self.toggleButton.selected = NO;
     [self didUpdateHUDVisibility];
+}
+
+- (void)clearButtonTouchUpInside:(UIButton *)sender {
+    
+    [self.logEntries removeAllObjects];
+    [self.tableView reloadData];
 }
 
 - (void)resizeButtonTouchEnd:(UIButton *)sender {
@@ -479,6 +494,9 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     UIButton *reportButton = self.reportButton;
     reportButton.hidden = consoleHidden;
     
+    UIButton *clearButton = self.clearButton;
+    clearButton.hidden = consoleHidden;
+    
     UIView *menuView = self.menuView;
     CGRect menuFrame = menuView.frame;
     
@@ -500,7 +518,7 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     
     menuView.frame = (CGRect){
         .origin = menuFrame.origin,
-        .size.width = CGRectGetMaxX(reportButton.frame),
+        .size.width = CGRectGetMaxX(clearButton.frame),
         .size.height = CGRectGetHeight(menuFrame)
     };
     menuMaskLayer.frame = menuView.layer.bounds;

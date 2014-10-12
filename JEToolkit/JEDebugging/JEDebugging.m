@@ -88,7 +88,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                           @"%@ %@(%@), iOS %@, %@ %@",
                           [NSString applicationName],
                           [NSString applicationVersion],
-                          [NSString applicationBuild],
+                          [NSString applicationBundleVersion],
                           device.systemVersion,
                           device.platform,
                           device.hardwareName];
@@ -546,7 +546,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
         
         fileURL = [fileLogsDirectoryURL
                    URLByAppendingPathComponent:
-                   [[NSString alloc] initWithFormat:@"%@ %@ %@.log",
+                   [[NSString alloc] initWithFormat:@"%@(%@) %@.log",
                     [NSString applicationName],
                     ([NSString applicationBundleVersion] ?: @"-"),
                     [[JEDebugging fileNameDateFormatter] stringFromDate:[[NSDate alloc] init]]]
@@ -844,27 +844,29 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
 
 - (void)windowDidBecomeTopmost:(NSNotification *)note {
     
-    NSCAssert([NSThread isMainThread], @"UIApplication's keyWindow was set on a background thread.");
-    
-    JEHUDLogView *view = self.HUDLogView;
-    if (!view) {
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        return;
-    }
-    
-    if (view.window == [[UIApplication sharedApplication].windows lastObject]) {
+        JEHUDLogView *view = self.HUDLogView;
+        if (!view) {
+            
+            return;
+        }
         
-        return;
-    }
-    
-    JEHUDLoggerSettings *__block HUDLoggerSettings;
-    dispatch_barrier_sync([JEDebugging settingsQueue], ^{
+        if (view.window == [[UIApplication sharedApplication].windows lastObject]) {
+            
+            return;
+        }
         
-        HUDLoggerSettings = self.HUDLoggerSettings;
+        JEHUDLoggerSettings *__block HUDLoggerSettings;
+        dispatch_barrier_sync([JEDebugging settingsQueue], ^{
+            
+            HUDLoggerSettings = self.HUDLoggerSettings;
+            
+        });
+        
+        [self moveHUDLoggerToTopmostWindowIfNeededWithThreadSafeSettings:HUDLoggerSettings];
         
     });
-    
-    [self moveHUDLoggerToTopmostWindowIfNeededWithThreadSafeSettings:HUDLoggerSettings];
 }
 
 
@@ -881,7 +883,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
 #endif
 }
 
-+ (BOOL)isDebuggerRunning {
++ (BOOL)isDebuggerAttached {
     
 #ifdef DEBUG
     
@@ -972,9 +974,81 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     });
 }
 
-+ (void)setAsExceptionHandler {
++ (void)setExceptionLoggingEnabled:(BOOL)enabled{
     
-    NSSetUncaughtExceptionHandler(_JEDebuggingUncaughtExceptionHandler);
+    static NSUncaughtExceptionHandler *defaultHandler;
+    dispatch_barrier_sync([self settingsQueue], ^{
+        
+        if (enabled) {
+            
+            if (defaultHandler != _JEDebuggingUncaughtExceptionHandler) {
+                
+                defaultHandler = NSGetUncaughtExceptionHandler();
+            }
+            
+            NSSetUncaughtExceptionHandler(_JEDebuggingUncaughtExceptionHandler);
+        }
+        else {
+            
+            NSSetUncaughtExceptionHandler(defaultHandler);
+        }
+        
+    });
+}
+
++ (void)setApplicationLifecycleLoggingEnabled:(BOOL)enabled{
+    
+    JEDebugging *instance = [self sharedInstance];
+    if (enabled) {
+        
+        [instance
+         registerForNotificationsWithName:UIApplicationDidEnterBackgroundNotification
+         targetBlock:^(NSNotification *note) {
+             
+             [self
+              logLevel:JELogLevelNotice
+              location:(JELogLocation){ NULL, NULL, 0 }
+              format:@"Application did enter background."];
+             
+         }];
+        [instance
+         registerForNotificationsWithName:UIApplicationWillEnterForegroundNotification
+         targetBlock:^(NSNotification *note) {
+             
+             [self
+              logLevel:JELogLevelNotice
+              location:(JELogLocation){ NULL, NULL, 0 }
+              format:@"Application will enter foreground."];
+             
+         }];
+        [instance
+         registerForNotificationsWithName:UIApplicationDidBecomeActiveNotification
+         targetBlock:^(NSNotification *note) {
+             
+             [self
+              logLevel:JELogLevelNotice
+              location:(JELogLocation){ NULL, NULL, 0 }
+              format:@"Application did become active."];
+             
+         }];
+        [instance
+         registerForNotificationsWithName:UIApplicationWillResignActiveNotification
+         targetBlock:^(NSNotification *note) {
+             
+             [self
+              logLevel:JELogLevelNotice
+              location:(JELogLocation){ NULL, NULL, 0 }
+              format:@"Application will resign active."];
+             
+         }];
+    }
+    else {
+        
+        [instance unregisterForNotificationsWithName:UIApplicationDidEnterBackgroundNotification];
+        [instance unregisterForNotificationsWithName:UIApplicationWillEnterForegroundNotification];
+        [instance unregisterForNotificationsWithName:UIApplicationDidBecomeActiveNotification];
+        [instance unregisterForNotificationsWithName:UIApplicationWillResignActiveNotification];
+    }
 }
 
 + (void)start {
@@ -1120,6 +1194,17 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
         location:(JELogLocation)location
           format:(NSString *)format, ... {
     
+    va_list arguments;
+    va_start(arguments, format);
+    [self logLevel:level location:location format:format arguments:arguments];
+    va_end(arguments);
+}
+
++ (void)logLevel:(JELogLevelMask)level
+        location:(JELogLocation)location
+          format:(NSString *)format
+       arguments:(va_list)arguments {
+    
     if (![self sharedInstance].isStarted) {
         
         return;
@@ -1146,11 +1231,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
             return;
         }
         
-        va_list arguments;
-        va_start(arguments, format);
         NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arguments];
-        va_end(arguments);
-        
         NSDictionary *headerEntries = [self
                                        headerEntriesForLocation:location
                                        withMask:(consoleLoggerSettings.logMessageHeaderMask
@@ -1335,7 +1416,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
 
 #pragma mark retrieving
 
-+ (void)enumerateFileLogsWithBlock:(void (^)(NSString *fileName, NSData *data, BOOL *stop))block {
++ (void)enumerateFileLogDataWithBlock:(void (^)(NSString *fileName, NSData *data, BOOL *stop))block {
     
     JEAssert(block != NULL, @"Enumeration block was NULL.");
     
@@ -1363,6 +1444,35 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
             
             BOOL shouldStop = NO;
             block([fileURL lastPathComponent], data, &shouldStop);
+            if (shouldStop) {
+                
+                (*stop) = YES;
+            }
+            
+        }];
+        
+    });
+}
+
++ (void)enumerateFileLogURLsWithBlock:(void (^)(NSURL *fileURL, BOOL *stop))block {
+    
+    JEAssert(block != NULL, @"Enumeration block was NULL.");
+    
+    JEFileLoggerSettings *__block fileLoggerSettings;
+    dispatch_barrier_sync([JEDebugging settingsQueue], ^{
+        
+        fileLoggerSettings = [self sharedInstance].fileLoggerSettings;
+        
+    });
+    
+    dispatch_barrier_sync([self fileLogQueue], ^{
+        
+        JEDebugging *instance = [self sharedInstance];
+        [instance flushFileHandleIfNeededOrForced:YES withThreadSafeSettings:fileLoggerSettings];
+        [instance enumerateFileLogsWithThreadSafeSettings:fileLoggerSettings block:^(NSURL *fileURL, BOOL *stop) {
+            
+            BOOL shouldStop = NO;
+            block(fileURL, &shouldStop);
             if (shouldStop) {
                 
                 (*stop) = YES;

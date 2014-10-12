@@ -298,12 +298,14 @@ typedef struct JELogLocation {
 
 #pragma mark - JEDebugging class
 
+/*! Logs a format string to the console. Also displays the source filename, line number, and method name.
+ */
 @interface JEDebugging : NSObject
 
 #pragma mark - utilities
 
 + (BOOL)isDebugBuild;
-+ (BOOL)isDebuggerRunning;
++ (BOOL)isDebuggerAttached;
 
 
 #pragma mark - configuring
@@ -317,7 +319,8 @@ typedef struct JELogLocation {
 + (JEFileLoggerSettings *)copyFileLoggerSettings JE_WARN_UNUSED_RESULT;
 + (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings;
 
-+ (void)setAsExceptionHandler;
++ (void)setExceptionLoggingEnabled:(BOOL)enabled;
++ (void)setApplicationLifecycleLoggingEnabled:(BOOL)enabled;
 + (void)start;
 
 
@@ -332,14 +335,18 @@ typedef struct JELogLocation {
         location:(JELogLocation)location
           format:(NSString *)format, ... JE_FORMAT_STRING(3, 4);
 
++ (void)logLevel:(JELogLevelMask)level
+        location:(JELogLocation)location
+          format:(NSString *)format
+       arguments:(va_list)arguments;
+
 + (void)logFailureInAssertionCondition:(NSString *)conditionString
                               location:(JELogLocation)location;
 
 
 #pragma mark - retrieving
 
-+ (void)enumerateFileLogsWithBlock:(void (^)(NSString *fileName,
-                                             NSData *data,
-                                             BOOL *stop))block;
++ (void)enumerateFileLogDataWithBlock:(void (^)(NSString *fileName, NSData *data, BOOL *stop))block;
++ (void)enumerateFileLogURLsWithBlock:(void (^)(NSURL *fileURL, BOOL *stop))block;
 
 @end
