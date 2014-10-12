@@ -39,6 +39,8 @@
                              targetQueue:(NSOperationQueue *)queueOrNil
                              targetBlock:(void (^)(NSNotification *note))block;
 
+- (void)unregisterForNotificationsWithName:(NSString *)notificationName;
+
 - (void)unregisterForNotificationsWithName:(NSString *)notificationName
                                 fromObject:(id)objectOrNil;
 

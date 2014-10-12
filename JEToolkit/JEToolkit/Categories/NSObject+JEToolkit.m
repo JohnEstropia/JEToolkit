@@ -156,6 +156,11 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
                                      usingBlock:block];
 }
 
+- (void)unregisterForNotificationsWithName:(NSString *)notificationName {
+    
+    [self unregisterForNotificationsWithName:notificationName fromObject:nil];
+}
+
 - (void)unregisterForNotificationsWithName:(NSString *)notificationName
                                 fromObject:(id)objectOrNil {
     
