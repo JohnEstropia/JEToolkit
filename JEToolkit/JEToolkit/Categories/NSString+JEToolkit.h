@@ -54,10 +54,6 @@
  */
 + (NSString *)applicationVersion;
 
-/*! Convenience method to get the app build version string
- */
-+ (NSString *)applicationBuild;
-
 /*! Convenience method to get the app bundle version string
  */
 + (NSString *)applicationBundleVersion;

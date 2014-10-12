@@ -67,11 +67,6 @@
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 }
 
-+ (NSString *)applicationBuild {
-    
-    return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-}
-
 + (NSString *)applicationBundleVersion {
     
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
