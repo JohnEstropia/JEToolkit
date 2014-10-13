@@ -121,6 +121,7 @@ JEScopeWeak(self);
 ## Installation
 - Requires ARC
 - Note that the utility macros currently doesn’t have swift alternatives. (see To-do list below)
+
 ### via Cocoapods
 ```
 pod 'JEToolkit', :git => 'https://github.com/JohnEstropia/JEToolkit.git'
