@@ -38,6 +38,17 @@ static NSString *const _JEDebuggingFileLogAttributeKey = @"" JEDebuggingReverseD
 static NSString *const _JEDebuggingFileLogAttributeValue = @"1";
 
 
+@interface JEHUDLogView (JEDebugging)
+
+- (instancetype)initWithFrame:(CGRect)frame
+           threadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings;
+
+- (void)addLogString:(NSString *)logString
+withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings;
+
+@end
+
+
 @interface JEDebugging ()
 
 @property (nonatomic, strong, readonly) NSString *deviceDescription;

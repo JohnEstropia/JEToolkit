@@ -2,11 +2,30 @@
 //  NSObject+JEDebugging.m
 //  JEToolkit
 //
-//  Created by John Rommel Estropia on 2013/10/05.
-//  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
+//  Copyright (c) 2013 John Rommel Estropia
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
 //
 
 #import "NSObject+JEDebugging.h"
+
+#import "NSString+JEToolkit.h"
 
 
 static NSString *const JEDebuggingEmptyDescription = @"<No Objective-C description available>";
@@ -37,15 +56,37 @@ static NSString *const JEDebuggingEmptyDescription = @"<No Objective-C descripti
     NSMutableString *description = [NSMutableString string];
     @autoreleasepool {
         
+        NSString *classString = [NSString stringWithFormat:@"(%@ *) ", [self class]];
+        NSString *addressString = [NSString stringWithFormat:@"<%p> ", self];
         if (includeClass) {
             
-            [description appendFormat:@"(%@ *) ", [self class]];
+            [description appendString:classString];
         }
         if (includeAddress) {
             
-            [description appendFormat:@"<%p> ", self];
+            [description appendString:addressString];
         }
-        [description appendString:([self loggingDescription] ?: JEDebuggingEmptyDescription)];
+        if ([self isKindOfClass:NSClassFromString(@"NSBlock")]) {
+            
+            NSMutableString *blockDescription = [NSMutableString stringWithString:
+                                                 [[NSValue value:&self withObjCType:@encode(typeof(^{}))]
+                                                  loggingDescriptionIncludeClass:NO
+                                                  includeAddress:NO]];
+            if ([blockDescription hasPrefix:classString]) {
+                
+                [blockDescription deleteCharactersInRange:[classString range]];
+            }
+            if ([blockDescription hasPrefix:addressString]) {
+                
+                [blockDescription deleteCharactersInRange:[addressString range]];
+            }
+            
+            [description appendString:(blockDescription ?: JEDebuggingEmptyDescription)];
+        }
+        else {
+            
+            [description appendString:([self loggingDescription] ?: JEDebuggingEmptyDescription)];
+        }
         
     }
     return description;

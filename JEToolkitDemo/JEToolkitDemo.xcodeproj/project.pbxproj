@@ -8,12 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		2FE2865C19E04EB40083C03B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE2865B19E04EB40083C03B /* AppDelegate.swift */; };
-		2FE2865E19E04EB40083C03B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE2865D19E04EB40083C03B /* ViewController.swift */; };
 		2FE2866119E04EB40083C03B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FE2865F19E04EB40083C03B /* Main.storyboard */; };
 		2FE2866319E04EB40083C03B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FE2866219E04EB40083C03B /* Images.xcassets */; };
 		2FE2866619E04EB40083C03B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FE2866419E04EB40083C03B /* LaunchScreen.xib */; };
 		2FE2868619E04F290083C03B /* JEToolkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FE2868119E04EF90083C03B /* JEToolkit.framework */; };
 		2FE2868719E04F290083C03B /* JEToolkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2FE2868119E04EF90083C03B /* JEToolkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B537BABE19EB8D2D00715933 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B537BABD19EB8D2D00715933 /* MenuViewController.swift */; };
+		B537BAC319EB92B900715933 /* JELogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B537BAC219EB92B900715933 /* JELogViewController.m */; };
+		B537BAC619EB92D900715933 /* JEDumpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B537BAC519EB92D900715933 /* JEDumpViewController.m */; };
+		B537BAC819EB92FD00715933 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B537BAC719EB92FD00715933 /* Localizable.strings */; };
+		B537BACD19EBA3A600715933 /* JEAssertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B537BACC19EBA3A600715933 /* JEAssertViewController.m */; };
+		B537BAD519EBA7B000715933 /* BaseSourceCodeSamplerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B537BAD419EBA7B000715933 /* BaseSourceCodeSamplerController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,11 +70,21 @@
 		2FE2865619E04EB40083C03B /* JEToolkitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JEToolkitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FE2865A19E04EB40083C03B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FE2865B19E04EB40083C03B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2FE2865D19E04EB40083C03B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		2FE2866019E04EB40083C03B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2FE2866219E04EB40083C03B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2FE2866519E04EB40083C03B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		2FE2867B19E04EF90083C03B /* JEToolkit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JEToolkit.xcodeproj; path = ../JEToolkit.xcodeproj; sourceTree = "<group>"; };
+		B537BABD19EB8D2D00715933 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		B537BAC019EB92B800715933 /* JEToolkitDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JEToolkitDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		B537BAC119EB92B900715933 /* JELogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JELogViewController.h; sourceTree = "<group>"; };
+		B537BAC219EB92B900715933 /* JELogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JELogViewController.m; sourceTree = "<group>"; };
+		B537BAC419EB92D900715933 /* JEDumpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEDumpViewController.h; sourceTree = "<group>"; };
+		B537BAC519EB92D900715933 /* JEDumpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEDumpViewController.m; sourceTree = "<group>"; };
+		B537BAC719EB92FD00715933 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		B537BACB19EBA3A600715933 /* JEAssertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEAssertViewController.h; sourceTree = "<group>"; };
+		B537BACC19EBA3A600715933 /* JEAssertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEAssertViewController.m; sourceTree = "<group>"; };
+		B537BAD319EBA7B000715933 /* BaseSourceCodeSamplerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseSourceCodeSamplerController.h; sourceTree = "<group>"; };
+		B537BAD419EBA7B000715933 /* BaseSourceCodeSamplerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseSourceCodeSamplerController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,11 +120,20 @@
 			isa = PBXGroup;
 			children = (
 				2FE2865B19E04EB40083C03B /* AppDelegate.swift */,
-				2FE2865D19E04EB40083C03B /* ViewController.swift */,
+				B537BABD19EB8D2D00715933 /* MenuViewController.swift */,
+				B537BAD319EBA7B000715933 /* BaseSourceCodeSamplerController.h */,
+				B537BAD419EBA7B000715933 /* BaseSourceCodeSamplerController.m */,
+				B537BAC119EB92B900715933 /* JELogViewController.h */,
+				B537BAC219EB92B900715933 /* JELogViewController.m */,
+				B537BACB19EBA3A600715933 /* JEAssertViewController.h */,
+				B537BACC19EBA3A600715933 /* JEAssertViewController.m */,
+				B537BAC419EB92D900715933 /* JEDumpViewController.h */,
+				B537BAC519EB92D900715933 /* JEDumpViewController.m */,
 				2FE2865F19E04EB40083C03B /* Main.storyboard */,
 				2FE2866219E04EB40083C03B /* Images.xcassets */,
 				2FE2866419E04EB40083C03B /* LaunchScreen.xib */,
 				2FE2865919E04EB40083C03B /* Supporting Files */,
+				B537BAC019EB92B800715933 /* JEToolkitDemo-Bridging-Header.h */,
 			);
 			path = JEToolkitDemo;
 			sourceTree = "<group>";
@@ -118,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				2FE2865A19E04EB40083C03B /* Info.plist */,
+				B537BAC719EB92FD00715933 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -215,6 +240,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FE2866119E04EB40083C03B /* Main.storyboard in Resources */,
+				B537BAC819EB92FD00715933 /* Localizable.strings in Resources */,
 				2FE2866619E04EB40083C03B /* LaunchScreen.xib in Resources */,
 				2FE2866319E04EB40083C03B /* Images.xcassets in Resources */,
 			);
@@ -227,7 +253,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FE2865E19E04EB40083C03B /* ViewController.swift in Sources */,
+				B537BAC319EB92B900715933 /* JELogViewController.m in Sources */,
+				B537BAC619EB92D900715933 /* JEDumpViewController.m in Sources */,
+				B537BABE19EB8D2D00715933 /* MenuViewController.swift in Sources */,
+				B537BAD519EBA7B000715933 /* BaseSourceCodeSamplerController.m in Sources */,
+				B537BACD19EBA3A600715933 /* JEAssertViewController.m in Sources */,
 				2FE2865C19E04EB40083C03B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -351,10 +381,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = JEToolkitDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "JEToolkitDemo/JEToolkitDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -362,10 +395,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = JEToolkitDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "JEToolkitDemo/JEToolkitDemo-Bridging-Header.h";
 			};
 			name = Release;
 		};

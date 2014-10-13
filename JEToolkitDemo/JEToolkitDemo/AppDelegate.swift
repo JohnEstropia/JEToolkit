@@ -17,28 +17,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        let consoleLoggerSettings = JEDebugging.copyConsoleLoggerSettings()
-        let HUDLoggerSettings = JEDebugging.copyHUDLoggerSettings()
-        let fileLoggerSettings = JEDebugging.copyFileLoggerSettings()
-        
-        // These are the actual default logging level masks declared for debug and release modes.
+        // The actual default logging level masks for debug and release modes are set with consideration to performance and privacy. (For example, The HUD logger is disabled on release mode)
         // For other configurable settings, refer to the JEConsoleLoggerSettings, JEHUDLoggerSettings, and JEFileLoggerSettings classes.
-        #if DEBUG
-            
-            consoleLoggerSettings.logLevelMask = .All
-            HUDLoggerSettings.logLevelMask = .All
-            fileLoggerSettings.logLevelMask = (.Notice | .Alert)
-            
-            #else
-            
-            consoleLoggerSettings.logLevelMask = (.Notice | .Alert)
-            HUDLoggerSettings.logLevelMask = .None
-            fileLoggerSettings.logLevelMask = (.Notice | .Alert)
-            
-        #endif
         
+        let consoleLoggerSettings = JEDebugging.copyConsoleLoggerSettings()
+        consoleLoggerSettings.logLevelMask = .All
         JEDebugging.setConsoleLoggerSettings(consoleLoggerSettings)
+        
+        let HUDLoggerSettings = JEDebugging.copyHUDLoggerSettings()
+        HUDLoggerSettings.logLevelMask = .All
+        HUDLoggerSettings.visibleOnStart = true
         JEDebugging.setHUDLoggerSettings(HUDLoggerSettings)
+        
+        let fileLoggerSettings = JEDebugging.copyFileLoggerSettings()
+        fileLoggerSettings.logLevelMask = (.Notice | .Alert)
         JEDebugging.setFileLoggerSettings(fileLoggerSettings)
         
         // Note that this will detach previously set exception handlers, such as handlers provided by analytics frameworks or other debugging frameworks.
@@ -46,12 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         JEDebugging.setApplicationLifecycleLoggingEnabled(true)
         
         JEDebugging.start()
-        
-        JEDebugging.logLevel(
-            .Notice,
-            location:JELogLocation(fileName: nil, functionName: nil, lineNumber: 0),
-            format: "isDebugBuild = %@, isDebuggerRunning = %@",
-            arguments: getVaList([JEDebugging.isDebugBuild(), JEDebugging.isDebuggerAttached()]))
         
         return true
     }
