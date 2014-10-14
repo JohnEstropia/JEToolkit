@@ -25,6 +25,9 @@
 
 #import "UILabel+JEToolkit.h"
 
+#import "JECompilerDefines.h"
+
+
 @implementation UILabel (JEToolkit)
 
 #pragma mark - Public
@@ -41,10 +44,13 @@
         return [self sizeThatFits:constrainSize];
     }
     
+    JE_PRAGMA_PUSH
+    JE_PRAGMA_IGNORE("-Wdeprecated-declarations")
     return [self.text
             sizeWithFont:self.font
             constrainedToSize:constrainSize
             lineBreakMode:self.lineBreakMode];
+    JE_PRAGMA_POP
 }
 
 - (CGSize)sizeForAttributedText {

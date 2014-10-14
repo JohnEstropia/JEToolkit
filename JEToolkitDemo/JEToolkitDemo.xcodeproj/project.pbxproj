@@ -133,7 +133,6 @@
 				2FE2866219E04EB40083C03B /* Images.xcassets */,
 				2FE2866419E04EB40083C03B /* LaunchScreen.xib */,
 				2FE2865919E04EB40083C03B /* Supporting Files */,
-				B537BAC019EB92B800715933 /* JEToolkitDemo-Bridging-Header.h */,
 			);
 			path = JEToolkitDemo;
 			sourceTree = "<group>";
@@ -143,6 +142,7 @@
 			children = (
 				2FE2865A19E04EB40083C03B /* Info.plist */,
 				B537BAC719EB92FD00715933 /* Localizable.strings */,
+				B537BAC019EB92B800715933 /* JEToolkitDemo-Bridging-Header.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

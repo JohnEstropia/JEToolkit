@@ -2,8 +2,25 @@
 //  JEDebugging.m
 //  JEToolkit
 //
-//  Created by John Rommel Estropia on 2013/09/28.
-//  Copyright (c) 2013 John Rommel Estropia. All rights reserved.
+//  Copyright (c) 2013 John Rommel Estropia
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
 //
 
 #import "JEDebugging.h"
@@ -1085,6 +1102,21 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
             label:(NSString *)label
             value:(NSValue *)wrappedValue {
     
+    [self
+     dumpLevel:level
+     location:location
+     label:label
+     valueDescription:(wrappedValue
+                       // Note that because of a bug(?) with NSGetSizeAndAlignment, structs and unions with bitfields cannot be wrapped in NSValue, in which case wrappedValue will be nil.
+                       ? [wrappedValue loggingDescriptionIncludeClass:NO includeAddress:NO]
+                       : @"(?) { ... }")];
+}
+
++ (void)dumpLevel:(JELogLevelMask)level
+         location:(JELogLocation)location
+            label:(NSString *)label
+ valueDescription:(NSString *)valueDescription {
+
     if (![self sharedInstance].isStarted) {
         
         return;
@@ -1111,13 +1143,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
             return;
         }
         
-        // Note that because of a bug(?) with NSGetSizeAndAlignment, structs and unions with bitfields cannot be wrapped in NSValue, in which case wrappedValue will be nil.
-        NSMutableString *description = [NSMutableString stringWithString:
-                                        (wrappedValue
-                                         ? [wrappedValue
-                                            loggingDescriptionIncludeClass:NO
-                                            includeAddress:NO]
-                                         : @"(?) { ... }")];
+        NSMutableString *description = [NSMutableString stringWithString:valueDescription];
         [description indentByLevel:1];
         
         NSDictionary *headerEntries = [self
@@ -1326,6 +1352,15 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
 
 + (void)logFailureInAssertionCondition:(NSString *)conditionString
                               location:(JELogLocation)location {
+ 
+    [self
+     logFailureInAssertionWithMessage:
+     [[NSString alloc] initWithFormat:@"Assertion failed for condition: (%@)", conditionString]
+     location:location];
+}
+
++ (void)logFailureInAssertionWithMessage:(NSString *)failureMessage
+                                location:(JELogLocation)location {
     
     if (![self sharedInstance].isStarted) {
         
@@ -1359,9 +1394,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                                                  | HUDLoggerSettings.logMessageHeaderMask
                                                  | fileLoggerSettings.logMessageHeaderMask)];
         NSString *bulletString = [self defaultAssertBulletString];
-        NSString *formattedString = [[NSString alloc] initWithFormat:
-                                     @"Assertion failed for condition: (%@)",
-                                     conditionString];
         
         if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelAlert)) {
             
@@ -1373,7 +1405,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                                                   messageHeaderFromEntries:headerEntries
                                                   withSettings:consoleLoggerSettings];
                     [logString appendFormat:@"%@ %@\n",
-                     bulletString, formattedString];
+                     bulletString, failureMessage];
                     
                     puts([logString UTF8String]);
                     
@@ -1391,7 +1423,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                                                   messageHeaderFromEntries:headerEntries
                                                   withSettings:HUDLoggerSettings];
                     [logString appendFormat:@"%@ %@",
-                     bulletString, formattedString];
+                     bulletString, failureMessage];
                     
                     [[self sharedInstance]
                      appendStringToHUD:logString
@@ -1411,7 +1443,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                                                   messageHeaderFromEntries:headerEntries
                                                   withSettings:fileLoggerSettings];
                     [logString appendFormat:@"%@ %@\n\n",
-                     bulletString, formattedString];
+                     bulletString, failureMessage];
                     
                     [[self sharedInstance]
                      appendStringToFile:logString

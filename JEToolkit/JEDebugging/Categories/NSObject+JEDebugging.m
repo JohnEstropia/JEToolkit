@@ -47,6 +47,28 @@ static NSString *const JEDebuggingEmptyDescription = @"<No Objective-C descripti
 
 - (NSString *)loggingDescription {
     
+    if ([self isKindOfClass:NSClassFromString(@"NSBlock")]) {
+        
+        NSMutableString *blockDescription = [NSMutableString stringWithString:
+                                             [[NSValue value:&self withObjCType:@encode(typeof(^{}))]
+                                              loggingDescriptionIncludeClass:NO
+                                              includeAddress:NO]];
+        
+        NSString *classString = [NSString stringWithFormat:@"(%@ *) ", [self class]];
+        if ([blockDescription hasPrefix:classString]) {
+            
+            [blockDescription deleteCharactersInRange:[classString range]];
+        }
+        
+        NSString *addressString = [NSString stringWithFormat:@"<%p> ", self];
+        if ([blockDescription hasPrefix:addressString]) {
+            
+            [blockDescription deleteCharactersInRange:[addressString range]];
+        }
+        
+        return blockDescription;
+    }
+    
     return ([self description] ?: JEDebuggingEmptyDescription);
 }
 
@@ -56,37 +78,15 @@ static NSString *const JEDebuggingEmptyDescription = @"<No Objective-C descripti
     NSMutableString *description = [NSMutableString string];
     @autoreleasepool {
         
-        NSString *classString = [NSString stringWithFormat:@"(%@ *) ", [self class]];
-        NSString *addressString = [NSString stringWithFormat:@"<%p> ", self];
         if (includeClass) {
             
-            [description appendString:classString];
+            [description appendFormat:@"(%@ *) ", [self class]];
         }
         if (includeAddress) {
             
-            [description appendString:addressString];
+            [description appendFormat:@"<%p> ", self];
         }
-        if ([self isKindOfClass:NSClassFromString(@"NSBlock")]) {
-            
-            NSMutableString *blockDescription = [NSMutableString stringWithString:
-                                                 [[NSValue value:&self withObjCType:@encode(typeof(^{}))]
-                                                  loggingDescriptionIncludeClass:NO
-                                                  includeAddress:NO]];
-            if ([blockDescription hasPrefix:classString]) {
-                
-                [blockDescription deleteCharactersInRange:[classString range]];
-            }
-            if ([blockDescription hasPrefix:addressString]) {
-                
-                [blockDescription deleteCharactersInRange:[addressString range]];
-            }
-            
-            [description appendString:(blockDescription ?: JEDebuggingEmptyDescription)];
-        }
-        else {
-            
-            [description appendString:([self loggingDescription] ?: JEDebuggingEmptyDescription)];
-        }
+        [description appendString:([self loggingDescription] ?: JEDebuggingEmptyDescription)];
         
     }
     return description;

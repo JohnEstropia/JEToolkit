@@ -22,14 +22,6 @@ enum MenuIndex: Int {
 
 class MenuViewController: UITableViewController {
 
-    // MARK: - UIViewController
-    
-    override func viewDidLoad() {
-        
-        super.viewDidLoad()
-
-    }
-
     // MARK: - UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
