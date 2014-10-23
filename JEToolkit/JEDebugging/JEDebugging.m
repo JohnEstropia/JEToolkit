@@ -1002,11 +1002,11 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     });
 }
 
-+ (void)setExceptionLoggingEnabled:(BOOL)enabled{
++ (void)setExceptionLoggingEnabled:(BOOL)enabled {
     
-    static NSUncaughtExceptionHandler *defaultHandler;
     dispatch_barrier_sync([self settingsQueue], ^{
         
+        static NSUncaughtExceptionHandler *defaultHandler;
         if (enabled) {
             
             if (defaultHandler != _JEDebuggingUncaughtExceptionHandler) {
@@ -1024,7 +1024,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     });
 }
 
-+ (void)setApplicationLifecycleLoggingEnabled:(BOOL)enabled{
++ (void)setApplicationLifecycleLoggingEnabled:(BOOL)enabled {
     
     JEDebugging *instance = [self sharedInstance];
     if (enabled) {
@@ -1034,7 +1034,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
          targetBlock:^(NSNotification *note) {
              
              [self
-              logLevel:JELogLevelNotice
+              logLevel:JELogLevelTrace
               location:(JELogLocation){ NULL, NULL, 0 }
               format:@"Application did enter background."];
              
@@ -1044,7 +1044,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
          targetBlock:^(NSNotification *note) {
              
              [self
-              logLevel:JELogLevelNotice
+              logLevel:JELogLevelTrace
               location:(JELogLocation){ NULL, NULL, 0 }
               format:@"Application will enter foreground."];
              
@@ -1054,7 +1054,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
          targetBlock:^(NSNotification *note) {
              
              [self
-              logLevel:JELogLevelNotice
+              logLevel:JELogLevelTrace
               location:(JELogLocation){ NULL, NULL, 0 }
               format:@"Application did become active."];
              
@@ -1064,7 +1064,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
          targetBlock:^(NSNotification *note) {
              
              [self
-              logLevel:JELogLevelNotice
+              logLevel:JELogLevelTrace
               location:(JELogLocation){ NULL, NULL, 0 }
               format:@"Application will resign active."];
              

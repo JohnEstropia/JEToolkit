@@ -339,6 +339,7 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     return ceilf((CGRectGetHeight(dummyCell.bounds)
                   - CGRectGetHeight(textLabel.frame)
                   + [textLabel sizeForText].height
+                  + JEUITableViewSeparatorWidth
                   + (JEHUDLogViewConsolePadding * 2.0f)));
 }
 
