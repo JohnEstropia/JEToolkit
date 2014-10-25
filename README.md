@@ -24,7 +24,7 @@ will print out this way:
 - Option to save logs to files. Log files are separated by date, and there is an API to enumerate the logs' `NSData`s or `NSURL`s.
 - Option to display a lightweight, inline HUD console from within the app itself.
 <br /><img src="https://cloud.githubusercontent.com/assets/3029684/4608566/52e84ab4-5283-11e4-9f51-b986eeb8169d.gif" alt="Inline HUD screenshot" /><br />
-You can expand/collapse the HUD with a draggable button, and you can stretch the size of the view. The HUD also stays on top of all other views/windows, even if you open a modal view or if you create your own window. There is also a button to send log files via `UIActivityViewController`, as well as a button to clear all displayed logs.
+By default, this view will not be created in release mode. You can expand/collapse the HUD with a draggable button, and you can stretch the size of the view. The HUD also stays on top of all other views/windows, even if you open a modal view or if you create your own window. There is also a button to send log files via `UIActivityViewController`, as well as a button to clear all displayed logs.
 - Configurable settings for the console logger, the file logger, and the HUD logger.
 
 
