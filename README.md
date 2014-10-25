@@ -120,20 +120,20 @@ JEScopeWeak(self);
 
 ## Installation
 - Requires ARC
-- Note that the utility macros currently doesn’t have swift alternatives. (see To-do list below)
 
 ### via Cocoapods
 ```
 pod 'JEToolkit', :git => 'https://github.com/JohnEstropia/JEToolkit.git'
 ```
+Note that cocoapods currently doesn't support Swift yet.
 ### as Framework (iOS 8 above)
-Drag and drop **JEToolkit.xcodeproj** to your app project.
+Clone this repository and drag and drop **JEToolkit.xcodeproj** to your app project.
 
 
 ## To-do list
 
 - Push to cocoapods trunk
-- Swift alternative functions for macros
+- Swift alternatives for some of the macros
 
 Feel free to report any issues or send suggestions!
 
