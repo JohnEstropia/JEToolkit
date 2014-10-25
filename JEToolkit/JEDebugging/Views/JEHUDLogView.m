@@ -87,6 +87,8 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     
     CADisplayLink *displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkDidFire:)];
     displayLink.frameInterval = JEHUDLogDisplayFrameInterval;
+    [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    displayLink.paused = YES;
     _displayLink = displayLink;
     
     self.backgroundColor = [UIColor clearColor];
@@ -285,9 +287,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 
 - (void)dealloc {
     
-    [_displayLink
-     removeFromRunLoop:[NSRunLoop mainRunLoop]
-     forMode:NSDefaultRunLoopMode];
+    [_displayLink invalidate];
     
     [[NSNotificationCenter defaultCenter]
      removeObserver:self
@@ -542,9 +542,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     CAShapeLayer *menuMaskLayer = self.menuMaskLayer;
     if (consoleHidden) {
         
-        [self.displayLink
-         removeFromRunLoop:[NSRunLoop mainRunLoop]
-         forMode:NSDefaultRunLoopMode];
+        self.displayLink.paused = YES;
         
         menuView.frame = (CGRect){
             .origin = menuFrame.origin,
@@ -559,9 +557,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
         return;
     }
     
-    [self.displayLink
-     addToRunLoop:[NSRunLoop mainRunLoop]
-     forMode:NSDefaultRunLoopMode];
+    self.displayLink.paused = NO;
     
     menuView.frame = (CGRect){
         .origin = menuFrame.origin,
@@ -654,6 +650,9 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 }
 
 - (void)reloadLogEntriesForced {
+    
+    NSCAssert([NSThread isMainThread],
+              @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
     self.displayedLogEntries = self.pendingLogEntries;
     self.hasPendingLogUpdates = NO;
