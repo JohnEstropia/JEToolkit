@@ -134,7 +134,6 @@ Drag and drop **JEToolkit.xcodeproj** to your app project.
 
 - Push to cocoapods trunk
 - Swift alternative functions for macros
-- Performance improvements for the HUD logger view.
 
 Feel free to report any issues or send suggestions!
 

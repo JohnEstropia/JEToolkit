@@ -43,11 +43,14 @@ static NSString *const JEHUDCellReuseIdentifier = @"cell";
 static const CGFloat JEHUDLogViewButtonSize = 44.0f;
 static const CGFloat JEHUDLogViewConsoleMinHeight = 100.0f;
 static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
+static const NSInteger JEHUDLogDisplayFrameInterval = 5;
+static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 
 
 @interface JEHUDLogView () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong, readonly) NSMutableArray *logEntries;
+@property (nonatomic, strong, readonly) NSMutableArray *pendingLogEntries;
+@property (nonatomic, strong, readonly) CADisplayLink *displayLink;
 
 @property (nonatomic, weak) UIView *menuView;
 @property (nonatomic, weak) CAShapeLayer *menuMaskLayer;
@@ -60,6 +63,9 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
 
 @property (nonatomic, assign) BOOL isDraggingToggleButton;
 @property (nonatomic, assign) BOOL isDraggingResizeButton;
+@property (nonatomic, copy) NSArray *displayedLogEntries;
+@property (nonatomic, assign) BOOL hasPendingLogUpdates;
+@property (nonatomic, assign) NSTimeInterval lastReloadTimeInterval;
 
 @end
 
@@ -77,7 +83,12 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
         return nil;
     }
     
-    _logEntries = [[NSMutableArray alloc] initWithCapacity:HUDLogSettings.numberOfLogEntriesInMemory];
+    _pendingLogEntries = [[NSMutableArray alloc] initWithCapacity:HUDLogSettings.numberOfLogEntriesInMemory];
+    
+    CADisplayLink *displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkDidFire:)];
+    displayLink.frameInterval = JEHUDLogDisplayFrameInterval;
+    _displayLink = displayLink;
+    
     self.backgroundColor = [UIColor clearColor];
     
     CGRect bounds = self.bounds;
@@ -274,6 +285,10 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
 
 - (void)dealloc {
     
+    [_displayLink
+     removeFromRunLoop:[NSRunLoop mainRunLoop]
+     forMode:NSDefaultRunLoopMode];
+    
     [[NSNotificationCenter defaultCenter]
      removeObserver:self
      name:UIApplicationDidChangeStatusBarOrientationNotification
@@ -316,7 +331,7 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return [self.logEntries count];
+    return [self.displayedLogEntries count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -333,7 +348,7 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     };
     
     UILabel *textLabel = dummyCell.textLabel;
-    textLabel.text = self.logEntries[indexPath.row];
+    textLabel.text = self.displayedLogEntries[indexPath.row];
     [dummyCell layoutIfNeeded];
     
     return ceilf((CGRectGetHeight(dummyCell.bounds)
@@ -348,7 +363,7 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     UITableViewCell *cell = [self cellForIndexPath:indexPath];
     
     UILabel *textLabel = cell.textLabel;
-    textLabel.text = self.logEntries[indexPath.row];
+    textLabel.text = self.displayedLogEntries[indexPath.row];
     
     return cell;
 }
@@ -363,6 +378,11 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
 
 
 #pragma mark - @selector
+
+- (void)displayLinkDidFire:(CADisplayLink *)sender {
+    
+    [self reloadLogEntriesIfNeeded];
+}
 
 - (void)toggleButtonTouchUpInside:(UIButton *)sender {
     
@@ -443,8 +463,9 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
 
 - (void)clearButtonTouchUpInside:(UIButton *)sender {
     
-    [self.logEntries removeAllObjects];
-    [self.tableView reloadData];
+    [self.pendingLogEntries removeAllObjects];
+    self.hasPendingLogUpdates = YES;
+    [self reloadLogEntriesForced];
 }
 
 - (void)resizeButtonTouchEnd:(UIButton *)sender {
@@ -521,6 +542,10 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     CAShapeLayer *menuMaskLayer = self.menuMaskLayer;
     if (consoleHidden) {
         
+        [self.displayLink
+         removeFromRunLoop:[NSRunLoop mainRunLoop]
+         forMode:NSDefaultRunLoopMode];
+        
         menuView.frame = (CGRect){
             .origin = menuFrame.origin,
             .size.width = CGRectGetMinX(reportButton.frame),
@@ -534,6 +559,10 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
         return;
     }
     
+    [self.displayLink
+     addToRunLoop:[NSRunLoop mainRunLoop]
+     forMode:NSDefaultRunLoopMode];
+    
     menuView.frame = (CGRect){
         .origin = menuFrame.origin,
         .size.width = CGRectGetMaxX(clearButton.frame),
@@ -545,20 +574,7 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
                           byRoundingCorners:UIRectCornerTopRight
                           cornerRadii:(CGSize){ .width = 8.0f, .height = 8.0f }].CGPath;
     
-    UITableView *tableView = self.tableView;
-    [tableView reloadData];
-    
-    NSUInteger numberOfLogEntries = [self.logEntries count];
-    if (numberOfLogEntries <= 0) {
-        
-        return;
-    }
-    
-    [tableView
-     scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:(numberOfLogEntries - 1) inSection:0]
-     atScrollPosition:UITableViewScrollPositionBottom
-     animated:NO];
-    [tableView flashScrollIndicators];
+    [self reloadLogEntriesIfNeeded];
 }
 
 - (UITableViewCell *)cellForIndexPath:(NSIndexPath *)indexPath {
@@ -637,6 +653,43 @@ static const CGFloat JEHUDLogViewConsolePadding = 10.0f;
     }
 }
 
+- (void)reloadLogEntriesForced {
+    
+    self.displayedLogEntries = self.pendingLogEntries;
+    self.hasPendingLogUpdates = NO;
+    
+    UITableView *tableView = self.tableView;
+    CGRect scrollBounds = tableView.bounds;
+    BOOL shouldScrollToBottom = (!(tableView.tracking || tableView.dragging)
+                                 && (truncf(tableView.contentOffset.y)
+                                     >= truncf(tableView.contentSize.height - CGRectGetHeight(scrollBounds))));
+    [tableView reloadData];
+    
+    if (shouldScrollToBottom) {
+        
+        [tableView
+         scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([self.displayedLogEntries count] - 1) inSection:0]
+         atScrollPosition:UITableViewScrollPositionBottom
+         animated:NO];
+    }
+    [tableView flashScrollIndicators];
+    self.lastReloadTimeInterval = [NSDate timeIntervalSinceReferenceDate];
+}
+
+- (void)reloadLogEntriesIfNeeded {
+    
+    NSCAssert([NSThread isMainThread],
+              @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
+    
+    if (!self.hasPendingLogUpdates
+        || self.consoleView.hidden
+        || ([NSDate timeIntervalSinceReferenceDate] - self.lastReloadTimeInterval) < JEHUDLogFrameCoalescingInterval) {
+        
+        return;
+    }
+    
+    [self reloadLogEntriesForced];
+}
 
 
 #pragma mark - Public
@@ -649,68 +702,23 @@ withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings {
     NSCAssert([NSThread isMainThread],
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
-    UITableView *tableView = self.tableView;
-    CGRect scrollBounds = tableView.bounds;
-    BOOL shouldScrollToBottom = (!(tableView.tracking || tableView.dragging)
-                                 && (truncf(tableView.contentOffset.y)
-                                     >= truncf(tableView.contentSize.height - CGRectGetHeight(scrollBounds))));
-    
-    NSMutableArray *logEntries = self.logEntries;
-    NSUInteger numberOfLogEntries = [logEntries count];
-    
-    NSMutableArray *indexPathsToDelete;
+    NSMutableArray *pendingLogEntries = self.pendingLogEntries;
+    NSUInteger numberOfPendingLogEntries = [pendingLogEntries count];
     NSUInteger maxNumberOfLogEntriesInMemory = HUDLogSettings.numberOfLogEntriesInMemory;
-    if (numberOfLogEntries >= maxNumberOfLogEntriesInMemory) {
+    
+    if (numberOfPendingLogEntries >= maxNumberOfLogEntriesInMemory) {
         
         NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:(NSRange){
             .location = 0,
-            .length = (numberOfLogEntries - maxNumberOfLogEntriesInMemory)
+            .length = (numberOfPendingLogEntries - maxNumberOfLogEntriesInMemory)
         }];
-        [logEntries removeObjectsAtIndexes:indexSet];
-        
-        indexPathsToDelete = [[NSMutableArray alloc] initWithCapacity:[indexSet count]];
-        [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-            
-            [indexPathsToDelete addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
-            
-        }];
+        [pendingLogEntries removeObjectsAtIndexes:indexSet];
     }
     
-    [logEntries addObject:logString];
+    [pendingLogEntries addObject:logString];
+    self.hasPendingLogUpdates = YES;
     
-    if (self.consoleView.hidden) {
-        
-        return;
-    }
-    
-    NSUInteger newNumberOfLogEntries = [logEntries count];
-    NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:(newNumberOfLogEntries - 1) inSection:0];
-    if (numberOfLogEntries == newNumberOfLogEntries) {
-        
-        [tableView reloadData];
-    }
-    else {
-        
-        [tableView beginUpdates];
-        if (indexPathsToDelete) {
-            
-            [tableView
-             deleteRowsAtIndexPaths:indexPathsToDelete
-             withRowAnimation:UITableViewRowAnimationNone];
-        }
-        [tableView
-         insertRowsAtIndexPaths:@[newIndexPath]
-         withRowAnimation:UITableViewRowAnimationNone];
-        [tableView endUpdates];
-    }
-    
-    if (shouldScrollToBottom) {
-        
-        [tableView
-         scrollToRowAtIndexPath:newIndexPath
-         atScrollPosition:UITableViewScrollPositionBottom
-         animated:NO];
-    }
+    [self reloadLogEntriesIfNeeded];
 }
 
 @end
