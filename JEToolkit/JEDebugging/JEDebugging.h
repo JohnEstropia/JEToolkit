@@ -51,9 +51,6 @@
 
 
 
-
-
-
 #pragma mark - JEAssert() variants
 
 #ifdef NS_BLOCK_ASSERTIONS
@@ -114,6 +111,9 @@
 #define JEDumpAlert(expression...) \
     JEDumpLevel(JELogLevelAlert, ##expression)
 
+#define JEDumpFatal(expression...) \
+    JEDumpLevel(JELogLevelFatal, ##expression)
+
 #define JEDumpLevel(level, expression...) \
     do { \
         JE_PRAGMA_PUSH \
@@ -154,6 +154,9 @@
 
 #define JELogAlert(formatString, ...) \
     JELogLevel(JELogLevelAlert, (formatString), ##__VA_ARGS__)
+
+#define JELogFatal(formatString, ...) \
+    JELogLevel(JELogLevelFatal, (formatString), ##__VA_ARGS__)
 
 #define JELogLevel(level, formatString, ...) \
     do { \

@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, JELogSamplesRow) {
     JELogSamplesRowTrace = 0,
     JELogSamplesRowNotice,
     JELogSamplesRowAlert,
+    JELogSamplesRowFatal,
     
     _JELogSamplesRowCount
 };
@@ -31,15 +32,19 @@ typedef NS_ENUM(NSInteger, JELogSamplesRow) {
     switch (indexPath.row) {
             
         case JELogSamplesRowTrace:
-            text = @"JELog(@\"This is a sample log (indexPath: %@)\", indexPath);";
+            text = @"JELog(@\"This is a sample log (row: %d)\", indexPath.row);";
             break;
             
         case JELogSamplesRowNotice:
-            text = @"JELogNotice(@\"This is a notice-level log (indexPath: %@)\", indexPath);";
+            text = @"JELogNotice(@\"This is a notice-level log (row: %d)\", indexPath.row);";
             break;
             
         case JELogSamplesRowAlert:
-            text = @"JELogAlert(@\"This is an alert-level log (indexPath: %@)\", indexPath);";
+            text = @"JELogAlert(@\"This is an alert-level log (row: %d)\", indexPath.row);";
+            break;
+            
+        case JELogSamplesRowFatal:
+            text = @"JELogFatal(@\"This is a fatal-level log (row: %d)\", indexPath.row);";
             break;
             
         default:
@@ -53,15 +58,19 @@ typedef NS_ENUM(NSInteger, JELogSamplesRow) {
     switch (indexPath.row) {
             
         case JELogSamplesRowTrace:
-            JELog(@"This is a sample log (indexPath: %@)", indexPath);
+            JELog(@"This is a sample log (row: %d)", (int)indexPath.row);
             break;
             
         case JELogSamplesRowNotice:
-            JELogNotice(@"This is a notice-level log (indexPath: %@)", indexPath);
+            JELogNotice(@"This is a notice-level log (row: %d)", (int)indexPath.row);
             break;
             
         case JELogSamplesRowAlert:
-            JELogAlert(@"This is an alert-level log (indexPath: %@)", indexPath);
+            JELogAlert(@"This is an alert-level log (row: %d)", (int)indexPath.row);
+            break;
+            
+        case JELogSamplesRowFatal:
+            JELogFatal(@"This is a fatal-level log (row: %d)", (int)indexPath.row);
             break;
             
         default:

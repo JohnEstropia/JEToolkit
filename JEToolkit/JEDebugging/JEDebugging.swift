@@ -91,6 +91,11 @@ public func JELogAlert(message: String, fileName: String = __FILE__, lineNumber:
     JELogLevel(.Alert, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
 }
 
+public func JELogFatal(message: String, fileName: String = __FILE__, lineNumber: Int32 = __LINE__, functionName: String = __FUNCTION__) {
+    
+    JELogLevel(.Fatal, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+}
+
 public func JELogLevel(level: JELogLevelMask, message: String, fileName: String = __FILE__, lineNumber: Int32 = __LINE__, functionName: String = __FUNCTION__) {
     
     JEDebugging.logLevel(
@@ -161,6 +166,21 @@ public func JEDumpAlert(object: AnyObject, label: String, fileName: String = __F
 public func JEDumpAlert<T>(object: T, label: String, fileName: String = __FILE__, lineNumber: Int32 = __LINE__, functionName: String = __FUNCTION__) {
     
     JEDumpLevel(.Alert, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+}
+
+public func JEDumpFatal(object: NSObject, label: String, fileName: String = __FILE__, lineNumber: Int32 = __LINE__, functionName: String = __FUNCTION__) {
+    
+    JEDumpLevel(.Fatal, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+}
+
+public func JEDumpFatal(object: AnyObject, label: String, fileName: String = __FILE__, lineNumber: Int32 = __LINE__, functionName: String = __FUNCTION__) {
+    
+    JEDumpLevel(.Fatal, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+}
+
+public func JEDumpFatal<T>(object: T, label: String, fileName: String = __FILE__, lineNumber: Int32 = __LINE__, functionName: String = __FUNCTION__) {
+    
+    JEDumpLevel(.Fatal, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
 }
 
 public func JEDumpLevel(level: JELogLevelMask, object: NSObject, label: String, fileName: String = __FILE__, lineNumber: Int32 = __LINE__, functionName: String = __FUNCTION__) {

@@ -32,7 +32,7 @@ typedef NS_OPTIONS(NSUInteger, JELogLevelMask) {
     JELogLevelTrace     = (1 << 0),
     JELogLevelNotice    = (1 << 1),
     JELogLevelAlert     = (1 << 2),
-    // add custom masks here
+    JELogLevelFatal     = (1 << 3),
     
     JELogLevelAll       = ~0u
 };

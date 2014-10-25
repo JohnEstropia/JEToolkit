@@ -328,6 +328,11 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     return @"⚠️";
 }
 
++ (NSString *)defaultFatalBulletString {
+    
+    return @"❗";
+}
+
 + (NSString *)defaultAssertBulletString {
     
     return @"❗";
@@ -1152,7 +1157,11 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                                                  | HUDLoggerSettings.logMessageHeaderMask
                                                  | fileLoggerSettings.logMessageHeaderMask)];
         NSString *bulletString;
-        if (JEEnumBitmasked(level, JELogLevelAlert)) {
+        if (JEEnumBitmasked(level, JELogLevelFatal)) {
+            
+            bulletString = [self defaultFatalBulletString];
+        }
+        else if (JEEnumBitmasked(level, JELogLevelAlert)) {
             
             bulletString = [self defaultAlertBulletString];
         }
@@ -1275,7 +1284,11 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                                                  | HUDLoggerSettings.logMessageHeaderMask
                                                  | fileLoggerSettings.logMessageHeaderMask)];
         NSString *bulletString;
-        if (JEEnumBitmasked(level, JELogLevelAlert)) {
+        if (JEEnumBitmasked(level, JELogLevelFatal)) {
+            
+            bulletString = [self defaultFatalBulletString];
+        }
+        else if (JEEnumBitmasked(level, JELogLevelAlert)) {
             
             bulletString = [self defaultAlertBulletString];
         }
