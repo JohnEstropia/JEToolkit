@@ -324,6 +324,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     };
     
     [self layoutConsoleView];
+    [self.superview bringSubviewToFront:self];
 }
 
 
@@ -425,11 +426,6 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 }
 
 - (void)reportButtonTouchUpInside:(UIButton *)sender {
-    
-    if (![MFMailComposeViewController canSendMail]) {
-        
-        return;
-    }
     
     UIViewController *viewController = [UIViewController topmostPresentedViewController];
     if (!viewController) {
