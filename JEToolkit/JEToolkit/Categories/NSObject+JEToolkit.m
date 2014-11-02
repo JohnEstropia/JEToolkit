@@ -64,7 +64,10 @@
 
 - (void)dealloc {
     
-    [self stopObserving];
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:_observer
+     name:_notificationName
+     object:_object];
 }
 
 - (void)stopObserving {
