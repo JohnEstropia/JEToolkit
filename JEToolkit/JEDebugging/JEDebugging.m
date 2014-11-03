@@ -93,7 +93,7 @@ withThreadSafeSettings:(JEHUDLoggerSettings *)HUDLogSettings;
 JE_STATIC
 void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     
-    JELogAlert(@"Application (%@) crashed with exception: %@",
+    JELogFatal(@"Application (%@) crashed with exception: %@",
                [JEDebugging sharedInstance].deviceDescription,
                [exception loggingDescriptionIncludeClass:YES includeAddress:NO]);
 }
