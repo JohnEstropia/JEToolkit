@@ -123,17 +123,16 @@ JEScopeWeak(self);
 
 ### via Cocoapods
 ```
-pod 'JEToolkit', :git => 'https://github.com/JohnEstropia/JEToolkit.git'
+pod 'JEToolkit', '~> 1.2'
 ```
-Note that cocoapods currently doesn't support Swift yet.
+Unfortunately, Cocoapods currently doesn't support Swift yet. You will need to manually include *JEDebugging.swift* to your project to use `JELog`, `JEDump`, and `JEAssert` from Swift code.
 ### as Framework (iOS 8 above)
-Clone this repository and drag and drop **JEToolkit.xcodeproj** to your app project.
+Clone this repository and drag and drop **JEToolkit.xcodeproj** to your app project. Make sure to include `JEToolkit.framework` to your project's "Embedded Binaries" list.
 
 
 ## To-do list
 
-- Push to cocoapods trunk
-- Swift alternatives for some of the macros
+- Better swift implementations
 
 Feel free to report any issues or send suggestions!
 
