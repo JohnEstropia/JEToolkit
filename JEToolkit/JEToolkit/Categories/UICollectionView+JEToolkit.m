@@ -28,7 +28,11 @@
 #import "NSObject+JEToolkit.h"
 #import "UINib+JEToolkit.h"
 
+#if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
+#else
+#define JEAssertParameter   NSCParameterAssert
+#endif
 
 
 @implementation UICollectionView (JEToolkit)

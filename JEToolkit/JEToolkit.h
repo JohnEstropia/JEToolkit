@@ -69,6 +69,8 @@
 #import "JEDispatch.h"
 #import "NSObject+JEDispatch.h"
 
+#import "JESettings.h"
+#import "JEUserDefaults.h"
 #import "JEKeychain.h"
 
 #import "JEOrderedDictionary.h"

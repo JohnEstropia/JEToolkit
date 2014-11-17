@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                    = "JEToolkit"
-  s.version                 = "1.2.2"
+  s.version                 = "1.3.1"
   s.summary                 = "iOS Utilities"
   s.homepage                = "https://github.com/JohnEstropia/JEToolkit"
   s.license                 = 'MIT'
@@ -18,8 +18,9 @@ Pod::Spec.new do |s|
   s.subspec "JEToolkit" do |ss|
     ss.source_files         = "#{s.name}/JEToolkit/**/*.{h,m,c}"
     ss.ios.frameworks       = 'Foundation', 'MobileCoreServices', 'UIKit'
+    ss.dependency "#{s.name}/JESynthesize"
   end
-  
+
   s.subspec "JESynthesize" do |ss|
     ss.source_files         = "#{s.name}/JESynthesize/**/*.{h,m,c}"
     ss.ios.frameworks       = 'Foundation'
@@ -30,21 +31,18 @@ Pod::Spec.new do |s|
     ss.source_files         = "#{s.name}/JEDebugging/**/*.{h,m,c}"
     ss.ios.frameworks       = 'Foundation', 'UIKit', 'MessageUI'
     ss.dependency "#{s.name}/JEToolkit"
+    end
+
+  s.subspec "JESettings" do |ss|
+    ss.source_files         = "#{s.name}/JESettings/**/*.{h,m,c}"
+    ss.ios.frameworks       = 'Foundation'
   end
-  
+
   s.subspec "JEDispatch" do |ss|
     ss.source_files         = "#{s.name}/JEDispatch/**/*.{h,m,c}"
     ss.ios.frameworks       = 'Foundation'
     ss.dependency "#{s.name}/JEToolkit"
-    ss.dependency "#{s.name}/JEDebugging"
     ss.dependency "#{s.name}/JESynthesize"
-  end
-  
-  s.subspec "JEKeychain" do |ss|
-    ss.source_files         = "#{s.name}/JEKeychain/**/*.{h,m,c}"
-    ss.ios.frameworks       = 'Foundation'
-    ss.dependency "#{s.name}/JEToolkit"
-    ss.dependency "#{s.name}/JEDebugging"
   end
   
   s.subspec "JEOrderedDictionary" do |ss|

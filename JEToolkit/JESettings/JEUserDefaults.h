@@ -1,8 +1,8 @@
 //
-//  NSError+JEToolkit.m
+//  JEUserDefaults.h
 //  JEToolkit
 //
-//  Copyright (c) 2013 John Rommel Estropia
+//  Copyright (c) 2014 John Rommel Estropia
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,37 +23,14 @@
 //  SOFTWARE.
 //
 
-#import "NSError+JEToolkit.h"
+#import "JESettings.h"
 
 
-@implementation NSError (JEToolkit)
+@interface JEUserDefaults : JESettings
 
-#pragma mark - Public
+- (instancetype)init;
+- (instancetype)initWithDomain:(NSString *)domain;
 
-+ (instancetype)errorWithLastPOSIXErrorAndUserInfo:(NSDictionary *)userInfo {
-    
-    const errno_t posixErrorCode = errno;
-    NSString *errorDescription = [[NSString alloc] initWithUTF8String:(strerror(posixErrorCode) ?: "")];
-    NSMutableDictionary *additionalInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
-    
-    if ([errorDescription length] > 0
-        && ![additionalInfo objectForKey:NSLocalizedDescriptionKey])
-    {
-        additionalInfo[NSLocalizedDescriptionKey] = errorDescription;
-    }
-    
-    return [self
-            errorWithDomain:NSPOSIXErrorDomain
-            code:posixErrorCode
-            userInfo:additionalInfo];
-}
-
-+ (instancetype)errorWithOSStatus:(OSStatus)status userInfo:(NSDictionary *)userInfo {
-    
-    return [self
-            errorWithDomain:NSOSStatusErrorDomain
-            code:status
-            userInfo:userInfo];
-}
+- (NSString *)userDefaultsKeyForProperty:(NSString *)propertyName;
 
 @end

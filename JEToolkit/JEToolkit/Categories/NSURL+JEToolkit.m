@@ -29,9 +29,15 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 
 #import "JEAvailability.h"
-#import "JEDebugging.h"
 #import "NSError+JEToolkit.h"
 #import "NSString+JEToolkit.h"
+
+#if __has_include("JEDebugging.h")
+#import "JEDebugging.h"
+#else
+#define JEAssertParameter   NSCParameterAssert
+#define JEAssert            NSCAssert
+#endif
 
 
 @implementation NSURL (JEToolkit)

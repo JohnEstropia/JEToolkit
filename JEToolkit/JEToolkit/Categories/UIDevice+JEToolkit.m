@@ -24,11 +24,11 @@
 //
 
 #import "UIDevice+JEToolkit.h"
-
 #include <sys/socket.h>
 #include <sys/sysctl.h>
 #include <net/if.h>
 #include <net/if_dl.h>
+
 
 @implementation UIDevice (JEToolkit)
 

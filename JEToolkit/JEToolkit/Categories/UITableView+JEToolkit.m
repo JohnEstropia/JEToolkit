@@ -24,12 +24,15 @@
 //
 
 #import "UITableView+JEToolkit.h"
-
 #import "NSObject+JEToolkit.h"
 #import "UINib+JEToolkit.h"
-
 #import "JESynthesize.h"
+
+#if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
+#else
+#define JEAssertParameter   NSCParameterAssert
+#endif
 
 
 @implementation UITableView (JEToolkit)

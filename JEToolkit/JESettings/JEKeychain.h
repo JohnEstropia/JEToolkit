@@ -23,7 +23,7 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+#import "JESettings.h"
 
 
 typedef NS_ENUM(NSInteger, JEKeychainAccess) {
@@ -39,27 +39,13 @@ typedef NS_ENUM(NSInteger, JEKeychainAccess) {
 };
 
 
-@interface JEKeychain : NSObject
+@interface JEKeychain : JESettings
 
-+ (NSString *)defaultService;
-+ (void)setDefaultService:(NSString *)defaultService;
+- (instancetype)init;
+- (instancetype)initWithService:(NSString *)service
+                    accessGroup:(NSString *)accessGroupOrNil;
 
-+ (NSString *)defaultAccessGroup;
-+ (void)setDefaultAccessGroup:(NSString *)defaultAccessGroup;
-
-+ (JEKeychainAccess)defaultAccessType;
-+ (void)setDefaultAccessType:(JEKeychainAccess)defaultAccessType;
-
-+ (NSString *)stringForKey:(NSString *)key;
-+ (NSString *)stringForKey:(NSString *)key
-             inAccessGroup:(NSString *)accessGroup
-                     error:(NSError *__autoreleasing *)error;
-+ (BOOL)setString:(NSString *)string
-           forKey:(NSString *)key;
-+ (BOOL)setString:(NSString *)string
-           forKey:(NSString *)key
-    inAccessGroup:(NSString *)accessGroup
-            error:(NSError *__autoreleasing *)error;
-
+- (NSString *)keychainAccountForProperty:(NSString *)propertyName;
+- (JEKeychainAccess)keychainAccessForProperty:(NSString *)propertyName;
 
 @end

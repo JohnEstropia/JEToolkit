@@ -1,0 +1,428 @@
+//
+//  JEUserDefaults.m
+//  JEToolkit
+//
+//  Copyright (c) 2014 John Rommel Estropia
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+//
+
+#import "JEUserDefaults.h"
+
+#if __has_include("JEDebugging.h")
+#import "JEDebugging.h"
+#else
+#define JEAssertParameter   NSCParameterAssert
+#endif
+
+
+@implementation JEUserDefaults
+
+#pragma mark - NSObject
+
+- (instancetype)init {
+    
+    self = [self initWithDomain:NSStringFromClass([self class])];
+    return self;
+}
+
+- (instancetype)initWithDomain:(NSString *)domain {
+    
+    JEAssertParameter([domain isKindOfClass:[NSString class]]);
+    
+    static NSMutableDictionary *sharedInstances;
+    static dispatch_queue_t barrierQueue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        sharedInstances = [[NSMutableDictionary alloc] init];
+        barrierQueue = dispatch_queue_create("com.JEToolkit.JEUserDefaults.barrierQueue", DISPATCH_QUEUE_CONCURRENT);
+    });
+    
+    typeof(self) __block instance;
+    dispatch_barrier_sync(barrierQueue, ^{
+        
+        instance = sharedInstances[domain];
+        if (!instance) {
+            
+            instance = [super init];
+            sharedInstances[domain] = instance;
+        }
+        
+    });
+    
+    self = instance;
+    return self;
+}
+
+
+#pragma mark - JESettings
+
+- (long long int)integerValueForKey:(NSString *)key {
+    
+    return [(NSNumber *)[[NSUserDefaults standardUserDefaults]
+             objectForKey:[self userDefaultsKeyForProperty:key]] longLongValue];
+}
+
+- (void)setIntegerValue:(long long int)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setObject:[NSNumber numberWithLongLong:value]
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (unsigned long long int)unsignedIntegerValueForKey:(NSString *)key {
+    
+    return [(NSNumber *)[[NSUserDefaults standardUserDefaults]
+             objectForKey:[self userDefaultsKeyForProperty:key]] unsignedLongLongValue];
+}
+
+- (void)setUnsignedIntegerValue:(unsigned long long int)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setObject:[NSNumber numberWithUnsignedLongLong:value]
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (bool)booleanValueForKey:(NSString *)key {
+    
+    return [[NSUserDefaults standardUserDefaults]
+            boolForKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (void)setBooleanValue:(bool)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setBool:value
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (float)floatValueForKey:(NSString *)key {
+    
+    return [[NSUserDefaults standardUserDefaults]
+            floatForKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (void)setFloatValue:(float)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setFloat:value
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (double)doubleValueForKey:(NSString *)key {
+    
+    return [[NSUserDefaults standardUserDefaults]
+            doubleForKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (void)setDoubleValue:(double)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setDouble:value
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (NSString *)NSStringValueForKey:(NSString *)key {
+    
+    return [[NSUserDefaults standardUserDefaults]
+            objectForKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (void)setNSStringValue:(NSString *)value forKey:(NSString *)key {
+    
+    NSString *userDefaultsKey = [self userDefaultsKeyForProperty:key];
+    if ([value isKindOfClass:[NSString class]]) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:value forKey:userDefaultsKey];
+    }
+    else {
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+    }
+}
+
+- (NSNumber *)NSNumberValueForKey:(NSString *)key {
+    
+    return [[NSUserDefaults standardUserDefaults]
+            objectForKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (void)setNSNumberValue:(NSNumber *)value forKey:(NSString *)key {
+    
+    NSString *userDefaultsKey = [self userDefaultsKeyForProperty:key];
+    if ([value isKindOfClass:[NSNumber class]]) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:value forKey:userDefaultsKey];
+    }
+    else {
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+    }
+}
+
+- (NSDate *)NSDateValueForKey:(NSString *)key {
+    
+    return [[NSUserDefaults standardUserDefaults]
+            objectForKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (void)setNSDateValue:(NSDate *)value forKey:(NSString *)key {
+    
+    NSString *userDefaultsKey = [self userDefaultsKeyForProperty:key];
+    if ([value isKindOfClass:[NSDate class]]) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:value forKey:userDefaultsKey];
+    }
+    else {
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+    }
+}
+
+- (NSData *)NSDataValueForKey:(NSString *)key {
+    
+    return [[NSUserDefaults standardUserDefaults]
+            objectForKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (void)setNSDataValue:(NSData *)value forKey:(NSString *)key {
+    
+    NSString *userDefaultsKey = [self userDefaultsKeyForProperty:key];
+    if ([value isKindOfClass:[NSData class]]) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:value forKey:userDefaultsKey];
+    }
+    else {
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+    }
+}
+
+- (NSURL *)NSURLValueForKey:(NSString *)key {
+    
+    return [NSURL URLWithString:[[NSUserDefaults standardUserDefaults]
+                                 objectForKey:[self userDefaultsKeyForProperty:key]]];
+}
+
+- (void)setNSURLValue:(NSURL *)value forKey:(NSString *)key {
+    
+    NSString *userDefaultsKey = [self userDefaultsKeyForProperty:key];
+    if ([value isKindOfClass:[NSURL class]]) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[value absoluteString] forKey:userDefaultsKey];
+    }
+    else {
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+    }
+}
+
+- (NSUUID *)NSUUIDValueForKey:(NSString *)key {
+    
+    return [[NSUUID alloc] initWithUUIDString:[[NSUserDefaults standardUserDefaults]
+                                               objectForKey:[self userDefaultsKeyForProperty:key]]];
+}
+
+- (void)setNSUUIDValue:(NSUUID *)value forKey:(NSString *)key {
+    
+    NSString *userDefaultsKey = [self userDefaultsKeyForProperty:key];
+    if ([value isKindOfClass:[NSUUID class]]) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[value UUIDString] forKey:userDefaultsKey];
+    }
+    else {
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+    }
+}
+
+- (id)idValueForKey:(NSString *)key {
+    
+    return [[NSUserDefaults standardUserDefaults] objectForKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (void)setIdValue:(id)value forKey:(NSString *)key {
+    
+    NSString *userDefaultsKey = [self userDefaultsKeyForProperty:key];
+    if (value) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:value forKey:userDefaultsKey];
+    }
+    else {
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+    }
+}
+
+- (Class)classValueForKey:(NSString *)key {
+    
+    NSString *className = [[NSUserDefaults standardUserDefaults] objectForKey:[self userDefaultsKeyForProperty:key]];
+    return (className ? NSClassFromString(className) : Nil);
+}
+
+- (void)setClassValue:(Class)value forKey:(NSString *)key {
+    
+    NSString *userDefaultsKey = [self userDefaultsKeyForProperty:key];
+    if (value) {
+        
+        [[NSUserDefaults standardUserDefaults]
+         setObject:NSStringFromClass(value)
+         forKey:userDefaultsKey];
+    }
+    else {
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+    }
+}
+
+- (SEL)selectorValueForKey:(NSString *)key {
+    
+    NSString *selectorName = [[NSUserDefaults standardUserDefaults] objectForKey:[self userDefaultsKeyForProperty:key]];
+    return (selectorName ? NSSelectorFromString(selectorName) : NULL);
+}
+
+- (void)setSelectorValue:(SEL)value forKey:(NSString *)key {
+    
+    NSString *userDefaultsKey = [self userDefaultsKeyForProperty:key];
+    if (value) {
+        
+        [[NSUserDefaults standardUserDefaults]
+         setObject:NSStringFromSelector(value)
+         forKey:userDefaultsKey];
+    }
+    else {
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+    }
+}
+
+- (CGPoint)CGPointValueForKey:(NSString *)key {
+    
+    return CGPointFromString([[NSUserDefaults standardUserDefaults]
+                              objectForKey:[self userDefaultsKeyForProperty:key]]);
+}
+
+- (void)setCGPointValue:(CGPoint)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setObject:NSStringFromCGPoint(value)
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (CGSize)CGSizeValueForKey:(NSString *)key {
+    
+    return CGSizeFromString([[NSUserDefaults standardUserDefaults]
+                             objectForKey:[self userDefaultsKeyForProperty:key]]);
+}
+
+- (void)setCGSizeValue:(CGSize)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setObject:NSStringFromCGSize(value)
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (CGRect)CGRectValueForKey:(NSString *)key {
+    
+    return CGRectFromString([[NSUserDefaults standardUserDefaults]
+                             objectForKey:[self userDefaultsKeyForProperty:key]]);
+}
+
+- (void)setCGRectValue:(CGRect)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setObject:NSStringFromCGRect(value)
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (CGAffineTransform)CGAffineTransformValueForKey:(NSString *)key {
+    
+    return CGAffineTransformFromString([[NSUserDefaults standardUserDefaults]
+                                        objectForKey:[self userDefaultsKeyForProperty:key]]);
+}
+
+- (void)setCGAffineTransformValue:(CGAffineTransform)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setObject:NSStringFromCGAffineTransform(value)
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (CGVector)CGVectorValueForKey:(NSString *)key {
+    
+    return CGVectorFromString([[NSUserDefaults standardUserDefaults]
+                               objectForKey:[self userDefaultsKeyForProperty:key]]);
+}
+
+- (void)setCGVectorValue:(CGVector)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setObject:NSStringFromCGVector(value)
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (UIEdgeInsets)UIEdgeInsetsValueForKey:(NSString *)key {
+    
+    return UIEdgeInsetsFromString([[NSUserDefaults standardUserDefaults]
+                                   objectForKey:[self userDefaultsKeyForProperty:key]]);
+}
+
+- (void)setUIEdgeInsetsValue:(UIEdgeInsets)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setObject:NSStringFromUIEdgeInsets(value)
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (UIOffset)UIOffsetValueForKey:(NSString *)key {
+    
+    return UIOffsetFromString([[NSUserDefaults standardUserDefaults]
+                               objectForKey:[self userDefaultsKeyForProperty:key]]);
+}
+
+- (void)setUIOffsetValue:(UIOffset)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setObject:NSStringFromUIOffset(value)
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+- (NSRange)NSRangeValueForKey:(NSString *)key {
+    
+    return NSRangeFromString([[NSUserDefaults standardUserDefaults]
+                              objectForKey:[self userDefaultsKeyForProperty:key]]);
+}
+
+- (void)setNSRangeValue:(NSRange)value forKey:(NSString *)key {
+    
+    [[NSUserDefaults standardUserDefaults]
+     setObject:NSStringFromRange(value)
+     forKey:[self userDefaultsKeyForProperty:key]];
+}
+
+
+#pragma mark - Public
+
+- (NSString *)userDefaultsKeyForProperty:(NSString *)propertyName {
+    
+    return [NSString stringWithFormat:@"%@.%@", NSStringFromClass([self class]), propertyName];
+}
+
+@end

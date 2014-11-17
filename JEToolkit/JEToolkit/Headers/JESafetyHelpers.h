@@ -26,8 +26,14 @@
 #ifndef JEToolkit_JESafetyHelpers_h
 #define JEToolkit_JESafetyHelpers_h
 
+#import <Foundation/Foundation.h>
 #import "JECompilerDefines.h"
+
+#if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
+#else
+#define JEAssert            NSCAssert
+#endif
 
 
 #pragma mark - Key-Value Coding

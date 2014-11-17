@@ -24,11 +24,14 @@
 //
 
 #import "NSObject+JEToolkit.h"
-
 #import <objc/runtime.h>
-
 #import "JESynthesize.h"
+
+#if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
+#else
+#define JEAssert   NSCAssert
+#endif
 
 
 @interface _JE_NSNotificationObserver : NSObject
