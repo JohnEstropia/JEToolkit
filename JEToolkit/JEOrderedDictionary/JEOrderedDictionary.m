@@ -25,8 +25,6 @@
 
 #import "JEOrderedDictionary.h"
 
-#import "JESafetyHelpers.h"
-
 
 @interface JEOrderedDictionary ()
 
@@ -148,17 +146,17 @@
     }
     
     _dictionary = [[NSMutableDictionary alloc] initWithDictionary:
-                   [aDecoder decodeObjectForKey:JEKeypath(typeof(self), dictionary)]];
+                   [aDecoder decodeObjectForKey:@"dictionary"]];
     _orderedKeys = [[NSMutableOrderedSet alloc] initWithOrderedSet:
-                    [aDecoder decodeObjectForKey:JEKeypath(typeof(self), orderedKeys)]];
+                    [aDecoder decodeObjectForKey:@"orderedKeys"]];
     
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     
-    [aCoder encodeObject:self.dictionary forKey:JEKeypath(typeof(self), dictionary)];
-    [aCoder encodeObject:self.orderedKeys forKey:JEKeypath(typeof(self), orderedKeys)];
+    [aCoder encodeObject:self.dictionary forKey:@"dictionary"];
+    [aCoder encodeObject:self.orderedKeys forKey:@"orderedKeys"];
 }
 
 

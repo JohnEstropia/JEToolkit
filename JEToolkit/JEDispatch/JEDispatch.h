@@ -25,7 +25,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "JECompilerDefines.h"
 
 /*! Execute a block once and only once.
  */
@@ -36,30 +35,30 @@
     } while(NO)
 
 
-JE_EXTERN JE_NONNULL_ALL
+extern __attribute__((nonnull))
 void JEDispatchConcurrent(dispatch_block_t block);
 
 /*! Dispatches a block to a concurrent global queue. Convenience method equivalent to calling dispatch_async() with dispatch_get_global_queue()
  */
-JE_EXTERN JE_NONNULL_ALL
+extern __attribute__((nonnull))
 void JEDispatchConcurrent(dispatch_block_t block);
 
 /*! Dispatches a block to a concurrent global queue after a delay. Convenience method equivalent to calling dispatch_after() with dispatch_get_global_queue()
  */
-JE_EXTERN JE_NONNULL(2)
+extern __attribute__((nonnull(2)))
 void JEDispatchConcurrentAfter(NSTimeInterval delay, dispatch_block_t block);
 
 /*! Dispatches a block to the main queue. Convenience method equivalent to calling dispatch_async() with dispatch_get_main_queue()
  */
-JE_EXTERN JE_NONNULL_ALL
+extern __attribute__((nonnull))
 void JEDispatchUI(dispatch_block_t block);
 
 /*! Dispatches a block to the main queue after a delay. Convenience method equivalent to calling dispatch_after() with dispatch_get_main_queue()
  */
-JE_EXTERN JE_NONNULL(2)
+extern __attribute__((nonnull(2)))
 void JEDispatchUIAfter(NSTimeInterval delay, dispatch_block_t block);
 
 /*! Dispatches a block to the main queue, or runs the block immediately if already running on the main thread.
  */
-JE_EXTERN JE_NONNULL_ALL
+extern __attribute__((nonnull))
 void JEDispatchUIASAP(dispatch_block_t block);

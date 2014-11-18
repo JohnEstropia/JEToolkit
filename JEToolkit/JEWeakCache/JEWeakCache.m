@@ -25,8 +25,6 @@
 
 #import "JEWeakCache.h"
 
-#import "JESafetyHelpers.h"
-
 
 @interface JEWeakCache ()
 
@@ -60,10 +58,10 @@
 - (id)objectForKey:(id)key {
     
     id __block object;
-    JEScopeWeak(self);
+    typeof(self) __weak weakSelf;
     dispatch_barrier_sync(self.barrierQueue, ^{
         
-        JEScopeStrong(self);
+        typeof(self) self = weakSelf;
         object = [self.mapTable objectForKey:key];
         
     });
@@ -72,10 +70,10 @@
 
 - (void)setObject:(id)obj forKey:(id)key {
     
-    JEScopeWeak(self);
+    typeof(self) __weak weakSelf;
     dispatch_barrier_async(self.barrierQueue, ^{
         
-        JEScopeStrong(self);
+        typeof(self) self = weakSelf;
         if (obj) {
             
             [self.mapTable setObject:obj forKey:key];
@@ -90,10 +88,10 @@
 
 - (void)removeObjectForKey:(id)key {
     
-    JEScopeWeak(self);
+    typeof(self) __weak weakSelf;
     dispatch_barrier_async(self.barrierQueue, ^{
         
-        JEScopeStrong(self);
+        typeof(self) self = weakSelf;
         [self.mapTable removeObjectForKey:key];
         
     });

@@ -62,7 +62,6 @@
 		2F74E7C119DFCD2400FB0C88 /* JEDispatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F74E74B19DFCD2300FB0C88 /* JEDispatch.m */; };
 		2F74E7C419DFCD2400FB0C88 /* JEOrderedDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F74E75019DFCD2300FB0C88 /* JEOrderedDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F74E7C519DFCD2400FB0C88 /* JEOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F74E75119DFCD2300FB0C88 /* JEOrderedDictionary.m */; };
-		2F74E7C619DFCD2400FB0C88 /* JESynthesize.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F74E75319DFCD2300FB0C88 /* JESynthesize.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F74E7C719DFCD2400FB0C88 /* JEWeakCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F74E75519DFCD2300FB0C88 /* JEWeakCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2F74E7C819DFCD2400FB0C88 /* JEWeakCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F74E75619DFCD2300FB0C88 /* JEWeakCache.m */; };
 		2F74E7C919DFCD2400FB0C88 /* NSArray+JEToolkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F74E75919DFCD2300FB0C88 /* NSArray+JEToolkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -122,6 +121,7 @@
 		2F74E80219DFD0DB00FB0C88 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F74E80119DFD0DB00FB0C88 /* MobileCoreServices.framework */; };
 		2F74E80419DFD0E200FB0C88 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F74E80319DFD0E200FB0C88 /* Foundation.framework */; };
 		2F74E80619DFD0E900FB0C88 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F74E80519DFD0E900FB0C88 /* UIKit.framework */; };
+		B502A76E1A1B8F56002667B1 /* JESynthesize.h in Headers */ = {isa = PBXBuildFile; fileRef = B502A76D1A1B8F56002667B1 /* JESynthesize.h */; };
 		B537BAE219EC2A9800715933 /* JEDebugging.swift in Sources */ = {isa = PBXBuildFile; fileRef = B537BAE119EC2A9800715933 /* JEDebugging.swift */; };
 		B5F5399A1A18536000EC763B /* JESettings.h in Headers */ = {isa = PBXBuildFile; fileRef = B5F539981A18536000EC763B /* JESettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B5F5399B1A18536000EC763B /* JESettings.m in Sources */ = {isa = PBXBuildFile; fileRef = B5F539991A18536000EC763B /* JESettings.m */; };
@@ -203,7 +203,6 @@
 		2F74E74B19DFCD2300FB0C88 /* JEDispatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEDispatch.m; sourceTree = "<group>"; };
 		2F74E75019DFCD2300FB0C88 /* JEOrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEOrderedDictionary.h; sourceTree = "<group>"; };
 		2F74E75119DFCD2300FB0C88 /* JEOrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEOrderedDictionary.m; sourceTree = "<group>"; };
-		2F74E75319DFCD2300FB0C88 /* JESynthesize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JESynthesize.h; sourceTree = "<group>"; };
 		2F74E75519DFCD2300FB0C88 /* JEWeakCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JEWeakCache.h; sourceTree = "<group>"; };
 		2F74E75619DFCD2300FB0C88 /* JEWeakCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEWeakCache.m; sourceTree = "<group>"; };
 		2F74E75919DFCD2300FB0C88 /* NSArray+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+JEToolkit.h"; sourceTree = "<group>"; };
@@ -263,6 +262,7 @@
 		2F74E80119DFD0DB00FB0C88 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		2F74E80319DFD0E200FB0C88 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2F74E80519DFD0E900FB0C88 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		B502A76D1A1B8F56002667B1 /* JESynthesize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JESynthesize.h; sourceTree = "<group>"; };
 		B537BAE119EC2A9800715933 /* JEDebugging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JEDebugging.swift; sourceTree = "<group>"; };
 		B5F539981A18536000EC763B /* JESettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JESettings.h; sourceTree = "<group>"; };
 		B5F539991A18536000EC763B /* JESettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JESettings.m; sourceTree = "<group>"; };
@@ -325,7 +325,6 @@
 				2F74E71419DFCD2300FB0C88 /* JEDebugging */,
 				2F74E74619DFCD2300FB0C88 /* JEDispatch */,
 				2F74E74F19DFCD2300FB0C88 /* JEOrderedDictionary */,
-				2F74E75219DFCD2300FB0C88 /* JESynthesize */,
 				2F74E75419DFCD2300FB0C88 /* JEWeakCache */,
 				2F74E75719DFCD2300FB0C88 /* JEToolkit */,
 				2F74E6F819DFCC7A00FB0C88 /* Supporting Files */,
@@ -464,14 +463,6 @@
 			path = JEOrderedDictionary;
 			sourceTree = "<group>";
 		};
-		2F74E75219DFCD2300FB0C88 /* JESynthesize */ = {
-			isa = PBXGroup;
-			children = (
-				2F74E75319DFCD2300FB0C88 /* JESynthesize.h */,
-			);
-			path = JESynthesize;
-			sourceTree = "<group>";
-		};
 		2F74E75419DFCD2300FB0C88 /* JEWeakCache */ = {
 			isa = PBXGroup;
 			children = (
@@ -552,6 +543,7 @@
 				2F74E78B19DFCD2400FB0C88 /* JECompilerDefines.h */,
 				2F74E78C19DFCD2400FB0C88 /* JEFormulas.h */,
 				2F74E78D19DFCD2400FB0C88 /* JESafetyHelpers.h */,
+				B502A76D1A1B8F56002667B1 /* JESynthesize.h */,
 				2F74E78E19DFCD2400FB0C88 /* JEUIMetrics.h */,
 			);
 			path = Headers;
@@ -622,6 +614,7 @@
 				2F74E79619DFCD2400FB0C88 /* NSError+JEDebugging.h in Headers */,
 				2F74E7A219DFCD2400FB0C88 /* NSObject+JEDebugging.h in Headers */,
 				2F74E7A619DFCD2400FB0C88 /* NSPointerArray+JEDebugging.h in Headers */,
+				B502A76E1A1B8F56002667B1 /* JESynthesize.h in Headers */,
 				2F74E7B619DFCD2400FB0C88 /* JEConsoleLoggerSettings.h in Headers */,
 				2F74E6FB19DFCC7A00FB0C88 /* JEToolkit.h in Headers */,
 				2F74E7FA19DFCD2400FB0C88 /* JECompilerDefines.h in Headers */,
@@ -630,7 +623,6 @@
 				2F74E7C719DFCD2400FB0C88 /* JEWeakCache.h in Headers */,
 				2F74E7A819DFCD2400FB0C88 /* NSSet+JEDebugging.h in Headers */,
 				2F74E79819DFCD2400FB0C88 /* NSException+JEDebugging.h in Headers */,
-				2F74E7C619DFCD2400FB0C88 /* JESynthesize.h in Headers */,
 				2F74E7D519DFCD2400FB0C88 /* NSIndexSet+JEToolkit.h in Headers */,
 				2F74E7FB19DFCD2400FB0C88 /* JEFormulas.h in Headers */,
 				2F74E7F119DFCD2400FB0C88 /* UITableView+JEToolkit.h in Headers */,

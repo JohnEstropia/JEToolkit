@@ -24,12 +24,24 @@
 //
 
 #import "NSObject+JEDispatch.h"
-
-#import "JESynthesize.h"
+#import <objc/runtime.h>
 
 
 @implementation NSObject (JEDispatch)
 
-JESynthesize(strong, NSUUID *, dispatchTaskID, setDispatchTaskID);
+static const void *_NSObject_JEDispatch_dispatchTaskID = &_NSObject_JEDispatch_dispatchTaskID;
+
+- (NSUUID *)dispatchTaskID {
+    
+    return objc_getAssociatedObject(self, _NSObject_JEDispatch_dispatchTaskID);
+}
+
+- (void)setDispatchTaskID:(NSUUID *)dispatchTaskID {
+    
+    objc_setAssociatedObject(self,
+                             _NSObject_JEDispatch_dispatchTaskID,
+                             dispatchTaskID,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 @end
