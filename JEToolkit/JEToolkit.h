@@ -30,6 +30,7 @@
 #import "JESafetyHelpers.h"
 #import "JEFormulas.h"
 #import "JEUIMetrics.h"
+#import "JESynthesize.h"
 
 
 #pragma mark - Categories
@@ -61,8 +62,6 @@
 
 
 #pragma mark - Submodules
-
-#import "JESynthesize.h"
 
 #import "JEDebugging.h"
 
