@@ -37,6 +37,8 @@
 
 @property (nonatomic, strong, readonly) NSString *service;
 @property (nonatomic, strong, readonly) NSString *accessGroup;
+@property (nonatomic, strong, readonly) NSMutableDictionary *cachedKeychainAccounts;
+@property (nonatomic, strong, readonly) NSMutableDictionary *cachedKeychainAccesses;
 
 @end
 
@@ -56,6 +58,13 @@
             initWithService:[[NSBundle mainBundle] bundleIdentifier]
             accessGroup:nil];
 #endif
+    if (!self) {
+        
+        return nil;
+    }
+    
+    _cachedKeychainAccounts = [[NSMutableDictionary alloc] init];
+    _cachedKeychainAccesses = [[NSMutableDictionary alloc] init];
     return self;
 }
 
@@ -100,7 +109,7 @@
 
 - (long long int)integerValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? [(NSNumber *)[NSKeyedUnarchiver unarchiveObjectWithData:data] longLongValue]
             : 0);
@@ -110,13 +119,13 @@
     
     [self
      setData:[NSKeyedArchiver archivedDataWithRootObject:[NSNumber numberWithLongLong:value]]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (unsigned long long int)unsignedIntegerValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? [(NSNumber *)[NSKeyedUnarchiver unarchiveObjectWithData:data] unsignedLongLongValue]
             : 0);
@@ -126,13 +135,13 @@
     
     [self
      setData:[NSKeyedArchiver archivedDataWithRootObject:[NSNumber numberWithUnsignedLongLong:value]]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (bool)booleanValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     bool value = 0;
     [data getBytes:&value length:sizeof(value)];
     return value;
@@ -142,13 +151,13 @@
     
     [self
      setData:[[NSData alloc] initWithBytes:&value length:sizeof(value)]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (float)floatValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? [(NSNumber *)[NSKeyedUnarchiver unarchiveObjectWithData:data] floatValue]
             : 0.0f);
@@ -158,13 +167,13 @@
     
     [self
      setData:[NSKeyedArchiver archivedDataWithRootObject:[NSNumber numberWithFloat:value]]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (double)doubleValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? [(NSNumber *)[NSKeyedUnarchiver unarchiveObjectWithData:data] doubleValue]
             : 0.0f);
@@ -174,13 +183,13 @@
     
     [self
      setData:[NSKeyedArchiver archivedDataWithRootObject:[NSNumber numberWithDouble:value]]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (NSString *)NSStringValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]
             : nil);
@@ -192,13 +201,13 @@
      setData:([value isKindOfClass:[NSString class]]
               ? [value dataUsingEncoding:NSUTF8StringEncoding]
               : nil)
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (NSNumber *)NSNumberValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? [NSKeyedUnarchiver unarchiveObjectWithData:data]
             : nil);
@@ -210,13 +219,13 @@
      setData:([value isKindOfClass:[NSNumber class]]
               ? [NSKeyedArchiver archivedDataWithRootObject:value]
               : nil)
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (NSDate *)NSDateValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? [NSKeyedUnarchiver unarchiveObjectWithData:data]
             : nil);
@@ -228,13 +237,13 @@
      setData:([value isKindOfClass:[NSDate class]]
               ? [NSKeyedArchiver archivedDataWithRootObject:value]
               : nil)
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (NSData *)NSDataValueForKey:(NSString *)key {
     
-    return [self dataForAccount:[self keychainAccountForProperty:key]];
+    return [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (void)setNSDataValue:(NSData *)value forKey:(NSString *)key {
@@ -243,13 +252,13 @@
      setData:([value isKindOfClass:[NSDate class]]
               ? value
               : nil)
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (NSURL *)NSURLValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? [NSKeyedUnarchiver unarchiveObjectWithData:data]
             : nil);
@@ -261,13 +270,13 @@
      setData:([value isKindOfClass:[NSURL class]]
               ? [NSKeyedArchiver archivedDataWithRootObject:value]
               : nil)
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (NSUUID *)NSUUIDValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     if (!data) {
         
         return nil;
@@ -290,13 +299,13 @@
     
     [self
      setData:data
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (id)idValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? [NSKeyedUnarchiver unarchiveObjectWithData:data]
             : nil);
@@ -308,13 +317,13 @@
      setData:(value
               ? [NSKeyedArchiver archivedDataWithRootObject:value]
               : nil)
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (Class)classValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? NSClassFromString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])
             : Nil);
@@ -326,13 +335,13 @@
      setData:(value
               ? [NSStringFromClass(value) dataUsingEncoding:NSUTF8StringEncoding]
               : nil)
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (SEL)selectorValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? NSSelectorFromString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])
             : Nil);
@@ -344,13 +353,13 @@
      setData:(value
               ? [NSStringFromSelector(value) dataUsingEncoding:NSUTF8StringEncoding]
               : nil)
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (CGPoint)CGPointValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? CGPointFromString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])
             : CGPointZero);
@@ -360,13 +369,13 @@
     
     [self
      setData:[NSStringFromCGPoint(value) dataUsingEncoding:NSUTF8StringEncoding]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (CGSize)CGSizeValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? CGSizeFromString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])
             : CGSizeZero);
@@ -376,13 +385,13 @@
     
     [self
      setData:[NSStringFromCGSize(value) dataUsingEncoding:NSUTF8StringEncoding]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (CGRect)CGRectValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? CGRectFromString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])
             : CGRectZero);
@@ -392,13 +401,13 @@
     
     [self
      setData:[NSStringFromCGRect(value) dataUsingEncoding:NSUTF8StringEncoding]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (CGAffineTransform)CGAffineTransformValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? CGAffineTransformFromString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])
             : (CGAffineTransform){ });
@@ -408,13 +417,13 @@
     
     [self
      setData:[NSStringFromCGAffineTransform(value) dataUsingEncoding:NSUTF8StringEncoding]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (CGVector)CGVectorValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? CGVectorFromString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])
             : (CGVector){ });
@@ -424,13 +433,13 @@
     
     [self
      setData:[NSStringFromCGVector(value) dataUsingEncoding:NSUTF8StringEncoding]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (UIEdgeInsets)UIEdgeInsetsValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? UIEdgeInsetsFromString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])
             : UIEdgeInsetsZero);
@@ -440,13 +449,13 @@
     
     [self
      setData:[NSStringFromUIEdgeInsets(value) dataUsingEncoding:NSUTF8StringEncoding]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (UIOffset)UIOffsetValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? UIOffsetFromString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])
             : UIOffsetZero);
@@ -456,13 +465,13 @@
     
     [self
      setData:[NSStringFromUIOffset(value) dataUsingEncoding:NSUTF8StringEncoding]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 - (NSRange)NSRangeValueForKey:(NSString *)key {
     
-    NSData *data = [self dataForAccount:[self keychainAccountForProperty:key]];
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
     return (data
             ? NSRangeFromString([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding])
             : (NSRange){ });
@@ -472,8 +481,8 @@
     
     [self
      setData:[NSStringFromRange(value) dataUsingEncoding:NSUTF8StringEncoding]
-     keychainAccess:[self keychainAccessForProperty:key]
-     forAccount:[self keychainAccountForProperty:key]];
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
 
@@ -611,6 +620,31 @@
                        [[NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil] debugDescription]);
         }
     }
+}
+
+
+#pragma mark - Private
+
+- (NSString *)cachedKeychainAccountForProperty:(NSString *)propertyName {
+    
+    NSString *keychainAccount = self.cachedKeychainAccounts[propertyName];
+    if (!keychainAccount) {
+        
+        keychainAccount = [self keychainAccountForProperty:propertyName];
+        self.cachedKeychainAccounts[propertyName] = keychainAccount;
+    }
+    return keychainAccount;
+}
+
+- (JEKeychainAccess)cachedKeychainAccessForProperty:(NSString *)propertyName {
+    
+    NSNumber *keychainAccess = self.cachedKeychainAccesses[propertyName];
+    if (!keychainAccess) {
+        
+        keychainAccess = @([self keychainAccessForProperty:propertyName]);
+        self.cachedKeychainAccesses[propertyName] = keychainAccess;
+    }
+    return [keychainAccess integerValue];
 }
 
 

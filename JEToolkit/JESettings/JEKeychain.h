@@ -28,14 +28,12 @@
 
 typedef NS_ENUM(NSInteger, JEKeychainAccess) {
     
-    JEKeychainAccessWhenUnlocked = 0,
+    JEKeychainAccessWhenUnlocked,
     JEKeychainAccessAfterFirstUnlock,
     JEKeychainAccessAlways,
     JEKeychainAccessWhenUnlockedThisDeviceOnly,
     JEKeychainAccessAfterFirstUnlockThisDeviceOnly,
-    JEKeychainAccessAlwaysThisDeviceOnly,
-    
-    _JEKeychainAccessCount
+    JEKeychainAccessAlwaysThisDeviceOnly
 };
 
 

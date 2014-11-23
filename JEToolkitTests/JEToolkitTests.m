@@ -36,8 +36,8 @@
 
 @interface JETestUserDefaults : JEUserDefaults
 
-@property (nonatomic, strong) NSString *string;
-@property (nonatomic, strong) NSNumber *number;
+@property (nonatomic, copy) NSString *string;
+@property (nonatomic, copy) NSNumber *number;
 @property (nonatomic, assign) NSTimeInterval timeInterval;
 @property (nonatomic, assign) CGRect rect;
 
@@ -50,8 +50,8 @@
 
 @interface JETestKeychain : JEKeychain
 
-@property (nonatomic, strong) NSString *string;
-@property (nonatomic, strong) NSNumber *number;
+@property (nonatomic, copy) NSString *string;
+@property (nonatomic, copy) NSNumber *number;
 @property (nonatomic, assign) NSTimeInterval timeInterval;
 @property (nonatomic, assign) CGRect rect;
 
@@ -476,6 +476,8 @@ JESynthesize(weak, id, synthesizedWeak, setSynthesizedWeak);
     
     JETestUserDefaults *userDefaults = [[JETestUserDefaults alloc] init];
     XCTAssert(userDefaults == [[JETestUserDefaults alloc] init]);
+    
+    JEDump(userDefaults);
     
     NSString *string = @"String1";
     userDefaults.string = string;

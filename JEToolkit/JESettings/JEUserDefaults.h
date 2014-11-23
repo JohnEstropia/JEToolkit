@@ -31,6 +31,8 @@
 - (instancetype)init;
 - (instancetype)initWithDomain:(NSString *)domain;
 
++ (void)synchronizeAllInstances;
+
 - (NSString *)userDefaultsKeyForProperty:(NSString *)propertyName;
 
 @end

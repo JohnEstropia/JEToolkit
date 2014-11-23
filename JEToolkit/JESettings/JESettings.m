@@ -53,38 +53,44 @@
                                     [[propertyName substringToIndex:1] uppercaseString],
                                     [propertyName substringFromIndex:1]];
             BOOL isReadOnly = NO;
+            BOOL isCopy = NO;
             for (NSString *attribute in [[[NSString alloc]
                                           initWithCString:property_getAttributes(property)
                                           encoding:NSUTF8StringEncoding] componentsSeparatedByString:@","]) {
                 
-                if ([attribute hasPrefix:@"R"]) {
-                    
-                    isReadOnly = YES;
-                }
-                else if ([attribute hasPrefix:@"T"]) {
-                    
-                    objcType = [attribute substringFromIndex:1];
-                }
-                else if ([attribute hasPrefix:@"G"]) {
-                    
-                    getterName = [attribute substringFromIndex:1];
-                }
-                else if ([attribute hasPrefix:@"S"]) {
-                    
-                    setterName = [attribute substringFromIndex:1];
+                switch (attribute.UTF8String[0]) {
+                    case 'C':
+                        isCopy = YES;
+                        break;
+                    case 'G':
+                        getterName = [attribute substringFromIndex:1];
+                        break;
+                    case 'R':
+                        isReadOnly = YES;
+                        break;
+                    case 'S':
+                        setterName = [attribute substringFromIndex:1];
+                        break;
+                    case 'T':
+                        objcType = [attribute substringFromIndex:1];
+                        break;
+                    default:
+                        break;
                 }
             }
-            if (isReadOnly || !objcType) {
+            if (isReadOnly
+                || !objcType
+                || (objcType.UTF8String[0] == _C_ID && !isCopy)) {
                 
                 continue;
             }
             
-            SEL getterSelector = sel_registerName([getterName UTF8String]);
-            SEL setterSelector = sel_registerName([setterName UTF8String]);
+            SEL getterSelector = sel_registerName(getterName.UTF8String);
+            SEL setterSelector = sel_registerName(setterName.UTF8String);
             
             IMP getterImplementation = NULL;
             IMP setterImplementation = NULL;
-            switch ([objcType UTF8String][0]) {
+            switch (objcType.UTF8String[0]) {
                     
                 case _C_CHR:
                 case _C_SHT:
@@ -386,11 +392,11 @@
             class_replaceMethod(contextClass,
                                 getterSelector,
                                 getterImplementation,
-                                [[objcType stringByAppendingString:@"@:"] UTF8String]);
+                                [objcType stringByAppendingString:@"@:"].UTF8String);
             class_replaceMethod(contextClass,
                                 setterSelector,
                                 setterImplementation,
-                                [[@"v@" stringByAppendingString:objcType] UTF8String]);
+                                [@"v@" stringByAppendingString:objcType].UTF8String);
         }
     }
     free(properties);
