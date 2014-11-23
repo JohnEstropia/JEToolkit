@@ -40,7 +40,7 @@
 #if DEBUG
     self.logLevelMask = JELogLevelAll;
 #else
-    self.logLevelMask = (JELogLevelNotice | JELogLevelAlert);
+    self.logLevelMask = (JELogLevelNotice | JELogLevelAlert | JELogLevelFatal);
 #endif
     
     self.logMessageHeaderMask = (JELogMessageHeaderQueue
