@@ -31,6 +31,10 @@
  */
 + (UIViewController *)topmostPresentedViewController;
 
+/*! Returns the candidate view controller for presenting a new modal controller
+ */
++ (UIViewController *)topmostViewControllerInHierarchy;
+
 /*! Checks if the receiver's view currently is in a window (i.e. currently in the view heirarchy)
  */
 - (BOOL)hasWindow;

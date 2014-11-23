@@ -1,4 +1,8 @@
 # JEToolkit
+[![Version](https://img.shields.io/cocoapods/v/JEToolkit.svg?style=flat)](http://cocoadocs.org/docsets/JEToolkit)
+[![Platform](https://img.shields.io/cocoapods/p/JEToolkit.svg?style=flat)](http://cocoadocs.org/docsets/JEToolkit)
+[![License](https://img.shields.io/cocoapods/l/JEToolkit.svg?style=flat)](http://cocoadocs.org/docsets/JEToolkit)
+
 JEToolkit is a collection of time-saving utilities for iOS development.
 
 
