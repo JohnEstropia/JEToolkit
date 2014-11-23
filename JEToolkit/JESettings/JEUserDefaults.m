@@ -338,24 +338,6 @@
     }
 }
 
-- (id)idValueForKey:(NSString *)key {
-    
-    return [[NSUserDefaults standardUserDefaults] objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
-}
-
-- (void)setIdValue:(id)value forKey:(NSString *)key {
-    
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    if (value) {
-        
-        [[NSUserDefaults standardUserDefaults] setObject:value forKey:userDefaultsKey];
-    }
-    else {
-        
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
-    }
-}
-
 - (Class)classValueForKey:(NSString *)key {
     
     NSString *className = [[NSUserDefaults standardUserDefaults] objectForKey:[self cachedUserDefaultsKeyForProperty:key]];

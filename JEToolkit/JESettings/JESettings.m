@@ -417,257 +417,308 @@
 
 #pragma mark - Public
 
+#define __JESettings_unimplementedMethod() \
+    [NSException \
+     raise:NSInternalInconsistencyException \
+     format:@"-[%@ %@] not implemented.", [self class], NSStringFromSelector(_cmd)]
+
 - (long long int)integerValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return 0;
 }
 
 - (void)setIntegerValue:(long long int)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (unsigned long long int)unsignedIntegerValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return 0;
 }
 
 - (void)setUnsignedIntegerValue:(unsigned long long int)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (bool)booleanValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return false;
 }
 
 - (void)setBooleanValue:(bool)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (float)floatValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return 0.0f;
 }
 
 - (void)setFloatValue:(float)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (double)doubleValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return 0.0;
 }
 
 - (void)setDoubleValue:(double)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (NSString *)NSStringValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return nil;
 }
 
 - (void)setNSStringValue:(NSString *)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (NSNumber *)NSNumberValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return nil;
 }
 
 - (void)setNSNumberValue:(NSNumber *)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (NSDate *)NSDateValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return nil;
 }
 
 - (void)setNSDateValue:(NSDate *)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (NSData *)NSDataValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return nil;
 }
 
 - (void)setNSDataValue:(NSData *)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (NSURL *)NSURLValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return nil;
 }
 
 - (void)setNSURLValue:(NSURL *)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (NSUUID *)NSUUIDValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return nil;
 }
 
 - (void)setNSUUIDValue:(NSUUID *)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (id<NSCoding>)NSCodingValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return nil;
 }
 
 - (void)setNSCodingValue:(id<NSCoding>)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (id)idValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return nil;
 }
 
 - (void)setIdValue:(id)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (Class)classValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return Nil;
 }
 
 - (void)setClassValue:(Class)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (SEL)selectorValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return NULL;
 }
 
 - (void)setSelectorValue:(SEL)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (CGPoint)CGPointValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return CGPointZero;
 }
 
 - (void)setCGPointValue:(CGPoint)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (CGSize)CGSizeValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return CGSizeZero;
 }
 
 - (void)setCGSizeValue:(CGSize)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (CGRect)CGRectValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return CGRectZero;
 }
 
 - (void)setCGRectValue:(CGRect)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (CGAffineTransform)CGAffineTransformValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return (CGAffineTransform){ };
 }
 
 - (void)setCGAffineTransformValue:(CGAffineTransform)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (CGVector)CGVectorValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return (CGVector){ };
 }
 
 - (void)setCGVectorValue:(CGVector)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (UIEdgeInsets)UIEdgeInsetsValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return UIEdgeInsetsZero;
 }
 
 - (void)setUIEdgeInsetsValue:(UIEdgeInsets)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (UIOffset)UIOffsetValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return UIOffsetZero;
 }
 
 - (void)setUIOffsetValue:(UIOffset)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 - (NSRange)NSRangeValueForKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
     return (NSRange){ };
 }
 
 - (void)setNSRangeValue:(NSRange)value forKey:(NSString *)key {
     
     // Subclass override
+    __JESettings_unimplementedMethod();
 }
 
 @end
