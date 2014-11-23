@@ -28,7 +28,7 @@
 @interface JEConsoleLoggerSettings : JEBaseLoggerSettings
 
 /*!
- The combination of JELogLevelMask flags that will be output by the console logger. Defaults to JELogLevelAll for debug builds, (JELogLevelNotice | JELogLevelAlert) for release builds
+ The combination of JELogLevelMask flags that will be output by the console logger. Defaults to JELogLevelAll for debug builds, (JELogLevelNotice | JELogLevelAlert | JELogLevelFatal) for release builds
  */
 @property (nonatomic, assign) JELogLevelMask logLevelMask;
 

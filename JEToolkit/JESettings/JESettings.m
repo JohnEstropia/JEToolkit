@@ -243,6 +243,18 @@
                         });
                         break;
                     }
+                    if ([type conformsToProtocol:@protocol(NSCoding)]) {
+                        
+                        getterImplementation = imp_implementationWithBlock(^id<NSCoding>(JESettings *self, SEL _cmd) {
+                            
+                            return [self NSCodingValueForKey:propertyName];
+                        });
+                        setterImplementation = imp_implementationWithBlock(^(JESettings *self, id<NSCoding> value) {
+                            
+                            [self setNSCodingValue:value forKey:propertyName];
+                        });
+                        break;
+                    }
                     
                     getterImplementation = imp_implementationWithBlock(^id(JESettings *self, SEL _cmd) {
                         
@@ -522,6 +534,17 @@
 }
 
 - (void)setNSUUIDValue:(NSUUID *)value forKey:(NSString *)key {
+    
+    // Subclass override
+}
+
+- (id<NSCoding>)NSCodingValueForKey:(NSString *)key {
+    
+    // Subclass override
+    return nil;
+}
+
+- (void)setNSCodingValue:(id<NSCoding>)value forKey:(NSString *)key {
     
     // Subclass override
 }

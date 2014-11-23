@@ -303,6 +303,24 @@
      forAccount:[self cachedKeychainAccountForProperty:key]];
 }
 
+- (id<NSCoding>)NSCodingValueForKey:(NSString *)key {
+    
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
+    return (data
+            ? [NSKeyedUnarchiver unarchiveObjectWithData:data]
+            : nil);
+}
+
+- (void)setNSCodingValue:(id<NSCoding>)value forKey:(NSString *)key {
+    
+    [self
+     setData:(value
+              ? [NSKeyedArchiver archivedDataWithRootObject:value]
+              : nil)
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
+}
+
 - (id)idValueForKey:(NSString *)key {
     
     NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];

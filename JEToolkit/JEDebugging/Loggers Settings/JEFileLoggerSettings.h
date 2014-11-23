@@ -28,7 +28,7 @@
 @interface JEFileLoggerSettings : JEBaseLoggerSettings
 
 /*!
- The combination of JELogLevelMask flags that will be output by the file logger. Defaults to (JELogLevelNotice | JELogLevelAlert)
+ The combination of JELogLevelMask flags that will be output by the file logger. Defaults to (JELogLevelNotice | JELogLevelAlert | JELogLevelFatal)
  */
 @property (nonatomic, assign) JELogLevelMask logLevelMask;
 

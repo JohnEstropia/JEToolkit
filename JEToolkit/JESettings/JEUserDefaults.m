@@ -78,7 +78,6 @@
             instance = [super init];
             sharedInstances[domain] = instance;
         }
-        
     });
     
     self = instance;
@@ -100,7 +99,6 @@
         [keys addObject:@(property_getName(properties[i]))];
     }
     free(properties);
-    
     
     NSMutableString *description = [NSMutableString stringWithString:@"{"];
     [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
@@ -314,6 +312,28 @@
     }
     else {
         
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+    }
+}
+
+- (id<NSCoding>)NSCodingValueForKey:(NSString *)key {
+    
+    NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    return (data
+            ? [NSKeyedUnarchiver unarchiveObjectWithData:data]
+            : nil);
+}
+
+- (void)setNSCodingValue:(id<NSCoding>)value forKey:(NSString *)key {
+    
+    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
+    if (data) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:userDefaultsKey];
+    }
+    else {
+     
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
     }
 }

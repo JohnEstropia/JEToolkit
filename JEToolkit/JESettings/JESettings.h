@@ -62,6 +62,9 @@
 - (NSUUID *)NSUUIDValueForKey:(NSString *)key;
 - (void)setNSUUIDValue:(NSUUID *)value forKey:(NSString *)key;
 
+- (id<NSCoding>)NSCodingValueForKey:(NSString *)key;
+- (void)setNSCodingValue:(id<NSCoding>)value forKey:(NSString *)key;
+
 - (id)idValueForKey:(NSString *)key;
 - (void)setIdValue:(id)value forKey:(NSString *)key;
 
