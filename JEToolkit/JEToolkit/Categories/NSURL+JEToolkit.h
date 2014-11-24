@@ -103,4 +103,13 @@
                        error:(NSError **)error;
 
 
+#pragma mark - Conversion
+
+/*! Extracts a URL from the given value.
+ @param valueOrNil The object to extract string from. Accepts nil, NSString, NSURL, or a UTF-8 NSData
+ @return valueOrNil if it is an NSURL, an NSURL initialized from an NSString, an NSURL from a UTF-8 string value of an NSData, or nil otherwise.
+ */
++ (NSURL *)URLFromValue:(id)valueOrNil;
+
+
 @end

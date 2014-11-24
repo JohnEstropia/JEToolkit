@@ -249,5 +249,27 @@
     return YES;
 }
 
+#pragma mark Conversion
+
++ (NSURL *)URLFromValue:(id)valueOrNil {
+    
+    if (valueOrNil) {
+        
+        if ([valueOrNil isKindOfClass:[NSURL class]]) {
+            
+            return valueOrNil;
+        }
+        if ([valueOrNil isKindOfClass:[NSString class]]) {
+            
+            return [NSURL URLWithString:valueOrNil];
+        }
+        if ([valueOrNil isKindOfClass:[NSData class]]) {
+            
+            return [NSURL URLWithString:[[NSString alloc] initWithData:valueOrNil encoding:NSUTF8StringEncoding]];
+        }
+    }
+    return nil;
+}
+
 
 @end
