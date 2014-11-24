@@ -827,7 +827,13 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     if (view.window != topmostWindow) {
         
         [view removeFromSuperview];
-        view.frame = topmostWindow.frame;
+        
+        view.autoresizingMask = (UIViewAutoresizingFlexibleWidth
+                                 | UIViewAutoresizingFlexibleHeight);
+        [view setTranslatesAutoresizingMaskIntoConstraints:YES];
+        view.frame = [topmostWindow
+                      convertRect:[UIScreen mainScreen].bounds
+                      fromWindow:nil];
         [topmostWindow addSubview:view];
     }
 }

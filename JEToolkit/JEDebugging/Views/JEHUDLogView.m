@@ -67,6 +67,8 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 @property (nonatomic, assign) BOOL hasPendingLogUpdates;
 @property (nonatomic, assign) NSTimeInterval lastReloadTimeInterval;
 
+@property (nonatomic, weak) UIActivityViewController *activityController;
+
 @end
 
 
@@ -309,15 +311,20 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 
 - (void)layoutSubviews {
     
+    self.frame = [self.superview
+                  convertRect:[UIScreen mainScreen].bounds
+                  fromView:nil];
+    
     [super layoutSubviews];
     
+    CGRect bounds = self.bounds;
     UIView *menuView = self.menuView;
     CGRect menuFrame = menuView.frame;
     menuView.frame = (CGRect){
-        .origin.x = CGRectGetMinX(menuFrame),
-        .origin.y = JEClamp(JEUIStatusBarHeight,
+        .origin.x = CGRectGetMinX(bounds),
+        .origin.y = JEClamp((CGRectGetMinY(bounds) + JEUIStatusBarHeight),
                             CGRectGetMinY(menuFrame),
-                            (CGRectGetHeight(self.bounds)
+                            (CGRectGetHeight(bounds)
                              - JEHUDLogViewConsoleMinHeight
                              - CGRectGetHeight(menuFrame))),
         .size = menuFrame.size
@@ -427,7 +434,13 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 
 - (void)reportButtonTouchUpInside:(UIButton *)sender {
     
-    UIViewController *viewController = [UIViewController topmostPresentedViewController];
+    UIActivityViewController *previousController = self.activityController;
+    if (previousController) {
+    
+        [(previousController.presentingViewController ?: previousController) dismissViewControllerAnimated:YES completion:nil];
+    }
+    
+    UIViewController *viewController = [UIViewController topmostViewControllerInHierarchy];
     if (!viewController) {
         
         return;
@@ -452,6 +465,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
                                           UIActivityTypePostToTencentWeibo ];
     
     [viewController presentViewController:controller animated:YES completion:nil];
+    self.activityController = controller;
     
     self.toggleButton.selected = NO;
     [self didUpdateHUDVisibility];
@@ -490,6 +504,11 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 }
 
 - (void)applicationDidChangeStatusBarOrientation:(NSNotification *)note {
+    
+    if (NSProtocolFromString(@"UICoordinateSpace")) {
+        
+        return;
+    }
     
     CGAffineTransform transform = CGAffineTransformIdentity;
     CGRect bounds = [UIScreen mainScreen].bounds;
