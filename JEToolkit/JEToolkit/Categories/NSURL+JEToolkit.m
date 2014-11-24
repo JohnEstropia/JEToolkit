@@ -47,8 +47,8 @@
 - (const char *)je_fileSystemRepresentation NS_RETURNS_INNER_POINTER {
     
     return ([self respondsToSelector:@selector(fileSystemRepresentation)]
-            ? [self fileSystemRepresentation]
-            : [[self path] fileSystemRepresentation]);
+            ? self.fileSystemRepresentation
+            : self.path.fileSystemRepresentation);
 }
 
 
@@ -112,12 +112,29 @@
 
 - (BOOL)isAssetsLibraryURL {
     
-    return [[self scheme] isEqualToString:@"assets-library"];
+    return [self.scheme isEqualToString:@"assets-library"];
 }
 
 - (BOOL)isDataURL {
     
-    return [[self scheme] isEqualToString:@"data"];
+    return [self.scheme isEqualToString:@"data"];
+}
+
+- (NSDictionary *)queryValues {
+    
+    NSArray *pairs = [self.query componentsSeparatedByString:@"&"];
+    NSMutableDictionary *components = [[NSMutableDictionary alloc] initWithCapacity:pairs.count];
+    for (NSString *keyValueString in pairs) {
+        
+        NSArray *keyValueArray = [keyValueString componentsSeparatedByString:@"="];
+        if (keyValueArray.count != 2)  {
+            
+            continue;
+        }
+        
+        components[[keyValueArray[0] URLDecodedString]] = [keyValueArray[1] URLDecodedString];
+    }
+    return [NSDictionary dictionaryWithDictionary:components];
 }
 
 #pragma mark Extended Attributes
@@ -204,7 +221,7 @@
         
         const char *valueString = [extendedAttribute UTF8String];
         errorCode = setxattr([self je_fileSystemRepresentation],
-                             [key UTF8String],
+                             key.UTF8String,
                              valueString,
                              strlen(valueString),
                              0,
@@ -213,7 +230,7 @@
     else {
         
         errorCode = removexattr([self je_fileSystemRepresentation],
-                                [key UTF8String],
+                                key.UTF8String,
                                 kNilOptions);
     }
     

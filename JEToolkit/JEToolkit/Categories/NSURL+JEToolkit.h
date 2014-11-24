@@ -75,6 +75,10 @@
  */
 - (BOOL)isDataURL;
 
+/*! Returns the URL query parameters as a key-value dictionary
+ */
+- (NSDictionary *)queryValues;
+
 
 #pragma mark - Extended Attributes
 

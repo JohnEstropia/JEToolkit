@@ -134,5 +134,13 @@
  */
 - (NSString *)canonicalString;
 
+/*! Returns a URL-encoded string from the receiver
+ */
+- (NSString *)URLEncodedString;
+
+/*! Returns a URL-decoded string from the receiver
+ */
+- (NSString *)URLDecodedString;
+
 
 @end

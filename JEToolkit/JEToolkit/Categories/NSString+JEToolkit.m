@@ -241,6 +241,22 @@
     return [[self trimmedString] lowercaseString];
 }
 
+- (NSString *)URLEncodedString {
+    
+    // http://www.ietf.org/rfc/rfc3986.txt
+    return (__bridge_transfer NSString *)
+    CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+                                            (__bridge CFStringRef)self,
+                                            NULL,
+                                            (__bridge CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                            kCFStringEncodingUTF8);
+}
+
+- (NSString *)URLDecodedString {
+    
+    return [self stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+}
+
 
 
 @end
