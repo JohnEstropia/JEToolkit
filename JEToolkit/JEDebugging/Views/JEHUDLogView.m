@@ -437,7 +437,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     UIActivityViewController *previousController = self.activityController;
     if (previousController) {
     
-        [(previousController.presentingViewController ?: previousController) dismissViewControllerAnimated:YES completion:nil];
+        return;
     }
     
     UIViewController *viewController = [UIViewController topmostViewControllerInHierarchy];
