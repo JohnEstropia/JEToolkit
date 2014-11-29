@@ -283,6 +283,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     
     
     [self didUpdateHUDVisibility];
+    displayLink.paused = NO;
     
     return self;
 }
@@ -389,6 +390,10 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 
 - (void)displayLinkDidFire:(CADisplayLink *)sender {
     
+    if ([self.superview.subviews lastObject] != self) {
+        
+        [self.superview bringSubviewToFront:self];
+    }
     [self reloadLogEntriesIfNeeded];
 }
 
@@ -557,8 +562,6 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     CAShapeLayer *menuMaskLayer = self.menuMaskLayer;
     if (consoleHidden) {
         
-        self.displayLink.paused = YES;
-        
         menuView.frame = (CGRect){
             .origin = menuFrame.origin,
             .size.width = CGRectGetMinX(reportButton.frame),
@@ -571,8 +574,6 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
                               cornerRadii:(CGSize){ .width = 8.0f, .height = 8.0f }].CGPath;
         return;
     }
-    
-    self.displayLink.paused = NO;
     
     menuView.frame = (CGRect){
         .origin = menuFrame.origin,
