@@ -33,7 +33,7 @@
  @param valueOrNil The object to extract an array from. Accepts nil, NSArray, a JSON string, or a JSON NSData
  @return valueOrNil if it is an NSArray, an array representation of a JSON NSData or string, or nil otherwise.
  */
-+ (NSArray *)arrayWithValue:(id)valueOrNil;
++ (NSArray *)arrayFromValue:(id)valueOrNil;
 
 
 #pragma mark - Container Tools

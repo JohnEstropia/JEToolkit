@@ -10,7 +10,7 @@
 
 @implementation NSDictionary (JEToolkit)
 
-+ (NSDictionary *)dictionaryWithValue:(id)valueOrNil {
++ (NSDictionary *)dictionaryFromValue:(id)valueOrNil {
     
     if (!valueOrNil) {
         

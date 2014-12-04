@@ -34,7 +34,7 @@
 
 #pragma mark Conversion
 
-+ (NSArray *)arrayWithValue:(id)valueOrNil {
++ (NSArray *)arrayFromValue:(id)valueOrNil {
     
     if (!valueOrNil) {
         
