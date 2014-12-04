@@ -32,6 +32,44 @@
 
 #pragma mark - Public
 
+#pragma mark Conversion
+
++ (NSArray *)arrayWithValue:(id)valueOrNil {
+    
+    if (!valueOrNil) {
+        
+        return nil;
+    }
+    if ([valueOrNil isKindOfClass:[NSArray class]]) {
+        
+        return valueOrNil;
+    }
+    if ([valueOrNil isKindOfClass:[NSData class]]) {
+        
+        id JSON = [NSJSONSerialization
+                   JSONObjectWithData:(NSData *)valueOrNil
+                   options:kNilOptions
+                   error:nil];
+        if ([JSON isKindOfClass:[NSArray class]]) {
+            
+            return JSON;
+        }
+    }
+    if ([valueOrNil isKindOfClass:[NSString class]]) {
+        
+        id JSON = [NSJSONSerialization
+                   JSONObjectWithData:[(NSString *)valueOrNil dataUsingEncoding:NSUTF8StringEncoding]
+                   options:kNilOptions
+                   error:nil];
+        if ([JSON isKindOfClass:[NSArray class]]) {
+            
+            return JSON;
+        }
+    }
+    return nil;
+}
+
+
 #pragma mark Container Tools
 
 - (NSArray *)shuffledArray {

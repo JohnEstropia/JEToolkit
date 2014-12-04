@@ -40,6 +40,7 @@
 #import "NSCalendar+JEToolkit.h"
 #import "NSDate+JEToolkit.h"
 #import "NSDateFormatter+JEToolkit.h"
+#import "NSDictionary+JEToolkit.h"
 #import "NSError+JEToolkit.h"
 #import "NSIndexSet+JEToolkit.h"
 #import "NSMutableArray+JEToolkit.h"
