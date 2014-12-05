@@ -41,7 +41,7 @@
 
 #pragma mark Conversion
 
-+ (NSDate *)dateWithValue:(id)valueOrNil {
++ (NSDate *)dateForValue:(id)valueOrNil {
     
     if (!valueOrNil) {
         
