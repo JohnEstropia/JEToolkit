@@ -488,7 +488,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     = ((JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderSourceFile)
         && location.fileName != NULL
         && location.lineNumber > 0)
-       ? [NSString stringWithFormat:@"%s:%li ", location.fileName, (long)location.lineNumber]
+       ? [NSString stringWithFormat:@"%s:%lu ", location.fileName, (unsigned long)location.lineNumber]
        : [NSString string]);
     headerEntries[@(JELogMessageHeaderFunction)]
     = ((JEEnumBitmasked(logMessageHeaderMask, JELogMessageHeaderFunction) && location.functionName != NULL)

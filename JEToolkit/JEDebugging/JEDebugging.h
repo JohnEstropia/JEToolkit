@@ -177,106 +177,11 @@ typedef struct JELogLocation {
 
     const char *fileName;
     const char *functionName;
-    int lineNumber;
+    const unsigned int lineNumber;
 
 } JELogLocation;
 
 #define JELogLocationCurrent()  ((JELogLocation){ __JE_FILE_NAME__, __PRETTY_FUNCTION__, __LINE__ })
-
-
-
-#pragma mark - Breakpoint utility
-
-#if !DEBUG
-#define JEDebugBreak()  do {} while (NO)
-
-#elif TARGET_CPU_ARM
-#define JEDebugBreak() \
-    do { \
-        if (![JEDebugging isDebuggerAttached]) { \
-            break; \
-        } \
-        /* http://iphone.m20.nl/wp/2010/10/xcode-iphone-debugger-halt-assertions/ */ \
-        __asm__ __volatile__ ( \
-            "mov r0, %0\n" \
-            "mov r1, %1\n" \
-            "mov r12, #37\n" \
-            "swi 128\n" \
-            "nop\n" \
-            : \
-            : "r" (getpid()), "r" (SIGINT) \
-            : "r12", "r0", "r1", "cc" \
-        ); \
-    } while (NO)
-
-#elif TARGET_CPU_ARM64
-#define JEDebugBreak() \
-    do { \
-        if (![JEDebugging isDebuggerAttached]) { \
-            break; \
-        } \
-        __asm__ __volatile__ ( \
-            "movq r0, %0\n" \
-            "movq r1, %1\n" \
-            "movq r12, #37\n" \
-            "swi 128\n" \
-            "nop\n" \
-            : \
-            : "r" (getpid()), "r" (SIGINT) \
-            : "r12", "r0", "r1", "cc" \
-        ); \
-    } while (NO)
-
-#elif TARGET_CPU_X86
-#define JEDebugBreak() \
-    do { \
-        if (![JEDebugging isDebuggerAttached]) { \
-            break; \
-        } \
-        /* http://iphone.m20.nl/wp/2010/10/xcode-iphone-debugger-halt-assertions/ */ \
-        __asm__ __volatile__ ( \
-            "pushl %0\n" \
-            "pushl %1\n" \
-            "push $0\n" \
-            "movl %2, %%eax\n" \
-            "int $0x80\n" \
-            "add $12, %%esp" \
-            : \
-            : "g" (SIGINT), "g" (getpid()), "n" (37) \
-            : "eax", "cc" \
-        ); \
-    } while (NO)
-
-#elif TARGET_CPU_X86_64
-#define JEDebugBreak() \
-    do { \
-        if (![JEDebugging isDebuggerAttached]) { \
-            break; \
-        } \
-        __asm__ __volatile__ ( \
-            "pushq %0\n" \
-            "pushq %1\n" \
-            "push $0\n" \
-            "movq %2, %%rax\n" \
-            "syscall\n" \
-            "addq $24, %%rsp" \
-            : \
-            : "g" (SIGINT), "g" (getpid()), "n" (37) \
-            : "rax", "cc" \
-        ); \
-    } while (NO)
-
-#else
-#define JEDebugBreak()  do {} while (NO)
-
-#endif
-
-#define JEDebugBreakIf(condition) \
-    do { \
-        if (condition) { \
-            JEDebugBreak(); \
-        } \
-    } while(NO)
 
 
 

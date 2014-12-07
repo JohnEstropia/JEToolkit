@@ -384,7 +384,6 @@
     
     JEDump([UIColor blueColor]);
     JEDump([UIColor redColor]);
-    JEDebugBreak();
     JEDump([UIColor cyanColor]);
     JEDump([UIColor whiteColor]);
     JEDump([UIColor clearColor]);
@@ -407,7 +406,6 @@
     
     NSObject *__autoreleasing weakObject;
     [weakValue getValue:&weakObject];
-    JEDebugBreakIf(!weakObject);
     JEDump(weakObject);
 }
 
