@@ -26,6 +26,7 @@
 #import "NSObject+JEToolkit.h"
 #import <objc/runtime.h>
 #import "JESynthesize.h"
+#import "NSString+JEToolkit.h"
 
 #if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
@@ -115,6 +116,21 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
 + (NSString *)className {
     
     return NSStringFromClass(self);
+}
+
++ (NSString *)classNameInAppModule {
+    
+    return [self classNameInModule:[NSString applicationName]];
+}
+
++ (NSString *)classNameInModule:(NSString *)moduleName {
+    
+    NSMutableArray *components = [[NSMutableArray alloc] initWithArray:[[self className] componentsSeparatedByString:@"."]];
+    if ([[components firstObject] isEqualToString:moduleName]) {
+        
+        [components removeObjectAtIndex:0];
+    }
+    return [components componentsJoinedByString:@"."];
 }
 
 + (Class)classForIdiom {

@@ -33,6 +33,14 @@
  */
 + (NSString *)className;
 
+/*! Returns the fully-qualified class name relative to the main bundle. For example, for class name "MyApp.MyClass", this method returns "MyClass". For classes outside "MyApp", this method returns "SomeExternalModule.SomeClass".
+ */
++ (NSString *)classNameInAppModule;
+
+/*! Returns the fully-qualified class name relative to the specified module. For example, for class name "MyApp.MyClass", this method returns "MyClass" for moduleName "MyApp". For classes outside "MyApp", this method returns "SomeExternalModule.SomeClass".
+ */
++ (NSString *)classNameInModule:(NSString *)moduleName;
+
 /*! Returns the iPhone or iPad-specific subclass for the receiver if they exist. Device-specific subclass names are expected to have either the suffix "_iPad" or "_iPhone".
  */
 + (Class)classForIdiom;
