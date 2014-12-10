@@ -113,24 +113,31 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
 
 #pragma mark Class Utilities
 
-+ (NSString *)className {
++ (NSString *)fullyQualifiedClassName {
     
     return NSStringFromClass(self);
 }
 
-+ (NSString *)classNameInAppModule {
++ (NSString *)classNameInNameSpace:(NSString *)namespace {
     
-    return [self classNameInModule:[NSString applicationName]];
+    NSString *fullyQualifiedClassName = [self fullyQualifiedClassName];
+    if ([fullyQualifiedClassName isEqualToString:namespace]) {
+        
+        return [fullyQualifiedClassName componentsSeparatedByString:@"."].lastObject;
+    }
+    
+    NSString *prefix = [fullyQualifiedClassName stringByAppendingString:@"."];
+    if ([fullyQualifiedClassName hasPrefix:prefix]) {
+        
+        return [fullyQualifiedClassName substringFromIndex:prefix.length];
+    }
+    
+    return fullyQualifiedClassName;
 }
 
-+ (NSString *)classNameInModule:(NSString *)moduleName {
++ (NSString *)classNameInAppModule {
     
-    NSMutableArray *components = [[NSMutableArray alloc] initWithArray:[[self className] componentsSeparatedByString:@"."]];
-    if ([[components firstObject] isEqualToString:moduleName]) {
-        
-        [components removeObjectAtIndex:0];
-    }
-    return [components componentsJoinedByString:@"."];
+    return [self classNameInNameSpace:[NSString applicationName]];
 }
 
 + (Class)classForIdiom {
@@ -145,7 +152,7 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
         
     });
     
-    NSString *className = [self className];
+    NSString *className = [self fullyQualifiedClassName];
     return (NSClassFromString([[NSString alloc] initWithFormat:@"%@_%@", className, idiom])
             ?: NSClassFromString(className));
 }

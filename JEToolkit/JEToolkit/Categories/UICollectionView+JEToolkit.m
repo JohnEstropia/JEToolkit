@@ -47,7 +47,7 @@
     
     JEAssertParameter([collectionViewCellClass isSubclassOfClass:[UICollectionViewCell class]]);
     
-    NSString *className = [collectionViewCellClass className];
+    NSString *className = [collectionViewCellClass classNameInAppModule];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -83,7 +83,7 @@
     JEAssertParameter([collectionViewCellClass isSubclassOfClass:[UICollectionViewCell class]]);
     JEAssertParameter(indexPath != nil);
     
-    NSString *className = [collectionViewCellClass className];
+    NSString *className = [collectionViewCellClass classNameInAppModule];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         

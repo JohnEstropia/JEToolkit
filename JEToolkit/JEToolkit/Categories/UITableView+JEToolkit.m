@@ -54,7 +54,7 @@ JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCa
     
     JEAssertParameter([tableViewCellClass isSubclassOfClass:[UITableViewCell class]]);
     
-    NSString *className = [tableViewCellClass className];
+    NSString *className = [tableViewCellClass classNameInAppModule];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -90,7 +90,7 @@ JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCa
     
     JEAssertParameter([tableViewCellClass isSubclassOfClass:[UITableViewCell class]]);
     
-    NSString *className = [tableViewCellClass className];
+    NSString *className = [tableViewCellClass classNameInAppModule];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -114,7 +114,7 @@ JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCa
     
     JEAssertParameter([tableViewCellClass isSubclassOfClass:[UITableViewCell class]]);
     
-    NSString *className = [tableViewCellClass className];
+    NSString *className = [tableViewCellClass classNameInAppModule];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
