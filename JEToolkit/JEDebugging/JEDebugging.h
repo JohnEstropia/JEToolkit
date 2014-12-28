@@ -241,10 +241,10 @@ typedef struct JELogLocation {
  */
 + (void)setExceptionLoggingEnabled:(BOOL)enabled;
 
-/*! Enable or disable application lifecycle logging. Logged events include foreground and background events, active and inactive events.
+/*! Enable or disable application lifecycle logging (JELogLevelTrace level). Logged events include foreground and background events, active and inactive events, and UIViewController viewDidAppear and viewWillDisappear events.
  @param enabled @p YES to enable application lifecycle logging, @p NO to disable. Defaults to @p NO.
  */
-+ (void)setApplicationLifecycleLoggingEnabled:(BOOL)enabled;
++ (void)setApplicationLifeCycleLoggingEnabled:(BOOL)enabled;
 
 /*!
  Starts the logging session. All logs are ignored until this method is called.
@@ -296,6 +296,16 @@ typedef struct JELogLocation {
  */
 + (void)logFailureInAssertionWithMessage:(NSString *)failureMessage
                                 location:(JELogLocation)location;
+
+/*!
+ Use the @p setApplicationLifeCycleLoggingEnabled: to enable application lifecycle logging instead of this method.
+ */
++ (void)logLifeCycleEventWithFormat:(NSString *)format, ... JE_FORMAT_STRING(1, 2);
+
+/*!
+ Use the @p setApplicationLifeCycleLoggingEnabled: to enable application lifecycle logging instead of this method.
+ */
++ (void)logLifeCycleEventWithFormat:(NSString *)format arguments:(va_list)arguments;
 
 
 #pragma mark - retrieving

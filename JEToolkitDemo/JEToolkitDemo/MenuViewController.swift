@@ -76,13 +76,13 @@ class MenuViewController: UITableViewController {
             switch menuIndex {
                 
             case .JELogExamples:
-                self.performSegueWithIdentifier(JELogViewController.className(), sender: nil)
+                self.performSegueWithIdentifier(JELogViewController.classNameInAppModule(), sender: nil)
                 
             case .JEAssertExamples:
-                self.performSegueWithIdentifier(JEAssertViewController.className(), sender: nil)
+                self.performSegueWithIdentifier(JEAssertViewController.classNameInAppModule(), sender: nil)
                 
             case .JEDumpExamples:
-                self.performSegueWithIdentifier(JEDumpViewController.className(), sender: nil)
+                self.performSegueWithIdentifier(JEDumpViewController.classNameInAppModule(), sender: nil)
             }
         }
     }

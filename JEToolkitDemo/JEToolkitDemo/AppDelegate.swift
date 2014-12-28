@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Note that this will detach previously set exception handlers, such as handlers provided by analytics frameworks or other debugging frameworks.
         JEDebugging.setExceptionLoggingEnabled(true)
-        JEDebugging.setApplicationLifecycleLoggingEnabled(true)
+        JEDebugging.setApplicationLifeCycleLoggingEnabled(true)
         
         JEDebugging.start()
         

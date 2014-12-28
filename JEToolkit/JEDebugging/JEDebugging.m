@@ -34,11 +34,12 @@
 #import "JESafetyHelpers.h"
 
 #import "NSCalendar+JEToolkit.h"
-#import "NSMutableString+JEDebugging.h"
 #import "NSObject+JEToolkit.h"
 #import "NSString+JEToolkit.h"
 #import "NSURL+JEToolkit.h"
 #import "UIDevice+JEToolkit.h"
+#import "NSMutableString+JEDebugging.h"
+#import "UIViewController+JEDebugging.h"
 
 #import "JEHUDLogView.h"
 
@@ -197,7 +198,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_once(&onceToken, ^{
         
         sharedInstance = [[JEDebugging alloc] init];
-        
     });
     return sharedInstance;
 }
@@ -219,7 +219,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                            @"\r" : @"\\r",
                            @"\e" : @"\\e",
                            @"\"" : @"\\\"" };
-        
     });
     return escapeMapping;
 }
@@ -236,7 +235,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
         [formatter setCalendar:[NSCalendar gregorianCalendar]];
         [formatter setDateFormat:@"yyyy'-'MM'-'dd' 'HH':'mm':'ss'.'SSS"];
         consoleDateFormatter = formatter;
-        
     });
     return consoleDateFormatter;
 }
@@ -253,7 +251,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
         [formatter setCalendar:[NSCalendar gregorianCalendar]];
         [formatter setDateFormat:@"yyyy'-'MM'-'dd"];
         consoleDateFormatter = formatter;
-        
     });
     return consoleDateFormatter;
 }
@@ -269,7 +266,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                                     _JEDebuggingQueueIDKey,
                                     (void *)_JEDebuggingSettingsQueueID,
                                     NULL);
-        
     });
     return settingsQueue;
 }
@@ -285,7 +281,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                                     _JEDebuggingQueueIDKey,
                                     (void *)_JEDebuggingConsoleLogQueueID,
                                     NULL);
-        
     });
     return consoleLogQueue;
 }
@@ -301,7 +296,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                                     _JEDebuggingQueueIDKey,
                                     (void *)_JEDebuggingFileLogQueueID,
                                     NULL);
-        
     });
     return fileLogQueue;
 }
@@ -336,6 +330,11 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
 + (NSString *)defaultAssertBulletString {
     
     return @"❗";
+}
+
++ (NSString *)defaultLifeCycleBulletString {
+    
+    return @"📱";
 }
 
 #pragma mark utilities
@@ -399,9 +398,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                 }
                 
                 puts([logString UTF8String]);
-                
             }
-            
         });
     }
     if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelAlert)) {
@@ -433,9 +430,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                 [[self sharedInstance]
                  appendStringToHUD:logString
                  withThreadSafeSettings:HUDLoggerSettings];
-                
             }
-            
         });
     }
 }
@@ -556,7 +551,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
         
         // Prevent retrying
         self.fileLogIsDisabled = YES;
-        
     };
     
     NSURL *fileURL = self.fileLogURL;
@@ -708,9 +702,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
             }
             
             block(fileURL, stop);
-            
         }
-        
     }];
 }
 
@@ -753,7 +745,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
         }
         
         [fileManager removeItemAtURL:fileURL error:NULL];
-        
     }];
 }
 
@@ -768,7 +759,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
         [[self cachedFileHandleWithThreadSafeSettings:fileLoggerSettings]
          writeData:[string dataUsingEncoding:NSUTF8StringEncoding]];
         [self flushFileHandleIfNeededOrForced:NO withThreadSafeSettings:fileLoggerSettings];
-        
     }
     @catch (NSException *exception) {
         
@@ -776,7 +766,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
          logFileError:exception
          location:JELogLocationCurrent()
          message:@"Failed appending to log file because of exception:"];
-        
     }
 }
 
@@ -857,7 +846,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_barrier_async([JEDebugging fileLogQueue], ^{
         
         [self flushFileHandleIfNeededOrForced:YES withThreadSafeSettings:fileLoggerSettings];
-        
     });
 }
 
@@ -867,7 +855,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_barrier_sync([JEDebugging fileLogQueue], ^{
     
         [self flushFileHandleIfNeededOrForced:YES withThreadSafeSettings:fileLoggerSettings];
-        
     });
 }
 
@@ -877,7 +864,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_barrier_sync([JEDebugging fileLogQueue], ^{
         
         [self flushFileHandleIfNeededOrForced:YES withThreadSafeSettings:fileLoggerSettings];
-        
     });
 }
 
@@ -900,11 +886,9 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
         dispatch_barrier_sync([JEDebugging settingsQueue], ^{
             
             HUDLoggerSettings = self.HUDLoggerSettings;
-            
         });
         
         [self moveHUDLoggerToTopmostWindowIfNeededWithThreadSafeSettings:HUDLoggerSettings];
-        
     });
 }
 
@@ -953,7 +937,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_barrier_sync([self settingsQueue], ^{
         
         settings = [[self sharedInstance].consoleLoggerSettings copy];
-        
     });
     return settings;
 }
@@ -965,7 +948,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_barrier_async([self settingsQueue], ^{
         
         [self sharedInstance].consoleLoggerSettings = [consoleLoggerSettings copy];
-        
     });
 }
 
@@ -975,7 +957,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_barrier_sync([self settingsQueue], ^{
         
         settings = [[self sharedInstance].HUDLoggerSettings copy];
-        
     });
     return settings;
 }
@@ -987,7 +968,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_barrier_async([self settingsQueue], ^{
         
         [self sharedInstance].HUDLoggerSettings = [HUDLoggerSettings copy];
-        
     });
 }
 
@@ -997,7 +977,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_barrier_sync([self settingsQueue], ^{
         
         settings = [[self sharedInstance].fileLoggerSettings copy];
-        
     });
     return settings;
 }
@@ -1009,7 +988,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_barrier_async([self settingsQueue], ^{
         
         [self sharedInstance].fileLoggerSettings = [fileLoggerSettings copy];
-        
     });
 }
 
@@ -1031,11 +1009,10 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
             
             NSSetUncaughtExceptionHandler(defaultHandler);
         }
-        
     });
 }
 
-+ (void)setApplicationLifecycleLoggingEnabled:(BOOL)enabled {
++ (void)setApplicationLifeCycleLoggingEnabled:(BOOL)enabled {
     
     JEDebugging *instance = [self sharedInstance];
     if (enabled) {
@@ -1044,41 +1021,61 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
          registerForNotificationsWithName:UIApplicationDidEnterBackgroundNotification
          targetBlock:^(NSNotification *note) {
              
-             [self
-              logLevel:JELogLevelTrace
-              location:(JELogLocation){ NULL, NULL, 0 }
-              format:@"Application did enter background."];
-             
+             [self logLifeCycleEventWithFormat:@"Application did enter background."];
          }];
         [instance
          registerForNotificationsWithName:UIApplicationWillEnterForegroundNotification
          targetBlock:^(NSNotification *note) {
              
-             [self
-              logLevel:JELogLevelTrace
-              location:(JELogLocation){ NULL, NULL, 0 }
-              format:@"Application will enter foreground."];
-             
+             [self logLifeCycleEventWithFormat:@"Application will enter foreground."];
          }];
         [instance
          registerForNotificationsWithName:UIApplicationDidBecomeActiveNotification
          targetBlock:^(NSNotification *note) {
              
-             [self
-              logLevel:JELogLevelTrace
-              location:(JELogLocation){ NULL, NULL, 0 }
-              format:@"Application did become active."];
-             
+             [self logLifeCycleEventWithFormat:@"Application did become active."];
          }];
         [instance
          registerForNotificationsWithName:UIApplicationWillResignActiveNotification
          targetBlock:^(NSNotification *note) {
              
-             [self
-              logLevel:JELogLevelTrace
-              location:(JELogLocation){ NULL, NULL, 0 }
-              format:@"Application will resign active."];
+             [self logLifeCycleEventWithFormat:@"Application will resign active."];
+         }];
+        
+        NSString *(^resourceName)(UIViewController *viewController) = ^NSString *(UIViewController *viewController) {
+            
+#if DEBUG // -[UIStoryboard name] is a private API. Use only when debugging!
+            NSString *storyboardName = ([viewController.storyboard respondsToSelector:@selector(name)]
+                                        ? [viewController.storyboard performSelector:@selector(name)]
+                                        : nil);
+            if (storyboardName) {
+                
+                return [NSString stringWithFormat:@" (%@.storyboard)", storyboardName];
+            }
+#endif
+            
+            NSString *nibName = viewController.nibName;
+            return (nibName
+                    ? [NSString stringWithFormat:@" (%@)", nibName]
+                    : @"");
+        };
+        [instance
+         registerForNotificationsWithName:_JEDebugging_UIViewController_viewDidAppear
+         targetBlock:^(NSNotification *note) {
              
+             UIViewController *controller = note.object;
+             [self logLifeCycleEventWithFormat:
+              @"%@%@ did appear.",
+              [[controller class] fullyQualifiedClassName], resourceName(controller)];
+         }];
+        [instance
+         registerForNotificationsWithName:_JEDebugging_UIViewController_viewWillDisappear
+         targetBlock:^(NSNotification *note) {
+             
+             UIViewController *controller = note.object;
+             [self logLifeCycleEventWithFormat:
+              @"%@%@ will disappear.",
+              [[controller class] fullyQualifiedClassName], resourceName(controller)];
          }];
     }
     else {
@@ -1087,6 +1084,8 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
         [instance unregisterForNotificationsWithName:UIApplicationWillEnterForegroundNotification];
         [instance unregisterForNotificationsWithName:UIApplicationDidBecomeActiveNotification];
         [instance unregisterForNotificationsWithName:UIApplicationWillResignActiveNotification];
+        [instance unregisterForNotificationsWithName:_JEDebugging_UIViewController_viewDidAppear];
+        [instance unregisterForNotificationsWithName:_JEDebugging_UIViewController_viewWillDisappear];
     }
 }
 
@@ -1144,7 +1143,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
             consoleLoggerSettings = instance.consoleLoggerSettings;
             HUDLoggerSettings = instance.HUDLoggerSettings;
             fileLoggerSettings = instance.fileLoggerSettings;
-            
         });
         
         if (!JEEnumBitmasked(consoleLoggerSettings.logLevelMask, level)
@@ -1193,9 +1191,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                      bulletString, label, [self defaultDumpBulletString], description];
                     
                     puts([logString UTF8String]);
-                
                 }
-                
             });
         }
         if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level)) {
@@ -1213,9 +1209,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                     [[self sharedInstance]
                      appendStringToHUD:logString
                      withThreadSafeSettings:HUDLoggerSettings];
-                    
                 }
-                
             });
         }
         if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, level)) {
@@ -1233,12 +1227,9 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                     [[self sharedInstance]
                      appendStringToFile:logString
                      withThreadSafeSettings:fileLoggerSettings];
-                    
                 }
-                
             });
         }
-        
     }
 }
 
@@ -1320,9 +1311,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                      bulletString, formattedString];
                     
                     puts([logString UTF8String]);
-                    
                 }
-                
             });
         }
         if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, level)) {
@@ -1340,9 +1329,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                     [[self sharedInstance]
                      appendStringToHUD:logString
                      withThreadSafeSettings:HUDLoggerSettings];
-                    
                 }
-                
             });
         }
         if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, level)) {
@@ -1360,12 +1347,9 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                     [[self sharedInstance]
                      appendStringToFile:logString
                      withThreadSafeSettings:fileLoggerSettings];
-                    
                 }
-                
             });
         }
-        
     }
 }
 
@@ -1429,7 +1413,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                     puts([logString UTF8String]);
                     
                 }
-                
             });
         }
         if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelAlert)) {
@@ -1447,9 +1430,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                     [[self sharedInstance]
                      appendStringToHUD:logString
                      withThreadSafeSettings:HUDLoggerSettings];
-                    
                 }
-                
             });
         }
         if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, JELogLevelAlert)) {
@@ -1467,12 +1448,106 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                     [[self sharedInstance]
                      appendStringToFile:logString
                      withThreadSafeSettings:fileLoggerSettings];
-                    
                 }
-                
             });
         }
+    }
+}
+
++ (void)logLifeCycleEventWithFormat:(NSString *)format, ... {
+    
+    va_list arguments;
+    va_start(arguments, format);
+    [self logLifeCycleEventWithFormat:format arguments:arguments];
+    va_end(arguments);
+}
+
++ (void)logLifeCycleEventWithFormat:(NSString *)format arguments:(va_list)arguments {
+    
+    if (![self sharedInstance].isStarted) {
         
+        return;
+    }
+    
+    @autoreleasepool {
+        
+        JEConsoleLoggerSettings *__block consoleLoggerSettings;
+        JEHUDLoggerSettings *__block HUDLoggerSettings;
+        JEFileLoggerSettings *__block fileLoggerSettings;
+        dispatch_barrier_sync([self settingsQueue], ^{
+            
+            JEDebugging *instance = [self sharedInstance];
+            consoleLoggerSettings = instance.consoleLoggerSettings;
+            HUDLoggerSettings = instance.HUDLoggerSettings;
+            fileLoggerSettings = instance.fileLoggerSettings;
+            
+        });
+        
+        if (!JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelTrace)
+            && !JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelTrace)
+            && !JEEnumBitmasked(fileLoggerSettings.logLevelMask, JELogLevelTrace)) {
+            
+            return;
+        }
+        
+        NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arguments];
+        NSDictionary *headerEntries = [self
+                                       headerEntriesForLocation:(JELogLocation){ NULL, NULL, 0 }
+                                       withMask:JELogMessageHeaderNone];
+        NSString *bulletString = [self defaultLifeCycleBulletString];
+        
+        if (JEEnumBitmasked(consoleLoggerSettings.logLevelMask, JELogLevelTrace)) {
+            
+            dispatch_barrier_sync([self consoleLogQueue], ^{
+                
+                @autoreleasepool {
+                    
+                    NSMutableString *logString = [self
+                                                  messageHeaderFromEntries:headerEntries
+                                                  withSettings:consoleLoggerSettings];
+                    [logString appendFormat:@"%@ %@\n",
+                     bulletString, formattedString];
+                    
+                    puts([logString UTF8String]);
+                }
+            });
+        }
+        if (JEEnumBitmasked(HUDLoggerSettings.logLevelMask, JELogLevelTrace)) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                @autoreleasepool {
+                    
+                    NSMutableString *logString = [self
+                                                  messageHeaderFromEntries:headerEntries
+                                                  withSettings:HUDLoggerSettings];
+                    [logString appendFormat:@"%@ %@",
+                     bulletString, formattedString];
+                    
+                    [[self sharedInstance]
+                     appendStringToHUD:logString
+                     withThreadSafeSettings:HUDLoggerSettings];
+                }
+            });
+        }
+        if (JEEnumBitmasked(fileLoggerSettings.logLevelMask, JELogLevelTrace)) {
+            
+            dispatch_barrier_async([self fileLogQueue], ^{
+                
+                @autoreleasepool {
+                    
+                    NSMutableString *logString = [self
+                                                  messageHeaderFromEntries:headerEntries
+                                                  withSettings:fileLoggerSettings];
+                    [logString appendFormat:@"%@ %@\n\n",
+                     bulletString, formattedString];
+                    
+                    [[self sharedInstance]
+                     appendStringToFile:logString
+                     withThreadSafeSettings:fileLoggerSettings];
+                }
+            });
+        }
     }
 }
 
@@ -1486,7 +1561,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_barrier_sync([JEDebugging settingsQueue], ^{
         
         fileLoggerSettings = [self sharedInstance].fileLoggerSettings;
-        
     });
     
     dispatch_barrier_sync([self fileLogQueue], ^{
@@ -1510,9 +1584,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                 
                 (*stop) = YES;
             }
-            
         }];
-        
     });
 }
 
@@ -1524,7 +1596,6 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     dispatch_barrier_sync([JEDebugging settingsQueue], ^{
         
         fileLoggerSettings = [self sharedInstance].fileLoggerSettings;
-        
     });
     
     dispatch_barrier_sync([self fileLogQueue], ^{
@@ -1539,9 +1610,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
                 
                 (*stop) = YES;
             }
-            
         }];
-        
     });
 }
 

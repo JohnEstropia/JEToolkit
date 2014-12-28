@@ -123,6 +123,8 @@
 		2F74E80619DFD0E900FB0C88 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F74E80519DFD0E900FB0C88 /* UIKit.framework */; };
 		B502A76E1A1B8F56002667B1 /* JESynthesize.h in Headers */ = {isa = PBXBuildFile; fileRef = B502A76D1A1B8F56002667B1 /* JESynthesize.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B537BAE219EC2A9800715933 /* JEDebugging.swift in Sources */ = {isa = PBXBuildFile; fileRef = B537BAE119EC2A9800715933 /* JEDebugging.swift */; };
+		B57078B61A504327007E33F2 /* UIViewController+JEDebugging.h in Headers */ = {isa = PBXBuildFile; fileRef = B57078B41A504327007E33F2 /* UIViewController+JEDebugging.h */; };
+		B57078B71A504327007E33F2 /* UIViewController+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = B57078B51A504327007E33F2 /* UIViewController+JEDebugging.m */; };
 		B5E2D8531A2FF29600658696 /* NSDictionary+JEToolkit.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E2D8511A2FF29600658696 /* NSDictionary+JEToolkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B5E2D8541A2FF29600658696 /* NSDictionary+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2D8521A2FF29600658696 /* NSDictionary+JEToolkit.m */; };
 		B5F5399A1A18536000EC763B /* JESettings.h in Headers */ = {isa = PBXBuildFile; fileRef = B5F539981A18536000EC763B /* JESettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -266,6 +268,8 @@
 		2F74E80519DFD0E900FB0C88 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B502A76D1A1B8F56002667B1 /* JESynthesize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JESynthesize.h; sourceTree = "<group>"; };
 		B537BAE119EC2A9800715933 /* JEDebugging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JEDebugging.swift; sourceTree = "<group>"; };
+		B57078B41A504327007E33F2 /* UIViewController+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JEDebugging.h"; sourceTree = "<group>"; };
+		B57078B51A504327007E33F2 /* UIViewController+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JEDebugging.m"; sourceTree = "<group>"; };
 		B5E2D8511A2FF29600658696 /* NSDictionary+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+JEToolkit.h"; sourceTree = "<group>"; };
 		B5E2D8521A2FF29600658696 /* NSDictionary+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+JEToolkit.m"; sourceTree = "<group>"; };
 		B5F539981A18536000EC763B /* JESettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JESettings.h; sourceTree = "<group>"; };
@@ -411,6 +415,8 @@
 				2F74E73519DFCD2300FB0C88 /* UIColor+JEDebugging.m */,
 				2F74E73619DFCD2300FB0C88 /* UIImage+JEDebugging.h */,
 				2F74E73719DFCD2300FB0C88 /* UIImage+JEDebugging.m */,
+				B57078B41A504327007E33F2 /* UIViewController+JEDebugging.h */,
+				B57078B51A504327007E33F2 /* UIViewController+JEDebugging.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -627,6 +633,7 @@
 				2F74E79019DFCD2400FB0C88 /* NSArray+JEDebugging.h in Headers */,
 				2F74E7BA19DFCD2400FB0C88 /* JEHUDLoggerSettings.h in Headers */,
 				2F74E7C719DFCD2400FB0C88 /* JEWeakCache.h in Headers */,
+				B57078B61A504327007E33F2 /* UIViewController+JEDebugging.h in Headers */,
 				2F74E7A819DFCD2400FB0C88 /* NSSet+JEDebugging.h in Headers */,
 				2F74E79819DFCD2400FB0C88 /* NSException+JEDebugging.h in Headers */,
 				B5E2D8531A2FF29600658696 /* NSDictionary+JEToolkit.h in Headers */,
@@ -760,6 +767,7 @@
 				2F74E7B919DFCD2400FB0C88 /* JEFileLoggerSettings.m in Sources */,
 				2F74E79919DFCD2400FB0C88 /* NSException+JEDebugging.m in Sources */,
 				2F74E7E419DFCD2400FB0C88 /* UICollectionView+JEToolkit.m in Sources */,
+				B57078B71A504327007E33F2 /* UIViewController+JEDebugging.m in Sources */,
 				2F74E7B519DFCD2400FB0C88 /* JEBaseLoggerSettings.m in Sources */,
 				2F74E7EC19DFCD2400FB0C88 /* UILabel+JEToolkit.m in Sources */,
 				2F74E7B319DFCD2400FB0C88 /* JEDebugging.m in Sources */,
