@@ -29,9 +29,11 @@
 
 #import "JEFormulas.h"
 #import "JEUIMetrics.h"
+#import "JESafetyHelpers.h"
 
 #import "JEDebugging.h"
 
+#import "NSObject+JEToolkit.h"
 #import "NSString+JEToolkit.h"
 #import "UILabel+JEToolkit.h"
 #import "UIView+JEToolkit.h"
@@ -309,6 +311,75 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 
 
 #pragma mark - UIView
+
+- (void)willMoveToWindow:(UIWindow *)newWindow {
+    
+    [super willMoveToWindow:newWindow];
+    
+    if (!newWindow) {
+        
+        [self unregisterForNotificationsWithName:UIKeyboardWillShowNotification];
+        return;
+    }
+    
+    JEScopeWeak(self);
+    [self
+     registerForNotificationsWithName:UIKeyboardWillShowNotification
+     targetBlock:^(NSNotification *note) {
+         
+         JEScopeStrong(self);
+         if (!self || !self.superview || self.toggleButton.selected || self.isDraggingToggleButton) {
+             
+             return;
+         }
+         
+         NSDictionary *userInfo = [note userInfo];
+         CGRect keyboardFrameInView = [self
+                                       convertRect:[(NSValue *)userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue]
+                                       fromView:nil];
+         CGFloat duration = [(NSNumber *)userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+         UIViewAnimationOptions animationCurve = kNilOptions;
+         switch ([(NSNumber *)userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]) {
+                 
+             case UIViewAnimationCurveEaseInOut:
+                 animationCurve = UIViewAnimationOptionCurveEaseInOut;
+                 break;
+             case UIViewAnimationCurveEaseIn:
+                 animationCurve = UIViewAnimationOptionCurveEaseIn;
+                 break;
+             case UIViewAnimationCurveEaseOut:
+                 animationCurve = UIViewAnimationOptionCurveEaseOut;
+                 break;
+             case UIViewAnimationCurveLinear:
+                 animationCurve = UIViewAnimationOptionCurveLinear;
+                 break;
+         }
+         
+         CGRect bounds = self.bounds;
+         CGFloat coveredHeight = (CGRectGetMaxY(bounds)
+                                  - CGRectGetMinY(keyboardFrameInView));
+         UIView *menuView = self.menuView;
+         CGRect menuFrame = menuView.frame;
+         
+         [UIView
+          animateWithDuration:duration
+          delay:0.0f
+          options:(UIViewAnimationOptionBeginFromCurrentState | (animationCurve << 16))
+          animations:^{
+              
+              menuView.frame = (CGRect){
+                  .origin.x = CGRectGetMinX(bounds),
+                  .origin.y = JEClamp((CGRectGetMinY(bounds) + JEUIStatusBarHeight),
+                                      CGRectGetMinY(menuFrame),
+                                      (CGRectGetHeight(bounds)
+                                       - coveredHeight
+                                       - CGRectGetHeight(menuFrame))),
+                  .size = menuFrame.size
+              };
+          }
+          completion:NULL];
+     }];
+}
 
 - (void)layoutSubviews {
     

@@ -334,7 +334,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
 
 + (NSString *)defaultLifeCycleBulletString {
     
-    return @"📱";
+    return @"📲";
 }
 
 #pragma mark utilities
