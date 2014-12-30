@@ -274,5 +274,18 @@
     return [self.superview firstSuperviewWithClass:viewClass];
 }
 
+- (id)findViewController {
+    
+    id nextResponder = [self nextResponder];
+    if ([nextResponder isKindOfClass:[UIViewController class]]) {
+        
+        return nextResponder;
+    }
+    if ([nextResponder isKindOfClass:[UIView class]]) {
+        
+        return [(UIView *)nextResponder findViewController];
+    }
+    return nil;
+}
 
 @end

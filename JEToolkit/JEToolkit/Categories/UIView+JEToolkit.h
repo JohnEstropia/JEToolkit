@@ -107,4 +107,8 @@
  */
 - (id)firstSuperviewWithClass:(Class)viewClass;
 
+/*! Returns the UIViewController owning the receiver's view tree if it exists
+ */
+- (id)findViewController;
+
 @end
