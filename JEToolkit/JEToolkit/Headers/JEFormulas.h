@@ -65,6 +65,21 @@ NSUInteger JEClamp(NSUInteger min, NSUInteger value, NSUInteger max) {
 }
 
 
+#pragma mark - Comparing Values
+
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+BOOL JEEquals(float v1, float v2) {
+    
+    return (fabsf(v1 - v2) < FLT_EPSILON);
+}
+
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+BOOL JEEquals(double v1, double v2) {
+    
+    return (fabs(v1 - v2) < DBL_EPSILON);
+}
+
+
 #pragma mark - Geometry
 
 JE_STATIC_INLINE JE_CONST JE_OVERLOAD
