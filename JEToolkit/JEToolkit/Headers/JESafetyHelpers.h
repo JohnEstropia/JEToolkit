@@ -54,11 +54,11 @@
 
 #else
 
-#define JEKeypath(class, property) \
+#define JEKeypath(type, property) \
     ( @#property )
 
-#define JEKeypathOperator(class, property) \
-    ( @"@" #class "." #property )
+#define JEKeypathOperator(operator, type, property) \
+    ( @"@" #operator "." #property )
 
 #endif
 
