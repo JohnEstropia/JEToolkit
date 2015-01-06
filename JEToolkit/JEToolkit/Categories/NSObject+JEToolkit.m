@@ -126,7 +126,7 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
         return [fullyQualifiedClassName componentsSeparatedByString:@"."].lastObject;
     }
     
-    NSString *prefix = [fullyQualifiedClassName stringByAppendingString:@"."];
+    NSString *prefix = [namespace stringByAppendingString:@"."];
     if ([fullyQualifiedClassName hasPrefix:prefix]) {
         
         return [fullyQualifiedClassName substringFromIndex:prefix.length];
