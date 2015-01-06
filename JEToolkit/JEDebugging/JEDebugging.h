@@ -59,6 +59,7 @@
 #define JEAssertParameter(condition)            do {} while (NO)
 #define JEAssertMainThread()                    do {} while (NO)
 #define JEAssertBackgroundThread()              do {} while (NO)
+#define JEAssertMethodOverride()                do {} while (NO)
 
 #else
 
@@ -85,6 +86,22 @@
 
 #define JEAssertBackgroundThread() \
     JEAssert(![NSThread isMainThread], @"Code expected to run on a background thread")
+
+#define JEAssertMethodOverride() \
+    do { \
+        NSString *formatString = [NSString stringWithFormat:@"Required method %s override not implemented.", __PRETTY_FUNCTION__];\
+        [JEDebugging \
+         logFailureInAssertionWithMessage:formatString \
+         location:JELogLocationCurrent()]; \
+        JE_PRAGMA_PUSH \
+        JE_PRAGMA_IGNORE("-Wformat-extra-args") \
+        [NSException \
+         raise:NSInternalInconsistencyException \
+         format:@"%@", formatString]; \
+        JE_PRAGMA_POP \
+    } while(NO)
+
+
 
 #endif
 

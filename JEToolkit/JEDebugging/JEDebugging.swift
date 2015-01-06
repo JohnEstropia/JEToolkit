@@ -68,6 +68,16 @@ public func JEAssertBackgroundThread(fileName: String = __FILE__, lineNumber: UW
         functionName: functionName)
 }
 
+public func JEAssertMethodOverride(fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+    
+    JEAssert(
+        false,
+        "Required method \(functionName) override not implemented.",
+        fileName: fileName,
+        lineNumber: lineNumber,
+        functionName: functionName)
+}
+
 
 // MARK: - JELog() variants
 
