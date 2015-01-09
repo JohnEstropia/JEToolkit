@@ -40,6 +40,7 @@
 #pragma mark - Private
 
 JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCache);
+JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFooterViewHeightQueryingCache);
 
 
 #pragma mark - Public
@@ -75,6 +76,37 @@ JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCa
     }
 }
 
+- (void)registerTableViewHeaderFooterViewClass:(Class)headerFooterViewClass {
+    
+    [self registerTableViewHeaderFooterViewClass:headerFooterViewClass subIdentifier:nil];
+}
+
+- (void)registerTableViewHeaderFooterViewClass:(Class)headerFooterViewClass
+                                 subIdentifier:(NSString *)subIdentifier {
+    
+    JEAssertParameter([headerFooterViewClass isSubclassOfClass:[UITableViewHeaderFooterView class]]);
+    
+    NSString *className = [headerFooterViewClass classNameInAppModule];
+    NSString *reuseIdentifier = className;
+    if (subIdentifier) {
+        
+        reuseIdentifier = [className stringByAppendingString:subIdentifier];
+    }
+    
+    if ([UINib nibWithNameExists:className]) {
+        
+        [self
+         registerNib:[UINib cachedNibWithName:className]
+         forHeaderFooterViewReuseIdentifier:reuseIdentifier];
+    }
+    else {
+        
+        [self
+         registerClass:headerFooterViewClass
+         forHeaderFooterViewReuseIdentifier:reuseIdentifier];
+    }
+}
+
 - (id)dequeueReusableCellWithClass:(Class)tableViewCellClass
                       forIndexPath:(NSIndexPath *)indexPath {
     
@@ -103,6 +135,27 @@ JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCa
             ?: [[tableViewCellClass alloc]
                 initWithStyle:UITableViewCellStyleDefault
                 reuseIdentifier:reuseIdentifier]);
+}
+
+- (id)dequeueReusableHeaderFooterViewWithClass:(Class)headerFooterViewClass {
+    
+    return [self dequeueReusableHeaderFooterViewWithClass:headerFooterViewClass subIdentifier:nil];
+}
+
+- (id)dequeueReusableHeaderFooterViewWithClass:(Class)headerFooterViewClass
+                                 subIdentifier:(NSString *)subIdentifier {
+    
+    JEAssertParameter([headerFooterViewClass isSubclassOfClass:[UITableViewHeaderFooterView class]]);
+    
+    NSString *className = [headerFooterViewClass classNameInAppModule];
+    NSString *reuseIdentifier = className;
+    if (subIdentifier) {
+        
+        reuseIdentifier = [className stringByAppendingString:subIdentifier];
+    }
+    
+    return ([self dequeueReusableHeaderFooterViewWithIdentifier:reuseIdentifier]
+            ?: [[headerFooterViewClass alloc] initWithReuseIdentifier:reuseIdentifier]);
 }
 
 - (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass {
@@ -150,6 +203,45 @@ JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCa
     [cell layoutIfNeeded];
     
     return cell;
+}
+
+- (id)headerFooterViewForQueryingHeightWithClass:(Class)headerFooterViewClass {
+    
+    return [self headerFooterViewForQueryingHeightWithClass:headerFooterViewClass subIdentifier:nil];
+}
+
+- (id)headerFooterViewForQueryingHeightWithClass:(Class)headerFooterViewClass
+                                   subIdentifier:(NSString *)subIdentifier {
+    
+    JEAssertParameter([headerFooterViewClass isSubclassOfClass:[UITableViewHeaderFooterView class]]);
+    
+    NSString *className = [headerFooterViewClass classNameInAppModule];
+    NSString *reuseIdentifier = className;
+    if (subIdentifier) {
+        
+        reuseIdentifier = [className stringByAppendingString:subIdentifier];
+    }
+    
+    NSCache *cache = [self headerFooterViewHeightQueryingCache];
+    UITableViewHeaderFooterView *view = [cache objectForKey:reuseIdentifier];
+    if (!view) {
+        
+        view = [self
+                dequeueReusableHeaderFooterViewWithClass:headerFooterViewClass
+                subIdentifier:subIdentifier];
+        if (view) {
+            
+            [cache setObject:view forKey:reuseIdentifier];
+        }
+    }
+    
+    CGRect viewFrame = view.frame;
+    viewFrame.size.width = CGRectGetWidth(self.bounds);
+    
+    view.frame = viewFrame;
+    [view layoutIfNeeded];
+    
+    return view;
 }
 
 

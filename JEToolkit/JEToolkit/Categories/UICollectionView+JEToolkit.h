@@ -28,15 +28,26 @@
 @interface UICollectionView (JEToolkit)
 
 - (void)registerCollectionViewCellClass:(Class)collectionViewCellClass;
-
 - (void)registerCollectionViewCellClass:(Class)collectionViewCellClass
                           subIdentifier:(NSString *)subIdentifier;
 
+- (void)registerSupplementaryViewClass:(Class)supplementaryViewClass
+                                ofKind:(NSString *)supplementaryViewKind;
+- (void)registerSupplementaryViewClass:(Class)supplementaryViewClass
+                                ofKind:(NSString *)supplementaryViewKind
+                         subIdentifier:(NSString *)subIdentifier;
+
 - (id)dequeueReusableCellWithClass:(Class)collectionViewCellClass
                       forIndexPath:(NSIndexPath *)indexPath;
-
 - (id)dequeueReusableCellWithClass:(Class)collectionViewCellClass
                      subIdentifier:(NSString *)subIdentifier
                       forIndexPath:(NSIndexPath *)indexPath;
 
+- (id)dequeueSupplementaryViewWithClass:(Class)supplementaryViewClass
+                                 ofKind:(NSString *)supplementaryViewKind
+                           forIndexPath:(NSIndexPath *)indexPath;
+- (id)dequeueSupplementaryViewWithClass:(Class)supplementaryViewClass
+                                 ofKind:(NSString *)supplementaryViewKind
+                          subIdentifier:(NSString *)subIdentifier
+                           forIndexPath:(NSIndexPath *)indexPath;
 @end

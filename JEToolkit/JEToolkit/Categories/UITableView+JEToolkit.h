@@ -28,19 +28,24 @@
 @interface UITableView (JEToolkit)
 
 - (void)registerTableViewCellClass:(Class)tableViewCellClass;
-
 - (void)registerTableViewCellClass:(Class)tableViewCellClass
                      subIdentifier:(NSString *)subIdentifier;
 
+- (void)registerTableViewHeaderFooterViewClass:(Class)headerFooterViewClass;
+- (void)registerTableViewHeaderFooterViewClass:(Class)headerFooterViewClass
+                                 subIdentifier:(NSString *)subIdentifier;
+
 - (id)dequeueReusableCellWithClass:(Class)tableViewCellClass
                       forIndexPath:(NSIndexPath *)indexPath;
-
 - (id)dequeueReusableCellWithClass:(Class)tableViewCellClass
                      subIdentifier:(NSString *)subIdentifier
                       forIndexPath:(NSIndexPath *)indexPath;
 
-- (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass;
+- (id)dequeueReusableHeaderFooterViewWithClass:(Class)headerFooterViewClass;
+- (id)dequeueReusableHeaderFooterViewWithClass:(Class)headerFooterViewClass
+                                 subIdentifier:(NSString *)subIdentifier;
 
+- (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass;
 - (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass subIdentifier:(NSString *)subIdentifier;
 
 @end

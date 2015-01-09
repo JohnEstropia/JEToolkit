@@ -67,6 +67,45 @@
     }
 }
 
+- (void)registerSupplementaryViewClass:(Class)supplementaryViewClass
+                                ofKind:(NSString *)supplementaryViewKind {
+    
+    [self
+     registerSupplementaryViewClass:supplementaryViewClass
+     ofKind:supplementaryViewKind
+     subIdentifier:nil];
+}
+
+- (void)registerSupplementaryViewClass:(Class)supplementaryViewClass
+                                ofKind:(NSString *)supplementaryViewKind
+                         subIdentifier:(NSString *)subIdentifier {
+    
+    JEAssertParameter([supplementaryViewClass isSubclassOfClass:[UICollectionReusableView class]]);
+    JEAssertParameter(supplementaryViewKind != nil);
+    
+    NSString *className = [supplementaryViewClass classNameInAppModule];
+    NSString *reuseIdentifier = className;
+    if (subIdentifier) {
+        
+        reuseIdentifier = [className stringByAppendingString:subIdentifier];
+    }
+    
+    if ([UINib nibWithNameExists:className]) {
+        
+        [self
+         registerNib:[UINib cachedNibWithName:className]
+         forSupplementaryViewOfKind:supplementaryViewKind
+         withReuseIdentifier:reuseIdentifier];
+    }
+    else {
+        
+        [self
+         registerClass:supplementaryViewClass
+         forSupplementaryViewOfKind:supplementaryViewKind
+         withReuseIdentifier:reuseIdentifier];
+    }
+}
+
 - (id)dequeueReusableCellWithClass:(Class)collectionViewCellClass
                       forIndexPath:(NSIndexPath *)indexPath {
     
@@ -95,6 +134,43 @@
     if (!cell) {
         
         cell = [[collectionViewCellClass alloc] initWithFrame:CGRectZero];
+    }
+    
+    return cell;
+}
+
+- (id)dequeueSupplementaryViewWithClass:(Class)supplementaryViewClass
+                                 ofKind:(NSString *)supplementaryViewKind
+                           forIndexPath:(NSIndexPath *)indexPath {
+    
+    return [self
+            dequeueSupplementaryViewWithClass:supplementaryViewClass
+            ofKind:supplementaryViewKind
+            subIdentifier:nil
+            forIndexPath:indexPath];
+}
+
+- (id)dequeueSupplementaryViewWithClass:(Class)supplementaryViewClass
+                                 ofKind:(NSString *)supplementaryViewKind
+                          subIdentifier:(NSString *)subIdentifier
+                           forIndexPath:(NSIndexPath *)indexPath {
+
+    JEAssertParameter([supplementaryViewClass isSubclassOfClass:[UICollectionReusableView class]]);
+    JEAssertParameter(supplementaryViewKind != nil);
+    
+    NSString *className = [supplementaryViewClass classNameInAppModule];
+    NSString *reuseIdentifier = className;
+    if (subIdentifier) {
+        
+        reuseIdentifier = [className stringByAppendingString:subIdentifier];
+    }
+    id cell = [self
+               dequeueReusableSupplementaryViewOfKind:supplementaryViewKind
+               withReuseIdentifier:reuseIdentifier
+               forIndexPath:indexPath];
+    if (!cell) {
+        
+        cell = [[supplementaryViewClass alloc] initWithFrame:CGRectZero];
     }
     
     return cell;
