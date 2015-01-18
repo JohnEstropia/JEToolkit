@@ -139,8 +139,8 @@
         || self.resizingMode != image.resizingMode) {
         
         image = [image
-                 resizableImageWithCapInsets:image.capInsets
-                 resizingMode:image.resizingMode];
+                 resizableImageWithCapInsets:self.capInsets
+                 resizingMode:self.resizingMode];
     }
     
     return image;
@@ -165,8 +165,8 @@
         || self.resizingMode != image.resizingMode) {
         
         image = [image
-                 resizableImageWithCapInsets:image.capInsets
-                 resizingMode:image.resizingMode];
+                 resizableImageWithCapInsets:self.capInsets
+                 resizingMode:self.resizingMode];
     }
     
     return image;
