@@ -52,6 +52,18 @@
 + (UIImage *)imageFromColor:(UIColor *)color
                        size:(CGSize)size JE_NONNULL(1);
 
+/*! Creates an image by alpha blending a color to the receiver.
+ @param tintColor the color to apply as tint.
+ @return a tinted image
+ */
+- (UIImage *)imageByTintingWithColor:(UIColor *)tintColor JE_NONNULL_ALL;
+
+/*! Creates an image by filling the receiver with a color.
+ @param fillColor the color to fill with.
+ @return a filled image
+ */
+- (UIImage *)imageByFillingWithColor:(UIColor *)fillColor JE_NONNULL_ALL;
+
 /*! Creates a decoded UIImage from the receiver. This is usually used to preload an image to prevent slight lags in the UI
  */
 - (instancetype)decodedImage;

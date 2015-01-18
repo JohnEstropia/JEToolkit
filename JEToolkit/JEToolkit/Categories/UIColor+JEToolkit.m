@@ -154,5 +154,61 @@
     return [UIColor colorWithInt:arc4random_uniform(0x01000000) alpha:1.0f];
 }
 
+- (UIColor *)colorByTintingWithColor:(UIColor *)tintColor {
+    
+    CGFloat originalRed = 0;
+    CGFloat originalGreen = 0;
+    CGFloat originalBlue = 0;
+    CGFloat originalAlpha = 0;
+    
+    if (![self getRed:&originalRed green:&originalGreen blue:&originalBlue alpha:&originalAlpha]) {
+        
+        CGFloat white;
+        if (![self getWhite:&white alpha:&originalAlpha]) {
+            
+            return self;
+        }
+        
+        originalRed = white;
+        originalGreen = white;
+        originalBlue = white;
+    }
+    
+    CGFloat tintRed = 0;
+    CGFloat tintGreen = 0;
+    CGFloat tintBlue = 0;
+    CGFloat tintAlpha = 0;
+    
+    if (![tintColor getRed:&tintRed green:&tintGreen blue:&tintBlue alpha:&tintAlpha]) {
+        
+        CGFloat white;
+        if (![tintColor getWhite:&white alpha:&tintAlpha]) {
+            
+            return self;
+        }
+        
+        tintRed = white;
+        tintGreen = white;
+        tintBlue = white;
+    }
+    
+    // http://en.wikipedia.org/wiki/Alpha_compositing
+    
+    CGFloat outAlpha = (tintAlpha + (originalAlpha * (1.0f - tintAlpha)));
+    
+    CGFloat (^blendSourceAtop)(CGFloat sourceColor, CGFloat sourceAlpha, CGFloat destinationColor, CGFloat destinationAlpha) = ^(CGFloat sourceColor, CGFloat sourceAlpha, CGFloat destinationColor, CGFloat destinationAlpha) {
+        
+        return (((sourceColor * sourceAlpha)
+                 + ((destinationColor * destinationAlpha) * (1.0f - sourceAlpha)))
+                / outAlpha);
+    };
+    
+    return [UIColor
+            colorWithRed:blendSourceAtop(tintRed, tintAlpha, originalRed, originalAlpha)
+            green:blendSourceAtop(tintGreen, tintAlpha, originalGreen, originalAlpha)
+            blue:blendSourceAtop(tintBlue, tintAlpha, originalBlue, originalAlpha)
+            alpha:outAlpha];
+}
+
 
 @end

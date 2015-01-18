@@ -60,4 +60,10 @@
  */
 + (UIColor *)randomColor;
 
+/*! Creates a color by alpha blending another color.
+ @param tintColor the color to apply as tint.
+ @return a tinted color
+ */
+- (UIColor *)colorByTintingWithColor:(UIColor *)tintColor JE_NONNULL_ALL;
+
 @end
