@@ -32,7 +32,6 @@
 #endif
 
 
-JE_OVERLOAD
 NSString *JEL10n(NSString *keyString) {
     
     NSString *localizedString = NSLocalizedString(keyString, nil);
@@ -42,8 +41,7 @@ NSString *JEL10n(NSString *keyString) {
     return localizedString;
 }
 
-JE_OVERLOAD
-NSString *JEL10n(NSString *keyString, NSString *stringsFile) {
+NSString *JEL10nFromFile(NSString *stringsFile, NSString *keyString) {
     
     NSString *localizedString = NSLocalizedStringFromTable(keyString, stringsFile, nil);
     JEAssert(keyString != localizedString,

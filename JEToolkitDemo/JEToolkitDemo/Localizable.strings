@@ -5,3 +5,12 @@
   Created by John Rommel Estropia on 10/13/14.
   Copyright (c) 2014 John Rommel Estropia. All rights reserved.
 */
+
+
+// MARK: MenuViewController
+"menuViewController.cellText.log"       = "Logging examples";
+"menuViewController.cellDetail.log"     = "JELog(...) macro variants";
+"menuViewController.cellText.assert"    = "Assert examples";
+"menuViewController.cellDetail.assert"  = "JEAssert(...) macro variants";
+"menuViewController.cellText.dump"      = "Dumping values";
+"menuViewController.cellDetail.dump"    = "JEDump(...) macro variants";
