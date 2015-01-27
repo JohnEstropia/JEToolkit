@@ -26,7 +26,7 @@
 #import "UIScrollView+JEToolkit.h"
 
 #import "NSObject+JEToolkit.h"
-#import "UIView+JEToolkit.m"
+#import "UIView+JEToolkit.h"
 
 #import "JESafetyHelpers.h"
 

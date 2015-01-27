@@ -23,17 +23,12 @@
 //  SOFTWARE.
 //
 
+#import <Foundation/Foundation.h>
+
 #ifndef JEToolkit_JESafetyHelpers_h
 #define JEToolkit_JESafetyHelpers_h
 
-#import <Foundation/Foundation.h>
 #import "JECompilerDefines.h"
-
-#if __has_include("JEDebugging.h")
-#import "JEDebugging.h"
-#else
-#define JEAssert            NSCAssert
-#endif
 
 
 #pragma mark - Key-Value Coding
@@ -66,26 +61,11 @@
 
 #pragma mark - Localizable Strings
 
-JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *JEL10n(NSString *keyString) {
-    
-	NSString *localizedString = NSLocalizedString(keyString, nil);
-    JEAssert(keyString != localizedString,
-              @"\"%@\" not found in Localizable.strings",
-              keyString);
-    return localizedString;
-}
+JE_EXTERN JE_NONNULL_ALL JE_OVERLOAD
+NSString *JEL10n(NSString *keyString);
 
-JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *JEL10n(NSString *keyString, NSString *stringsFile) {
-    
-	NSString *localizedString = NSLocalizedStringFromTable(keyString, stringsFile, nil);
-    JEAssert(keyString != localizedString,
-              @"\"%@\" not found in %@.strings",
-              keyString,
-              stringsFile);
-    return localizedString;
-}
+JE_EXTERN JE_NONNULL_ALL JE_OVERLOAD
+NSString *JEL10n(NSString *keyString, NSString *stringsFile);
 
 
 

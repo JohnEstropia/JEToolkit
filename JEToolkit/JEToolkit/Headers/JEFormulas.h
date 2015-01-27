@@ -23,6 +23,8 @@
 //  SOFTWARE.
 //
 
+#import <UIKit/UIKit.h>
+
 #ifndef JEToolkit_JEFormulas_h
 #define JEToolkit_JEFormulas_h
 

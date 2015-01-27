@@ -122,6 +122,7 @@
 		2F74E80419DFD0E200FB0C88 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F74E80319DFD0E200FB0C88 /* Foundation.framework */; };
 		2F74E80619DFD0E900FB0C88 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F74E80519DFD0E900FB0C88 /* UIKit.framework */; };
 		B502A76E1A1B8F56002667B1 /* JESynthesize.h in Headers */ = {isa = PBXBuildFile; fileRef = B502A76D1A1B8F56002667B1 /* JESynthesize.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B505F31A1A6D0FFA001CB9A2 /* JESafetyHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = B505F3191A6D0FFA001CB9A2 /* JESafetyHelpers.m */; };
 		B537BAE219EC2A9800715933 /* JEDebugging.swift in Sources */ = {isa = PBXBuildFile; fileRef = B537BAE119EC2A9800715933 /* JEDebugging.swift */; };
 		B57078B61A504327007E33F2 /* UIViewController+JEDebugging.h in Headers */ = {isa = PBXBuildFile; fileRef = B57078B41A504327007E33F2 /* UIViewController+JEDebugging.h */; };
 		B57078B71A504327007E33F2 /* UIViewController+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = B57078B51A504327007E33F2 /* UIViewController+JEDebugging.m */; };
@@ -267,6 +268,7 @@
 		2F74E80319DFD0E200FB0C88 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2F74E80519DFD0E900FB0C88 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B502A76D1A1B8F56002667B1 /* JESynthesize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JESynthesize.h; sourceTree = "<group>"; };
+		B505F3191A6D0FFA001CB9A2 /* JESafetyHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JESafetyHelpers.m; sourceTree = "<group>"; };
 		B537BAE119EC2A9800715933 /* JEDebugging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JEDebugging.swift; sourceTree = "<group>"; };
 		B57078B41A504327007E33F2 /* UIViewController+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JEDebugging.h"; sourceTree = "<group>"; };
 		B57078B51A504327007E33F2 /* UIViewController+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JEDebugging.m"; sourceTree = "<group>"; };
@@ -555,6 +557,7 @@
 				2F74E78B19DFCD2400FB0C88 /* JECompilerDefines.h */,
 				2F74E78C19DFCD2400FB0C88 /* JEFormulas.h */,
 				2F74E78D19DFCD2400FB0C88 /* JESafetyHelpers.h */,
+				B505F3191A6D0FFA001CB9A2 /* JESafetyHelpers.m */,
 				B502A76D1A1B8F56002667B1 /* JESynthesize.h */,
 				2F74E78E19DFCD2400FB0C88 /* JEUIMetrics.h */,
 			);
@@ -787,6 +790,7 @@
 				2F74E7A519DFCD2400FB0C88 /* NSOrderedSet+JEDebugging.m in Sources */,
 				2F74E7DA19DFCD2400FB0C88 /* NSNumber+JEToolkit.m in Sources */,
 				2F74E7CE19DFCD2400FB0C88 /* NSCalendar+JEToolkit.m in Sources */,
+				B505F31A1A6D0FFA001CB9A2 /* JESafetyHelpers.m in Sources */,
 				2F74E7E619DFCD2400FB0C88 /* UIColor+JEToolkit.m in Sources */,
 				2F74E7BD19DFCD2400FB0C88 /* JEHUDLogView.m in Sources */,
 				2F74E7D219DFCD2400FB0C88 /* NSDateFormatter+JEToolkit.m in Sources */,

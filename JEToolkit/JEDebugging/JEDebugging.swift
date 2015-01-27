@@ -42,8 +42,8 @@ public func JEAssert(condition: @autoclosure() -> Bool, message: @autoclosure() 
                     lineNumber: UInt32(lineNumber)))
             NSException.raise(
                 NSInternalInconsistencyException,
-                format: messageString,
-                arguments: getVaList([CVarArgType]()))
+                format: "%@",
+                arguments: getVaList([messageString]))
         }
     #endif
 }
@@ -114,8 +114,8 @@ public func JELogLevel(level: JELogLevelMask, message: String, fileName: String 
             fileName: fileName.lastPathComponent,
             functionName: functionName.stringValue,
             lineNumber: UInt32(lineNumber)),
-        format: message,
-        arguments: getVaList([CVarArgType]()))
+        format: "%@",
+        arguments: getVaList([message]))
 }
 
 
