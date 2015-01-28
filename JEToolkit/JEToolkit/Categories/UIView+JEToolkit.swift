@@ -31,13 +31,13 @@ public extension UIView {
     */
     public func firstSubviewWithClass<T: UIView>(viewClass: T.Type) -> T? {
         
-        return self.firstSubviewWithClass(viewClass) as AnyObject? as? T
+        return self.firstSubviewWithClass(viewClass as AnyClass!) as? T
     }
     
     /*! Returns the first superview that is a subclass of class. Searches recursively, and may return the receiver itself.
     */
     public func firstSuperviewWithClass<T: UIView>(viewClass: T.Type) -> T? {
         
-        return self.firstSuperviewWithClass(viewClass) as AnyObject? as? T
+        return self.firstSuperviewWithClass(viewClass as AnyClass!) as? T
     }
 }

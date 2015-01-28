@@ -29,31 +29,42 @@ public extension UITableView {
     
     public func dequeueReusableCellWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, forIndexPath indexPath: NSIndexPath?) -> T {
         
-        return self.dequeueReusableCellWithClass(tableViewCellClass, forIndexPath: indexPath) as AnyObject! as T
+        return self.dequeueReusableCellWithClass(
+            tableViewCellClass as AnyClass!,
+            forIndexPath: indexPath) as T
     }
     
     public func dequeueReusableCellWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, subIdentifier: String, forIndexPath indexPath: NSIndexPath?) -> T {
         
-        return self.dequeueReusableCellWithClass(tableViewCellClass, subIdentifier: subIdentifier, forIndexPath: indexPath) as AnyObject! as T
+        return self.dequeueReusableCellWithClass(
+            tableViewCellClass as AnyClass!,
+            subIdentifier: subIdentifier,
+            forIndexPath: indexPath) as T
     }
     
     public func dequeueReusableHeaderFooterViewWithClass<T: UITableViewHeaderFooterView>(headerFooterViewClass: T.Type) -> T {
         
-        return self.dequeueReusableHeaderFooterViewWithClass(headerFooterViewClass) as AnyObject! as T
+        return self.dequeueReusableHeaderFooterViewWithClass(
+            headerFooterViewClass as AnyClass!) as T
     }
     
     public func dequeueReusableHeaderFooterViewWithClass<T: UITableViewHeaderFooterView>(headerFooterViewClass: T.Type, subIdentifier: String) -> T {
         
-        return self.dequeueReusableHeaderFooterViewWithClass(headerFooterViewClass, subIdentifier: subIdentifier) as AnyObject! as T
+        return self.dequeueReusableHeaderFooterViewWithClass(
+            headerFooterViewClass as AnyClass!,
+            subIdentifier: subIdentifier) as T
     }
     
     public func cellForQueryingHeightWithClass<T: UITableViewCell>(tableViewCellClass: T.Type) -> T {
         
-        return self.cellForQueryingHeightWithClass(tableViewCellClass) as AnyObject! as T
+        return self.cellForQueryingHeightWithClass(
+            tableViewCellClass as AnyClass!) as T
     }
     
     public func cellForQueryingHeightWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, subIdentifier: String) -> T {
         
-        return self.cellForQueryingHeightWithClass(tableViewCellClass, subIdentifier: subIdentifier) as AnyObject! as T
+        return self.cellForQueryingHeightWithClass(
+            tableViewCellClass as AnyClass!,
+            subIdentifier: subIdentifier) as T
     }
 }

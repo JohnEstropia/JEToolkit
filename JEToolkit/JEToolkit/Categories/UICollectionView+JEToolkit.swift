@@ -29,21 +29,33 @@ public extension UICollectionView {
     
     public func dequeueReusableCellWithClass<T: UICollectionViewCell>(collectionViewClass: T.Type, forIndexPath indexPath: NSIndexPath) -> T {
         
-        return self.dequeueReusableCellWithClass(collectionViewClass, forIndexPath: indexPath) as AnyObject! as T
+        return self.dequeueReusableCellWithClass(
+            collectionViewClass as AnyClass!,
+            forIndexPath: indexPath) as T
     }
     
     public func dequeueReusableCellWithClass<T: UICollectionViewCell>(collectionViewClass: T.Type, subIdentifier: String, forIndexPath indexPath: NSIndexPath) -> T {
         
-        return self.dequeueReusableCellWithClass(collectionViewClass, subIdentifier: subIdentifier, forIndexPath: indexPath) as AnyObject! as T
+        return self.dequeueReusableCellWithClass(
+            collectionViewClass as AnyClass!,
+            subIdentifier: subIdentifier,
+            forIndexPath: indexPath) as T
     }
     
     public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, forIndexPath indexPath: NSIndexPath) -> T {
         
-        return self.dequeueSupplementaryViewWithClass(supplementaryViewClass, ofKind: supplementaryViewKind, forIndexPath: indexPath) as AnyObject! as T
+        return self.dequeueSupplementaryViewWithClass(
+            supplementaryViewClass as AnyClass!,
+            ofKind: supplementaryViewKind,
+            forIndexPath: indexPath) as T
     }
     
     public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, subIdentifier: String, forIndexPath indexPath: NSIndexPath) -> T {
         
-        return self.dequeueSupplementaryViewWithClass(supplementaryViewClass, ofKind: supplementaryViewKind, subIdentifier: subIdentifier, forIndexPath: indexPath) as AnyObject! as T
+        return self.dequeueSupplementaryViewWithClass(
+            supplementaryViewClass as AnyClass!,
+            ofKind: supplementaryViewKind,
+            subIdentifier: subIdentifier,
+            forIndexPath: indexPath) as T
     }
 }

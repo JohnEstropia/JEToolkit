@@ -178,7 +178,7 @@
              [supplementaryView class],
              [UICollectionReusableView class]);
     
-    return (supplementaryViewClass ?: [[supplementaryViewClass alloc] initWithFrame:CGRectZero]);
+    return (supplementaryView ?: [[supplementaryViewClass alloc] initWithFrame:CGRectZero]);
 }
 
 @end
