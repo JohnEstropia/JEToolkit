@@ -32,6 +32,7 @@
 #import "JEDebugging.h"
 #else
 #define JEAssertParameter   NSCParameterAssert
+#define JEAssert            NSCAssert
 #endif
 
 
@@ -129,12 +130,19 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
         reuseIdentifier = [className stringByAppendingString:subIdentifier];
     }
     
-    return ((indexPath
-             ? [self dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath]
-             : [self dequeueReusableCellWithIdentifier:reuseIdentifier])
-            ?: [[tableViewCellClass alloc]
-                initWithStyle:UITableViewCellStyleDefault
-                reuseIdentifier:reuseIdentifier]);
+    id cell = (indexPath
+               ? [self dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath]
+               : [self dequeueReusableCellWithIdentifier:reuseIdentifier]);
+    JEAssert(!cell || [cell isKindOfClass:tableViewCellClass],
+             @"Expected table view cell class \"%@\" from reuseIdentifier \"%@\" but dequeued a cell of type \"%@\" instead. Make sure that the reuseIdentifier for the %@ subclass is set to its class name",
+             tableViewCellClass,
+             reuseIdentifier,
+             [cell class],
+             [UITableViewCell class]);
+    
+    return (cell ?: [[tableViewCellClass alloc]
+                     initWithStyle:UITableViewCellStyleDefault
+                     reuseIdentifier:reuseIdentifier]);
 }
 
 - (id)dequeueReusableHeaderFooterViewWithClass:(Class)headerFooterViewClass {
@@ -154,8 +162,15 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
         reuseIdentifier = [className stringByAppendingString:subIdentifier];
     }
     
-    return ([self dequeueReusableHeaderFooterViewWithIdentifier:reuseIdentifier]
-            ?: [[headerFooterViewClass alloc] initWithReuseIdentifier:reuseIdentifier]);
+    id headerFooterView = [self dequeueReusableHeaderFooterViewWithIdentifier:reuseIdentifier];
+    JEAssert(!headerFooterView || [headerFooterView isKindOfClass:headerFooterViewClass],
+             @"Expected table view header/footer class \"%@\" from reuseIdentifier \"%@\" but dequeued a view of type \"%@\" instead. Make sure that the reuseIdentifier for the %@ subclass is set to its class name",
+             headerFooterViewClass,
+             reuseIdentifier,
+             [headerFooterView class],
+             [UITableViewHeaderFooterView class]);
+    
+    return (headerFooterView ?: [[headerFooterViewClass alloc] initWithReuseIdentifier:reuseIdentifier]);
 }
 
 - (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass {

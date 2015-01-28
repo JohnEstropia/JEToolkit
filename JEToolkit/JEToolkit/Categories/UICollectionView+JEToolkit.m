@@ -32,6 +32,7 @@
 #import "JEDebugging.h"
 #else
 #define JEAssertParameter   NSCParameterAssert
+#define JEAssert            NSCAssert
 #endif
 
 
@@ -131,12 +132,14 @@
     id cell = [self
                dequeueReusableCellWithReuseIdentifier:reuseIdentifier
                forIndexPath:indexPath];
-    if (!cell) {
-        
-        cell = [[collectionViewCellClass alloc] initWithFrame:CGRectZero];
-    }
+    JEAssert(!cell || [cell isKindOfClass:collectionViewCellClass],
+             @"Expected collection view cell class \"%@\" from reuseIdentifier \"%@\" but dequeued a cell of type \"%@\" instead. Make sure that the reuseIdentifier for the %@ subclass is set to its class name",
+             collectionViewCellClass,
+             reuseIdentifier,
+             [cell class],
+             [UICollectionViewCell class]);
     
-    return cell;
+    return (cell ?: [[collectionViewCellClass alloc] initWithFrame:CGRectZero]);
 }
 
 - (id)dequeueSupplementaryViewWithClass:(Class)supplementaryViewClass
@@ -164,16 +167,18 @@
         
         reuseIdentifier = [className stringByAppendingString:subIdentifier];
     }
-    id cell = [self
-               dequeueReusableSupplementaryViewOfKind:supplementaryViewKind
-               withReuseIdentifier:reuseIdentifier
-               forIndexPath:indexPath];
-    if (!cell) {
-        
-        cell = [[supplementaryViewClass alloc] initWithFrame:CGRectZero];
-    }
+    id supplementaryView = [self
+                            dequeueReusableSupplementaryViewOfKind:supplementaryViewKind
+                            withReuseIdentifier:reuseIdentifier
+                            forIndexPath:indexPath];
+    JEAssert(!supplementaryView || [supplementaryView isKindOfClass:supplementaryViewClass],
+             @"Expected collection reusable view class \"%@\" from reuseIdentifier \"%@\" but dequeued a view of type \"%@\" instead. Make sure that the reuseIdentifier for the %@ subclass is set to its class name",
+             supplementaryViewKind,
+             reuseIdentifier,
+             [supplementaryView class],
+             [UICollectionReusableView class]);
     
-    return cell;
+    return (supplementaryViewClass ?: [[supplementaryViewClass alloc] initWithFrame:CGRectZero]);
 }
 
 @end

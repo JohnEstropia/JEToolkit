@@ -126,6 +126,10 @@
 		B537BAE219EC2A9800715933 /* JEDebugging.swift in Sources */ = {isa = PBXBuildFile; fileRef = B537BAE119EC2A9800715933 /* JEDebugging.swift */; };
 		B57078B61A504327007E33F2 /* UIViewController+JEDebugging.h in Headers */ = {isa = PBXBuildFile; fileRef = B57078B41A504327007E33F2 /* UIViewController+JEDebugging.h */; };
 		B57078B71A504327007E33F2 /* UIViewController+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = B57078B51A504327007E33F2 /* UIViewController+JEDebugging.m */; };
+		B5C8D67B1A7877470007C5DF /* UITableView+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D67A1A7877470007C5DF /* UITableView+JEToolkit.swift */; };
+		B5C8D6811A787BBB0007C5DF /* UICollectionView+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D6801A787BBB0007C5DF /* UICollectionView+JEToolkit.swift */; };
+		B5C8D6831A7883190007C5DF /* NSDate+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D6821A7883190007C5DF /* NSDate+JEToolkit.swift */; };
+		B5C8D6851A78846B0007C5DF /* UIView+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D6841A78846B0007C5DF /* UIView+JEToolkit.swift */; };
 		B5E2D8531A2FF29600658696 /* NSDictionary+JEToolkit.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E2D8511A2FF29600658696 /* NSDictionary+JEToolkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B5E2D8541A2FF29600658696 /* NSDictionary+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2D8521A2FF29600658696 /* NSDictionary+JEToolkit.m */; };
 		B5F5399A1A18536000EC763B /* JESettings.h in Headers */ = {isa = PBXBuildFile; fileRef = B5F539981A18536000EC763B /* JESettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -272,6 +276,10 @@
 		B537BAE119EC2A9800715933 /* JEDebugging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JEDebugging.swift; sourceTree = "<group>"; };
 		B57078B41A504327007E33F2 /* UIViewController+JEDebugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JEDebugging.h"; sourceTree = "<group>"; };
 		B57078B51A504327007E33F2 /* UIViewController+JEDebugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JEDebugging.m"; sourceTree = "<group>"; };
+		B5C8D67A1A7877470007C5DF /* UITableView+JEToolkit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+JEToolkit.swift"; sourceTree = "<group>"; };
+		B5C8D6801A787BBB0007C5DF /* UICollectionView+JEToolkit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+JEToolkit.swift"; sourceTree = "<group>"; };
+		B5C8D6821A7883190007C5DF /* NSDate+JEToolkit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+JEToolkit.swift"; sourceTree = "<group>"; };
+		B5C8D6841A78846B0007C5DF /* UIView+JEToolkit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+JEToolkit.swift"; sourceTree = "<group>"; };
 		B5E2D8511A2FF29600658696 /* NSDictionary+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+JEToolkit.h"; sourceTree = "<group>"; };
 		B5E2D8521A2FF29600658696 /* NSDictionary+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+JEToolkit.m"; sourceTree = "<group>"; };
 		B5F539981A18536000EC763B /* JESettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JESettings.h; sourceTree = "<group>"; };
@@ -504,6 +512,7 @@
 				2F74E75E19DFCD2300FB0C88 /* NSCalendar+JEToolkit.m */,
 				2F74E75F19DFCD2300FB0C88 /* NSDate+JEToolkit.h */,
 				2F74E76019DFCD2300FB0C88 /* NSDate+JEToolkit.m */,
+				B5C8D6821A7883190007C5DF /* NSDate+JEToolkit.swift */,
 				2F74E76119DFCD2300FB0C88 /* NSDateFormatter+JEToolkit.h */,
 				2F74E76219DFCD2300FB0C88 /* NSDateFormatter+JEToolkit.m */,
 				B5E2D8511A2FF29600658696 /* NSDictionary+JEToolkit.h */,
@@ -526,6 +535,7 @@
 				2F74E77219DFCD2300FB0C88 /* NSValue+JEToolkit.m */,
 				2F74E77319DFCD2300FB0C88 /* UICollectionView+JEToolkit.h */,
 				2F74E77419DFCD2300FB0C88 /* UICollectionView+JEToolkit.m */,
+				B5C8D6801A787BBB0007C5DF /* UICollectionView+JEToolkit.swift */,
 				2F74E77519DFCD2300FB0C88 /* UIColor+JEToolkit.h */,
 				2F74E77619DFCD2300FB0C88 /* UIColor+JEToolkit.m */,
 				2F74E77719DFCD2300FB0C88 /* UIDevice+JEToolkit.h */,
@@ -540,10 +550,12 @@
 				2F74E78019DFCD2400FB0C88 /* UIScrollView+JEToolkit.m */,
 				2F74E78119DFCD2400FB0C88 /* UITableView+JEToolkit.h */,
 				2F74E78219DFCD2400FB0C88 /* UITableView+JEToolkit.m */,
+				B5C8D67A1A7877470007C5DF /* UITableView+JEToolkit.swift */,
 				2F74E78319DFCD2400FB0C88 /* UITextView+JEToolkit.h */,
 				2F74E78419DFCD2400FB0C88 /* UITextView+JEToolkit.m */,
 				2F74E78519DFCD2400FB0C88 /* UIView+JEToolkit.h */,
 				2F74E78619DFCD2400FB0C88 /* UIView+JEToolkit.m */,
+				B5C8D6841A78846B0007C5DF /* UIView+JEToolkit.swift */,
 				2F74E78719DFCD2400FB0C88 /* UIViewController+JEToolkit.h */,
 				2F74E78819DFCD2400FB0C88 /* UIViewController+JEToolkit.m */,
 			);
@@ -764,6 +776,7 @@
 				2F74E7A919DFCD2400FB0C88 /* NSSet+JEDebugging.m in Sources */,
 				2F74E7AB19DFCD2400FB0C88 /* NSString+JEDebugging.m in Sources */,
 				B537BAE219EC2A9800715933 /* JEDebugging.swift in Sources */,
+				B5C8D67B1A7877470007C5DF /* UITableView+JEToolkit.swift in Sources */,
 				2F74E7DE19DFCD2400FB0C88 /* NSString+JEToolkit.m in Sources */,
 				2F74E79F19DFCD2400FB0C88 /* NSMutableString+JEDebugging.m in Sources */,
 				2F74E7AF19DFCD2400FB0C88 /* UIColor+JEDebugging.m in Sources */,
@@ -794,9 +807,11 @@
 				2F74E7E619DFCD2400FB0C88 /* UIColor+JEToolkit.m in Sources */,
 				2F74E7BD19DFCD2400FB0C88 /* JEHUDLogView.m in Sources */,
 				2F74E7D219DFCD2400FB0C88 /* NSDateFormatter+JEToolkit.m in Sources */,
+				B5C8D6831A7883190007C5DF /* NSDate+JEToolkit.swift in Sources */,
 				2F74E7A119DFCD2400FB0C88 /* NSNumber+JEDebugging.m in Sources */,
 				2F74E79719DFCD2400FB0C88 /* NSError+JEDebugging.m in Sources */,
 				2F74E7F419DFCD2400FB0C88 /* UITextView+JEToolkit.m in Sources */,
+				B5C8D6811A787BBB0007C5DF /* UICollectionView+JEToolkit.swift in Sources */,
 				2F74E7C519DFCD2400FB0C88 /* JEOrderedDictionary.m in Sources */,
 				2F74E7D419DFCD2400FB0C88 /* NSError+JEToolkit.m in Sources */,
 				2F74E7AD19DFCD2400FB0C88 /* NSValue+JEDebugging.m in Sources */,
@@ -807,6 +822,7 @@
 				2F74E7B719DFCD2400FB0C88 /* JEConsoleLoggerSettings.m in Sources */,
 				2F74E7BB19DFCD2400FB0C88 /* JEHUDLoggerSettings.m in Sources */,
 				2F74E7DC19DFCD2400FB0C88 /* NSObject+JEToolkit.m in Sources */,
+				B5C8D6851A78846B0007C5DF /* UIView+JEToolkit.swift in Sources */,
 				2F74E7CA19DFCD2400FB0C88 /* NSArray+JEToolkit.m in Sources */,
 				2F74E79519DFCD2400FB0C88 /* NSDictionary+JEDebugging.m in Sources */,
 				2F74E7C819DFCD2400FB0C88 /* JEWeakCache.m in Sources */,
