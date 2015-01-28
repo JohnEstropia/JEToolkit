@@ -1,8 +1,8 @@
 //
-//  JEUIMetrics.h
+//  JEUIMetrics.m
 //  JEToolkit
 //
-//  Copyright (c) 2014 John Rommel Estropia
+//  Copyright (c) 2015 John Rommel Estropia
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,63 +23,27 @@
 //  SOFTWARE.
 //
 
-#import <CoreGraphics/CoreGraphics.h>
-
-#ifndef JEToolkit_JEUIMetrics_h
-#define JEToolkit_JEUIMetrics_h
-
-#import "JECompilerDefines.h"
+#import "JEUIMetrics.h"
 
 
-#pragma mark - Device Metrics
+const CGSize JEUIIPhone4ScreenPortraitSize = (CGSize){ .width = 320.0f, .height = 480.0f };
+const CGSize JEUIIPhone4ScreenLandscapeSize = (CGSize){ .width = 480.0f, .height = 320.0f };
 
-JE_EXTERN
-const CGSize JEUIIPhone4ScreenPortraitSize;
+const CGSize JEUIIPhone5ScreenPortraitSize = (CGSize){ .width = 320.0f, .height = 568.0f };
+const CGSize JEUIIPhone5ScreenLandscapeSize = (CGSize){ .width = 568.0f, .height = 320.0f };
 
-JE_EXTERN
-const CGSize JEUIIPhone4ScreenLandscapeSize;
+const CGSize JEUIIPadScreenPortraitSize = (CGSize){ .width = 768.0f, .height = 1024.0f };
+const CGSize JEUIIPadScreenLandscapeSize = (CGSize){ .width = 1024.0f, .height = 768.0f };
 
-JE_EXTERN
-const CGSize JEUIIPhone5ScreenPortraitSize;
+const CGFloat JEUIAdBannerViewHeight = 50.0f;
+const CGFloat JEUIPickerViewHeight = 216.0f;
+const CGFloat JEUITextFieldHeight = 31.0f;
+const CGFloat JEUIToolbarHeight = 44.0f;
 
-JE_EXTERN
-const CGSize JEUIIPhone5ScreenLandscapeSize;
+const CGFloat JEUINavigationBarLandscapeHeight = 32.0f;
+const CGFloat JEUINavigationBarPortraitHeight = 44.0f;
 
-JE_EXTERN
-const CGSize JEUIIPadScreenPortraitSize;
+const CGFloat JEUIStatusBarHeight = 20.0f;
+const CGFloat JEUITableViewSeparatorWidth = 1.0f;
 
-JE_EXTERN
-const CGSize JEUIIPadScreenLandscapeSize;
-
-
-#pragma mark - Views
-
-JE_EXTERN
-const CGFloat JEUIAdBannerViewHeight;
-
-JE_EXTERN
-const CGFloat JEUIPickerViewHeight;
-
-JE_EXTERN
-const CGFloat JEUITextFieldHeight;
-
-JE_EXTERN
-const CGFloat JEUIToolbarHeight;
-
-JE_EXTERN
-const CGFloat JEUINavigationBarLandscapeHeight;
-
-JE_EXTERN
-const CGFloat JEUINavigationBarPortraitHeight;
-
-JE_EXTERN
-const CGFloat JEUIStatusBarHeight;
-
-JE_EXTERN
-const CGFloat JEUITableViewSeparatorWidth;
-
-JE_EXTERN
-const CGFloat JEUITabBarHeight;
-
-
-#endif
+const CGFloat JEUITabBarHeight = 49.0f;

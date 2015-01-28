@@ -130,6 +130,7 @@
 		B5C8D6811A787BBB0007C5DF /* UICollectionView+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D6801A787BBB0007C5DF /* UICollectionView+JEToolkit.swift */; };
 		B5C8D6831A7883190007C5DF /* NSDate+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D6821A7883190007C5DF /* NSDate+JEToolkit.swift */; };
 		B5C8D6851A78846B0007C5DF /* UIView+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D6841A78846B0007C5DF /* UIView+JEToolkit.swift */; };
+		B5C8D6871A7889F20007C5DF /* JEUIMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D6861A7889F20007C5DF /* JEUIMetrics.m */; };
 		B5E2D8531A2FF29600658696 /* NSDictionary+JEToolkit.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E2D8511A2FF29600658696 /* NSDictionary+JEToolkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B5E2D8541A2FF29600658696 /* NSDictionary+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2D8521A2FF29600658696 /* NSDictionary+JEToolkit.m */; };
 		B5F5399A1A18536000EC763B /* JESettings.h in Headers */ = {isa = PBXBuildFile; fileRef = B5F539981A18536000EC763B /* JESettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -280,6 +281,7 @@
 		B5C8D6801A787BBB0007C5DF /* UICollectionView+JEToolkit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+JEToolkit.swift"; sourceTree = "<group>"; };
 		B5C8D6821A7883190007C5DF /* NSDate+JEToolkit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+JEToolkit.swift"; sourceTree = "<group>"; };
 		B5C8D6841A78846B0007C5DF /* UIView+JEToolkit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+JEToolkit.swift"; sourceTree = "<group>"; };
+		B5C8D6861A7889F20007C5DF /* JEUIMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JEUIMetrics.m; sourceTree = "<group>"; };
 		B5E2D8511A2FF29600658696 /* NSDictionary+JEToolkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+JEToolkit.h"; sourceTree = "<group>"; };
 		B5E2D8521A2FF29600658696 /* NSDictionary+JEToolkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+JEToolkit.m"; sourceTree = "<group>"; };
 		B5F539981A18536000EC763B /* JESettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JESettings.h; sourceTree = "<group>"; };
@@ -572,6 +574,7 @@
 				B505F3191A6D0FFA001CB9A2 /* JESafetyHelpers.m */,
 				B502A76D1A1B8F56002667B1 /* JESynthesize.h */,
 				2F74E78E19DFCD2400FB0C88 /* JEUIMetrics.h */,
+				B5C8D6861A7889F20007C5DF /* JEUIMetrics.m */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -796,6 +799,7 @@
 				2F74E7D019DFCD2400FB0C88 /* NSDate+JEToolkit.m in Sources */,
 				2F74E7C119DFCD2400FB0C88 /* JEDispatch.m in Sources */,
 				B5F5399B1A18536000EC763B /* JESettings.m in Sources */,
+				B5C8D6871A7889F20007C5DF /* JEUIMetrics.m in Sources */,
 				2F74E7EE19DFCD2400FB0C88 /* UINib+JEToolkit.m in Sources */,
 				2F74E7E219DFCD2400FB0C88 /* NSValue+JEToolkit.m in Sources */,
 				B5E2D8541A2FF29600658696 /* NSDictionary+JEToolkit.m in Sources */,
