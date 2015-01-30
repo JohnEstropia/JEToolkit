@@ -29,9 +29,9 @@
 @interface JEUserDefaults : JESettings
 
 - (instancetype)init;
-- (instancetype)initWithDomain:(NSString *)domain;
+- (instancetype)initWithSuiteName:(NSString *)suiteName;
 
-+ (void)synchronizeAllInstances;
+- (void)synchronize;
 
 - (NSString *)userDefaultsKeyForProperty:(NSString *)propertyName;
 

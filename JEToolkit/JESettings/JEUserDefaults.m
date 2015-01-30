@@ -35,6 +35,7 @@
 
 @interface JEUserDefaults ()
 
+@property (nonatomic, strong, readonly) NSUserDefaults *userDefaults;
 @property (nonatomic, strong, readonly) NSMutableDictionary *cachedUserDefaultsKeys;
 
 @end
@@ -46,19 +47,13 @@
 
 - (instancetype)init {
     
-    self = [self initWithDomain:NSStringFromClass([self class])];
-    if (!self) {
-        
-        return nil;
-    }
-    
-    _cachedUserDefaultsKeys = [[NSMutableDictionary alloc] init];
+    self = [self initWithSuiteName:nil];
     return self;
 }
 
-- (instancetype)initWithDomain:(NSString *)domain {
+- (instancetype)initWithSuiteName:(NSString *)suiteName {
     
-    JEAssertParameter([domain isKindOfClass:[NSString class]]);
+    JEAssertParameter(!suiteName || [suiteName isKindOfClass:[NSString class]]);
     
     static NSMutableDictionary *sharedInstances;
     static dispatch_queue_t barrierQueue;
@@ -69,14 +64,19 @@
         barrierQueue = dispatch_queue_create("com.JEToolkit.JEUserDefaults.barrierQueue", DISPATCH_QUEUE_CONCURRENT);
     });
     
+    NSString *const instanceKey = (suiteName
+                                   ? [@[NSStringFromClass([self class]), suiteName] componentsJoinedByString:@"."]
+                                   : NSStringFromClass([self class]));
     typeof(self) __block instance;
     dispatch_barrier_sync(barrierQueue, ^{
         
-        instance = sharedInstances[domain];
+        instance = sharedInstances[instanceKey];
         if (!instance) {
             
             instance = [super init];
-            sharedInstances[domain] = instance;
+            instance->_userDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
+            instance->_cachedUserDefaultsKeys = [[NSMutableDictionary alloc] init];
+            sharedInstances[instanceKey] = instance;
         }
     });
     
@@ -139,72 +139,72 @@
 
 - (long long int)integerValueForKey:(NSString *)key {
     
-    return [(NSNumber *)[[NSUserDefaults standardUserDefaults]
+    return [(NSNumber *)[self.userDefaults
              objectForKey:[self cachedUserDefaultsKeyForProperty:key]] longLongValue];
 }
 
 - (void)setIntegerValue:(long long int)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setObject:[NSNumber numberWithLongLong:value]
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (unsigned long long int)unsignedIntegerValueForKey:(NSString *)key {
     
-    return [(NSNumber *)[[NSUserDefaults standardUserDefaults]
+    return [(NSNumber *)[self.userDefaults
              objectForKey:[self cachedUserDefaultsKeyForProperty:key]] unsignedLongLongValue];
 }
 
 - (void)setUnsignedIntegerValue:(unsigned long long int)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setObject:[NSNumber numberWithUnsignedLongLong:value]
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (bool)booleanValueForKey:(NSString *)key {
     
-    return [[NSUserDefaults standardUserDefaults]
+    return [self.userDefaults
             boolForKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (void)setBooleanValue:(bool)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setBool:value
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (float)floatValueForKey:(NSString *)key {
     
-    return [[NSUserDefaults standardUserDefaults]
+    return [self.userDefaults
             floatForKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (void)setFloatValue:(float)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setFloat:value
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (double)doubleValueForKey:(NSString *)key {
     
-    return [[NSUserDefaults standardUserDefaults]
+    return [self.userDefaults
             doubleForKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (void)setDoubleValue:(double)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setDouble:value
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (NSString *)NSStringValueForKey:(NSString *)key {
     
-    return [[NSUserDefaults standardUserDefaults]
+    return [self.userDefaults
             objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
@@ -213,17 +213,17 @@
     NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
     if ([value isKindOfClass:[NSString class]]) {
         
-        [[NSUserDefaults standardUserDefaults] setObject:value forKey:userDefaultsKey];
+        [self.userDefaults setObject:value forKey:userDefaultsKey];
     }
     else {
         
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+        [self.userDefaults removeObjectForKey:userDefaultsKey];
     }
 }
 
 - (NSNumber *)NSNumberValueForKey:(NSString *)key {
     
-    return [[NSUserDefaults standardUserDefaults]
+    return [self.userDefaults
             objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
@@ -232,17 +232,17 @@
     NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
     if ([value isKindOfClass:[NSNumber class]]) {
         
-        [[NSUserDefaults standardUserDefaults] setObject:value forKey:userDefaultsKey];
+        [self.userDefaults setObject:value forKey:userDefaultsKey];
     }
     else {
         
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+        [self.userDefaults removeObjectForKey:userDefaultsKey];
     }
 }
 
 - (NSDate *)NSDateValueForKey:(NSString *)key {
     
-    return [[NSUserDefaults standardUserDefaults]
+    return [self.userDefaults
             objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
@@ -251,17 +251,17 @@
     NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
     if ([value isKindOfClass:[NSDate class]]) {
         
-        [[NSUserDefaults standardUserDefaults] setObject:value forKey:userDefaultsKey];
+        [self.userDefaults setObject:value forKey:userDefaultsKey];
     }
     else {
         
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+        [self.userDefaults removeObjectForKey:userDefaultsKey];
     }
 }
 
 - (NSData *)NSDataValueForKey:(NSString *)key {
     
-    return [[NSUserDefaults standardUserDefaults]
+    return [self.userDefaults
             objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
@@ -270,17 +270,17 @@
     NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
     if ([value isKindOfClass:[NSData class]]) {
         
-        [[NSUserDefaults standardUserDefaults] setObject:value forKey:userDefaultsKey];
+        [self.userDefaults setObject:value forKey:userDefaultsKey];
     }
     else {
         
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+        [self.userDefaults removeObjectForKey:userDefaultsKey];
     }
 }
 
 - (NSURL *)NSURLValueForKey:(NSString *)key {
     
-    return [NSURL URLWithString:[[NSUserDefaults standardUserDefaults]
+    return [NSURL URLWithString:[self.userDefaults
                                  objectForKey:[self cachedUserDefaultsKeyForProperty:key]]];
 }
 
@@ -289,17 +289,17 @@
     NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
     if ([value isKindOfClass:[NSURL class]]) {
         
-        [[NSUserDefaults standardUserDefaults] setObject:[value absoluteString] forKey:userDefaultsKey];
+        [self.userDefaults setObject:[value absoluteString] forKey:userDefaultsKey];
     }
     else {
         
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+        [self.userDefaults removeObjectForKey:userDefaultsKey];
     }
 }
 
 - (NSUUID *)NSUUIDValueForKey:(NSString *)key {
     
-    return [[NSUUID alloc] initWithUUIDString:[[NSUserDefaults standardUserDefaults]
+    return [[NSUUID alloc] initWithUUIDString:[self.userDefaults
                                                objectForKey:[self cachedUserDefaultsKeyForProperty:key]]];
 }
 
@@ -308,17 +308,17 @@
     NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
     if ([value isKindOfClass:[NSUUID class]]) {
         
-        [[NSUserDefaults standardUserDefaults] setObject:[value UUIDString] forKey:userDefaultsKey];
+        [self.userDefaults setObject:[value UUIDString] forKey:userDefaultsKey];
     }
     else {
         
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+        [self.userDefaults removeObjectForKey:userDefaultsKey];
     }
 }
 
 - (id<NSCoding>)NSCodingValueForKey:(NSString *)key {
     
-    NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    NSData *data = [self.userDefaults dataForKey:[self cachedUserDefaultsKeyForProperty:key]];
     return (data
             ? [NSKeyedUnarchiver unarchiveObjectWithData:data]
             : nil);
@@ -330,17 +330,17 @@
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
     if (data) {
         
-        [[NSUserDefaults standardUserDefaults] setObject:data forKey:userDefaultsKey];
+        [self.userDefaults setObject:data forKey:userDefaultsKey];
     }
     else {
      
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+        [self.userDefaults removeObjectForKey:userDefaultsKey];
     }
 }
 
 - (Class)classValueForKey:(NSString *)key {
     
-    NSString *className = [[NSUserDefaults standardUserDefaults] objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    NSString *className = [self.userDefaults objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
     return (className ? NSClassFromString(className) : Nil);
 }
 
@@ -349,19 +349,19 @@
     NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
     if (value) {
         
-        [[NSUserDefaults standardUserDefaults]
+        [self.userDefaults
          setObject:NSStringFromClass(value)
          forKey:userDefaultsKey];
     }
     else {
         
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+        [self.userDefaults removeObjectForKey:userDefaultsKey];
     }
 }
 
 - (SEL)selectorValueForKey:(NSString *)key {
     
-    NSString *selectorName = [[NSUserDefaults standardUserDefaults] objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    NSString *selectorName = [self.userDefaults objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
     return (selectorName ? NSSelectorFromString(selectorName) : NULL);
 }
 
@@ -370,116 +370,116 @@
     NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
     if (value) {
         
-        [[NSUserDefaults standardUserDefaults]
+        [self.userDefaults
          setObject:NSStringFromSelector(value)
          forKey:userDefaultsKey];
     }
     else {
         
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:userDefaultsKey];
+        [self.userDefaults removeObjectForKey:userDefaultsKey];
     }
 }
 
 - (CGPoint)CGPointValueForKey:(NSString *)key {
     
-    return CGPointFromString([[NSUserDefaults standardUserDefaults]
+    return CGPointFromString([self.userDefaults
                               objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setCGPointValue:(CGPoint)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setObject:NSStringFromCGPoint(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (CGSize)CGSizeValueForKey:(NSString *)key {
     
-    return CGSizeFromString([[NSUserDefaults standardUserDefaults]
+    return CGSizeFromString([self.userDefaults
                              objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setCGSizeValue:(CGSize)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setObject:NSStringFromCGSize(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (CGRect)CGRectValueForKey:(NSString *)key {
     
-    return CGRectFromString([[NSUserDefaults standardUserDefaults]
+    return CGRectFromString([self.userDefaults
                              objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setCGRectValue:(CGRect)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setObject:NSStringFromCGRect(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (CGAffineTransform)CGAffineTransformValueForKey:(NSString *)key {
     
-    return CGAffineTransformFromString([[NSUserDefaults standardUserDefaults]
+    return CGAffineTransformFromString([self.userDefaults
                                         objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setCGAffineTransformValue:(CGAffineTransform)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setObject:NSStringFromCGAffineTransform(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (CGVector)CGVectorValueForKey:(NSString *)key {
     
-    return CGVectorFromString([[NSUserDefaults standardUserDefaults]
+    return CGVectorFromString([self.userDefaults
                                objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setCGVectorValue:(CGVector)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setObject:NSStringFromCGVector(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (UIEdgeInsets)UIEdgeInsetsValueForKey:(NSString *)key {
     
-    return UIEdgeInsetsFromString([[NSUserDefaults standardUserDefaults]
+    return UIEdgeInsetsFromString([self.userDefaults
                                    objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setUIEdgeInsetsValue:(UIEdgeInsets)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setObject:NSStringFromUIEdgeInsets(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (UIOffset)UIOffsetValueForKey:(NSString *)key {
     
-    return UIOffsetFromString([[NSUserDefaults standardUserDefaults]
+    return UIOffsetFromString([self.userDefaults
                                objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setUIOffsetValue:(UIOffset)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setObject:NSStringFromUIOffset(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (NSRange)NSRangeValueForKey:(NSString *)key {
     
-    return NSRangeFromString([[NSUserDefaults standardUserDefaults]
+    return NSRangeFromString([self.userDefaults
                               objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setNSRangeValue:(NSRange)value forKey:(NSString *)key {
     
-    [[NSUserDefaults standardUserDefaults]
+    [self.userDefaults
      setObject:NSStringFromRange(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
@@ -501,9 +501,9 @@
 
 #pragma mark - Public
 
-+ (void)synchronizeAllInstances {
+- (void)synchronize {
     
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [self.userDefaults synchronize];
 }
 
 - (NSString *)userDefaultsKeyForProperty:(NSString *)propertyName {
