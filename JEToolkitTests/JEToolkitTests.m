@@ -45,6 +45,11 @@
 
 @implementation JETestUserDefaults
 
+@dynamic string;
+@dynamic number;
+@dynamic timeInterval;
+@dynamic rect;
+
 @end
 
 
@@ -58,6 +63,11 @@
 @end
 
 @implementation JETestKeychain
+
+@dynamic string;
+@dynamic number;
+@dynamic timeInterval;
+@dynamic rect;
 
 @end
 

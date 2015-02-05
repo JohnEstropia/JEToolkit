@@ -91,14 +91,19 @@
 
 - (NSString *)loggingDescription {
     
-    unsigned int numberOfProperties = 0;
-    objc_property_t *properties = class_copyPropertyList([self class], &numberOfProperties);
-    NSMutableArray *keys = [[NSMutableArray alloc] initWithCapacity:numberOfProperties];
-    for (unsigned int i = 0; i < numberOfProperties; ++i) {
+    NSMutableArray *keys = [[NSMutableArray alloc] init];
+    for (Class class = [self class];
+         class != [JEUserDefaults class] && [class isSubclassOfClass:[JEUserDefaults class]];
+         class = [class superclass]) {
         
-        [keys addObject:@(property_getName(properties[i]))];
+        unsigned int numberOfProperties = 0;
+        objc_property_t *properties = class_copyPropertyList(class, &numberOfProperties);
+        for (unsigned int i = 0; i < numberOfProperties; ++i) {
+            
+            [keys addObject:@(property_getName(properties[i]))];
+        }
+        free(properties);
     }
-    free(properties);
     
     NSMutableString *description = [NSMutableString stringWithString:@"{"];
     [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
@@ -334,6 +339,28 @@
     }
     else {
      
+        [self.userDefaults removeObjectForKey:userDefaultsKey];
+    }
+}
+
+- (id)idValueForKey:(NSString *)key {
+    
+    NSData *data = [self.userDefaults dataForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    return (data
+            ? [NSKeyedUnarchiver unarchiveObjectWithData:data]
+            : nil);
+}
+
+- (void)setIdValue:(id)value forKey:(NSString *)key {
+    
+    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
+    if (data) {
+        
+        [self.userDefaults setObject:data forKey:userDefaultsKey];
+    }
+    else {
+        
         [self.userDefaults removeObjectForKey:userDefaultsKey];
     }
 }

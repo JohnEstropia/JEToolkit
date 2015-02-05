@@ -53,14 +53,14 @@
                                     [[propertyName substringToIndex:1] uppercaseString],
                                     [propertyName substringFromIndex:1]];
             BOOL isReadOnly = NO;
-            BOOL isCopy = NO;
+            BOOL isDynamic = NO;
             for (NSString *attribute in [[[NSString alloc]
                                           initWithCString:property_getAttributes(property)
                                           encoding:NSUTF8StringEncoding] componentsSeparatedByString:@","]) {
-                
+                // https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
                 switch (attribute.UTF8String[0]) {
-                    case 'C':
-                        isCopy = YES;
+                    case 'D':
+                        isDynamic = YES;
                         break;
                     case 'G':
                         getterName = [attribute substringFromIndex:1];
@@ -79,8 +79,8 @@
                 }
             }
             if (isReadOnly
-                || !objcType
-                || (objcType.UTF8String[0] == _C_ID && !isCopy)) {
+                || !isDynamic
+                || !objcType) {
                 
                 continue;
             }

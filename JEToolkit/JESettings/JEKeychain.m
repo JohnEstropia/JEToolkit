@@ -24,6 +24,7 @@
 //
 
 #import "JEKeychain.h"
+#import <objc/runtime.h>
 
 #if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
@@ -103,6 +104,61 @@
     self = instance;
     return self;
 }
+
+
+#if __has_include("JEDebugging.h")
+
+#pragma mark - NSObject+JEDebugging
+
+- (NSString *)loggingDescription {
+    
+    NSMutableArray *keys = [[NSMutableArray alloc] init];
+    for (Class class = [self class];
+         class != [JEKeychain class] && [class isSubclassOfClass:[JEKeychain class]];
+         class = [class superclass]) {
+        
+        unsigned int numberOfProperties = 0;
+        objc_property_t *properties = class_copyPropertyList(class, &numberOfProperties);
+        for (unsigned int i = 0; i < numberOfProperties; ++i) {
+            
+            [keys addObject:@(property_getName(properties[i]))];
+        }
+        free(properties);
+    }
+    
+    NSMutableString *description = [NSMutableString stringWithString:@"{"];
+    [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
+        
+        @autoreleasepool {
+            
+            [description appendString:@"\n[\""];
+            [description appendString:[self cachedKeychainAccountForProperty:key]];
+            [description appendString:@"\"]"];
+            [description appendString:@": "];
+            
+            id value = [self valueForKey:key];
+            if (value) {
+                
+                [description appendString:[value
+                                           loggingDescriptionIncludeClass:NO
+                                           includeAddress:NO]];
+            }
+            else {
+                
+                [description appendString:@"nil"];
+            }
+            
+            [description appendString:@","];
+        }
+    }];
+    
+    [description indentByLevel:1];
+    [description appendString:@"\n}"];
+    
+    return description;
+}
+
+#endif
 
 
 #pragma mark - JESettings
@@ -312,6 +368,24 @@
 }
 
 - (void)setNSCodingValue:(id<NSCoding>)value forKey:(NSString *)key {
+    
+    [self
+     setData:(value
+              ? [NSKeyedArchiver archivedDataWithRootObject:value]
+              : nil)
+     keychainAccess:[self cachedKeychainAccessForProperty:key]
+     forAccount:[self cachedKeychainAccountForProperty:key]];
+}
+
+- (id)idValueForKey:(NSString *)key {
+    
+    NSData *data = [self dataForAccount:[self cachedKeychainAccountForProperty:key]];
+    return (data
+            ? [NSKeyedUnarchiver unarchiveObjectWithData:data]
+            : nil);
+}
+
+- (void)setIdValue:(id)value forKey:(NSString *)key {
     
     [self
      setData:(value
