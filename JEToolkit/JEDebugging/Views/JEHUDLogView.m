@@ -70,6 +70,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 @property (nonatomic, assign) NSTimeInterval lastReloadTimeInterval;
 
 @property (nonatomic, weak) UIActivityViewController *activityController;
+@property (nonatomic, copy) NSNumber *buttonOffsetOnStart;
 
 @end
 
@@ -88,6 +89,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     }
     
     _pendingLogEntries = [[NSMutableArray alloc] initWithCapacity:HUDLogSettings.numberOfLogEntriesInMemory];
+    _buttonOffsetOnStart = @(HUDLogSettings.buttonOffsetOnStart);
     
     CADisplayLink *displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkDidFire:)];
     displayLink.frameInterval = JEHUDLogDisplayFrameInterval;
@@ -98,7 +100,6 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     self.backgroundColor = [UIColor clearColor];
     
     CGRect bounds = self.bounds;
-    
     UIView *consoleView = [[UIView alloc] initWithFrame:(CGRect){
         .origin.y = (CGRectGetHeight(bounds) - JEHUDLogViewConsoleMinHeight),
         .size.width = CGRectGetWidth(bounds),
@@ -392,15 +393,21 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     CGRect bounds = self.bounds;
     UIView *menuView = self.menuView;
     CGRect menuFrame = menuView.frame;
+    
+    const CGFloat minOriginY = (CGRectGetMinY(bounds) + JEUIStatusBarHeight);
+    const CGFloat maxOriginY = (CGRectGetHeight(bounds)
+                                - JEHUDLogViewConsoleMinHeight
+                                - CGRectGetHeight(menuFrame));
     menuView.frame = (CGRect){
         .origin.x = CGRectGetMinX(bounds),
-        .origin.y = JEClamp((CGRectGetMinY(bounds) + JEUIStatusBarHeight),
-                            CGRectGetMinY(menuFrame),
-                            (CGRectGetHeight(bounds)
-                             - JEHUDLogViewConsoleMinHeight
-                             - CGRectGetHeight(menuFrame))),
+        .origin.y = JEClamp(minOriginY,
+                            (self.buttonOffsetOnStart
+                             ? (minOriginY + (self.buttonOffsetOnStart.floatValue * (maxOriginY - minOriginY)))
+                             : CGRectGetMinY(menuFrame)),
+                            maxOriginY),
         .size = menuFrame.size
     };
+    self.buttonOffsetOnStart = nil;
     
     [self layoutConsoleView];
     [self.superview bringSubviewToFront:self];

@@ -43,6 +43,11 @@
 @property (nonatomic, assign) BOOL visibleOnStart;
 
 /*!
+ The starting position of the toggle button on start. Set to a value from 0.0 (right below the statusbar) to 1.0 (the lowest expandable position). Defaults to 1.0.
+ */
+@property (nonatomic, assign) float buttonOffsetOnStart;
+
+/*!
  The maximum number of log entries at a time displayed on the HUD log. Defaults to 200 entries
  */
 @property (nonatomic, assign) NSUInteger numberOfLogEntriesInMemory;

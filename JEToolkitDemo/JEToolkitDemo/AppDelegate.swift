@@ -26,7 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let HUDLoggerSettings = JEDebugging.copyHUDLoggerSettings()
         HUDLoggerSettings.logLevelMask = .All
-        HUDLoggerSettings.visibleOnStart = true
+        HUDLoggerSettings.visibleOnStart = false
+        HUDLoggerSettings.buttonOffsetOnStart = 1.0
         JEDebugging.setHUDLoggerSettings(HUDLoggerSettings)
         
         let fileLoggerSettings = JEDebugging.copyFileLoggerSettings()

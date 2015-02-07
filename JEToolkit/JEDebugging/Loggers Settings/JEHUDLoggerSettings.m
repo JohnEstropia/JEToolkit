@@ -44,6 +44,7 @@
 #endif
     
     self.visibleOnStart = NO;
+    self.buttonOffsetOnStart = 1.0;
     self.logMessageHeaderMask = (JELogMessageHeaderSourceFile
                                  | JELogMessageHeaderFunction);
     self.numberOfLogEntriesInMemory = 200;
@@ -58,6 +59,7 @@
     
     typeof(self) copy = [super copyWithZone:zone];
     copy->_visibleOnStart = _visibleOnStart;
+    copy->_buttonOffsetOnStart = _buttonOffsetOnStart;
     copy->_numberOfLogEntriesInMemory = _numberOfLogEntriesInMemory;
     return copy;
 }
