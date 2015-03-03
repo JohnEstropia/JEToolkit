@@ -31,6 +31,9 @@
 - (instancetype)init;
 - (instancetype)initWithSuiteName:(NSString *)suiteName;
 
+- (void)setDefaultValue:(id)defaultValue forProperty:(NSString *)propertyName;
+- (void)removeDefaultValueForProperty:(NSString *)propertyName;
+
 - (void)synchronize;
 
 - (NSString *)userDefaultsKeyForProperty:(NSString *)propertyName;

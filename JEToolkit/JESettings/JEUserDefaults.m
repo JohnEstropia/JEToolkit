@@ -528,6 +528,33 @@
 
 #pragma mark - Public
 
+- (void)setDefaultValue:(id)defaultValue forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    if (!defaultValue) {
+        
+        [self removeDefaultValueForProperty:propertyName];
+        return;
+    }
+    
+    [self.userDefaults registerDefaults:@{ [self userDefaultsKeyForProperty:propertyName]: defaultValue }];
+}
+
+- (void)removeDefaultValueForProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    NSDictionary *registeredDefaults = [self.userDefaults volatileDomainForName:NSRegistrationDomain];
+    NSString *userDefaultsKey = [self userDefaultsKeyForProperty:propertyName];
+    if (registeredDefaults[userDefaultsKey] != nil) {
+        
+        NSMutableDictionary *updatedRegisteredDefaults = [[NSMutableDictionary alloc] initWithDictionary:registeredDefaults];
+        [updatedRegisteredDefaults removeObjectForKey:userDefaultsKey];
+        [self.userDefaults setVolatileDomain:updatedRegisteredDefaults forName:NSRegistrationDomain];
+    }
+}
+
 - (void)synchronize {
     
     [self.userDefaults synchronize];
