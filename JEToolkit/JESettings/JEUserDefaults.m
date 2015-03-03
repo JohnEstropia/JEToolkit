@@ -294,7 +294,7 @@
     NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
     if ([value isKindOfClass:[NSURL class]]) {
         
-        [self.userDefaults setObject:[value absoluteString] forKey:userDefaultsKey];
+        [self.userDefaults setObject:value.absoluteString forKey:userDefaultsKey];
     }
     else {
         
@@ -313,7 +313,7 @@
     NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
     if ([value isKindOfClass:[NSUUID class]]) {
         
-        [self.userDefaults setObject:[value UUIDString] forKey:userDefaultsKey];
+        [self.userDefaults setObject:value.UUIDString forKey:userDefaultsKey];
     }
     else {
         
@@ -528,17 +528,236 @@
 
 #pragma mark - Public
 
-- (void)setDefaultValue:(id)defaultValue forProperty:(NSString *)propertyName {
+- (void)setDefaultIntegerValue:(long long int)value forProperty:(NSString *)propertyName {
     
     JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
     
-    if (!defaultValue) {
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: [NSNumber numberWithLongLong:value] }];
+}
+
+- (void)setDefaultUnsignedIntegerValue:(unsigned long long int)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: [NSNumber numberWithUnsignedLongLong:value] }];
+}
+
+- (void)setDefaultBooleanValue:(bool)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: [NSNumber numberWithBool:value] }];
+}
+
+- (void)setDefaultFloatValue:(float)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: [NSNumber numberWithFloat:value] }];
+}
+
+- (void)setDefaultDoubleValue:(double)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: [NSNumber numberWithDouble:value] }];
+}
+
+- (void)setDefaultNSStringValue:(NSString *)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    if (![value isKindOfClass:[NSString class]]) {
         
         [self removeDefaultValueForProperty:propertyName];
         return;
     }
     
-    [self.userDefaults registerDefaults:@{ [self userDefaultsKeyForProperty:propertyName]: defaultValue }];
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: value }];
+}
+
+- (void)setDefaultNSNumberValue:(NSNumber *)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    if (![value isKindOfClass:[NSNumber class]]) {
+        
+        [self removeDefaultValueForProperty:propertyName];
+        return;
+    }
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: value }];
+}
+
+- (void)setDefaultNSDataValue:(NSData *)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    if (![value isKindOfClass:[NSData class]]) {
+        
+        [self removeDefaultValueForProperty:propertyName];
+        return;
+    }
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: value }];
+}
+
+- (void)setDefaultNSURLValue:(NSURL *)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    if (![value isKindOfClass:[NSURL class]]) {
+        
+        [self removeDefaultValueForProperty:propertyName];
+        return;
+    }
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: value.absoluteString }];
+}
+
+- (void)setDefaultNSUUIDValue:(NSUUID *)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    if (![value isKindOfClass:[NSUUID class]]) {
+        
+        [self removeDefaultValueForProperty:propertyName];
+        return;
+    }
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: value.UUIDString }];
+}
+
+- (void)setDefaultNSCodingValue:(id<NSCoding>)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
+    if (!data) {
+        
+        [self removeDefaultValueForProperty:propertyName];
+        return;
+    }
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: data }];
+}
+
+- (void)setDefaultIdValue:(id)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
+    if (!data) {
+        
+        [self removeDefaultValueForProperty:propertyName];
+        return;
+    }
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: data }];
+}
+
+- (void)setDefaultClassValue:(Class)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    if (!value) {
+        
+        [self removeDefaultValueForProperty:propertyName];
+        return;
+    }
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: NSStringFromClass(value) }];
+}
+
+- (void)setDefaultSelectorValue:(SEL)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    if (!value) {
+        
+        [self removeDefaultValueForProperty:propertyName];
+        return;
+    }
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: NSStringFromSelector(value) }];
+}
+
+- (void)setDefaultCGPointValue:(CGPoint)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: NSStringFromCGPoint(value) }];
+}
+
+- (void)setDefaultCGSizeValue:(CGSize)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: NSStringFromCGSize(value) }];
+}
+
+- (void)setDefaultCGRectValue:(CGRect)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: NSStringFromCGRect(value) }];
+}
+
+- (void)setDefaultCGAffineTransformValue:(CGAffineTransform)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: NSStringFromCGAffineTransform(value) }];
+}
+
+- (void)setDefaultCGVectorValue:(CGVector)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: NSStringFromCGVector(value) }];
+}
+
+- (void)setDefaultUIEdgeInsetsValue:(UIEdgeInsets)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: NSStringFromUIEdgeInsets(value) }];
+}
+
+- (void)setDefaultUIOffsetValue:(UIOffset)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: NSStringFromUIOffset(value) }];
+}
+
+- (void)setDefaultNSRangeValue:(NSRange)value forProperty:(NSString *)propertyName {
+    
+    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
+    
+    [self.userDefaults registerDefaults:
+     @{ [self userDefaultsKeyForProperty:propertyName]: NSStringFromRange(value) }];
 }
 
 - (void)removeDefaultValueForProperty:(NSString *)propertyName {
