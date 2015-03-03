@@ -31,6 +31,7 @@
 #import "JEFormulas.h"
 #import "JEUIMetrics.h"
 #import "JESynthesize.h"
+#import "JEDispatch.h"
 
 
 #pragma mark - Categories
@@ -65,10 +66,6 @@
 #pragma mark - Submodules
 
 #import "JEDebugging.h"
-
-#import "JEDispatch.h"
-#import "NSObject+JEDispatch.h"
-
 #import "JESettings.h"
 #import "JEUserDefaults.h"
 #import "JEKeychain.h"

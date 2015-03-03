@@ -285,4 +285,10 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
                                    class_getInstanceMethod(self, overrideSelector));
 }
 
+
+#pragma mark Object Tagging
+
+JESynthesize(strong, NSUUID *, dispatchTaskID, setDispatchTaskID);
+
+
 @end

@@ -109,4 +109,11 @@
            withOverrideMethod:(SEL)overrideSelector;
 
 
+#pragma mark - Object Tagging
+
+/*! Provides object-tagging.
+ */
+@property (nonatomic, strong) NSUUID *dispatchTaskID;
+
+
 @end

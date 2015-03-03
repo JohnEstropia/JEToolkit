@@ -30,11 +30,6 @@ Pod::Spec.new do |s|
     ss.source_files         = "#{s.name}/JESettings/**/*.{h,m,c}"
     ss.ios.frameworks       = 'Foundation'
   end
-
-  s.subspec "JEDispatch" do |ss|
-    ss.source_files         = "#{s.name}/JEDispatch/**/*.{h,m,c}"
-    ss.ios.frameworks       = 'Foundation'
-  end
   
   s.subspec "JEOrderedDictionary" do |ss|
     ss.source_files         = "#{s.name}/JEOrderedDictionary/**/*.{h,m,c}"
