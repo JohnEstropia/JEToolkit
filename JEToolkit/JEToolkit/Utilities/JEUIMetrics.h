@@ -46,6 +46,18 @@ JE_EXTERN
 const CGSize JEUIIPhone5ScreenLandscapeSize;
 
 JE_EXTERN
+const CGSize JEUIIPhone6ScreenPortraitSize;
+
+JE_EXTERN
+const CGSize JEUIIPhone6ScreenLandscapeSize;
+
+JE_EXTERN
+const CGSize JEUIIPhone6PlusScreenPortraitSize;
+
+JE_EXTERN
+const CGSize JEUIIPhone6PlusScreenLandscapeSize;
+
+JE_EXTERN
 const CGSize JEUIIPadScreenPortraitSize;
 
 JE_EXTERN

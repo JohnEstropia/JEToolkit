@@ -32,6 +32,12 @@ const CGSize JEUIIPhone4ScreenLandscapeSize = (CGSize){ .width = 480.0f, .height
 const CGSize JEUIIPhone5ScreenPortraitSize = (CGSize){ .width = 320.0f, .height = 568.0f };
 const CGSize JEUIIPhone5ScreenLandscapeSize = (CGSize){ .width = 568.0f, .height = 320.0f };
 
+const CGSize JEUIIPhone6ScreenPortraitSize = (CGSize){ .width = 375.0f, .height = 667.0f };
+const CGSize JEUIIPhone6ScreenLandscapeSize = (CGSize){ .width = 667.0f, .height = 375.0f };
+
+const CGSize JEUIIPhone6PlusScreenPortraitSize = (CGSize){ .width = 414.0f, .height = 736.0f };
+const CGSize JEUIIPhone6PlusScreenLandscapeSize = (CGSize){ .width = 736.0f, .height = 414.0f };
+
 const CGSize JEUIIPadScreenPortraitSize = (CGSize){ .width = 768.0f, .height = 1024.0f };
 const CGSize JEUIIPadScreenLandscapeSize = (CGSize){ .width = 1024.0f, .height = 768.0f };
 
