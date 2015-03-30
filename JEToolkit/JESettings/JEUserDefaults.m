@@ -332,15 +332,20 @@
 - (void)setNSCodingValue:(id<NSCoding>)value forKey:(NSString *)key {
     
     NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
-    if (data) {
+    if (!value) {
         
-        [self.userDefaults setObject:data forKey:userDefaultsKey];
-    }
-    else {
-     
         [self.userDefaults removeObjectForKey:userDefaultsKey];
+        return;
     }
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
+    if (!data) {
+        
+        [self.userDefaults removeObjectForKey:userDefaultsKey];
+        return;
+    }
+    
+    [self.userDefaults setObject:data forKey:userDefaultsKey];
 }
 
 - (id)idValueForKey:(NSString *)key {
@@ -647,6 +652,13 @@
     
     JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
     
+    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:propertyName];
+    if (!value) {
+        
+        [self removeDefaultValueForProperty:propertyName];
+        return;
+    }
+    
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
     if (!data) {
         
@@ -654,14 +666,20 @@
         return;
     }
     
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: data }];
+    [self.userDefaults registerDefaults:@{ userDefaultsKey: data }];
 }
 
 - (void)setDefaultIdValue:(id)value forProperty:(NSString *)propertyName {
     
     JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
     
+    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:propertyName];
+    if (!value) {
+        
+        [self removeDefaultValueForProperty:propertyName];
+        return;
+    }
+    
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
     if (!data) {
         
@@ -669,8 +687,7 @@
         return;
     }
     
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: data }];
+    [self.userDefaults registerDefaults:@{ userDefaultsKey: data }];
 }
 
 - (void)setDefaultClassValue:(Class)value forProperty:(NSString *)propertyName {
