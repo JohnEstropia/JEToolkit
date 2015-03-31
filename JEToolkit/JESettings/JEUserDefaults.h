@@ -31,30 +31,7 @@
 - (instancetype)init;
 - (instancetype)initWithSuiteName:(NSString *)suiteName;
 
-- (void)setDefaultIntegerValue:(long long int)value forProperty:(NSString *)propertyName;
-- (void)setDefaultUnsignedIntegerValue:(unsigned long long int)value forProperty:(NSString *)propertyName;
-- (void)setDefaultBooleanValue:(bool)value forProperty:(NSString *)propertyName;
-- (void)setDefaultFloatValue:(float)value forProperty:(NSString *)propertyName;
-- (void)setDefaultDoubleValue:(double)value forProperty:(NSString *)propertyName;
-- (void)setDefaultNSStringValue:(NSString *)value forProperty:(NSString *)propertyName;
-- (void)setDefaultNSNumberValue:(NSNumber *)value forProperty:(NSString *)propertyName;
-- (void)setDefaultNSDataValue:(NSData *)value forProperty:(NSString *)propertyName;
-- (void)setDefaultNSURLValue:(NSURL *)value forProperty:(NSString *)propertyName;
-- (void)setDefaultNSUUIDValue:(NSUUID *)value forProperty:(NSString *)propertyName;
-- (void)setDefaultNSCodingValue:(id<NSCoding>)value forProperty:(NSString *)propertyName;
-- (void)setDefaultIdValue:(id)value forProperty:(NSString *)propertyName;
-- (void)setDefaultClassValue:(Class)value forProperty:(NSString *)propertyName;
-- (void)setDefaultSelectorValue:(SEL)value forProperty:(NSString *)propertyName;
-- (void)setDefaultCGPointValue:(CGPoint)value forProperty:(NSString *)propertyName;
-- (void)setDefaultCGSizeValue:(CGSize)value forProperty:(NSString *)propertyName;
-- (void)setDefaultCGRectValue:(CGRect)value forProperty:(NSString *)propertyName;
-- (void)setDefaultCGAffineTransformValue:(CGAffineTransform)value forProperty:(NSString *)propertyName;
-- (void)setDefaultCGVectorValue:(CGVector)value forProperty:(NSString *)propertyName;
-- (void)setDefaultUIEdgeInsetsValue:(UIEdgeInsets)value forProperty:(NSString *)propertyName;
-- (void)setDefaultUIOffsetValue:(UIOffset)value forProperty:(NSString *)propertyName;
-- (void)setDefaultNSRangeValue:(NSRange)value forProperty:(NSString *)propertyName;
-
-- (void)removeDefaultValueForProperty:(NSString *)propertyName;
+- (instancetype)proxyForDefaultValues;
 
 - (void)synchronize;
 

@@ -486,7 +486,7 @@ JESynthesize(weak, id, synthesizedWeak, setSynthesizedWeak);
     XCTAssert(userDefaults == [[JETestUserDefaults alloc] init]);
     
     NSString *defaultStringValue = @"AAAAA";
-    [userDefaults setDefaultNSStringValue:defaultStringValue forProperty:JEKeypath(typeof(userDefaults), string)];
+    [userDefaults proxyForDefaultValues].string = defaultStringValue;
     
     XCTAssert([userDefaults.string isEqual:defaultStringValue]);
     XCTAssert([[[NSUserDefaults standardUserDefaults] objectForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, string)]] isEqual:defaultStringValue]);
@@ -521,7 +521,7 @@ JESynthesize(weak, id, synthesizedWeak, setSynthesizedWeak);
     XCTAssert([userDefaults.string isEqual:defaultStringValue]);
     XCTAssert([[[NSUserDefaults standardUserDefaults] objectForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, string)]] isEqual:defaultStringValue]);
     
-    [userDefaults setDefaultNSStringValue:nil forProperty:JEKeypath(typeof(userDefaults), string)];
+    [userDefaults proxyForDefaultValues].string = nil;
     
     XCTAssert(userDefaults.string == nil);
     XCTAssert([[NSUserDefaults standardUserDefaults] objectForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, string)]] == nil);

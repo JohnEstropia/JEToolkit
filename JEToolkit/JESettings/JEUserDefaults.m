@@ -38,6 +38,9 @@
 @property (nonatomic, strong, readonly) NSUserDefaults *userDefaults;
 @property (nonatomic, strong, readonly) NSMutableDictionary *cachedUserDefaultsKeys;
 
+@property (nonatomic, weak, readonly) JEUserDefaults *parentForProxy;
+@property (nonatomic, strong, readonly) JEUserDefaults *cachedProxyForDefaultValues;
+
 @end
 
 
@@ -81,6 +84,19 @@
     });
     
     self = instance;
+    return self;
+}
+
+- (instancetype)initProxyForUserDefaultsWithParent:(JEUserDefaults *)parentForProxy {
+    
+    self = [super init];
+    if (!self) {
+        
+        return nil;
+    }
+    
+    _parentForProxy = parentForProxy;
+    
     return self;
 }
 
@@ -144,379 +160,282 @@
 
 - (long long int)integerValueForKey:(NSString *)key {
     
-    return [(NSNumber *)[self.userDefaults
-             objectForKey:[self cachedUserDefaultsKeyForProperty:key]] longLongValue];
+    return [(NSNumber *)[self objectForKey:[self cachedUserDefaultsKeyForProperty:key]] longLongValue];
 }
 
 - (void)setIntegerValue:(long long int)value forKey:(NSString *)key {
     
-    [self.userDefaults
+    [self
      setObject:[NSNumber numberWithLongLong:value]
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (unsigned long long int)unsignedIntegerValueForKey:(NSString *)key {
     
-    return [(NSNumber *)[self.userDefaults
-             objectForKey:[self cachedUserDefaultsKeyForProperty:key]] unsignedLongLongValue];
+    return [(NSNumber *)[self objectForKey:[self cachedUserDefaultsKeyForProperty:key]] unsignedLongLongValue];
 }
 
 - (void)setUnsignedIntegerValue:(unsigned long long int)value forKey:(NSString *)key {
     
-    [self.userDefaults
+    [self
      setObject:[NSNumber numberWithUnsignedLongLong:value]
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (bool)booleanValueForKey:(NSString *)key {
     
-    return [self.userDefaults
-            boolForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    return [(NSNumber *)[self objectForKey:[self cachedUserDefaultsKeyForProperty:key]] boolValue];
 }
 
 - (void)setBooleanValue:(bool)value forKey:(NSString *)key {
     
-    [self.userDefaults
-     setBool:value
+    [self
+     setObject:@(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (float)floatValueForKey:(NSString *)key {
     
-    return [self.userDefaults
-            floatForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    return [(NSNumber *)[self objectForKey:[self cachedUserDefaultsKeyForProperty:key]] floatValue];
 }
 
 - (void)setFloatValue:(float)value forKey:(NSString *)key {
     
-    [self.userDefaults
-     setFloat:value
+    [self
+     setObject:@(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (double)doubleValueForKey:(NSString *)key {
     
-    return [self.userDefaults
-            doubleForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    return [(NSNumber *)[self objectForKey:[self cachedUserDefaultsKeyForProperty:key]] doubleValue];
 }
 
 - (void)setDoubleValue:(double)value forKey:(NSString *)key {
     
-    [self.userDefaults
-     setDouble:value
+    [self
+     setObject:@(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (NSString *)NSStringValueForKey:(NSString *)key {
     
-    return [self.userDefaults
-            objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    return [self objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (void)setNSStringValue:(NSString *)value forKey:(NSString *)key {
     
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    if ([value isKindOfClass:[NSString class]]) {
-        
-        [self.userDefaults setObject:value forKey:userDefaultsKey];
-    }
-    else {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-    }
+    [self
+     setObject:([value isKindOfClass:[NSString class]] ? value : nil)
+     forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (NSNumber *)NSNumberValueForKey:(NSString *)key {
     
-    return [self.userDefaults
-            objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    return [self objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (void)setNSNumberValue:(NSNumber *)value forKey:(NSString *)key {
     
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    if ([value isKindOfClass:[NSNumber class]]) {
-        
-        [self.userDefaults setObject:value forKey:userDefaultsKey];
-    }
-    else {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-    }
+    [self
+     setObject:([value isKindOfClass:[NSNumber class]] ? value : nil)
+     forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (NSDate *)NSDateValueForKey:(NSString *)key {
     
-    return [self.userDefaults
-            objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    return [self objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (void)setNSDateValue:(NSDate *)value forKey:(NSString *)key {
     
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    if ([value isKindOfClass:[NSDate class]]) {
-        
-        [self.userDefaults setObject:value forKey:userDefaultsKey];
-    }
-    else {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-    }
+    [self
+     setObject:([value isKindOfClass:[NSDate class]] ? value : nil)
+     forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (NSData *)NSDataValueForKey:(NSString *)key {
     
-    return [self.userDefaults
-            objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    return [self objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (void)setNSDataValue:(NSData *)value forKey:(NSString *)key {
     
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    if ([value isKindOfClass:[NSData class]]) {
-        
-        [self.userDefaults setObject:value forKey:userDefaultsKey];
-    }
-    else {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-    }
+    [self
+     setObject:([value isKindOfClass:[NSData class]] ? value : nil)
+     forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (NSURL *)NSURLValueForKey:(NSString *)key {
     
-    return [NSURL URLWithString:[self.userDefaults
-                                 objectForKey:[self cachedUserDefaultsKeyForProperty:key]]];
+    return [NSURL URLWithString:[self objectForKey:[self cachedUserDefaultsKeyForProperty:key]]];
 }
 
 - (void)setNSURLValue:(NSURL *)value forKey:(NSString *)key {
     
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    if ([value isKindOfClass:[NSURL class]]) {
-        
-        [self.userDefaults setObject:value.absoluteString forKey:userDefaultsKey];
-    }
-    else {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-    }
+    [self
+     setObject:([value isKindOfClass:[NSURL class]] ? value.absoluteString : nil)
+     forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (NSUUID *)NSUUIDValueForKey:(NSString *)key {
     
-    return [[NSUUID alloc] initWithUUIDString:[self.userDefaults
-                                               objectForKey:[self cachedUserDefaultsKeyForProperty:key]]];
+    return [[NSUUID alloc] initWithUUIDString:[self objectForKey:[self cachedUserDefaultsKeyForProperty:key]]];
 }
 
 - (void)setNSUUIDValue:(NSUUID *)value forKey:(NSString *)key {
     
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    if ([value isKindOfClass:[NSUUID class]]) {
-        
-        [self.userDefaults setObject:value.UUIDString forKey:userDefaultsKey];
-    }
-    else {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-    }
+    [self
+     setObject:([value isKindOfClass:[NSUUID class]] ? value.UUIDString : nil)
+     forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (id<NSCoding>)NSCodingValueForKey:(NSString *)key {
     
-    NSData *data = [self.userDefaults dataForKey:[self cachedUserDefaultsKeyForProperty:key]];
-    return (data
-            ? [NSKeyedUnarchiver unarchiveObjectWithData:data]
-            : nil);
+    NSData *data = [self objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    return (data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil);
 }
 
 - (void)setNSCodingValue:(id<NSCoding>)value forKey:(NSString *)key {
     
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    if (!value) {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-        return;
-    }
-    
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
-    if (!data) {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-        return;
-    }
-    
-    [self.userDefaults setObject:data forKey:userDefaultsKey];
+    [self
+     setObject:(value ? [NSKeyedArchiver archivedDataWithRootObject:value] : nil)
+     forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (id)idValueForKey:(NSString *)key {
     
-    NSData *data = [self.userDefaults dataForKey:[self cachedUserDefaultsKeyForProperty:key]];
-    return (data
+    NSData *data = [self objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    return ([data isKindOfClass:[NSData class]]
             ? [NSKeyedUnarchiver unarchiveObjectWithData:data]
             : nil);
 }
 
 - (void)setIdValue:(id)value forKey:(NSString *)key {
     
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    if (!value) {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-        return;
-    }
-    
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
-    if (!data) {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-        return;
-    }
-    
-    [self.userDefaults setObject:data forKey:userDefaultsKey];
+    [self
+     setObject:(value ? [NSKeyedArchiver archivedDataWithRootObject:value] : nil)
+     forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (Class)classValueForKey:(NSString *)key {
     
-    NSString *className = [self.userDefaults objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    NSString *className = [self objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
     return (className ? NSClassFromString(className) : Nil);
 }
 
 - (void)setClassValue:(Class)value forKey:(NSString *)key {
     
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    if (value) {
-        
-        [self.userDefaults
-         setObject:NSStringFromClass(value)
-         forKey:userDefaultsKey];
-    }
-    else {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-    }
+    [self
+     setObject:(value ? NSStringFromClass(value) : nil)
+     forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (SEL)selectorValueForKey:(NSString *)key {
     
-    NSString *selectorName = [self.userDefaults objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    NSString *selectorName = [self objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
     return (selectorName ? NSSelectorFromString(selectorName) : NULL);
 }
 
 - (void)setSelectorValue:(SEL)value forKey:(NSString *)key {
     
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:key];
-    if (value) {
-        
-        [self.userDefaults
-         setObject:NSStringFromSelector(value)
-         forKey:userDefaultsKey];
-    }
-    else {
-        
-        [self.userDefaults removeObjectForKey:userDefaultsKey];
-    }
+    [self
+     setObject:(value ? NSStringFromSelector(value) : nil)
+     forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (CGPoint)CGPointValueForKey:(NSString *)key {
     
-    return CGPointFromString([self.userDefaults
-                              objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
+    return CGPointFromString([self objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setCGPointValue:(CGPoint)value forKey:(NSString *)key {
     
-    [self.userDefaults
+    [self
      setObject:NSStringFromCGPoint(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (CGSize)CGSizeValueForKey:(NSString *)key {
     
-    return CGSizeFromString([self.userDefaults
-                             objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
+    return CGSizeFromString([self objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setCGSizeValue:(CGSize)value forKey:(NSString *)key {
     
-    [self.userDefaults
+    [self
      setObject:NSStringFromCGSize(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (CGRect)CGRectValueForKey:(NSString *)key {
     
-    return CGRectFromString([self.userDefaults
-                             objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
+    return CGRectFromString([self objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setCGRectValue:(CGRect)value forKey:(NSString *)key {
     
-    [self.userDefaults
+    [self
      setObject:NSStringFromCGRect(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (CGAffineTransform)CGAffineTransformValueForKey:(NSString *)key {
     
-    return CGAffineTransformFromString([self.userDefaults
-                                        objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
+    return CGAffineTransformFromString([self objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setCGAffineTransformValue:(CGAffineTransform)value forKey:(NSString *)key {
     
-    [self.userDefaults
+    [self
      setObject:NSStringFromCGAffineTransform(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (CGVector)CGVectorValueForKey:(NSString *)key {
     
-    return CGVectorFromString([self.userDefaults
-                               objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
+    return CGVectorFromString([self objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setCGVectorValue:(CGVector)value forKey:(NSString *)key {
     
-    [self.userDefaults
+    [self
      setObject:NSStringFromCGVector(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (UIEdgeInsets)UIEdgeInsetsValueForKey:(NSString *)key {
     
-    return UIEdgeInsetsFromString([self.userDefaults
-                                   objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
+    return UIEdgeInsetsFromString([self objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setUIEdgeInsetsValue:(UIEdgeInsets)value forKey:(NSString *)key {
     
-    [self.userDefaults
+    [self
      setObject:NSStringFromUIEdgeInsets(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (UIOffset)UIOffsetValueForKey:(NSString *)key {
     
-    return UIOffsetFromString([self.userDefaults
-                               objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
+    return UIOffsetFromString([self objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setUIOffsetValue:(UIOffset)value forKey:(NSString *)key {
     
-    [self.userDefaults
+    [self
      setObject:NSStringFromUIOffset(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
 
 - (NSRange)NSRangeValueForKey:(NSString *)key {
     
-    return NSRangeFromString([self.userDefaults
-                              objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
+    return NSRangeFromString([self objectForKey:[self cachedUserDefaultsKeyForProperty:key]]);
 }
 
 - (void)setNSRangeValue:(NSRange)value forKey:(NSString *)key {
     
-    [self.userDefaults
+    [self
      setObject:NSStringFromRange(value)
      forKey:[self cachedUserDefaultsKeyForProperty:key]];
 }
@@ -525,6 +444,12 @@
 #pragma mark - Private
 
 - (NSString *)cachedUserDefaultsKeyForProperty:(NSString *)propertyName {
+    
+    JEUserDefaults *parentForProxy = self.parentForProxy;
+    if (parentForProxy) {
+        
+        return [parentForProxy cachedUserDefaultsKeyForProperty:propertyName];
+    }
     
     NSString *userDefaultsKey = self.cachedUserDefaultsKeys[propertyName];
     if (!userDefaultsKey) {
@@ -535,273 +460,77 @@
     return userDefaultsKey;
 }
 
+- (id)objectForKey:(NSString *)key {
+    
+    JEUserDefaults *parentForProxy = self.parentForProxy;
+    if (!parentForProxy) {
+        
+        return [self.userDefaults objectForKey:key];
+    }
+    
+    return [parentForProxy.userDefaults volatileDomainForName:NSRegistrationDomain][key];
+}
+
+- (void)setObject:(id)object forKey:(NSString *)key {
+    
+    JEUserDefaults *parentForProxy = self.parentForProxy;
+    if (parentForProxy) {
+        
+        NSUserDefaults *userDefaults = parentForProxy.userDefaults;
+        NSMutableDictionary *volatileDomain = [[userDefaults volatileDomainForName:NSRegistrationDomain] mutableCopy];
+        if (object) {
+            
+            volatileDomain[key] = object;
+        }
+        else {
+            
+            [volatileDomain removeObjectForKey:key];
+        }
+        
+        [userDefaults setVolatileDomain:volatileDomain forName:NSRegistrationDomain];
+    }
+    else {
+        
+        [self.userDefaults setObject:object forKey:key];
+    }
+}
+
 
 #pragma mark - Public
 
-- (void)setDefaultIntegerValue:(long long int)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: [NSNumber numberWithLongLong:value] }];
-}
+- (instancetype)proxyForDefaultValues {
 
-- (void)setDefaultUnsignedIntegerValue:(unsigned long long int)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: [NSNumber numberWithUnsignedLongLong:value] }];
-}
-
-- (void)setDefaultBooleanValue:(bool)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: [NSNumber numberWithBool:value] }];
-}
-
-- (void)setDefaultFloatValue:(float)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: [NSNumber numberWithFloat:value] }];
-}
-
-- (void)setDefaultDoubleValue:(double)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: [NSNumber numberWithDouble:value] }];
-}
-
-- (void)setDefaultNSStringValue:(NSString *)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    if (![value isKindOfClass:[NSString class]]) {
+    if (self.parentForProxy) {
         
-        [self removeDefaultValueForProperty:propertyName];
-        return;
+        return self;
     }
     
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: value }];
-}
-
-- (void)setDefaultNSNumberValue:(NSNumber *)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    if (![value isKindOfClass:[NSNumber class]]) {
+    if (!_cachedProxyForDefaultValues) {
         
-        [self removeDefaultValueForProperty:propertyName];
-        return;
+        _cachedProxyForDefaultValues = [[[self class] alloc] initProxyForUserDefaultsWithParent:self];
     }
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: value }];
-}
-
-- (void)setDefaultNSDataValue:(NSData *)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    if (![value isKindOfClass:[NSData class]]) {
-        
-        [self removeDefaultValueForProperty:propertyName];
-        return;
-    }
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: value }];
-}
-
-- (void)setDefaultNSURLValue:(NSURL *)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    if (![value isKindOfClass:[NSURL class]]) {
-        
-        [self removeDefaultValueForProperty:propertyName];
-        return;
-    }
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: value.absoluteString }];
-}
-
-- (void)setDefaultNSUUIDValue:(NSUUID *)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    if (![value isKindOfClass:[NSUUID class]]) {
-        
-        [self removeDefaultValueForProperty:propertyName];
-        return;
-    }
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: value.UUIDString }];
-}
-
-- (void)setDefaultNSCodingValue:(id<NSCoding>)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:propertyName];
-    if (!value) {
-        
-        [self removeDefaultValueForProperty:propertyName];
-        return;
-    }
-    
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
-    if (!data) {
-        
-        [self removeDefaultValueForProperty:propertyName];
-        return;
-    }
-    
-    [self.userDefaults registerDefaults:@{ userDefaultsKey: data }];
-}
-
-- (void)setDefaultIdValue:(id)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:propertyName];
-    if (!value) {
-        
-        [self removeDefaultValueForProperty:propertyName];
-        return;
-    }
-    
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:value];
-    if (!data) {
-        
-        [self removeDefaultValueForProperty:propertyName];
-        return;
-    }
-    
-    [self.userDefaults registerDefaults:@{ userDefaultsKey: data }];
-}
-
-- (void)setDefaultClassValue:(Class)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    if (!value) {
-        
-        [self removeDefaultValueForProperty:propertyName];
-        return;
-    }
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: NSStringFromClass(value) }];
-}
-
-- (void)setDefaultSelectorValue:(SEL)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    if (!value) {
-        
-        [self removeDefaultValueForProperty:propertyName];
-        return;
-    }
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: NSStringFromSelector(value) }];
-}
-
-- (void)setDefaultCGPointValue:(CGPoint)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: NSStringFromCGPoint(value) }];
-}
-
-- (void)setDefaultCGSizeValue:(CGSize)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: NSStringFromCGSize(value) }];
-}
-
-- (void)setDefaultCGRectValue:(CGRect)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: NSStringFromCGRect(value) }];
-}
-
-- (void)setDefaultCGAffineTransformValue:(CGAffineTransform)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: NSStringFromCGAffineTransform(value) }];
-}
-
-- (void)setDefaultCGVectorValue:(CGVector)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: NSStringFromCGVector(value) }];
-}
-
-- (void)setDefaultUIEdgeInsetsValue:(UIEdgeInsets)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: NSStringFromUIEdgeInsets(value) }];
-}
-
-- (void)setDefaultUIOffsetValue:(UIOffset)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: NSStringFromUIOffset(value) }];
-}
-
-- (void)setDefaultNSRangeValue:(NSRange)value forProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    [self.userDefaults registerDefaults:
-     @{ [self cachedUserDefaultsKeyForProperty:propertyName]: NSStringFromRange(value) }];
-}
-
-- (void)removeDefaultValueForProperty:(NSString *)propertyName {
-    
-    JEAssertParameter([self respondsToSelector:NSSelectorFromString(propertyName)]);
-    
-    NSDictionary *registeredDefaults = [self.userDefaults volatileDomainForName:NSRegistrationDomain];
-    NSString *userDefaultsKey = [self cachedUserDefaultsKeyForProperty:propertyName];
-    if (registeredDefaults[userDefaultsKey] != nil) {
-        
-        NSMutableDictionary *updatedRegisteredDefaults = [[NSMutableDictionary alloc] initWithDictionary:registeredDefaults];
-        [updatedRegisteredDefaults removeObjectForKey:userDefaultsKey];
-        [self.userDefaults setVolatileDomain:updatedRegisteredDefaults forName:NSRegistrationDomain];
-    }
+    return _cachedProxyForDefaultValues;
 }
 
 - (void)synchronize {
+    
+    JEUserDefaults *parentForProxy = self.parentForProxy;
+    if (parentForProxy) {
+        
+        [parentForProxy synchronize];
+        return;
+    }
     
     [self.userDefaults synchronize];
 }
 
 - (NSString *)userDefaultsKeyForProperty:(NSString *)propertyName {
+    
+    JEUserDefaults *parentForProxy = self.parentForProxy;
+    if (parentForProxy) {
+        
+        return [parentForProxy userDefaultsKeyForProperty:propertyName];
+    }
     
     return [NSString stringWithFormat:@"%@.%@", NSStringFromClass([self class]), propertyName];
 }
