@@ -90,7 +90,7 @@
 
 /*! Loads a view from nib. This assumes that the .nib file was named as the view's class name, and that the UIView is the first root object in the nib.
  */
-+ (nullable instancetype)viewFromNib;
++ (null_unspecified instancetype)viewFromNib;
 
 
 #pragma mark - Hierarchy Helpers

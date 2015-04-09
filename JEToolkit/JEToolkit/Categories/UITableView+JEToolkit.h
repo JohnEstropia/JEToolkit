@@ -35,18 +35,18 @@
 - (void)registerTableViewHeaderFooterViewClass:(nonnull Class)headerFooterViewClass
                                  subIdentifier:(nullable NSString *)subIdentifier;
 
-- (nonnull id)dequeueReusableCellWithClass:(nonnull Class)tableViewCellClass
+- (nonnull id)dequeueReusableCellWithClass:(null_unspecified Class)tableViewCellClass
                       forIndexPath:(nullable NSIndexPath *)indexPath;
-- (nonnull id)dequeueReusableCellWithClass:(nonnull Class)tableViewCellClass
+- (nonnull id)dequeueReusableCellWithClass:(null_unspecified Class)tableViewCellClass
                      subIdentifier:(nullable NSString *)subIdentifier
                       forIndexPath:(nullable NSIndexPath *)indexPath;
 
-- (nonnull id)dequeueReusableHeaderFooterViewWithClass:(nonnull Class)headerFooterViewClass;
-- (nonnull id)dequeueReusableHeaderFooterViewWithClass:(nonnull Class)headerFooterViewClass
+- (nonnull id)dequeueReusableHeaderFooterViewWithClass:(null_unspecified Class)headerFooterViewClass;
+- (nonnull id)dequeueReusableHeaderFooterViewWithClass:(null_unspecified Class)headerFooterViewClass
                                  subIdentifier:(nullable NSString *)subIdentifier;
 
-- (nonnull id)cellForQueryingHeightWithClass:(nonnull Class)tableViewCellClass;
-- (nonnull id)cellForQueryingHeightWithClass:(nonnull Class)tableViewCellClass
+- (nonnull id)cellForQueryingHeightWithClass:(null_unspecified Class)tableViewCellClass;
+- (nonnull id)cellForQueryingHeightWithClass:(null_unspecified Class)tableViewCellClass
                                subIdentifier:(nullable NSString *)subIdentifier;
 
 @end

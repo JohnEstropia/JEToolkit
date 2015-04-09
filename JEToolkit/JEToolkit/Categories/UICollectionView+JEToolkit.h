@@ -37,16 +37,16 @@
                                 ofKind:(nonnull NSString *)supplementaryViewKind
                          subIdentifier:(nullable NSString *)subIdentifier;
 
-- (nonnull id)dequeueReusableCellWithClass:(nonnull Class)collectionViewCellClass
+- (nonnull id)dequeueReusableCellWithClass:(null_unspecified Class)collectionViewCellClass
                               forIndexPath:(nonnull NSIndexPath *)indexPath;
-- (nonnull id)dequeueReusableCellWithClass:(nonnull Class)collectionViewCellClass
+- (nonnull id)dequeueReusableCellWithClass:(null_unspecified Class)collectionViewCellClass
                              subIdentifier:(nullable NSString *)subIdentifier
                               forIndexPath:(nonnull NSIndexPath *)indexPath;
 
-- (nonnull id)dequeueSupplementaryViewWithClass:(nonnull Class)supplementaryViewClass
+- (nonnull id)dequeueSupplementaryViewWithClass:(null_unspecified Class)supplementaryViewClass
                                          ofKind:(nonnull NSString *)supplementaryViewKind
                                    forIndexPath:(nonnull NSIndexPath *)indexPath;
-- (nonnull id)dequeueSupplementaryViewWithClass:(nonnull Class)supplementaryViewClass
+- (nonnull id)dequeueSupplementaryViewWithClass:(null_unspecified Class)supplementaryViewClass
                                          ofKind:(nonnull NSString *)supplementaryViewKind
                                   subIdentifier:(nullable NSString *)subIdentifier
                                    forIndexPath:(nonnull NSIndexPath *)indexPath;
