@@ -27,25 +27,26 @@
 
 @interface UITableView (JEToolkit)
 
-- (void)registerTableViewCellClass:(Class)tableViewCellClass;
-- (void)registerTableViewCellClass:(Class)tableViewCellClass
-                     subIdentifier:(NSString *)subIdentifier;
+- (void)registerTableViewCellClass:(nonnull Class)tableViewCellClass;
+- (void)registerTableViewCellClass:(nonnull Class)tableViewCellClass
+                     subIdentifier:(nullable NSString *)subIdentifier;
 
-- (void)registerTableViewHeaderFooterViewClass:(Class)headerFooterViewClass;
-- (void)registerTableViewHeaderFooterViewClass:(Class)headerFooterViewClass
-                                 subIdentifier:(NSString *)subIdentifier;
+- (void)registerTableViewHeaderFooterViewClass:(nonnull Class)headerFooterViewClass;
+- (void)registerTableViewHeaderFooterViewClass:(nonnull Class)headerFooterViewClass
+                                 subIdentifier:(nullable NSString *)subIdentifier;
 
-- (id)dequeueReusableCellWithClass:(Class)tableViewCellClass
-                      forIndexPath:(NSIndexPath *)indexPath;
-- (id)dequeueReusableCellWithClass:(Class)tableViewCellClass
-                     subIdentifier:(NSString *)subIdentifier
-                      forIndexPath:(NSIndexPath *)indexPath;
+- (nonnull id)dequeueReusableCellWithClass:(nonnull Class)tableViewCellClass
+                      forIndexPath:(nullable NSIndexPath *)indexPath;
+- (nonnull id)dequeueReusableCellWithClass:(nonnull Class)tableViewCellClass
+                     subIdentifier:(nullable NSString *)subIdentifier
+                      forIndexPath:(nullable NSIndexPath *)indexPath;
 
-- (id)dequeueReusableHeaderFooterViewWithClass:(Class)headerFooterViewClass;
-- (id)dequeueReusableHeaderFooterViewWithClass:(Class)headerFooterViewClass
-                                 subIdentifier:(NSString *)subIdentifier;
+- (nonnull id)dequeueReusableHeaderFooterViewWithClass:(nonnull Class)headerFooterViewClass;
+- (nonnull id)dequeueReusableHeaderFooterViewWithClass:(nonnull Class)headerFooterViewClass
+                                 subIdentifier:(nullable NSString *)subIdentifier;
 
-- (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass;
-- (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass subIdentifier:(NSString *)subIdentifier;
+- (nonnull id)cellForQueryingHeightWithClass:(nonnull Class)tableViewCellClass;
+- (nonnull id)cellForQueryingHeightWithClass:(nonnull Class)tableViewCellClass
+                               subIdentifier:(nullable NSString *)subIdentifier;
 
 @end

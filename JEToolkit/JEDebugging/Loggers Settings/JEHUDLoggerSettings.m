@@ -65,4 +65,10 @@
 }
 
 
+#pragma mark - JEBaseLoggerSettings
+
+@dynamic logLevelMask;
+@dynamic logMessageHeaderMask;
+
+
 @end

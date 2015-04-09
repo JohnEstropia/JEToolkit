@@ -192,8 +192,8 @@
 
 typedef struct JELogLocation {
 
-    const char *fileName;
-    const char *functionName;
+    const char *__nullable fileName;
+    const char *__nullable functionName;
     const unsigned int lineNumber;
 
 } JELogLocation;
@@ -226,32 +226,32 @@ typedef struct JELogLocation {
 /*! Returns a configurable copy of the current console logger settings.
  @return a configurable copy of the current console logger settings. The changes to the returned object will not be reflected until it is passed back to @p setConsoleLoggerSettings:
  */
-+ (JEConsoleLoggerSettings *)copyConsoleLoggerSettings JE_WARN_UNUSED_RESULT;
++ (nonnull JEConsoleLoggerSettings *)copyConsoleLoggerSettings JE_WARN_UNUSED_RESULT;
 
 /*! Updates the current console logger settings. Note that the settings object passed to this method will be copied by the receiver, thus, further changes to the settings object will not be reflected until it is again passed to @p setConsoleLoggerSettings:
  @param consoleLoggerSettings the settings object holding new configuration values
  */
-+ (void)setConsoleLoggerSettings:(JEConsoleLoggerSettings *)consoleLoggerSettings;
++ (void)setConsoleLoggerSettings:(nonnull JEConsoleLoggerSettings *)consoleLoggerSettings;
 
 /*! Returns a configurable copy of the current HUD logger settings.
  @return a configurable copy of the current HUD logger settings. The changes to the returned object will not be reflected until it is passed back to @p setHUDLoggerSettings:
  */
-+ (JEHUDLoggerSettings *)copyHUDLoggerSettings JE_WARN_UNUSED_RESULT;
++ (nonnull JEHUDLoggerSettings *)copyHUDLoggerSettings JE_WARN_UNUSED_RESULT;
 
 /*! Updates the current HUD logger settings. Note that the settings object passed to this method will be copied by the receiver, thus, further changes to the settings object will not be reflected until it is again passed to @p setHUDLoggerSettings:
  @param HUDLoggerSettings the settings object holding new configuration values
  */
-+ (void)setHUDLoggerSettings:(JEHUDLoggerSettings *)HUDLoggerSettings;
++ (void)setHUDLoggerSettings:(nonnull JEHUDLoggerSettings *)HUDLoggerSettings;
 
 /*! Returns a configurable copy of the current file logger settings.
  @return a configurable copy of the current file logger settings. The changes to the returned object will not be reflected until it is passed back to @p setFileLoggerSettings:
  */
-+ (JEFileLoggerSettings *)copyFileLoggerSettings JE_WARN_UNUSED_RESULT;
++ (nonnull JEFileLoggerSettings *)copyFileLoggerSettings JE_WARN_UNUSED_RESULT;
 
 /*! Updates the current file logger settings. Note that the settings object passed to this method will be copied by the receiver, thus, further changes to the settings object will not be reflected until it is again passed to @p setFileLoggerSettings:
  @param fileLoggerSettings the settings object holding new configuration values
  */
-+ (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings;
++ (void)setFileLoggerSettings:(nonnull JEFileLoggerSettings *)fileLoggerSettings;
 
 /*! Enable or disable exception logging. Note that setting enabled to @p YES will detach the previously set exception handler, such as handlers provided by analytics frameworks or other debugging frameworks.
  @param enabled @p YES to enable exception logging and detach the previous exception handler; @p NO to disable exception logging and restore the original exception handler. Defaults to @p NO.
@@ -276,53 +276,53 @@ typedef struct JELogLocation {
  */
 + (void)dumpLevel:(JELogLevelMask)level
          location:(JELogLocation)location
-            label:(NSString *)label
-            value:(NSValue *)wrappedValue;
+            label:(nonnull NSString *)label
+            value:(nullable NSValue *)wrappedValue;
 
 /*!
  Use the @p JEDump(...) family of utilities instead of this method.
  */
 + (void)dumpLevel:(JELogLevelMask)level
          location:(JELogLocation)location
-            label:(NSString *)label
- valueDescription:(NSString *)valueDescription;
+            label:(nonnull NSString *)label
+ valueDescription:(nonnull NSString *)valueDescription;
 
 /*!
  Use the @p JELog(...) family of utilities instead of this method.
  */
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
-          format:(NSString *)format, ... JE_FORMAT_STRING(3, 4);
+          format:(nonnull NSString *)format, ... JE_FORMAT_STRING(3, 4);
 
 /*!
  Use the @p JELog(...) family of utilities instead of this method.
  */
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
-          format:(NSString *)format
-       arguments:(va_list)arguments;
+          format:(nonnull NSString *)format
+       arguments:(nonnull va_list)arguments;
 
 /*!
  Use the @p JEAssert(...) family of utilities instead of this method.
  */
-+ (void)logFailureInAssertionCondition:(NSString *)conditionString
++ (void)logFailureInAssertionCondition:(nonnull NSString *)conditionString
                               location:(JELogLocation)location;
 
 /*!
  Use the @p JEAssert(...) family of utilities instead of this method.
  */
-+ (void)logFailureInAssertionWithMessage:(NSString *)failureMessage
++ (void)logFailureInAssertionWithMessage:(nonnull NSString *)failureMessage
                                 location:(JELogLocation)location;
 
 /*!
  Use the @p setApplicationLifeCycleLoggingEnabled: to enable application lifecycle logging instead of this method.
  */
-+ (void)logLifeCycleEventWithFormat:(NSString *)format, ... JE_FORMAT_STRING(1, 2);
++ (void)logLifeCycleEventWithFormat:(nonnull NSString *)format, ... JE_FORMAT_STRING(1, 2);
 
 /*!
  Use the @p setApplicationLifeCycleLoggingEnabled: to enable application lifecycle logging instead of this method.
  */
-+ (void)logLifeCycleEventWithFormat:(NSString *)format arguments:(va_list)arguments;
++ (void)logLifeCycleEventWithFormat:(nonnull NSString *)format arguments:(nonnull va_list)arguments;
 
 
 #pragma mark - retrieving
@@ -331,12 +331,12 @@ typedef struct JELogLocation {
  Enumerates all log files' data synchronously, starting with the most recent up to the oldest file.
  @param block The iteration block. Set the @p stop argument to @p YES to terminate the enumeration.
  */
-+ (void)enumerateFileLogDataWithBlock:(void (^)(NSString *fileName, NSData *data, BOOL *stop))block;
++ (void)enumerateFileLogDataWithBlock:(nonnull void (^)(NSString *__nonnull fileName, NSData *__nonnull data, BOOL *__nonnull stop))block;
 
 /*!
  Enumerates all log files' URLs synchronously, starting with the most recent up to the oldest file.
  @param block The iteration block. Set the @p stop argument to @p YES to terminate the enumeration.
  */
-+ (void)enumerateFileLogURLsWithBlock:(void (^)(NSURL *fileURL, BOOL *stop))block;
++ (void)enumerateFileLogURLsWithBlock:(nonnull void (^)(NSURL *__nonnull fileURL, BOOL *__nonnull stop))block;
 
 @end

@@ -27,8 +27,8 @@
 
 @interface UINib (JEToolkit)
 
-+ (BOOL)nibWithNameExists:(NSString *)nibName;
++ (BOOL)nibWithNameExists:(nonnull NSString *)nibName;
 
-+ (UINib *)cachedNibWithName:(NSString *)nibName;
++ (nullable UINib *)cachedNibWithName:(nonnull NSString *)nibName;
 
 @end

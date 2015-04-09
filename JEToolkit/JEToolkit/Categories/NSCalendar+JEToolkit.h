@@ -32,10 +32,10 @@
 
 /*! Create and caches the NSCalendar returned from [NSCalendar currentCalendar].
  */
-+ (NSCalendar *)cachedLocalizedCalendar JE_CONST;
++ (nonnull NSCalendar *)cachedLocalizedCalendar JE_CONST;
 
 /*! Create and caches the NSCalendar created with NSGregorianCalendar identifier.
  */
-+ (NSCalendar *)gregorianCalendar JE_CONST;
++ (nonnull NSCalendar *)gregorianCalendar JE_CONST;
 
 @end

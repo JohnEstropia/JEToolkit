@@ -25,8 +25,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "JECompilerDefines.h"
-
 
 @interface NSString (JEToolkit)
 
@@ -34,57 +32,57 @@
 
 /*! Convenience method to get the app Application Support path
  */
-+ (NSString *)applicationSupportDirectory;
++ (null_unspecified NSString *)applicationSupportDirectory;
 
 /*! Convenience method to get the app Caches path
  */
-+ (NSString *)cachesDirectory;
++ (null_unspecified NSString *)cachesDirectory;
 
 /*! Convenience method to get the app Documents path
  */
-+ (NSString *)documentsDirectory;
++ (null_unspecified NSString *)documentsDirectory;
 
 /*! Convenience method to get the app Downloads path
  */
-+ (NSString *)downloadsDirectory;
++ (null_unspecified NSString *)downloadsDirectory;
 
 /*! Convenience method to get the app Library path
  */
-+ (NSString *)libraryDirectory;
++ (null_unspecified NSString *)libraryDirectory;
 
 /*! Convenience method to get the app Temporary path
  */
-+ (NSString *)temporaryDirectory;
++ (null_unspecified NSString *)temporaryDirectory;
 
 /*! Convenience method to build file path from components
  */
-+ (NSString *)pathWithComponents:(NSArray *)components pathExtension:(NSString *)pathExtension;
++ (nonnull NSString *)pathWithComponents:(nonnull NSArray *)components pathExtension:(nullable NSString *)pathExtension;
 
 
 #pragma mark - Constants
 
 /*! Convenience method to get the app name string
  */
-+ (NSString *)applicationName;
++ (null_unspecified NSString *)applicationName;
 
 /*! Convenience method to get the app short version string
  */
-+ (NSString *)applicationVersion;
++ (null_unspecified NSString *)applicationVersion;
 
 /*! Convenience method to get the app bundle version string
  */
-+ (NSString *)applicationBundleVersion;
++ (null_unspecified NSString *)applicationBundleVersion;
 
 
 #pragma mark - String Manipulation
 
 /*! Removes leading and trailing whitespace characters from the receiver
  */
-- (NSString *)trimmedString;
+- (nonnull NSString *)trimmedString;
 
 /*! Gets the array of characters from the receiver
  */
-- (NSArray *)glyphs;
+- (nonnull NSArray *)glyphs;
 
 /*! Gets the range of the receiver
  */
@@ -95,26 +93,26 @@
 
 /*! Checks if value is nil, if it's an NSString instance, if its length is 0, or if all its characters are whitespace.
  */
-+ (BOOL)isNilOrEmptyString:(id)valueOrNil;
++ (BOOL)isNilOrEmptyString:(nullable id)valueOrNil;
 
 /*! Checks if value is an NSString instance and returns the trimmed string if it's not empty. Returns nil otherwise.
  */
-+ (NSString *)nonEmptyStringOrNil:(id)valueOrNil;
++ (nullable NSString *)nonEmptyStringOrNil:(nullable id)valueOrNil;
 
 /*! Checks if a string is a substring of the receiver.
  */
-- (BOOL)containsSubstring:(NSString *)substring JE_NONNULL_ALL;
+- (BOOL)containsSubstring:(nullable NSString *)substring;
 
 /*! Checks if a string is a substring of the receiver.
  */
-- (BOOL)containsSubstring:(NSString *)substring
-                  options:(NSStringCompareOptions)options JE_NONNULL(1);
+- (BOOL)containsSubstring:(nullable NSString *)substring
+                  options:(NSStringCompareOptions)options;
 
 /*! Returns an NSComparisonResult value that indicates the version ordering of the receiver and another version string.
  @param versionString The version string with which to compare the receiver.
  @return NSOrderedAscending if the value of versionString is greater than the receiver; NSOrderedSame if they’re equal; and NSOrderedDescending if the value of versionString is less than the receiver or if versionString is nil.
  */
-- (NSComparisonResult)compareWithVersion:(NSString *)versionString;
+- (NSComparisonResult)compareWithVersion:(nullable NSString *)versionString;
 
 
 #pragma mark - Conversion
@@ -123,24 +121,24 @@
  @param valueOrNil The object to extract string from. Accepts nil, NSString, NSNumber, or UTF-8 NSData
  @return valueOrNil if it is an NSString, the numerical string if valueOrNil is an NSNumber, the UTF-8 string value of an NSData, or nil otherwise.
  */
-+ (NSString *)stringFromValue:(id)valueOrNil;
++ (nullable NSString *)stringFromValue:(nullable id)valueOrNil;
 
 /*! Returns the shorthand display string for a file size
  @param fileSize The number of bytes to represent as a string
  */
-+ (NSString *)stringFromFileSize:(int64_t)fileSize;
++ (nonnull NSString *)stringFromFileSize:(int64_t)fileSize;
 
 /*! Returns a canonical string suitable for optimizing string queries and other string-based indexing
  */
-- (NSString *)canonicalString;
+- (nonnull NSString *)canonicalString;
 
 /*! Returns a URL-encoded string from the receiver
  */
-- (NSString *)URLEncodedString;
+- (nonnull NSString *)URLEncodedString;
 
 /*! Returns a URL-decoded string from the receiver
  */
-- (NSString *)URLDecodedString;
+- (nullable NSString *)URLDecodedString;
 
 
 @end

@@ -25,8 +25,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import "JECompilerDefines.h"
-
 
 @interface UIImage (JEToolkit)
 
@@ -36,36 +34,36 @@
  @param orientation The orientation of the image
  @return A UIImage from file, or nil if loading failed
  */
-+ (instancetype)imageFromFile:(NSString *)filePath
-                        scale:(CGFloat)scale
-                  orientation:(UIImageOrientation)orientation;
++ (nullable instancetype)imageFromFile:(nonnull NSString *)filePath
+                                 scale:(CGFloat)scale
+                           orientation:(UIImageOrientation)orientation;
 
 /*! Takes a screenshot
  */
-+ (UIImage *)screenshot;
++ (nullable UIImage *)screenshot;
 
 /*! Creates a UIImage filled with the specified color
  @param color The color to fill the image
  @param size The size of the image
  @return A UIImage filled with the specified color and size
  */
-+ (UIImage *)imageFromColor:(UIColor *)color
-                       size:(CGSize)size JE_NONNULL(1);
++ (nonnull UIImage *)imageFromColor:(nonnull UIColor *)color
+                               size:(CGSize)size;
 
 /*! Creates an image by alpha blending a color to the receiver.
  @param tintColor the color to apply as tint.
  @return a tinted image
  */
-- (UIImage *)imageByTintingWithColor:(UIColor *)tintColor JE_NONNULL_ALL;
+- (nonnull UIImage *)imageByTintingWithColor:(nonnull UIColor *)tintColor;
 
 /*! Creates an image by filling the receiver with a color.
  @param fillColor the color to fill with.
  @return a filled image
  */
-- (UIImage *)imageByFillingWithColor:(UIColor *)fillColor JE_NONNULL_ALL;
+- (nonnull UIImage *)imageByFillingWithColor:(nonnull UIColor *)fillColor;
 
 /*! Creates a decoded UIImage from the receiver. This is usually used to preload an image to prevent slight lags in the UI
  */
-- (instancetype)decodedImage;
+- (nonnull instancetype)decodedImage;
 
 @end

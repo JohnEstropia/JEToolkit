@@ -39,11 +39,11 @@ typedef NS_ENUM(NSInteger, JEKeychainAccess) {
 
 @interface JEKeychain : JESettings
 
-- (instancetype)init;
-- (instancetype)initWithService:(NSString *)service
-                    accessGroup:(NSString *)accessGroupOrNil;
+- (nonnull instancetype)init;
+- (nonnull instancetype)initWithService:(nonnull NSString *)service
+                            accessGroup:(nullable NSString *)accessGroupOrNil NS_DESIGNATED_INITIALIZER;
 
-- (NSString *)keychainAccountForProperty:(NSString *)propertyName;
-- (JEKeychainAccess)keychainAccessForProperty:(NSString *)propertyName;
+- (nonnull NSString *)keychainAccountForProperty:(nonnull NSString *)propertyName;
+- (JEKeychainAccess)keychainAccessForProperty:(nonnull NSString *)propertyName;
 
 @end

@@ -25,18 +25,16 @@
 
 #import <Foundation/Foundation.h>
 
-#import "JECompilerDefines.h"
-
 
 @interface NSCache (JEToolkit)
 
 /*! Allows key subscripting with NSCache. Equivalent to -[NSCache objectForKey:]
  */
-- (id)objectForKeyedSubscript:(id)key JE_NONNULL_ALL;
+- (nullable id)objectForKeyedSubscript:(nonnull id)key;
 
 /*! Allows key subscripting with NSCache. Equivalent to -[NSCache setObject:forKey:]
  */
-- (void)setObject:(id)obj forKeyedSubscript:(id)key JE_NONNULL_ALL;
+- (void)setObject:(nullable id)obj forKeyedSubscript:(nonnull id)key;
 
 
 @end

@@ -28,7 +28,7 @@ import Foundation
 
 // MARK: - JEAssert() variants
 
-public func JEAssert(condition: @autoclosure() -> Bool, message: @autoclosure() -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEAssert(@autoclosure condition: () -> Bool, @autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     #if DEBUG
         if !condition() {

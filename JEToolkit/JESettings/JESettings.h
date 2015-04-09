@@ -29,73 +29,73 @@
 
 @interface JESettings : NSObject
 
-- (long long int)integerValueForKey:(NSString *)key;
-- (void)setIntegerValue:(long long int)value forKey:(NSString *)key;
+- (long long int)integerValueForKey:(nonnull NSString *)key;
+- (void)setIntegerValue:(long long int)value forKey:(nonnull NSString *)key;
 
-- (unsigned long long int)unsignedIntegerValueForKey:(NSString *)key;
-- (void)setUnsignedIntegerValue:(unsigned long long int)value forKey:(NSString *)key;
+- (unsigned long long int)unsignedIntegerValueForKey:(nonnull NSString *)key;
+- (void)setUnsignedIntegerValue:(unsigned long long int)value forKey:(nonnull NSString *)key;
 
-- (bool)booleanValueForKey:(NSString *)key;
-- (void)setBooleanValue:(bool)value forKey:(NSString *)key;
+- (bool)booleanValueForKey:(nonnull NSString *)key;
+- (void)setBooleanValue:(bool)value forKey:(nonnull NSString *)key;
 
-- (float)floatValueForKey:(NSString *)key;
-- (void)setFloatValue:(float)value forKey:(NSString *)key;
+- (float)floatValueForKey:(nonnull NSString *)key;
+- (void)setFloatValue:(float)value forKey:(nonnull NSString *)key;
 
-- (double)doubleValueForKey:(NSString *)key;
-- (void)setDoubleValue:(double)value forKey:(NSString *)key;
+- (double)doubleValueForKey:(nonnull NSString *)key;
+- (void)setDoubleValue:(double)value forKey:(nonnull NSString *)key;
 
-- (NSString *)NSStringValueForKey:(NSString *)key;
-- (void)setNSStringValue:(NSString *)value forKey:(NSString *)key;
+- (nullable NSString *)NSStringValueForKey:(nonnull NSString *)key;
+- (void)setNSStringValue:(nullable NSString *)value forKey:(nonnull NSString *)key;
 
-- (NSNumber *)NSNumberValueForKey:(NSString *)key;
-- (void)setNSNumberValue:(NSNumber *)value forKey:(NSString *)key;
+- (nullable NSNumber *)NSNumberValueForKey:(nonnull NSString *)key;
+- (void)setNSNumberValue:(nullable NSNumber *)value forKey:(nonnull NSString *)key;
 
-- (NSDate *)NSDateValueForKey:(NSString *)key;
-- (void)setNSDateValue:(NSDate *)value forKey:(NSString *)key;
+- (nullable NSDate *)NSDateValueForKey:(nonnull NSString *)key;
+- (void)setNSDateValue:(nullable NSDate *)value forKey:(nonnull NSString *)key;
 
-- (NSData *)NSDataValueForKey:(NSString *)key;
-- (void)setNSDataValue:(NSData *)value forKey:(NSString *)key;
+- (nullable NSData *)NSDataValueForKey:(nonnull NSString *)key;
+- (void)setNSDataValue:(nullable NSData *)value forKey:(nonnull NSString *)key;
 
-- (NSURL *)NSURLValueForKey:(NSString *)key;
-- (void)setNSURLValue:(NSURL *)value forKey:(NSString *)key;
+- (nullable NSURL *)NSURLValueForKey:(nonnull NSString *)key;
+- (void)setNSURLValue:(nullable NSURL *)value forKey:(nonnull NSString *)key;
 
-- (NSUUID *)NSUUIDValueForKey:(NSString *)key;
-- (void)setNSUUIDValue:(NSUUID *)value forKey:(NSString *)key;
+- (nullable NSUUID *)NSUUIDValueForKey:(nonnull NSString *)key;
+- (void)setNSUUIDValue:(nullable NSUUID *)value forKey:(nonnull NSString *)key;
 
-- (id<NSCoding>)NSCodingValueForKey:(NSString *)key;
-- (void)setNSCodingValue:(id<NSCoding>)value forKey:(NSString *)key;
+- (nullable id<NSCoding>)NSCodingValueForKey:(nonnull NSString *)key;
+- (void)setNSCodingValue:(nullable id<NSCoding>)value forKey:(nonnull NSString *)key;
 
-- (id)idValueForKey:(NSString *)key;
-- (void)setIdValue:(id)value forKey:(NSString *)key;
+- (nullable id)idValueForKey:(nonnull NSString *)key;
+- (void)setIdValue:(nullable id)value forKey:(nonnull NSString *)key;
 
-- (Class)classValueForKey:(NSString *)key;
-- (void)setClassValue:(Class)value forKey:(NSString *)key;
+- (nullable Class)classValueForKey:(nonnull NSString *)key;
+- (void)setClassValue:(nullable Class)value forKey:(nonnull NSString *)key;
 
-- (SEL)selectorValueForKey:(NSString *)key;
-- (void)setSelectorValue:(SEL)value forKey:(NSString *)key;
+- (nullable SEL)selectorValueForKey:(nonnull NSString *)key;
+- (void)setSelectorValue:(nullable SEL)value forKey:(nonnull NSString *)key;
 
-- (CGPoint)CGPointValueForKey:(NSString *)key;
-- (void)setCGPointValue:(CGPoint)value forKey:(NSString *)key;
+- (CGPoint)CGPointValueForKey:(nonnull NSString *)key;
+- (void)setCGPointValue:(CGPoint)value forKey:(nonnull NSString *)key;
 
-- (CGSize)CGSizeValueForKey:(NSString *)key;
-- (void)setCGSizeValue:(CGSize)value forKey:(NSString *)key;
+- (CGSize)CGSizeValueForKey:(nonnull NSString *)key;
+- (void)setCGSizeValue:(CGSize)value forKey:(nonnull NSString *)key;
 
-- (CGRect)CGRectValueForKey:(NSString *)key;
-- (void)setCGRectValue:(CGRect)value forKey:(NSString *)key;
+- (CGRect)CGRectValueForKey:(nonnull NSString *)key;
+- (void)setCGRectValue:(CGRect)value forKey:(nonnull NSString *)key;
 
-- (CGAffineTransform)CGAffineTransformValueForKey:(NSString *)key;
-- (void)setCGAffineTransformValue:(CGAffineTransform)value forKey:(NSString *)key;
+- (CGAffineTransform)CGAffineTransformValueForKey:(nonnull NSString *)key;
+- (void)setCGAffineTransformValue:(CGAffineTransform)value forKey:(nonnull NSString *)key;
 
-- (CGVector)CGVectorValueForKey:(NSString *)key;
-- (void)setCGVectorValue:(CGVector)value forKey:(NSString *)key;
+- (CGVector)CGVectorValueForKey:(nonnull NSString *)key;
+- (void)setCGVectorValue:(CGVector)value forKey:(nonnull NSString *)key;
 
-- (UIEdgeInsets)UIEdgeInsetsValueForKey:(NSString *)key;
-- (void)setUIEdgeInsetsValue:(UIEdgeInsets)value forKey:(NSString *)key;
+- (UIEdgeInsets)UIEdgeInsetsValueForKey:(nonnull NSString *)key;
+- (void)setUIEdgeInsetsValue:(UIEdgeInsets)value forKey:(nonnull NSString *)key;
 
-- (UIOffset)UIOffsetValueForKey:(NSString *)key;
-- (void)setUIOffsetValue:(UIOffset)value forKey:(NSString *)key;
+- (UIOffset)UIOffsetValueForKey:(nonnull NSString *)key;
+- (void)setUIOffsetValue:(UIOffset)value forKey:(nonnull NSString *)key;
 
-- (NSRange)NSRangeValueForKey:(NSString *)key;
-- (void)setNSRangeValue:(NSRange)value forKey:(NSString *)key;
+- (NSRange)NSRangeValueForKey:(nonnull NSString *)key;
+- (void)setNSRangeValue:(NSRange)value forKey:(nonnull NSString *)key;
 
 @end

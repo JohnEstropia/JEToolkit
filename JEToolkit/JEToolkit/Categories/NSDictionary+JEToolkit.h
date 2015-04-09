@@ -14,6 +14,6 @@
  @param valueOrNil The object to extract a dictionary from. Accepts nil, NSDictionary, a JSON string, or a JSON NSData
  @return valueOrNil if it is an NSDictionary, a dictionary representation of a JSON NSData or string, or nil otherwise.
  */
-+ (NSDictionary *)dictionaryFromValue:(id)valueOrNil;
++ (nullable NSDictionary *)dictionaryFromValue:(nullable id)valueOrNil;
 
 @end

@@ -40,7 +40,7 @@
 /*!
  The root directory URL for log files. Defaults to the application Caches/Logs/ directory
  */
-@property (nonatomic, copy) NSURL *fileLogsDirectoryURL;
+@property (nonatomic, copy, nonnull) NSURL *fileLogsDirectoryURL;
 
 /*!
  The memory threshold before logs are flushed to disk. Defaults to 100KB

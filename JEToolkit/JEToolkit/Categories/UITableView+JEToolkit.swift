@@ -30,41 +30,41 @@ public extension UITableView {
     public func dequeueReusableCellWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, forIndexPath indexPath: NSIndexPath?) -> T {
         
         return self.dequeueReusableCellWithClass(
-            tableViewCellClass as AnyClass!,
-            forIndexPath: indexPath) as T
+            tableViewCellClass as AnyClass,
+            forIndexPath: indexPath) as! T
     }
     
     public func dequeueReusableCellWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, subIdentifier: String, forIndexPath indexPath: NSIndexPath?) -> T {
         
         return self.dequeueReusableCellWithClass(
-            tableViewCellClass as AnyClass!,
+            tableViewCellClass as AnyClass,
             subIdentifier: subIdentifier,
-            forIndexPath: indexPath) as T
+            forIndexPath: indexPath) as! T
     }
     
     public func dequeueReusableHeaderFooterViewWithClass<T: UITableViewHeaderFooterView>(headerFooterViewClass: T.Type) -> T {
         
         return self.dequeueReusableHeaderFooterViewWithClass(
-            headerFooterViewClass as AnyClass!) as T
+            headerFooterViewClass as AnyClass) as! T
     }
     
     public func dequeueReusableHeaderFooterViewWithClass<T: UITableViewHeaderFooterView>(headerFooterViewClass: T.Type, subIdentifier: String) -> T {
         
         return self.dequeueReusableHeaderFooterViewWithClass(
-            headerFooterViewClass as AnyClass!,
-            subIdentifier: subIdentifier) as T
+            headerFooterViewClass as AnyClass,
+            subIdentifier: subIdentifier) as! T
     }
     
     public func cellForQueryingHeightWithClass<T: UITableViewCell>(tableViewCellClass: T.Type) -> T {
         
         return self.cellForQueryingHeightWithClass(
-            tableViewCellClass as AnyClass!) as T
+            tableViewCellClass as AnyClass) as! T
     }
     
     public func cellForQueryingHeightWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, subIdentifier: String) -> T {
         
         return self.cellForQueryingHeightWithClass(
-            tableViewCellClass as AnyClass!,
-            subIdentifier: subIdentifier) as T
+            tableViewCellClass as AnyClass,
+            subIdentifier: subIdentifier) as! T
     }
 }

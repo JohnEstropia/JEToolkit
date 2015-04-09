@@ -34,38 +34,38 @@
 
 /*! Convenience method to get the app Application Support URL
  */
-+ (NSURL *)applicationSupportDirectory JE_CONST;
++ (null_unspecified NSURL *)applicationSupportDirectory JE_CONST;
 
 /*! Convenience method to get the app Caches URL
  */
-+ (NSURL *)cachesDirectory JE_CONST;
++ (null_unspecified NSURL *)cachesDirectory JE_CONST;
 
 /*! Convenience method to get the app Documents URL
  */
-+ (NSURL *)documentsDirectory JE_CONST;
++ (null_unspecified NSURL *)documentsDirectory JE_CONST;
 
 /*! Convenience method to get the app Downloads URL
  */
-+ (NSURL *)downloadsDirectory JE_CONST;
++ (null_unspecified NSURL *)downloadsDirectory JE_CONST;
 
 /*! Convenience method to get the app Library URL
  */
-+ (NSURL *)libraryDirectory JE_CONST;
++ (null_unspecified NSURL *)libraryDirectory JE_CONST;
 
 /*! Convenience method to get the app Temporary URL
  */
-+ (NSURL *)temporaryDirectory JE_CONST;
++ (null_unspecified NSURL *)temporaryDirectory JE_CONST;
 
 
 #pragma mark - Inspecting URLs
 
 /*! Returns the known UTI for the receiver
  */
-- (NSString *)UTI;
+- (nullable NSString *)UTI;
 
 /*! Returns the known mimetype for the receiver, or "application/octet-stream" if a known mimetype was not found
  */
-- (NSString *)mimeType;
+- (nonnull NSString *)mimeType;
 
 /*! Checks if the reciever is an assets library URL
  */
@@ -77,7 +77,7 @@
 
 /*! Returns the URL query parameters as a key-value dictionary
  */
-- (NSDictionary *)queryValues;
+- (nonnull NSDictionary *)queryValues;
 
 
 #pragma mark - Extended Attributes
@@ -88,9 +88,9 @@
  @param error The error if the process failed
  @return YES if the attribute was read successfully, NO otherwise.
  */
-- (BOOL)getExtendedAttribute:(NSString **)extendedAttribute
-                      forKey:(NSString *)key
-                       error:(NSError **)error;
+- (BOOL)getExtendedAttribute:(NSString *__autoreleasing __nullable *__nullable)extendedAttribute
+                      forKey:(nonnull NSString *)key
+                       error:(NSError *__autoreleasing __nullable*__nullable)error;
 
 /*! Sets an extended attribute on the file refered by the receiver. Note anything other than file system URLs will be ignored.
  @param extendedAttribute The value for the extended attribute
@@ -98,9 +98,9 @@
  @param error The error if the process failed
  @return YES if the attribute was set successfully, NO otherwise.
  */
-- (BOOL)setExtendedAttribute:(NSString *)extendedAttribute
-                      forKey:(NSString *)key
-                       error:(NSError **)error;
+- (BOOL)setExtendedAttribute:(nullable NSString *)extendedAttribute
+                      forKey:(nonnull NSString *)key
+                       error:(NSError *__autoreleasing __nullable *__nullable)error;
 
 
 #pragma mark - Conversion
@@ -109,7 +109,7 @@
  @param valueOrNil The object to extract string from. Accepts nil, NSString, NSURL, or a UTF-8 NSData
  @return valueOrNil if it is an NSURL, an NSURL initialized from an NSString, an NSURL from a UTF-8 string value of an NSData, or nil otherwise.
  */
-+ (NSURL *)URLFromValue:(id)valueOrNil;
++ (nullable NSURL *)URLFromValue:(nullable id)valueOrNil;
 
 
 @end

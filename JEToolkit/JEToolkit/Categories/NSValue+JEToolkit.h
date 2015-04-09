@@ -27,7 +27,7 @@
 
 @interface NSValue (JEToolkit)
 
-+ (NSValue *)valueWithWeakObject:(id)weakObject;
-- (id)weakObjectValue;
++ (nonnull NSValue *)valueWithWeakObject:(nullable id)weakObject;
+- (nullable id)weakObjectValue;
 
 @end

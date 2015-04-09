@@ -31,23 +31,23 @@
 
 /*! Convenience method for NSStringFromClass(self)
  */
-+ (NSString *)fullyQualifiedClassName;
++ (nonnull NSString *)fullyQualifiedClassName;
 
 /*! Returns the fully-qualified class name relative to the specified namespace. For example, for class name "MyApp.MyClass", this method returns "MyClass" for namespace "MyApp". For classes outside "MyApp", this method returns "SomeExternalModule.SomeClass".
  */
-+ (NSString *)classNameInNameSpace:(NSString *)namespace;
++ (nonnull NSString *)classNameInNameSpace:(nonnull NSString *)namespace;
 
 /*! Returns the fully-qualified class name relative to the main bundle. For example, for class name "MyApp.MyClass", this method returns "MyClass". For classes outside "MyApp", this method returns "SomeExternalModule.SomeClass".
  */
-+ (NSString *)classNameInAppModule;
++ (nonnull NSString *)classNameInAppModule;
 
 /*! Returns the iPhone or iPad-specific subclass for the receiver if they exist. Device-specific subclass names are expected to have either the suffix "_iPad" or "_iPhone".
  */
-+ (Class)classForIdiom;
++ (nonnull Class)classForIdiom;
 
 /*! Allocates an instance of the iPhone or iPad-specific subclass for the receiver
  */
-+ (instancetype)allocForIdiom;
++ (nonnull instancetype)allocForIdiom;
 
 
 #pragma mark - Observing
@@ -56,17 +56,17 @@
  @param notificationName The NSNotification name to observe
  @param block The notification block
  */
-- (void)registerForNotificationsWithName:(NSString *)notificationName
-                             targetBlock:(void (^)(NSNotification *note))block;
+- (void)registerForNotificationsWithName:(nonnull NSString *)notificationName
+                             targetBlock:(nonnull void (^)(NSNotification *__nonnull note))block;
 
 /*! Registers the receiver for NSNotificationCenter callbacks.
  @param notificationName The NSNotification name to observe
  @param objectOrNil The NSNotification object to observe
  @param block The notification block
  */
-- (void)registerForNotificationsWithName:(NSString *)notificationName
-                              fromObject:(id)objectOrNil
-                             targetBlock:(void (^)(NSNotification *note))block;
+- (void)registerForNotificationsWithName:(nonnull NSString *)notificationName
+                              fromObject:(nullable id)objectOrNil
+                             targetBlock:(nonnull void (^)(NSNotification *__nonnull note))block;
 
 /*! Registers the receiver for NSNotificationCenter callbacks.
  @param notificationName The NSNotification name to observe
@@ -74,22 +74,22 @@
  @param queueOrNil The queue to execute the notification block on
  @param block The notification block
  */
-- (void)registerForNotificationsWithName:(NSString *)notificationName
-                              fromObject:(id)objectOrNil
-                             targetQueue:(NSOperationQueue *)queueOrNil
-                             targetBlock:(void (^)(NSNotification *note))block;
+- (void)registerForNotificationsWithName:(nonnull NSString *)notificationName
+                              fromObject:(nullable id)objectOrNil
+                             targetQueue:(nullable NSOperationQueue *)queueOrNil
+                             targetBlock:(nonnull void (^)(NSNotification *__nonnull note))block;
 
 /*! Unregisters the receiver for NSNotificationCenter callbacks.
  @param notificationName The NSNotification name to stop observing
  */
-- (void)unregisterForNotificationsWithName:(NSString *)notificationName;
+- (void)unregisterForNotificationsWithName:(nonnull NSString *)notificationName;
 
 /*! Unregisters the receiver for NSNotificationCenter callbacks.
  @param notificationName The NSNotification name to cancel observing
  @param objectOrNil The NSNotification object to cancel observing
  */
-- (void)unregisterForNotificationsWithName:(NSString *)notificationName
-                                fromObject:(id)objectOrNil;
+- (void)unregisterForNotificationsWithName:(nonnull NSString *)notificationName
+                                fromObject:(nullable id)objectOrNil;
 
 
 #pragma mark - Method Swizzling
@@ -98,22 +98,22 @@
  @param originalSelector The original method implementation
  @param overrideSelector The overriding method implementation
  */
-+ (void)swizzleClassMethod:(SEL)originalSelector
-        withOverrideMethod:(SEL)overrideSelector;
++ (void)swizzleClassMethod:(nonnull SEL)originalSelector
+        withOverrideMethod:(nonnull SEL)overrideSelector;
 
 /*! Swizzles an instance method.
  @param originalSelector The original method implementation
  @param overrideSelector The overriding method implementation
  */
-+ (void)swizzleInstanceMethod:(SEL)originalSelector
-           withOverrideMethod:(SEL)overrideSelector;
++ (void)swizzleInstanceMethod:(nonnull SEL)originalSelector
+           withOverrideMethod:(nonnull SEL)overrideSelector;
 
 
 #pragma mark - Object Tagging
 
 /*! Provides object-tagging.
  */
-@property (nonatomic, strong) NSUUID *dispatchTaskID;
+@property (nonatomic, strong, nullable) NSUUID *dispatchTaskID;
 
 
 @end

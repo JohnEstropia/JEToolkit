@@ -27,27 +27,27 @@
 
 @interface UICollectionView (JEToolkit)
 
-- (void)registerCollectionViewCellClass:(Class)collectionViewCellClass;
-- (void)registerCollectionViewCellClass:(Class)collectionViewCellClass
-                          subIdentifier:(NSString *)subIdentifier;
+- (void)registerCollectionViewCellClass:(nonnull Class)collectionViewCellClass;
+- (void)registerCollectionViewCellClass:(nonnull Class)collectionViewCellClass
+                          subIdentifier:(nullable NSString *)subIdentifier;
 
-- (void)registerSupplementaryViewClass:(Class)supplementaryViewClass
-                                ofKind:(NSString *)supplementaryViewKind;
-- (void)registerSupplementaryViewClass:(Class)supplementaryViewClass
-                                ofKind:(NSString *)supplementaryViewKind
-                         subIdentifier:(NSString *)subIdentifier;
+- (void)registerSupplementaryViewClass:(nonnull Class)supplementaryViewClass
+                                ofKind:(nonnull NSString *)supplementaryViewKind;
+- (void)registerSupplementaryViewClass:(nonnull Class)supplementaryViewClass
+                                ofKind:(nonnull NSString *)supplementaryViewKind
+                         subIdentifier:(nullable NSString *)subIdentifier;
 
-- (id)dequeueReusableCellWithClass:(Class)collectionViewCellClass
-                      forIndexPath:(NSIndexPath *)indexPath;
-- (id)dequeueReusableCellWithClass:(Class)collectionViewCellClass
-                     subIdentifier:(NSString *)subIdentifier
-                      forIndexPath:(NSIndexPath *)indexPath;
+- (nonnull id)dequeueReusableCellWithClass:(nonnull Class)collectionViewCellClass
+                              forIndexPath:(nonnull NSIndexPath *)indexPath;
+- (nonnull id)dequeueReusableCellWithClass:(nonnull Class)collectionViewCellClass
+                             subIdentifier:(nullable NSString *)subIdentifier
+                              forIndexPath:(nonnull NSIndexPath *)indexPath;
 
-- (id)dequeueSupplementaryViewWithClass:(Class)supplementaryViewClass
-                                 ofKind:(NSString *)supplementaryViewKind
-                           forIndexPath:(NSIndexPath *)indexPath;
-- (id)dequeueSupplementaryViewWithClass:(Class)supplementaryViewClass
-                                 ofKind:(NSString *)supplementaryViewKind
-                          subIdentifier:(NSString *)subIdentifier
-                           forIndexPath:(NSIndexPath *)indexPath;
+- (nonnull id)dequeueSupplementaryViewWithClass:(nonnull Class)supplementaryViewClass
+                                         ofKind:(nonnull NSString *)supplementaryViewKind
+                                   forIndexPath:(nonnull NSIndexPath *)indexPath;
+- (nonnull id)dequeueSupplementaryViewWithClass:(nonnull Class)supplementaryViewClass
+                                         ofKind:(nonnull NSString *)supplementaryViewKind
+                                  subIdentifier:(nullable NSString *)subIdentifier
+                                   forIndexPath:(nonnull NSIndexPath *)indexPath;
 @end

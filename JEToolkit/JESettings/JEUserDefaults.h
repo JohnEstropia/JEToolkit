@@ -28,13 +28,13 @@
 
 @interface JEUserDefaults : JESettings
 
-- (instancetype)init;
-- (instancetype)initWithSuiteName:(NSString *)suiteName;
+- (nonnull instancetype)init;
+- (nonnull instancetype)initWithSuiteName:(nullable NSString *)suiteName NS_DESIGNATED_INITIALIZER;
 
-- (instancetype)proxyForDefaultValues;
+- (nonnull instancetype)proxyForDefaultValues;
 
 - (void)synchronize;
 
-- (NSString *)userDefaultsKeyForProperty:(NSString *)propertyName;
+- (nonnull NSString *)userDefaultsKeyForProperty:(nonnull NSString *)propertyName;
 
 @end

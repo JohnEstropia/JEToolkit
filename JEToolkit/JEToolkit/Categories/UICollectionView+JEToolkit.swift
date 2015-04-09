@@ -30,32 +30,32 @@ public extension UICollectionView {
     public func dequeueReusableCellWithClass<T: UICollectionViewCell>(collectionViewClass: T.Type, forIndexPath indexPath: NSIndexPath) -> T {
         
         return self.dequeueReusableCellWithClass(
-            collectionViewClass as AnyClass!,
-            forIndexPath: indexPath) as T
+            collectionViewClass as AnyClass,
+            forIndexPath: indexPath) as! T
     }
     
     public func dequeueReusableCellWithClass<T: UICollectionViewCell>(collectionViewClass: T.Type, subIdentifier: String, forIndexPath indexPath: NSIndexPath) -> T {
         
         return self.dequeueReusableCellWithClass(
-            collectionViewClass as AnyClass!,
+            collectionViewClass as AnyClass,
             subIdentifier: subIdentifier,
-            forIndexPath: indexPath) as T
+            forIndexPath: indexPath) as! T
     }
     
     public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, forIndexPath indexPath: NSIndexPath) -> T {
         
         return self.dequeueSupplementaryViewWithClass(
-            supplementaryViewClass as AnyClass!,
+            supplementaryViewClass as AnyClass,
             ofKind: supplementaryViewKind,
-            forIndexPath: indexPath) as T
+            forIndexPath: indexPath) as! T
     }
     
     public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, subIdentifier: String, forIndexPath indexPath: NSIndexPath) -> T {
         
         return self.dequeueSupplementaryViewWithClass(
-            supplementaryViewClass as AnyClass!,
+            supplementaryViewClass as AnyClass,
             ofKind: supplementaryViewKind,
             subIdentifier: subIdentifier,
-            forIndexPath: indexPath) as T
+            forIndexPath: indexPath) as! T
     }
 }
