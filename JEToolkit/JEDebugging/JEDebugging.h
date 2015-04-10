@@ -300,7 +300,11 @@ typedef struct JELogLocation {
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
           format:(nonnull NSString *)format
-       arguments:(nonnull va_list)arguments;
+JE_PRAGMA_PUSH
+JE_PRAGMA_IGNORE("-Wnullability-completeness")
+       arguments:(va_list)arguments;
+JE_PRAGMA_POP
+
 
 /*!
  Use the @p JEAssert(...) family of utilities instead of this method.
@@ -322,7 +326,11 @@ typedef struct JELogLocation {
 /*!
  Use the @p setApplicationLifeCycleLoggingEnabled: to enable application lifecycle logging instead of this method.
  */
-+ (void)logLifeCycleEventWithFormat:(nonnull NSString *)format arguments:(nonnull va_list)arguments;
++ (void)logLifeCycleEventWithFormat:(nonnull NSString *)format
+JE_PRAGMA_PUSH
+JE_PRAGMA_IGNORE("-Wnullability-completeness")
+                          arguments:(va_list)arguments;
+JE_PRAGMA_POP
 
 
 #pragma mark - retrieving
