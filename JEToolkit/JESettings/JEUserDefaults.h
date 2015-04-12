@@ -25,16 +25,29 @@
 
 #import "JESettings.h"
 
-
+/*! The JEUserDefaults provides an interface for synthesizing dynamic properties by reading from/saving to the NSUserDefaults. To use, subclass JEUserDefaults and declare dynamic properties (@dynamic in Obj-C, @NSManaged in Swift).
+ */
 @interface JEUserDefaults : JESettings
 
+/*! Returns an instance that saves values to the +[NSUserDefaults standardUserDefaults]. Calling -init on the same class and the same suiteName will return the same instance.
+ */
 - (nonnull instancetype)init;
+
+/*! Returns an instance for the given suiteName. Calling -init on the same class and the same suiteName will return the same instance.
+ @param suiteName the name of the app group for the NSUserDefaults. A nil suiteName will save values to the +[NSUserDefaults standardUserDefaults].
+ */
 - (nonnull instancetype)initWithSuiteName:(nullable NSString *)suiteName NS_DESIGNATED_INITIALIZER;
 
+/*! Returns a proxy instance for setting default values. The instance returned by this method manages the NSRegistrationDomain domain for the original instance.
+ */
 - (nonnull instancetype)proxyForDefaultValues;
 
+/*! Saves the NSUserDefaults immediately. Note that this call is not required as NSUserDefaults saves to disk periodically.
+ */
 - (void)synchronize;
 
+/*! Override to change the default string key to use as NSUserDefaults key for a property. By default, keys for properties are in the format "<class name>.<property name>".
+ */
 - (nonnull NSString *)userDefaultsKeyForProperty:(nonnull NSString *)propertyName;
 
 @end

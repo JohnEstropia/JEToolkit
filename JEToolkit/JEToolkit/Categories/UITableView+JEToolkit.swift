@@ -27,6 +27,10 @@ import UIKit
 
 public extension UITableView {
     
+    /*! Dequeues a UITableViewCell from the receiver. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+    @param tableViewCellClass the UITableViewCell class name
+    @param indexPath the index path for the cell to dequeue
+    */
     public func dequeueReusableCellWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, forIndexPath indexPath: NSIndexPath?) -> T {
         
         return self.dequeueReusableCellWithClass(
@@ -34,6 +38,11 @@ public extension UITableView {
             forIndexPath: indexPath) as! T
     }
     
+    /*! Dequeues a UITableViewCell from the receiver. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+    @param tableViewCellClass the UITableViewCell class name
+    @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
+    @param indexPath the index path for the cell to dequeue
+    */
     public func dequeueReusableCellWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, subIdentifier: String, forIndexPath indexPath: NSIndexPath?) -> T {
         
         return self.dequeueReusableCellWithClass(
@@ -42,12 +51,19 @@ public extension UITableView {
             forIndexPath: indexPath) as! T
     }
     
+    /*! Dequeues a UITableViewHeaderFooterView from the receiver. Requires the UITableViewHeaderFooterView nib file and reuseIdentifier to both be set to the class name.
+    @param headerFooterViewClass the UITableViewHeaderFooterView class name
+    */
     public func dequeueReusableHeaderFooterViewWithClass<T: UITableViewHeaderFooterView>(headerFooterViewClass: T.Type) -> T {
         
         return self.dequeueReusableHeaderFooterViewWithClass(
             headerFooterViewClass as AnyClass) as! T
     }
     
+    /*! Dequeues a UITableViewHeaderFooterView from the receiver. Requires the UITableViewHeaderFooterView nib file and reuseIdentifier to both be set to the class name.
+    @param headerFooterViewClass the UITableViewHeaderFooterView class name
+    @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
+    */
     public func dequeueReusableHeaderFooterViewWithClass<T: UITableViewHeaderFooterView>(headerFooterViewClass: T.Type, subIdentifier: String) -> T {
         
         return self.dequeueReusableHeaderFooterViewWithClass(
@@ -55,12 +71,19 @@ public extension UITableView {
             subIdentifier: subIdentifier) as! T
     }
     
+    /*! Returns a shared UITableViewCell instance of the specified type. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+    @param tableViewCellClass the UITableViewCell class name
+    */
     public func cellForQueryingHeightWithClass<T: UITableViewCell>(tableViewCellClass: T.Type) -> T {
         
         return self.cellForQueryingHeightWithClass(
             tableViewCellClass as AnyClass) as! T
     }
     
+    /*! Returns a shared UITableViewCell instance of the specified type. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+    @param tableViewCellClass the UITableViewCell class name
+    @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
+    */
     public func cellForQueryingHeightWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, subIdentifier: String) -> T {
         
         return self.cellForQueryingHeightWithClass(

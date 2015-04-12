@@ -40,6 +40,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         JEDebugging.start()
         
+        self.registerForNotificationsWithName(UIApplicationDidEnterBackgroundNotification) { (note) in
+            // do something...
+        }
         return true
     }
 }

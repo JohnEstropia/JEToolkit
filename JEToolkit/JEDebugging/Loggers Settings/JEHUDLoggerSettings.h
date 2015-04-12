@@ -25,30 +25,27 @@
 
 #import "JEBaseLoggerSettings.h"
 
+/*! JEFileLoggerSettings provides configurations to the in-app HUD console.
+ */
 @interface JEHUDLoggerSettings : JEBaseLoggerSettings
 
-/*!
- The combination of JELogLevelMask flags that will be output by the HUD logger. Defaults to JELogLevelAll for debug builds, JELogLevelNone for release builds
+/*! The combination of JELogLevelMask flags that will be output by the HUD logger. Defaults to JELogLevelAll for debug builds, JELogLevelNone for release builds
  */
 @property (nonatomic, assign) JELogLevelMask logLevelMask;
 
-/*!
- The combination of JELogMessageHeaderMask flags for log headers that will be displayed by the HUD logger. Defaults to (JELogMessageHeaderSourceFile | JELogMessageHeaderFunction)
+/*! The combination of JELogMessageHeaderMask flags for log headers that will be displayed by the HUD logger. Defaults to (JELogMessageHeaderSourceFile | JELogMessageHeaderFunction)
  */
 @property (nonatomic, assign) JELogMessageHeaderMask logMessageHeaderMask;
 
-/*!
- Set to YES if the HUD log should be expanded when +[JEDebugging start] is called. Set to NO if the HUD log should stay collapsed. Defaults to NO
+/*! Set to YES if the HUD log should be expanded when +[JEDebugging start] is called. Set to NO if the HUD log should stay collapsed. Defaults to NO
  */
 @property (nonatomic, assign) BOOL visibleOnStart;
 
-/*!
- The starting position of the toggle button on start. Set to a value from 0.0 (right below the statusbar) to 1.0 (the lowest expandable position). Defaults to 1.0.
+/*! The starting position of the toggle button on start. Set to a value from 0.0 (right below the statusbar) to 1.0 (the lowest expandable position). Defaults to 1.0.
  */
 @property (nonatomic, assign) float buttonOffsetOnStart;
 
-/*!
- The maximum number of log entries at a time displayed on the HUD log. Defaults to 200 entries
+/*! The maximum number of log entries at a time displayed on the HUD log. Defaults to 200 entries
  */
 @property (nonatomic, assign) NSUInteger numberOfLogEntriesInMemory;
 

@@ -27,6 +27,10 @@ import UIKit
 
 public extension UICollectionView {
     
+    /*! Dequeues a UICollectionViewCell from the receiver. Requires the UICollectionViewCell nib file and reuseIdentifier to both be set to the class name.
+    @param collectionViewCellClass the UICollectionViewCell class name
+    @param indexPath the index path for the cell to dequeue
+    */
     public func dequeueReusableCellWithClass<T: UICollectionViewCell>(collectionViewClass: T.Type, forIndexPath indexPath: NSIndexPath) -> T {
         
         return self.dequeueReusableCellWithClass(
@@ -34,6 +38,11 @@ public extension UICollectionView {
             forIndexPath: indexPath) as! T
     }
     
+    /*! Dequeues a UICollectionViewCell from the receiver. Requires the UICollectionViewCell nib file and reuseIdentifier to both be set to the class name.
+    @param collectionViewCellClass the UICollectionViewCell class name
+    @param subIdentifier a suffix for the reuseIdentifier appended to the UICollectionViewCell class name.
+    @param indexPath the index path for the cell to dequeue
+    */
     public func dequeueReusableCellWithClass<T: UICollectionViewCell>(collectionViewClass: T.Type, subIdentifier: String, forIndexPath indexPath: NSIndexPath) -> T {
         
         return self.dequeueReusableCellWithClass(
@@ -42,6 +51,11 @@ public extension UICollectionView {
             forIndexPath: indexPath) as! T
     }
     
+    /*! Dequeues a UICollectionReusableView from the receiver. Requires the UICollectionReusableView nib file and reuseIdentifier to both be set to the class name.
+    @param supplementaryViewClass the UICollectionReusableView class name
+    @param supplementaryViewKind the UICollectionReusableView kind string
+    @param indexPath the index path for the cell to dequeue
+    */
     public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, forIndexPath indexPath: NSIndexPath) -> T {
         
         return self.dequeueSupplementaryViewWithClass(
@@ -50,6 +64,12 @@ public extension UICollectionView {
             forIndexPath: indexPath) as! T
     }
     
+    /*! Dequeues a UICollectionReusableView from the receiver. Requires the UICollectionReusableView nib file and reuseIdentifier to both be set to the class name.
+    @param supplementaryViewClass the UICollectionReusableView class name
+    @param supplementaryViewKind the UICollectionReusableView kind string
+    @param subIdentifier a suffix for the reuseIdentifier appended to the UICollectionReusableView class name.
+    @param indexPath the index path for the cell to dequeue
+    */
     public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, subIdentifier: String, forIndexPath indexPath: NSIndexPath) -> T {
         
         return self.dequeueSupplementaryViewWithClass(

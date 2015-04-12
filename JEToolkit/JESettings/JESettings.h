@@ -26,7 +26,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-
+/*! JESettings is an abstract class for implementing getters and setters for dynamic properties. To use, subclass and declare dynamic properties (@dynamic in Obj-C, @NSManaged in Swift).
+ */
 @interface JESettings : NSObject
 
 - (long long int)integerValueForKey:(nonnull NSString *)key;

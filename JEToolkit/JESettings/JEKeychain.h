@@ -36,14 +36,27 @@ typedef NS_ENUM(NSInteger, JEKeychainAccess) {
     JEKeychainAccessAlwaysThisDeviceOnly
 };
 
-
+/*! The JEKeychain provides an interface for synthesizing dynamic properties by reading from/saving to the keychain. To use, subclass JEKeychain and declare dynamic properties (@dynamic in Obj-C, @NSManaged in Swift).
+ */
 @interface JEKeychain : JESettings
 
+/*! Returns an instance that saves values to the keychain with kSecAttrService = <App bundle ID> and kSecAttrAccessGroup = nil. Calling -init on the same class will return the same instance.
+ */
 - (nonnull instancetype)init;
+
+/*! Returns an instance that saves values to the keychain with the specified service and access group. Calling -init on the same class will return the same instance.
+ @param service the value for the kSecAttrService key. Defaults to the app bundle identifier.
+ @param accessGroupOrNil the value for the kSecAttrAccessGroup key. Defaults to nil.
+ */
 - (nonnull instancetype)initWithService:(nonnull NSString *)service
                             accessGroup:(nullable NSString *)accessGroupOrNil NS_DESIGNATED_INITIALIZER;
 
+/*! Override to change the default string key to use as kSecAttrAccount key for a property. By default, the property name itself is used as kSecAttrAccount.
+ */
 - (nonnull NSString *)keychainAccountForProperty:(nonnull NSString *)propertyName;
+
+/*! Override to change the default keychain access mode for a property. By default, returns JEKeychainAccessAfterFirstUnlock.
+ */
 - (JEKeychainAccess)keychainAccessForProperty:(nonnull NSString *)propertyName;
 
 @end

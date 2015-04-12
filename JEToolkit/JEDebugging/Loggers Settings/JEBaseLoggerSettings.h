@@ -49,16 +49,15 @@ typedef NS_OPTIONS(NSUInteger, JELogMessageHeaderMask) {
     JELogMessageHeaderAll           = ~0u
 };
 
-
+/*! JEBaseLoggerSettings is an abstract class for configurations used by JEDebugging loggers.
+ */
 @interface JEBaseLoggerSettings : NSObject <NSCopying>
 
-/*!
- The combination of JELogLevelMask flags that will be output by this logger.
+/*! The combination of JELogLevelMask flags that will be output by this logger.
  */
 @property (nonatomic, assign) JELogLevelMask logLevelMask;
 
-/*!
- The combination of JELogMessageHeaderMask flags for log headers that will be displayed by this logger.
+/*! The combination of JELogMessageHeaderMask flags for log headers that will be displayed by this logger.
  */
 @property (nonatomic, assign) JELogMessageHeaderMask logMessageHeaderMask;
 
