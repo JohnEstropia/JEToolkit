@@ -15,9 +15,9 @@ JEToolkit is a collection of time-saving goodies for iOS development.
 ## Modules Summary
 - [**`JEToolkit/JEToolkit`**](#jetoolkitmodule): Useful categories, functions, and macros for safety, convenience, and readability.
 - [**`JEToolkit/JEDebugging`**](#jedebuggingmodule): A performant, configurable debugging framework that outputs to the debugger console, to an in-app console view, and/or to log files.
-- [**`JEToolkit/JESettings`**](#jesettingsmodule): A class-based wrapper to NSUserDefaults and keychain access. Lets you access key-values just by declaring properties.
-- [**`JEToolkit/JEOrderedDictionary`**]: An `NSMutableDictionary` subclass that remembers the order you inserted keys. Useful if you want to maintain chronological information or a constant ordering of keys.
-- [**`JEToolkit/JEWeakCache`**]: A thread-safe caching mechanism that is similar to `NSCache`. The difference is `JEWeakCache` only keeps a weak reference of the objects, that is, it will keep a reference of objects until nothing else is retaining them.
+- [**`JEToolkit/JESettings`**](#jesettingsmodule): A class-based wrapper to `NSUserDefaults` and keychain access. Lets you access key-values just by declaring properties.
+- **`JEToolkit/JEOrderedDictionary`**: An `NSMutableDictionary` subclass that remembers the order you inserted keys. Useful if you want to maintain chronological information or a constant ordering of keys.
+- **`JEToolkit/JEWeakCache`**: A thread-safe caching mechanism that is similar to `NSCache`. The difference is `JEWeakCache` only keeps a weak reference of the objects, that is, it will keep a reference of objects until nothing else is retaining them.
 
 Use each submodule independently (via cocoapods) or link everything as a whole package!
 
