@@ -13,16 +13,16 @@ JEToolkit is a collection of time-saving goodies for iOS development.
 - Objective-C-only projects will still benefit from all available features!
 
 ## Modules Summary
-- [**`JEToolkit/JEToolkit`**](#jetoolkit): Useful categories, functions, and macros for safety, convenience, and readability.
-- [**`JEToolkit/JEDebugging`**](#jedebugging): A performant, configurable debugging framework that outputs to the debugger console, to an in-app console view, and/or to log files.
-- [**`JEToolkit/JESettings`**](#jesettings): A class-based wrapper to NSUserDefaults and keychain access. Lets you access key-values just by declaring properties.
+- [**`JEToolkit/JEToolkit`**](#jetoolkitmodule): Useful categories, functions, and macros for safety, convenience, and readability.
+- [**`JEToolkit/JEDebugging`**](#jedebuggingmodule): A performant, configurable debugging framework that outputs to the debugger console, to an in-app console view, and/or to log files.
+- [**`JEToolkit/JESettings`**](#jesettingsmodule): A class-based wrapper to NSUserDefaults and keychain access. Lets you access key-values just by declaring properties.
 - [**`JEToolkit/JEOrderedDictionary`**]: An `NSMutableDictionary` subclass that remembers the order you inserted keys. Useful if you want to maintain chronological information or a constant ordering of keys.
 - [**`JEToolkit/JEWeakCache`**]: A thread-safe caching mechanism that is similar to `NSCache`. The difference is `JEWeakCache` only keeps a weak reference of the objects, that is, it will keep a reference of objects until nothing else is retaining them.
 
 Use each submodule independently (via cocoapods) or link everything as a whole package!
 
 
-# <a name="jetoolkit">JEToolkit/JEToolkit</a>
+# <a name="jetoolkitmodule">JEToolkit/JEToolkit</a>
 The `JEToolkit` module contains utilities that once you start using, you can never program without. They're that useful!
 
 ### Safer handling of `NSNotification`s (Objective-C and Swift)
@@ -144,7 +144,7 @@ override func viewWillDisappea(animated: Bool) {
 - and really, still a lot more!
 
 
-# <a name="jedebugging">JEToolkit/JEDebugging</a>
+# <a name="jedebuggingmodule">JEToolkit/JEDebugging</a>
 The `JEDebugging` module is a logging framework that will surely help you and your teammates (even the server guys and your testers!)
 
 ### Main Features
@@ -177,7 +177,7 @@ By default, this view will not be created in release mode. You can expand/collap
 - Configurable settings for the console logger, the file logger, and the HUD logger.
 
 
-# <a name="jesettings">JEToolkit/JESettings</a>
+# <a name="jesettingsmodule">JEToolkit/JESettings</a>
 The `JESettings` module provides cool base classes for managing `NSUserDefaults` and keychain data with object models.
 To create such models, subclass `JEUserDefaults` or `JEKeychain` and declare the data you want to manage as dynamic properties (`@dynamic` in Objective-C, `@NSManaged` in Swift)
 ``` obj-c
