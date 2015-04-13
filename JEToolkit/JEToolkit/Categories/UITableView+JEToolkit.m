@@ -179,7 +179,7 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
 }
 
 - (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass
-                          setupBlock:(void (^)(void))setupBlock {
+                          setupBlock:(void (^)(id cell))setupBlock {
     
     return [self cellForQueryingHeightWithClass:tableViewCellClass subIdentifier:nil setupBlock:setupBlock];
 }
@@ -192,7 +192,7 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
 
 - (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass
                        subIdentifier:(NSString *)subIdentifier
-                          setupBlock:(void (^)(void))setupBlock {
+                          setupBlock:(void (^)(id cell))setupBlock {
     
     JEAssertParameter([tableViewCellClass isSubclassOfClass:[UITableViewCell class]]);
     
@@ -232,7 +232,7 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
     
     if (setupBlock) {
         
-        setupBlock();
+        setupBlock(cell);
     }
     
     [cell setNeedsLayout];

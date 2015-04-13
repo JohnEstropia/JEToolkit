@@ -29,8 +29,10 @@ static const CGFloat UITableViewCellMargin = 10.0f;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UITableViewCell *cell = [tableView cellForQueryingHeightWithClass:[UITableViewCell class]];
-    [self configureCell:cell atIndexPath:indexPath];
+    UITableViewCell *cell = [tableView cellForQueryingHeightWithClass:[UITableViewCell class] setupBlock:^(UITableViewCell *cell) {
+        
+        [self configureCell:cell atIndexPath:indexPath];
+    }];
     return MAX(tableView.rowHeight,
                (CGRectGetHeight(cell.bounds)
                 - CGRectGetHeight(cell.textLabel.frame)
