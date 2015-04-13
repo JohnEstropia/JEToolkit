@@ -42,6 +42,11 @@
         return nil;
     }
     
+    if (!forcePurgeOnMemoryWarning) {
+        
+        return self;
+    }
+    
     JEScopeWeak(self);
     [self
      registerForNotificationsWithName:UIApplicationDidReceiveMemoryWarningNotification
