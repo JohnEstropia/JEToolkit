@@ -41,7 +41,7 @@
 @property (nonatomic, weak, readonly) JEUserDefaults *parentForProxy;
 @property (nonatomic, strong, readonly) JEUserDefaults *cachedProxyForDefaultValues;
 
-- (instancetype)initProxyForUserDefaultsWithParent:(JEUserDefaults *)parentForProxy JE_DESIGNATED_INITIALIZER;
+- (instancetype)initProxyForUserDefaultsWithParent:(JEUserDefaults *)parentForProxy NS_DESIGNATED_INITIALIZER;
 
 @end
 
