@@ -204,6 +204,12 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
     }
     
     NSCache *cache = [self cellHeightQueryingCache];
+    if (!cache) {
+        
+        cache = [[NSCache alloc] init];
+        [self setCellHeightQueryingCache:cache];
+    }
+    
     UITableViewCell *cell = [cache objectForKey:reuseIdentifier];
     if (!cell) {
         
