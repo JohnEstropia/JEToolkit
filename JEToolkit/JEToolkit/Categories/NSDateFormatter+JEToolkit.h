@@ -34,11 +34,11 @@
 
 /*! NSDateFormatter for dates in ISO 8601 UTC date format (ex: 2013-03-20T15:30:20Z). Note: only supports UTC
  */
-+ (NSDateFormatter *)ISO8601UTCDateFormatter JE_CONST;
++ (nonnull NSDateFormatter *)ISO8601UTCDateFormatter JE_CONST;
 
 /*! NSDateFormatter for dates in EXIF date format (ex: 2013-03-20 15:30:20). Note: only supports UTC
  */
-+ (NSDateFormatter *)EXIFDateFormatter JE_CONST;
++ (nonnull NSDateFormatter *)EXIFDateFormatter JE_CONST;
 
 
 @end

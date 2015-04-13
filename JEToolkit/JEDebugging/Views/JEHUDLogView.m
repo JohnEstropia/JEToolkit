@@ -29,9 +29,11 @@
 
 #import "JEFormulas.h"
 #import "JEUIMetrics.h"
+#import "JESafetyHelpers.h"
 
 #import "JEDebugging.h"
 
+#import "NSObject+JEToolkit.h"
 #import "NSString+JEToolkit.h"
 #import "UILabel+JEToolkit.h"
 #import "UIView+JEToolkit.h"
@@ -67,6 +69,9 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 @property (nonatomic, assign) BOOL hasPendingLogUpdates;
 @property (nonatomic, assign) NSTimeInterval lastReloadTimeInterval;
 
+@property (nonatomic, weak) UIActivityViewController *activityController;
+@property (nonatomic, copy) NSNumber *buttonOffsetOnStart;
+
 @end
 
 
@@ -84,6 +89,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     }
     
     _pendingLogEntries = [[NSMutableArray alloc] initWithCapacity:HUDLogSettings.numberOfLogEntriesInMemory];
+    _buttonOffsetOnStart = @(HUDLogSettings.buttonOffsetOnStart);
     
     CADisplayLink *displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkDidFire:)];
     displayLink.frameInterval = JEHUDLogDisplayFrameInterval;
@@ -94,7 +100,6 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     self.backgroundColor = [UIColor clearColor];
     
     CGRect bounds = self.bounds;
-    
     UIView *consoleView = [[UIView alloc] initWithFrame:(CGRect){
         .origin.y = (CGRectGetHeight(bounds) - JEHUDLogViewConsoleMinHeight),
         .size.width = CGRectGetWidth(bounds),
@@ -281,6 +286,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     
     
     [self didUpdateHUDVisibility];
+    displayLink.paused = NO;
     
     return self;
 }
@@ -307,21 +313,101 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 
 #pragma mark - UIView
 
+- (void)willMoveToWindow:(UIWindow *)newWindow {
+    
+    [super willMoveToWindow:newWindow];
+    
+    if (!newWindow) {
+        
+        [self unregisterForNotificationsWithName:UIKeyboardWillShowNotification];
+        return;
+    }
+    
+    JEScopeWeak(self);
+    [self
+     registerForNotificationsWithName:UIKeyboardWillShowNotification
+     targetBlock:^(NSNotification *note) {
+         
+         JEScopeStrong(self);
+         if (!self || !self.superview || self.toggleButton.selected || self.isDraggingToggleButton) {
+             
+             return;
+         }
+         
+         NSDictionary *userInfo = [note userInfo];
+         CGRect keyboardFrameInView = [self
+                                       convertRect:[(NSValue *)userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue]
+                                       fromView:nil];
+         CGFloat duration = [(NSNumber *)userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
+         UIViewAnimationOptions animationCurve = kNilOptions;
+         switch ([(NSNumber *)userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]) {
+                 
+             case UIViewAnimationCurveEaseInOut:
+                 animationCurve = UIViewAnimationOptionCurveEaseInOut;
+                 break;
+             case UIViewAnimationCurveEaseIn:
+                 animationCurve = UIViewAnimationOptionCurveEaseIn;
+                 break;
+             case UIViewAnimationCurveEaseOut:
+                 animationCurve = UIViewAnimationOptionCurveEaseOut;
+                 break;
+             case UIViewAnimationCurveLinear:
+                 animationCurve = UIViewAnimationOptionCurveLinear;
+                 break;
+         }
+         
+         CGRect bounds = self.bounds;
+         CGFloat coveredHeight = (CGRectGetMaxY(bounds)
+                                  - CGRectGetMinY(keyboardFrameInView));
+         UIView *menuView = self.menuView;
+         CGRect menuFrame = menuView.frame;
+         
+         [UIView
+          animateWithDuration:duration
+          delay:0.0f
+          options:(UIViewAnimationOptionBeginFromCurrentState | (animationCurve << 16))
+          animations:^{
+              
+              menuView.frame = (CGRect){
+                  .origin.x = CGRectGetMinX(bounds),
+                  .origin.y = JEClamp((CGRectGetMinY(bounds) + JEUIStatusBarHeight),
+                                      CGRectGetMinY(menuFrame),
+                                      (CGRectGetHeight(bounds)
+                                       - coveredHeight
+                                       - CGRectGetHeight(menuFrame))),
+                  .size = menuFrame.size
+              };
+          }
+          completion:NULL];
+     }];
+}
+
 - (void)layoutSubviews {
+    
+    self.frame = [self.superview
+                  convertRect:[UIScreen mainScreen].bounds
+                  fromView:nil];
     
     [super layoutSubviews];
     
+    CGRect bounds = self.bounds;
     UIView *menuView = self.menuView;
     CGRect menuFrame = menuView.frame;
+    
+    const CGFloat minOriginY = (CGRectGetMinY(bounds) + JEUIStatusBarHeight);
+    const CGFloat maxOriginY = (CGRectGetHeight(bounds)
+                                - JEHUDLogViewConsoleMinHeight
+                                - CGRectGetHeight(menuFrame));
     menuView.frame = (CGRect){
-        .origin.x = CGRectGetMinX(menuFrame),
-        .origin.y = JEClamp(JEUIStatusBarHeight,
-                            CGRectGetMinY(menuFrame),
-                            (CGRectGetHeight(self.bounds)
-                             - JEHUDLogViewConsoleMinHeight
-                             - CGRectGetHeight(menuFrame))),
+        .origin.x = CGRectGetMinX(bounds),
+        .origin.y = JEClamp(minOriginY,
+                            (self.buttonOffsetOnStart
+                             ? (minOriginY + (self.buttonOffsetOnStart.floatValue * (maxOriginY - minOriginY)))
+                             : CGRectGetMinY(menuFrame)),
+                            maxOriginY),
         .size = menuFrame.size
     };
+    self.buttonOffsetOnStart = nil;
     
     [self layoutConsoleView];
     [self.superview bringSubviewToFront:self];
@@ -382,6 +468,10 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 
 - (void)displayLinkDidFire:(CADisplayLink *)sender {
     
+    if ([self.superview.subviews lastObject] != self) {
+        
+        [self.superview bringSubviewToFront:self];
+    }
     [self reloadLogEntriesIfNeeded];
 }
 
@@ -427,7 +517,13 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 
 - (void)reportButtonTouchUpInside:(UIButton *)sender {
     
-    UIViewController *viewController = [UIViewController topmostPresentedViewController];
+    UIActivityViewController *previousController = self.activityController;
+    if (previousController) {
+    
+        return;
+    }
+    
+    UIViewController *viewController = [UIViewController topmostViewControllerInHierarchy];
     if (!viewController) {
         
         return;
@@ -452,6 +548,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
                                           UIActivityTypePostToTencentWeibo ];
     
     [viewController presentViewController:controller animated:YES completion:nil];
+    self.activityController = controller;
     
     self.toggleButton.selected = NO;
     [self didUpdateHUDVisibility];
@@ -490,6 +587,11 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
 }
 
 - (void)applicationDidChangeStatusBarOrientation:(NSNotification *)note {
+    
+    if (NSProtocolFromString(@"UICoordinateSpace")) {
+        
+        return;
+    }
     
     CGAffineTransform transform = CGAffineTransformIdentity;
     CGRect bounds = [UIScreen mainScreen].bounds;
@@ -538,8 +640,6 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     CAShapeLayer *menuMaskLayer = self.menuMaskLayer;
     if (consoleHidden) {
         
-        self.displayLink.paused = YES;
-        
         menuView.frame = (CGRect){
             .origin = menuFrame.origin,
             .size.width = CGRectGetMinX(reportButton.frame),
@@ -552,8 +652,6 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
                               cornerRadii:(CGSize){ .width = 8.0f, .height = 8.0f }].CGPath;
         return;
     }
-    
-    self.displayLink.paused = NO;
     
     menuView.frame = (CGRect){
         .origin = menuFrame.origin,

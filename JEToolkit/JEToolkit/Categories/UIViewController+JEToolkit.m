@@ -25,7 +25,31 @@
 
 #import "UIViewController+JEToolkit.h"
 
+
 @implementation UIViewController (JEToolkit)
+
+#pragma mark - Private
+
+- (UIViewController *)topmostViewControllerInHierarchy {
+    
+    UIViewController *presentedViewController = self.presentedViewController;
+    if (presentedViewController) {
+        
+        return [presentedViewController topmostViewControllerInHierarchy];
+    }
+    
+    if ([self isKindOfClass:[UITabBarController class]]) {
+        
+        return [((UITabBarController *)self).selectedViewController topmostViewControllerInHierarchy];
+    }
+    if ([self isKindOfClass:[UINavigationController class]]) {
+        
+        return [((UINavigationController *)self).topViewController topmostViewControllerInHierarchy];
+    }
+    
+    return self;
+}
+
 
 #pragma mark - Public
 
@@ -34,6 +58,13 @@
     UIApplication *application = [UIApplication sharedApplication];
     UIViewController *rootViewController = (((NSObject<UIApplicationDelegate> *)application.delegate).window.rootViewController ?: application.keyWindow.rootViewController);
     return [rootViewController topmostPresentedViewController];
+}
+
++ (UIViewController *)topmostViewControllerInHierarchy {
+    
+    UIApplication *application = [UIApplication sharedApplication];
+    UIViewController *rootViewController = (((NSObject<UIApplicationDelegate> *)application.delegate).window.rootViewController ?: application.keyWindow.rootViewController);
+    return [rootViewController topmostViewControllerInHierarchy];
 }
 
 - (BOOL)hasWindow {

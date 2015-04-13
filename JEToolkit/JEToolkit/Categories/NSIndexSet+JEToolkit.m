@@ -25,7 +25,11 @@
 
 #import "NSIndexSet+JEToolkit.h"
 
+#if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
+#else
+#define JEAssertParameter   NSCParameterAssert
+#endif
 
 
 @implementation NSIndexSet (JEToolkit)

@@ -90,21 +90,25 @@
 
 /*! Loads a view from nib. This assumes that the .nib file was named as the view's class name, and that the UIView is the first root object in the nib.
  */
-+ (instancetype)viewFromNib;
++ (null_unspecified instancetype)viewFromNib;
 
 
 #pragma mark - Hierarchy Helpers
 
 /*! Returns the first view within the receiver's view tree that is the first responder
  */
-- (UIView *)findFirstResponder;
+- (nullable UIView *)findFirstResponder;
 
 /*! Returns the first subview that is a subclass of class. Searches recursively, and may return the receiver itself.
  */
-- (id)firstSubviewWithClass:(Class)viewClass;
+- (nullable id)firstSubviewWithClass:(nonnull Class)viewClass;
 
 /*! Returns the first superview that is a subclass of class. Searches recursively, and may return the receiver itself.
  */
-- (id)firstSuperviewWithClass:(Class)viewClass;
+- (nullable id)firstSuperviewWithClass:(nonnull Class)viewClass;
+
+/*! Returns the UIViewController owning the receiver's view tree if it exists
+ */
+- (nullable id)findViewController;
 
 @end

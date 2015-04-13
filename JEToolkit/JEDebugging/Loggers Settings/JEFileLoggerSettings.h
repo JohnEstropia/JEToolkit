@@ -25,30 +25,27 @@
 
 #import "JEBaseLoggerSettings.h"
 
+/*! JEFileLoggerSettings provides configurations to JEDebugging file logging.
+ */
 @interface JEFileLoggerSettings : JEBaseLoggerSettings
 
-/*!
- The combination of JELogLevelMask flags that will be output by the file logger. Defaults to (JELogLevelNotice | JELogLevelAlert)
+/*! The combination of JELogLevelMask flags that will be output by the file logger. Defaults to (JELogLevelNotice | JELogLevelAlert | JELogLevelFatal)
  */
 @property (nonatomic, assign) JELogLevelMask logLevelMask;
 
-/*!
- The combination of JELogMessageHeaderMask flags for log headers that will be displayed by the file logger. Defaults to JELogMessageHeaderAll
+/*! The combination of JELogMessageHeaderMask flags for log headers that will be displayed by the file logger. Defaults to JELogMessageHeaderAll
  */
 @property (nonatomic, assign) JELogMessageHeaderMask logMessageHeaderMask;
 
-/*!
- The root directory URL for log files. Defaults to the application Caches/Logs/ directory
+/*! The root directory URL for log files. Defaults to the application Caches/Logs/ directory
  */
-@property (nonatomic, copy) NSURL *fileLogsDirectoryURL;
+@property (nonatomic, copy, nonnull) NSURL *fileLogsDirectoryURL;
 
-/*!
- The memory threshold before logs are flushed to disk. Defaults to 100KB
+/*! The memory threshold before logs are flushed to disk. Defaults to 100KB
  */
 @property (nonatomic, assign) unsigned long long numberOfBytesInMemoryBeforeWritingToFile;
 
-/*!
- The number of days from creation date before a log file is deleted (each log file only contains data for a single day). Defaults to 7 days
+/*! The number of days from creation date before a log file is deleted (each log file only contains data for a single day). Defaults to 7 days
  */
 @property (nonatomic, assign) NSUInteger numberOfDaysBeforeDeletingFile;
 

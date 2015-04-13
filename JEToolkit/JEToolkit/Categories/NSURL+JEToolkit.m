@@ -29,9 +29,15 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 
 #import "JEAvailability.h"
-#import "JEDebugging.h"
 #import "NSError+JEToolkit.h"
 #import "NSString+JEToolkit.h"
+
+#if __has_include("JEDebugging.h")
+#import "JEDebugging.h"
+#else
+#define JEAssertParameter   NSCParameterAssert
+#define JEAssert            NSCAssert
+#endif
 
 
 @implementation NSURL (JEToolkit)
@@ -41,8 +47,8 @@
 - (const char *)je_fileSystemRepresentation NS_RETURNS_INNER_POINTER {
     
     return ([self respondsToSelector:@selector(fileSystemRepresentation)]
-            ? [self fileSystemRepresentation]
-            : [[self path] fileSystemRepresentation]);
+            ? self.fileSystemRepresentation
+            : self.path.fileSystemRepresentation);
 }
 
 
@@ -106,12 +112,29 @@
 
 - (BOOL)isAssetsLibraryURL {
     
-    return [[self scheme] isEqualToString:@"assets-library"];
+    return [self.scheme isEqualToString:@"assets-library"];
 }
 
 - (BOOL)isDataURL {
     
-    return [[self scheme] isEqualToString:@"data"];
+    return [self.scheme isEqualToString:@"data"];
+}
+
+- (NSDictionary *)queryValues {
+    
+    NSArray *pairs = [self.query componentsSeparatedByString:@"&"];
+    NSMutableDictionary *components = [[NSMutableDictionary alloc] initWithCapacity:pairs.count];
+    for (NSString *keyValueString in pairs) {
+        
+        NSArray *keyValueArray = [keyValueString componentsSeparatedByString:@"="];
+        if (keyValueArray.count != 2)  {
+            
+            continue;
+        }
+        
+        components[[keyValueArray[0] URLDecodedString]] = [keyValueArray[1] URLDecodedString];
+    }
+    return [NSDictionary dictionaryWithDictionary:components];
 }
 
 #pragma mark Extended Attributes
@@ -198,7 +221,7 @@
         
         const char *valueString = [extendedAttribute UTF8String];
         errorCode = setxattr([self je_fileSystemRepresentation],
-                             [key UTF8String],
+                             key.UTF8String,
                              valueString,
                              strlen(valueString),
                              0,
@@ -207,7 +230,7 @@
     else {
         
         errorCode = removexattr([self je_fileSystemRepresentation],
-                                [key UTF8String],
+                                key.UTF8String,
                                 kNilOptions);
     }
     
@@ -224,6 +247,28 @@
     
     (*error) = nil;
     return YES;
+}
+
+#pragma mark Conversion
+
++ (NSURL *)URLFromValue:(id)valueOrNil {
+    
+    if (valueOrNil) {
+        
+        if ([valueOrNil isKindOfClass:[NSURL class]]) {
+            
+            return valueOrNil;
+        }
+        if ([valueOrNil isKindOfClass:[NSString class]]) {
+            
+            return [NSURL URLWithString:valueOrNil];
+        }
+        if ([valueOrNil isKindOfClass:[NSData class]]) {
+            
+            return [NSURL URLWithString:[[NSString alloc] initWithData:valueOrNil encoding:NSUTF8StringEncoding]];
+        }
+    }
+    return nil;
 }
 
 

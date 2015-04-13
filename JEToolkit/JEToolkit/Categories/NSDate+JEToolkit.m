@@ -28,7 +28,11 @@
 #import "NSCalendar+JEToolkit.h"
 #import "NSDateFormatter+JEToolkit.h"
 
+#if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
+#else
+#define JEAssertParameter   NSCParameterAssert
+#endif
 
 
 @implementation NSDate (JEToolkit)
@@ -37,7 +41,7 @@
 
 #pragma mark Conversion
 
-+ (NSDate *)dateWithValue:(id)valueOrNil {
++ (NSDate *)dateForValue:(id)valueOrNil {
     
     if (!valueOrNil) {
         

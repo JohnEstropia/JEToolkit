@@ -27,7 +27,7 @@
 
 @interface UIDevice (JEToolkit)
 
-@property (nonatomic, strong, readonly) NSString *platform;
-@property (nonatomic, strong, readonly) NSString *hardwareName;
+@property (nonatomic, strong, readonly, null_unspecified) NSString *platform;
+@property (nonatomic, strong, readonly, null_unspecified) NSString *hardwareName;
 
 @end

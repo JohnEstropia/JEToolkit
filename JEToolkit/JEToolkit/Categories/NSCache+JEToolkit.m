@@ -24,11 +24,39 @@
 //
 
 #import "NSCache+JEToolkit.h"
+#import <UIKit/UIKit.h>
+
+#import "JESafetyHelpers.h"
+#import "NSObject+JEToolkit.h"
 
 
 @implementation NSCache (JEToolkit)
 
 #pragma mark - Public
+
+- (instancetype)initWithForcedPurgingOnMemoryWarning:(BOOL)forcePurgeOnMemoryWarning {
+    
+    self = [self init];
+    if (!self) {
+        
+        return nil;
+    }
+    
+    if (!forcePurgeOnMemoryWarning) {
+        
+        return self;
+    }
+    
+    JEScopeWeak(self);
+    [self
+     registerForNotificationsWithName:UIApplicationDidReceiveMemoryWarningNotification
+     targetBlock:^(NSNotification * note) {
+         
+         JEScopeStrong(self);
+         [self removeAllObjects];
+     }];
+    return self;
+}
 
 - (id)objectForKeyedSubscript:(id)key {
     

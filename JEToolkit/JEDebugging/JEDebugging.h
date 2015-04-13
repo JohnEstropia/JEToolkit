@@ -59,6 +59,7 @@
 #define JEAssertParameter(condition)            do {} while (NO)
 #define JEAssertMainThread()                    do {} while (NO)
 #define JEAssertBackgroundThread()              do {} while (NO)
+#define JEAssertMethodOverride()                do {} while (NO)
 
 #else
 
@@ -85,6 +86,22 @@
 
 #define JEAssertBackgroundThread() \
     JEAssert(![NSThread isMainThread], @"Code expected to run on a background thread")
+
+#define JEAssertMethodOverride() \
+    do { \
+        NSString *formatString = [NSString stringWithFormat:@"Required method %s override not implemented.", __PRETTY_FUNCTION__];\
+        [JEDebugging \
+         logFailureInAssertionWithMessage:formatString \
+         location:JELogLocationCurrent()]; \
+        JE_PRAGMA_PUSH \
+        JE_PRAGMA_IGNORE("-Wformat-extra-args") \
+        [NSException \
+         raise:NSInternalInconsistencyException \
+         format:@"%@", formatString]; \
+        JE_PRAGMA_POP \
+    } while(NO)
+
+
 
 #endif
 
@@ -175,108 +192,13 @@
 
 typedef struct JELogLocation {
 
-    const char *fileName;
-    const char *functionName;
-    int lineNumber;
+    const char *__nullable fileName;
+    const char *__nullable functionName;
+    const unsigned int lineNumber;
 
 } JELogLocation;
 
 #define JELogLocationCurrent()  ((JELogLocation){ __JE_FILE_NAME__, __PRETTY_FUNCTION__, __LINE__ })
-
-
-
-#pragma mark - Breakpoint utility
-
-#if !DEBUG
-#define JEDebugBreak()  do {} while (NO)
-
-#elif TARGET_CPU_ARM
-#define JEDebugBreak() \
-    do { \
-        if (![JEDebugging isDebuggerAttached]) { \
-            break; \
-        } \
-        /* http://iphone.m20.nl/wp/2010/10/xcode-iphone-debugger-halt-assertions/ */ \
-        __asm__ __volatile__ ( \
-            "mov r0, %0\n" \
-            "mov r1, %1\n" \
-            "mov r12, #37\n" \
-            "swi 128\n" \
-            "nop\n" \
-            : \
-            : "r" (getpid()), "r" (SIGINT) \
-            : "r12", "r0", "r1", "cc" \
-        ); \
-    } while (NO)
-
-#elif TARGET_CPU_ARM64
-#define JEDebugBreak() \
-    do { \
-        if (![JEDebugging isDebuggerAttached]) { \
-            break; \
-        } \
-        __asm__ __volatile__ ( \
-            "movq r0, %0\n" \
-            "movq r1, %1\n" \
-            "movq r12, #37\n" \
-            "swi 128\n" \
-            "nop\n" \
-            : \
-            : "r" (getpid()), "r" (SIGINT) \
-            : "r12", "r0", "r1", "cc" \
-        ); \
-    } while (NO)
-
-#elif TARGET_CPU_X86
-#define JEDebugBreak() \
-    do { \
-        if (![JEDebugging isDebuggerAttached]) { \
-            break; \
-        } \
-        /* http://iphone.m20.nl/wp/2010/10/xcode-iphone-debugger-halt-assertions/ */ \
-        __asm__ __volatile__ ( \
-            "pushl %0\n" \
-            "pushl %1\n" \
-            "push $0\n" \
-            "movl %2, %%eax\n" \
-            "int $0x80\n" \
-            "add $12, %%esp" \
-            : \
-            : "g" (SIGINT), "g" (getpid()), "n" (37) \
-            : "eax", "cc" \
-        ); \
-    } while (NO)
-
-#elif TARGET_CPU_X86_64
-#define JEDebugBreak() \
-    do { \
-        if (![JEDebugging isDebuggerAttached]) { \
-            break; \
-        } \
-        __asm__ __volatile__ ( \
-            "pushq %0\n" \
-            "pushq %1\n" \
-            "push $0\n" \
-            "movq %2, %%rax\n" \
-            "syscall\n" \
-            "addq $24, %%rsp" \
-            : \
-            : "g" (SIGINT), "g" (getpid()), "n" (37) \
-            : "rax", "cc" \
-        ); \
-    } while (NO)
-
-#else
-#define JEDebugBreak()  do {} while (NO)
-
-#endif
-
-#define JEDebugBreakIf(condition) \
-    do { \
-        if (condition) { \
-            JEDebugBreak(); \
-        } \
-    } while(NO)
 
 
 
@@ -304,42 +226,42 @@ typedef struct JELogLocation {
 /*! Returns a configurable copy of the current console logger settings.
  @return a configurable copy of the current console logger settings. The changes to the returned object will not be reflected until it is passed back to @p setConsoleLoggerSettings:
  */
-+ (JEConsoleLoggerSettings *)copyConsoleLoggerSettings JE_WARN_UNUSED_RESULT;
++ (nonnull JEConsoleLoggerSettings *)copyConsoleLoggerSettings JE_WARN_UNUSED_RESULT;
 
 /*! Updates the current console logger settings. Note that the settings object passed to this method will be copied by the receiver, thus, further changes to the settings object will not be reflected until it is again passed to @p setConsoleLoggerSettings:
  @param consoleLoggerSettings the settings object holding new configuration values
  */
-+ (void)setConsoleLoggerSettings:(JEConsoleLoggerSettings *)consoleLoggerSettings;
++ (void)setConsoleLoggerSettings:(nonnull JEConsoleLoggerSettings *)consoleLoggerSettings;
 
 /*! Returns a configurable copy of the current HUD logger settings.
  @return a configurable copy of the current HUD logger settings. The changes to the returned object will not be reflected until it is passed back to @p setHUDLoggerSettings:
  */
-+ (JEHUDLoggerSettings *)copyHUDLoggerSettings JE_WARN_UNUSED_RESULT;
++ (nonnull JEHUDLoggerSettings *)copyHUDLoggerSettings JE_WARN_UNUSED_RESULT;
 
 /*! Updates the current HUD logger settings. Note that the settings object passed to this method will be copied by the receiver, thus, further changes to the settings object will not be reflected until it is again passed to @p setHUDLoggerSettings:
  @param HUDLoggerSettings the settings object holding new configuration values
  */
-+ (void)setHUDLoggerSettings:(JEHUDLoggerSettings *)HUDLoggerSettings;
++ (void)setHUDLoggerSettings:(nonnull JEHUDLoggerSettings *)HUDLoggerSettings;
 
 /*! Returns a configurable copy of the current file logger settings.
  @return a configurable copy of the current file logger settings. The changes to the returned object will not be reflected until it is passed back to @p setFileLoggerSettings:
  */
-+ (JEFileLoggerSettings *)copyFileLoggerSettings JE_WARN_UNUSED_RESULT;
++ (nonnull JEFileLoggerSettings *)copyFileLoggerSettings JE_WARN_UNUSED_RESULT;
 
 /*! Updates the current file logger settings. Note that the settings object passed to this method will be copied by the receiver, thus, further changes to the settings object will not be reflected until it is again passed to @p setFileLoggerSettings:
  @param fileLoggerSettings the settings object holding new configuration values
  */
-+ (void)setFileLoggerSettings:(JEFileLoggerSettings *)fileLoggerSettings;
++ (void)setFileLoggerSettings:(nonnull JEFileLoggerSettings *)fileLoggerSettings;
 
 /*! Enable or disable exception logging. Note that setting enabled to @p YES will detach the previously set exception handler, such as handlers provided by analytics frameworks or other debugging frameworks.
  @param enabled @p YES to enable exception logging and detach the previous exception handler; @p NO to disable exception logging and restore the original exception handler. Defaults to @p NO.
  */
 + (void)setExceptionLoggingEnabled:(BOOL)enabled;
 
-/*! Enable or disable application lifecycle logging. Logged events include foreground and background events, active and inactive events.
+/*! Enable or disable application lifecycle logging (JELogLevelTrace level). Logged events include foreground and background events, active and inactive events, and UIViewController viewDidAppear and viewWillDisappear events.
  @param enabled @p YES to enable application lifecycle logging, @p NO to disable. Defaults to @p NO.
  */
-+ (void)setApplicationLifecycleLoggingEnabled:(BOOL)enabled;
++ (void)setApplicationLifeCycleLoggingEnabled:(BOOL)enabled;
 
 /*!
  Starts the logging session. All logs are ignored until this method is called.
@@ -354,43 +276,61 @@ typedef struct JELogLocation {
  */
 + (void)dumpLevel:(JELogLevelMask)level
          location:(JELogLocation)location
-            label:(NSString *)label
-            value:(NSValue *)wrappedValue;
+            label:(nonnull NSString *)label
+            value:(nullable NSValue *)wrappedValue;
 
 /*!
  Use the @p JEDump(...) family of utilities instead of this method.
  */
 + (void)dumpLevel:(JELogLevelMask)level
          location:(JELogLocation)location
-            label:(NSString *)label
- valueDescription:(NSString *)valueDescription;
+            label:(nonnull NSString *)label
+ valueDescription:(nonnull NSString *)valueDescription;
 
 /*!
  Use the @p JELog(...) family of utilities instead of this method.
  */
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
-          format:(NSString *)format, ... JE_FORMAT_STRING(3, 4);
+          format:(nonnull NSString *)format, ... JE_FORMAT_STRING(3, 4);
 
 /*!
  Use the @p JELog(...) family of utilities instead of this method.
  */
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
-          format:(NSString *)format
+          format:(nonnull NSString *)format
+JE_PRAGMA_PUSH
+JE_PRAGMA_IGNORE("-Wnullability-completeness")
        arguments:(va_list)arguments;
+JE_PRAGMA_POP
+
 
 /*!
  Use the @p JEAssert(...) family of utilities instead of this method.
  */
-+ (void)logFailureInAssertionCondition:(NSString *)conditionString
++ (void)logFailureInAssertionCondition:(nonnull NSString *)conditionString
                               location:(JELogLocation)location;
 
 /*!
  Use the @p JEAssert(...) family of utilities instead of this method.
  */
-+ (void)logFailureInAssertionWithMessage:(NSString *)failureMessage
++ (void)logFailureInAssertionWithMessage:(nonnull NSString *)failureMessage
                                 location:(JELogLocation)location;
+
+/*!
+ Use the @p setApplicationLifeCycleLoggingEnabled: to enable application lifecycle logging instead of this method.
+ */
++ (void)logLifeCycleEventWithFormat:(nonnull NSString *)format, ... JE_FORMAT_STRING(1, 2);
+
+/*!
+ Use the @p setApplicationLifeCycleLoggingEnabled: to enable application lifecycle logging instead of this method.
+ */
++ (void)logLifeCycleEventWithFormat:(nonnull NSString *)format
+JE_PRAGMA_PUSH
+JE_PRAGMA_IGNORE("-Wnullability-completeness")
+                          arguments:(va_list)arguments;
+JE_PRAGMA_POP
 
 
 #pragma mark - retrieving
@@ -399,12 +339,12 @@ typedef struct JELogLocation {
  Enumerates all log files' data synchronously, starting with the most recent up to the oldest file.
  @param block The iteration block. Set the @p stop argument to @p YES to terminate the enumeration.
  */
-+ (void)enumerateFileLogDataWithBlock:(void (^)(NSString *fileName, NSData *data, BOOL *stop))block;
++ (void)enumerateFileLogDataWithBlock:(nonnull void (^)(NSString *__nonnull fileName, NSData *__nonnull data, BOOL *__nonnull stop))block;
 
 /*!
  Enumerates all log files' URLs synchronously, starting with the most recent up to the oldest file.
  @param block The iteration block. Set the @p stop argument to @p YES to terminate the enumeration.
  */
-+ (void)enumerateFileLogURLsWithBlock:(void (^)(NSURL *fileURL, BOOL *stop))block;
++ (void)enumerateFileLogURLsWithBlock:(nonnull void (^)(NSURL *__nonnull fileURL, BOOL *__nonnull stop))block;
 
 @end

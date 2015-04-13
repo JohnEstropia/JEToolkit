@@ -27,16 +27,67 @@
 
 @interface UICollectionView (JEToolkit)
 
-- (void)registerCollectionViewCellClass:(Class)collectionViewCellClass;
+/*! Registers a UICollectionViewCell to the receiver for dequeueing. Requires the UICollectionViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param collectionViewCellClass the UICollectionViewCell class name
+ */
+- (void)registerCollectionViewCellClass:(nonnull Class)collectionViewCellClass;
 
-- (void)registerCollectionViewCellClass:(Class)collectionViewCellClass
-                          subIdentifier:(NSString *)subIdentifier;
+/*! Registers a UICollectionViewCell to the receiver for dequeueing. Requires the UICollectionViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param collectionViewCellClass the UICollectionViewCell class name
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UICollectionViewCell class name.
+ */
+- (void)registerCollectionViewCellClass:(nonnull Class)collectionViewCellClass
+                          subIdentifier:(nullable NSString *)subIdentifier;
 
-- (id)dequeueReusableCellWithClass:(Class)collectionViewCellClass
-                      forIndexPath:(NSIndexPath *)indexPath;
+/*! Registers a UICollectionReusableView to the receiver for dequeueing. Requires the UICollectionReusableView nib file and reuseIdentifier to both be set to the class name.
+ @param supplementaryViewClass the UICollectionReusableView class name
+ @param supplementaryViewKind the UICollectionReusableView kind string
+ */
+- (void)registerSupplementaryViewClass:(nonnull Class)supplementaryViewClass
+                                ofKind:(nonnull NSString *)supplementaryViewKind;
 
-- (id)dequeueReusableCellWithClass:(Class)collectionViewCellClass
-                     subIdentifier:(NSString *)subIdentifier
-                      forIndexPath:(NSIndexPath *)indexPath;
+/*! Registers a UICollectionReusableView to the receiver for dequeueing. Requires the UICollectionReusableView nib file and reuseIdentifier to both be set to the class name.
+ @param supplementaryViewClass the UICollectionReusableView class name
+ @param supplementaryViewKind the UICollectionReusableView kind string
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UICollectionReusableView class name.
+ */
+- (void)registerSupplementaryViewClass:(nonnull Class)supplementaryViewClass
+                                ofKind:(nonnull NSString *)supplementaryViewKind
+                         subIdentifier:(nullable NSString *)subIdentifier;
 
+/*! Dequeues a UICollectionViewCell from the receiver. Requires the UICollectionViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param collectionViewCellClass the UICollectionViewCell class name
+ @param indexPath the index path for the cell to dequeue
+ */
+- (nonnull id)dequeueReusableCellWithClass:(null_unspecified Class)collectionViewCellClass
+                              forIndexPath:(nonnull NSIndexPath *)indexPath;
+
+/*! Dequeues a UICollectionViewCell from the receiver. Requires the UICollectionViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param collectionViewCellClass the UICollectionViewCell class name
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UICollectionViewCell class name.
+ @param indexPath the index path for the cell to dequeue
+ */
+- (nonnull id)dequeueReusableCellWithClass:(null_unspecified Class)collectionViewCellClass
+                             subIdentifier:(nullable NSString *)subIdentifier
+                              forIndexPath:(nonnull NSIndexPath *)indexPath;
+
+/*! Dequeues a UICollectionReusableView from the receiver. Requires the UICollectionReusableView nib file and reuseIdentifier to both be set to the class name.
+ @param supplementaryViewClass the UICollectionReusableView class name
+ @param supplementaryViewKind the UICollectionReusableView kind string
+ @param indexPath the index path for the cell to dequeue
+ */
+- (nonnull id)dequeueSupplementaryViewWithClass:(null_unspecified Class)supplementaryViewClass
+                                         ofKind:(nonnull NSString *)supplementaryViewKind
+                                   forIndexPath:(nonnull NSIndexPath *)indexPath;
+
+/*! Dequeues a UICollectionReusableView from the receiver. Requires the UICollectionReusableView nib file and reuseIdentifier to both be set to the class name.
+ @param supplementaryViewClass the UICollectionReusableView class name
+ @param supplementaryViewKind the UICollectionReusableView kind string
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UICollectionReusableView class name.
+ @param indexPath the index path for the cell to dequeue
+ */
+- (nonnull id)dequeueSupplementaryViewWithClass:(null_unspecified Class)supplementaryViewClass
+                                         ofKind:(nonnull NSString *)supplementaryViewKind
+                                  subIdentifier:(nullable NSString *)subIdentifier
+                                   forIndexPath:(nonnull NSIndexPath *)indexPath;
 @end

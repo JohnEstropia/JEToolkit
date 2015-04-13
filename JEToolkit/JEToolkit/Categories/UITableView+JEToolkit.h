@@ -27,20 +27,84 @@
 
 @interface UITableView (JEToolkit)
 
-- (void)registerTableViewCellClass:(Class)tableViewCellClass;
+/*! Registers a UITableViewCell to the receiver for dequeueing. Requires the UITableViewCell's nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ */
+- (void)registerTableViewCellClass:(nonnull Class)tableViewCellClass;
 
-- (void)registerTableViewCellClass:(Class)tableViewCellClass
-                     subIdentifier:(NSString *)subIdentifier;
+/*! Registers a UITableViewCell to the receiver for dequeueing. Requires the UITableViewCell's nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
+ */
+- (void)registerTableViewCellClass:(nonnull Class)tableViewCellClass
+                     subIdentifier:(nullable NSString *)subIdentifier;
 
-- (id)dequeueReusableCellWithClass:(Class)tableViewCellClass
-                      forIndexPath:(NSIndexPath *)indexPath;
+/*! Registers a UITableViewHeaderFooterView to the receiver for dequeueing. Requires the UITableViewHeaderFooterView nib file and reuseIdentifier to both be set to the class name.
+ @param headerFooterViewClass the UITableViewHeaderFooterView class name
+ */
+- (void)registerTableViewHeaderFooterViewClass:(nonnull Class)headerFooterViewClass;
 
-- (id)dequeueReusableCellWithClass:(Class)tableViewCellClass
-                     subIdentifier:(NSString *)subIdentifier
-                      forIndexPath:(NSIndexPath *)indexPath;
+/*! Registers a UITableViewHeaderFooterView to the receiver for dequeueing. Requires the UITableViewHeaderFooterView nib file and reuseIdentifier to both be set to the class name.
+ @param headerFooterViewClass the UITableViewHeaderFooterView class name
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewHeaderFooterView class name.
+ */
+- (void)registerTableViewHeaderFooterViewClass:(nonnull Class)headerFooterViewClass
+                                 subIdentifier:(nullable NSString *)subIdentifier;
 
-- (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass;
+/*! Dequeues a UITableViewCell from the receiver. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ @param indexPath the index path for the cell to dequeue
+ */
+- (nonnull id)dequeueReusableCellWithClass:(null_unspecified Class)tableViewCellClass
+                              forIndexPath:(nullable NSIndexPath *)indexPath;
 
-- (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass subIdentifier:(NSString *)subIdentifier;
+/*! Dequeues a UITableViewCell from the receiver. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
+ @param indexPath the index path for the cell to dequeue
+ */
+- (nonnull id)dequeueReusableCellWithClass:(null_unspecified Class)tableViewCellClass
+                             subIdentifier:(nullable NSString *)subIdentifier
+                              forIndexPath:(nullable NSIndexPath *)indexPath;
+
+/*! Dequeues a UITableViewHeaderFooterView from the receiver. Requires the UITableViewHeaderFooterView nib file and reuseIdentifier to both be set to the class name.
+ @param headerFooterViewClass the UITableViewHeaderFooterView class name
+ */
+- (nonnull id)dequeueReusableHeaderFooterViewWithClass:(null_unspecified Class)headerFooterViewClass;
+
+/*! Dequeues a UITableViewHeaderFooterView from the receiver. Requires the UITableViewHeaderFooterView nib file and reuseIdentifier to both be set to the class name.
+ @param headerFooterViewClass the UITableViewHeaderFooterView class name
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
+ */
+- (nonnull id)dequeueReusableHeaderFooterViewWithClass:(null_unspecified Class)headerFooterViewClass
+                                         subIdentifier:(nullable NSString *)subIdentifier;
+
+/*! Returns a shared UITableViewCell instance of the specified type. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ */
+- (nonnull id)cellForQueryingHeightWithClass:(null_unspecified Class)tableViewCellClass;
+
+/*! Returns a shared UITableViewCell instance of the specified type. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ @param setupBlock a block to perform before the cell calls -layoutIfNeeded
+ */
+- (nonnull id)cellForQueryingHeightWithClass:(null_unspecified Class)tableViewCellClass
+                                  setupBlock:(nullable void (^)(id __nonnull cell))setupBlock;
+
+/*! Returns a shared UITableViewCell instance of the specified type. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
+ */
+- (nonnull id)cellForQueryingHeightWithClass:(null_unspecified Class)tableViewCellClass
+                               subIdentifier:(nullable NSString *)subIdentifier;
+
+/*! Returns a shared UITableViewCell instance of the specified type. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
+ @param setupBlock a block to perform before the cell calls -layoutIfNeeded
+ */
+- (nonnull id)cellForQueryingHeightWithClass:(null_unspecified Class)tableViewCellClass
+                               subIdentifier:(nullable NSString *)subIdentifier
+                                  setupBlock:(nullable void (^)(id __nonnull cell))setupBlock;
 
 @end

@@ -26,7 +26,7 @@
 #import "UIScrollView+JEToolkit.h"
 
 #import "NSObject+JEToolkit.h"
-#import "UIView+JEToolkit.m"
+#import "UIView+JEToolkit.h"
 
 #import "JESafetyHelpers.h"
 
@@ -90,7 +90,7 @@
          [UIView
           animateWithDuration:duration
           delay:0.0f
-          options:(UIViewAnimationOptionBeginFromCurrentState | animationCurve)
+          options:(UIViewAnimationOptionBeginFromCurrentState | (animationCurve << 16))
           animations:^{
               
               self.contentInset = contentInsets;
@@ -143,7 +143,7 @@
          [UIView
           animateWithDuration:duration
           delay:0.0f
-          options:(UIViewAnimationOptionBeginFromCurrentState | animationCurve)
+          options:(UIViewAnimationOptionBeginFromCurrentState | (animationCurve << 16))
           animations:^{
               
               self.contentInset = contentInsets;
@@ -159,6 +159,62 @@
     
     [self unregisterForNotificationsWithName:UIKeyboardWillShowNotification];
     [self unregisterForNotificationsWithName:UIKeyboardWillHideNotification];
+}
+
+- (void)scrollToTopAnimated:(BOOL)animated {
+    
+    CGRect bounds = self.bounds;
+    CGRect rect = (CGRect){
+        .origin.x = CGRectGetMinX(bounds),
+        .origin.y = -self.contentInset.top,
+        .size = bounds.size
+    };
+    if (animated) {
+        
+        [UIView
+         animateWithDuration:0.25
+         delay:0
+         options:(UIViewAnimationOptionBeginFromCurrentState
+                  | UIViewAnimationOptionAllowUserInteraction)
+         animations:^{
+             
+             [self scrollRectToVisible:rect animated:NO];
+         }
+         completion:nil];
+    }
+    else {
+        
+        [self scrollRectToVisible:rect animated:NO];
+    }
+}
+
+- (void)scrollToBottomAnimated:(BOOL)animated {
+    
+    CGRect bounds = self.bounds;
+    CGFloat boundsHeight = CGRectGetHeight(bounds);
+    CGRect rect = (CGRect){
+        .origin.x = CGRectGetMinX(bounds),
+        .origin.y = (self.contentSize.height - boundsHeight),
+        .size.width = CGRectGetWidth(bounds),
+        .size.height = boundsHeight
+    };
+    if (animated) {
+        
+        [UIView
+         animateWithDuration:0.25
+         delay:0
+         options:(UIViewAnimationOptionBeginFromCurrentState
+                  | UIViewAnimationOptionAllowUserInteraction)
+         animations:^{
+             
+             [self scrollRectToVisible:rect animated:NO];
+         }
+         completion:nil];
+    }
+    else {
+        
+        [self scrollRectToVisible:rect animated:NO];
+    }
 }
 
 @end

@@ -1,8 +1,8 @@
 //
-//  NSObject+JEDispatch.h
+//  UIView+JEToolkit.swift
 //  JEToolkit
 //
-//  Copyright (c) 2014 John Rommel Estropia
+//  Copyright (c) 2015 John Rommel Estropia
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +23,21 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+import UIKit
 
-@interface NSObject (JEDispatch)
-
-@property (nonatomic, strong) NSUUID *dispatchTaskID;
-
-@end
+public extension UIView {
+    
+    /*! Returns the first subview that is a subclass of class. Searches recursively, and may return the receiver itself.
+    */
+    public func firstSubviewWithClass<T: UIView>(viewClass: T.Type) -> T? {
+        
+        return self.firstSubviewWithClass(viewClass as AnyClass) as? T
+    }
+    
+    /*! Returns the first superview that is a subclass of class. Searches recursively, and may return the receiver itself.
+    */
+    public func firstSuperviewWithClass<T: UIView>(viewClass: T.Type) -> T? {
+        
+        return self.firstSuperviewWithClass(viewClass as AnyClass) as? T
+    }
+}

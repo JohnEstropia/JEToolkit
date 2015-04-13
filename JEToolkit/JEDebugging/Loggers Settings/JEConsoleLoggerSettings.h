@@ -25,15 +25,15 @@
 
 #import "JEBaseLoggerSettings.h"
 
+/*! JEFileLoggerSettings provides configurations to the LLDB console.
+ */
 @interface JEConsoleLoggerSettings : JEBaseLoggerSettings
 
-/*!
- The combination of JELogLevelMask flags that will be output by the console logger. Defaults to JELogLevelAll for debug builds, (JELogLevelNotice | JELogLevelAlert) for release builds
+/*! The combination of JELogLevelMask flags that will be output by the console logger. Defaults to JELogLevelAll for debug builds, (JELogLevelNotice | JELogLevelAlert | JELogLevelFatal) for release builds
  */
 @property (nonatomic, assign) JELogLevelMask logLevelMask;
 
-/*!
- The combination of JELogMessageHeaderMask flags for log headers that will be displayed by the console logger. Defaults to (JELogMessageHeaderQueue | JELogMessageHeaderSourceFile | JELogMessageHeaderFunction)
+/*! The combination of JELogMessageHeaderMask flags for log headers that will be displayed by the console logger. Defaults to (JELogMessageHeaderQueue | JELogMessageHeaderSourceFile | JELogMessageHeaderFunction)
  */
 @property (nonatomic, assign) JELogMessageHeaderMask logMessageHeaderMask;
 

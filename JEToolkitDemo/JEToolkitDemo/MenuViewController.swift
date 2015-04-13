@@ -47,16 +47,16 @@ class MenuViewController: UITableViewController {
             switch menuIndex {
                 
             case .JELogExamples:
-                text = "Logging examples"
-                detail = "JELog(...) macro variants"
+                text = JEL10n("menuViewController.cellText.log")
+                detail = JEL10n("menuViewController.cellDetail.log")
                 
             case .JEAssertExamples:
-                text = "Assert examples"
-                detail = "JEAssert(...) macro variants"
+                text = JEL10n("menuViewController.cellText.assert")
+                detail = JEL10n("menuViewController.cellDetail.assert")
                 
             case .JEDumpExamples:
-                text = "Dumping values"
-                detail = "JEDump(...) macro variants"
+                text = JEL10n("menuViewController.cellText.dump")
+                detail = JEL10n("menuViewController.cellDetail.dump")
             }
         }
         
@@ -76,13 +76,13 @@ class MenuViewController: UITableViewController {
             switch menuIndex {
                 
             case .JELogExamples:
-                self.performSegueWithIdentifier(JELogViewController.className(), sender: nil)
+                self.performSegueWithIdentifier(JELogViewController.classNameInAppModule(), sender: nil)
                 
             case .JEAssertExamples:
-                self.performSegueWithIdentifier(JEAssertViewController.className(), sender: nil)
+                self.performSegueWithIdentifier(JEAssertViewController.classNameInAppModule(), sender: nil)
                 
             case .JEDumpExamples:
-                self.performSegueWithIdentifier(JEDumpViewController.className(), sender: nil)
+                self.performSegueWithIdentifier(JEDumpViewController.classNameInAppModule(), sender: nil)
             }
         }
     }

@@ -28,7 +28,12 @@
 #import "NSObject+JEToolkit.h"
 #import "UINib+JEToolkit.h"
 
+#if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
+#else
+#define JEAssertParameter   NSCParameterAssert
+#define JEAssert            NSCAssert
+#endif
 
 
 @implementation UICollectionView (JEToolkit)
@@ -43,7 +48,7 @@
     
     JEAssertParameter([collectionViewCellClass isSubclassOfClass:[UICollectionViewCell class]]);
     
-    NSString *className = [collectionViewCellClass className];
+    NSString *className = [collectionViewCellClass classNameInAppModule];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -63,6 +68,45 @@
     }
 }
 
+- (void)registerSupplementaryViewClass:(Class)supplementaryViewClass
+                                ofKind:(NSString *)supplementaryViewKind {
+    
+    [self
+     registerSupplementaryViewClass:supplementaryViewClass
+     ofKind:supplementaryViewKind
+     subIdentifier:nil];
+}
+
+- (void)registerSupplementaryViewClass:(Class)supplementaryViewClass
+                                ofKind:(NSString *)supplementaryViewKind
+                         subIdentifier:(NSString *)subIdentifier {
+    
+    JEAssertParameter([supplementaryViewClass isSubclassOfClass:[UICollectionReusableView class]]);
+    JEAssertParameter(supplementaryViewKind != nil);
+    
+    NSString *className = [supplementaryViewClass classNameInAppModule];
+    NSString *reuseIdentifier = className;
+    if (subIdentifier) {
+        
+        reuseIdentifier = [className stringByAppendingString:subIdentifier];
+    }
+    
+    if ([UINib nibWithNameExists:className]) {
+        
+        [self
+         registerNib:[UINib cachedNibWithName:className]
+         forSupplementaryViewOfKind:supplementaryViewKind
+         withReuseIdentifier:reuseIdentifier];
+    }
+    else {
+        
+        [self
+         registerClass:supplementaryViewClass
+         forSupplementaryViewOfKind:supplementaryViewKind
+         withReuseIdentifier:reuseIdentifier];
+    }
+}
+
 - (id)dequeueReusableCellWithClass:(Class)collectionViewCellClass
                       forIndexPath:(NSIndexPath *)indexPath {
     
@@ -79,7 +123,7 @@
     JEAssertParameter([collectionViewCellClass isSubclassOfClass:[UICollectionViewCell class]]);
     JEAssertParameter(indexPath != nil);
     
-    NSString *className = [collectionViewCellClass className];
+    NSString *className = [collectionViewCellClass classNameInAppModule];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -88,12 +132,53 @@
     id cell = [self
                dequeueReusableCellWithReuseIdentifier:reuseIdentifier
                forIndexPath:indexPath];
-    if (!cell) {
-        
-        cell = [[collectionViewCellClass alloc] initWithFrame:CGRectZero];
-    }
+    JEAssert(!cell || [cell isKindOfClass:collectionViewCellClass],
+             @"Expected collection view cell class \"%@\" from reuseIdentifier \"%@\" but dequeued a cell of type \"%@\" instead. Make sure that the reuseIdentifier for the %@ subclass is set to its class name",
+             collectionViewCellClass,
+             reuseIdentifier,
+             [cell class],
+             [UICollectionViewCell class]);
     
-    return cell;
+    return (cell ?: [[collectionViewCellClass alloc] initWithFrame:CGRectZero]);
+}
+
+- (id)dequeueSupplementaryViewWithClass:(Class)supplementaryViewClass
+                                 ofKind:(NSString *)supplementaryViewKind
+                           forIndexPath:(NSIndexPath *)indexPath {
+    
+    return [self
+            dequeueSupplementaryViewWithClass:supplementaryViewClass
+            ofKind:supplementaryViewKind
+            subIdentifier:nil
+            forIndexPath:indexPath];
+}
+
+- (id)dequeueSupplementaryViewWithClass:(Class)supplementaryViewClass
+                                 ofKind:(NSString *)supplementaryViewKind
+                          subIdentifier:(NSString *)subIdentifier
+                           forIndexPath:(NSIndexPath *)indexPath {
+
+    JEAssertParameter([supplementaryViewClass isSubclassOfClass:[UICollectionReusableView class]]);
+    JEAssertParameter(supplementaryViewKind != nil);
+    
+    NSString *className = [supplementaryViewClass classNameInAppModule];
+    NSString *reuseIdentifier = className;
+    if (subIdentifier) {
+        
+        reuseIdentifier = [className stringByAppendingString:subIdentifier];
+    }
+    id supplementaryView = [self
+                            dequeueReusableSupplementaryViewOfKind:supplementaryViewKind
+                            withReuseIdentifier:reuseIdentifier
+                            forIndexPath:indexPath];
+    JEAssert(!supplementaryView || [supplementaryView isKindOfClass:supplementaryViewClass],
+             @"Expected collection reusable view class \"%@\" from reuseIdentifier \"%@\" but dequeued a view of type \"%@\" instead. Make sure that the reuseIdentifier for the %@ subclass is set to its class name",
+             supplementaryViewKind,
+             reuseIdentifier,
+             [supplementaryView class],
+             [UICollectionReusableView class]);
+    
+    return (supplementaryView ?: [[supplementaryViewClass alloc] initWithFrame:CGRectZero]);
 }
 
 @end

@@ -25,18 +25,20 @@
 
 #import <Foundation/Foundation.h>
 
-#import "JECompilerDefines.h"
-
 
 @interface NSCache (JEToolkit)
 
+/*! Since iOS 7, NSCache doesn't remove its objects immediately after a UIApplicationDidReceiveMemoryWarningNotification. This initializer returns that behavior.
+ */
+- (nonnull instancetype)initWithForcedPurgingOnMemoryWarning:(BOOL)forcePurgeOnMemoryWarning;
+
 /*! Allows key subscripting with NSCache. Equivalent to -[NSCache objectForKey:]
  */
-- (id)objectForKeyedSubscript:(id)key JE_NONNULL_ALL;
+- (nullable id)objectForKeyedSubscript:(nonnull id)key;
 
 /*! Allows key subscripting with NSCache. Equivalent to -[NSCache setObject:forKey:]
  */
-- (void)setObject:(id)obj forKeyedSubscript:(id)key JE_NONNULL_ALL;
+- (void)setObject:(nullable id)obj forKeyedSubscript:(nonnull id)key;
 
 
 @end

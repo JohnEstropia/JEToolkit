@@ -24,12 +24,16 @@
 //
 
 #import "UITableView+JEToolkit.h"
-
 #import "NSObject+JEToolkit.h"
 #import "UINib+JEToolkit.h"
-
 #import "JESynthesize.h"
+
+#if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
+#else
+#define JEAssertParameter   NSCParameterAssert
+#define JEAssert            NSCAssert
+#endif
 
 
 @implementation UITableView (JEToolkit)
@@ -37,6 +41,7 @@
 #pragma mark - Private
 
 JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCache);
+JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFooterViewHeightQueryingCache);
 
 
 #pragma mark - Public
@@ -51,7 +56,7 @@ JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCa
     
     JEAssertParameter([tableViewCellClass isSubclassOfClass:[UITableViewCell class]]);
     
-    NSString *className = [tableViewCellClass className];
+    NSString *className = [tableViewCellClass classNameInAppModule];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -72,6 +77,37 @@ JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCa
     }
 }
 
+- (void)registerTableViewHeaderFooterViewClass:(Class)headerFooterViewClass {
+    
+    [self registerTableViewHeaderFooterViewClass:headerFooterViewClass subIdentifier:nil];
+}
+
+- (void)registerTableViewHeaderFooterViewClass:(Class)headerFooterViewClass
+                                 subIdentifier:(NSString *)subIdentifier {
+    
+    JEAssertParameter([headerFooterViewClass isSubclassOfClass:[UITableViewHeaderFooterView class]]);
+    
+    NSString *className = [headerFooterViewClass classNameInAppModule];
+    NSString *reuseIdentifier = className;
+    if (subIdentifier) {
+        
+        reuseIdentifier = [className stringByAppendingString:subIdentifier];
+    }
+    
+    if ([UINib nibWithNameExists:className]) {
+        
+        [self
+         registerNib:[UINib cachedNibWithName:className]
+         forHeaderFooterViewReuseIdentifier:reuseIdentifier];
+    }
+    else {
+        
+        [self
+         registerClass:headerFooterViewClass
+         forHeaderFooterViewReuseIdentifier:reuseIdentifier];
+    }
+}
+
 - (id)dequeueReusableCellWithClass:(Class)tableViewCellClass
                       forIndexPath:(NSIndexPath *)indexPath {
     
@@ -87,31 +123,80 @@ JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCa
     
     JEAssertParameter([tableViewCellClass isSubclassOfClass:[UITableViewCell class]]);
     
-    NSString *className = [tableViewCellClass className];
+    NSString *className = [tableViewCellClass classNameInAppModule];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
         reuseIdentifier = [className stringByAppendingString:subIdentifier];
     }
     
-    return ((indexPath
-             ? [self dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath]
-             : [self dequeueReusableCellWithIdentifier:reuseIdentifier])
-            ?: [[tableViewCellClass alloc]
-                initWithStyle:UITableViewCellStyleDefault
-                reuseIdentifier:reuseIdentifier]);
+    id cell = (indexPath
+               ? [self dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath]
+               : [self dequeueReusableCellWithIdentifier:reuseIdentifier]);
+    JEAssert(!cell || [cell isKindOfClass:tableViewCellClass],
+             @"Expected table view cell class \"%@\" from reuseIdentifier \"%@\" but dequeued a cell of type \"%@\" instead. Make sure that the reuseIdentifier for the %@ subclass is set to its class name",
+             tableViewCellClass,
+             reuseIdentifier,
+             [cell class],
+             [UITableViewCell class]);
+    
+    return (cell ?: [[tableViewCellClass alloc]
+                     initWithStyle:UITableViewCellStyleDefault
+                     reuseIdentifier:reuseIdentifier]);
+}
+
+- (id)dequeueReusableHeaderFooterViewWithClass:(Class)headerFooterViewClass {
+    
+    return [self dequeueReusableHeaderFooterViewWithClass:headerFooterViewClass subIdentifier:nil];
+}
+
+- (id)dequeueReusableHeaderFooterViewWithClass:(Class)headerFooterViewClass
+                                 subIdentifier:(NSString *)subIdentifier {
+    
+    JEAssertParameter([headerFooterViewClass isSubclassOfClass:[UITableViewHeaderFooterView class]]);
+    
+    NSString *className = [headerFooterViewClass classNameInAppModule];
+    NSString *reuseIdentifier = className;
+    if (subIdentifier) {
+        
+        reuseIdentifier = [className stringByAppendingString:subIdentifier];
+    }
+    
+    id headerFooterView = [self dequeueReusableHeaderFooterViewWithIdentifier:reuseIdentifier];
+    JEAssert(!headerFooterView || [headerFooterView isKindOfClass:headerFooterViewClass],
+             @"Expected table view header/footer class \"%@\" from reuseIdentifier \"%@\" but dequeued a view of type \"%@\" instead. Make sure that the reuseIdentifier for the %@ subclass is set to its class name",
+             headerFooterViewClass,
+             reuseIdentifier,
+             [headerFooterView class],
+             [UITableViewHeaderFooterView class]);
+    
+    return (headerFooterView ?: [[headerFooterViewClass alloc] initWithReuseIdentifier:reuseIdentifier]);
 }
 
 - (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass {
     
-    return [self cellForQueryingHeightWithClass:tableViewCellClass subIdentifier:nil];
+    return [self cellForQueryingHeightWithClass:tableViewCellClass subIdentifier:nil setupBlock:nil];
 }
 
-- (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass subIdentifier:(NSString *)subIdentifier {
+- (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass
+                          setupBlock:(void (^)(id cell))setupBlock {
+    
+    return [self cellForQueryingHeightWithClass:tableViewCellClass subIdentifier:nil setupBlock:setupBlock];
+}
+
+- (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass
+                       subIdentifier:(NSString *)subIdentifier {
+    
+    return [self cellForQueryingHeightWithClass:tableViewCellClass subIdentifier:subIdentifier setupBlock:nil];
+}
+
+- (id)cellForQueryingHeightWithClass:(Class)tableViewCellClass
+                       subIdentifier:(NSString *)subIdentifier
+                          setupBlock:(void (^)(id cell))setupBlock {
     
     JEAssertParameter([tableViewCellClass isSubclassOfClass:[UITableViewCell class]]);
     
-    NSString *className = [tableViewCellClass className];
+    NSString *className = [tableViewCellClass classNameInAppModule];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -119,6 +204,12 @@ JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCa
     }
     
     NSCache *cache = [self cellHeightQueryingCache];
+    if (!cache) {
+        
+        cache = [[NSCache alloc] init];
+        [self setCellHeightQueryingCache:cache];
+    }
+    
     UITableViewCell *cell = [cache objectForKey:reuseIdentifier];
     if (!cell) {
         
@@ -144,9 +235,55 @@ JESynthesize(strong, NSCache *, cellHeightQueryingCache, setCellHeightQueryingCa
         cellFrame.size.width = CGRectGetWidth(self.bounds);
     }
     cell.frame = cellFrame;
+    
+    if (setupBlock) {
+        
+        setupBlock(cell);
+    }
+    
+    [cell setNeedsLayout];
     [cell layoutIfNeeded];
     
     return cell;
+}
+
+- (id)headerFooterViewForQueryingHeightWithClass:(Class)headerFooterViewClass {
+    
+    return [self headerFooterViewForQueryingHeightWithClass:headerFooterViewClass subIdentifier:nil];
+}
+
+- (id)headerFooterViewForQueryingHeightWithClass:(Class)headerFooterViewClass
+                                   subIdentifier:(NSString *)subIdentifier {
+    
+    JEAssertParameter([headerFooterViewClass isSubclassOfClass:[UITableViewHeaderFooterView class]]);
+    
+    NSString *className = [headerFooterViewClass classNameInAppModule];
+    NSString *reuseIdentifier = className;
+    if (subIdentifier) {
+        
+        reuseIdentifier = [className stringByAppendingString:subIdentifier];
+    }
+    
+    NSCache *cache = [self headerFooterViewHeightQueryingCache];
+    UITableViewHeaderFooterView *view = [cache objectForKey:reuseIdentifier];
+    if (!view) {
+        
+        view = [self
+                dequeueReusableHeaderFooterViewWithClass:headerFooterViewClass
+                subIdentifier:subIdentifier];
+        if (view) {
+            
+            [cache setObject:view forKey:reuseIdentifier];
+        }
+    }
+    
+    CGRect viewFrame = view.frame;
+    viewFrame.size.width = CGRectGetWidth(self.bounds);
+    
+    view.frame = viewFrame;
+    [view layoutIfNeeded];
+    
+    return view;
 }
 
 

@@ -24,11 +24,15 @@
 //
 
 #import "NSObject+JEToolkit.h"
-
 #import <objc/runtime.h>
-
 #import "JESynthesize.h"
+#import "NSString+JEToolkit.h"
+
+#if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
+#else
+#define JEAssert   NSCAssert
+#endif
 
 
 @interface _JE_NSNotificationObserver : NSObject
@@ -109,9 +113,31 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
 
 #pragma mark Class Utilities
 
-+ (NSString *)className {
++ (NSString *)fullyQualifiedClassName {
     
     return NSStringFromClass(self);
+}
+
++ (NSString *)classNameInNameSpace:(NSString *)namespace {
+    
+    NSString *fullyQualifiedClassName = [self fullyQualifiedClassName];
+    if ([fullyQualifiedClassName isEqualToString:namespace]) {
+        
+        return [fullyQualifiedClassName componentsSeparatedByString:@"."].lastObject;
+    }
+    
+    NSString *prefix = [namespace stringByAppendingString:@"."];
+    if ([fullyQualifiedClassName hasPrefix:prefix]) {
+        
+        return [fullyQualifiedClassName substringFromIndex:prefix.length];
+    }
+    
+    return fullyQualifiedClassName;
+}
+
++ (NSString *)classNameInAppModule {
+    
+    return [self classNameInNameSpace:[NSString applicationName]];
 }
 
 + (Class)classForIdiom {
@@ -126,7 +152,7 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
         
     });
     
-    NSString *className = [self className];
+    NSString *className = [self fullyQualifiedClassName];
     return (NSClassFromString([[NSString alloc] initWithFormat:@"%@_%@", className, idiom])
             ?: NSClassFromString(className));
 }
@@ -258,5 +284,11 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
 	method_exchangeImplementations(class_getInstanceMethod(self, originalSelector),
                                    class_getInstanceMethod(self, overrideSelector));
 }
+
+
+#pragma mark Object Tagging
+
+JESynthesize(strong, NSUUID *, dispatchTaskID, setDispatchTaskID);
+
 
 @end

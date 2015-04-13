@@ -1,5 +1,5 @@
 //
-//  JEKeychain.h
+//  UIViewController+JEDebugging.h
 //  JEToolkit
 //
 //  Copyright (c) 2014 John Rommel Estropia
@@ -23,43 +23,13 @@
 //  SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 
-typedef NS_ENUM(NSInteger, JEKeychainAccess) {
-    
-    JEKeychainAccessWhenUnlocked = 0,
-    JEKeychainAccessAfterFirstUnlock,
-    JEKeychainAccessAlways,
-    JEKeychainAccessWhenUnlockedThisDeviceOnly,
-    JEKeychainAccessAfterFirstUnlockThisDeviceOnly,
-    JEKeychainAccessAlwaysThisDeviceOnly,
-    
-    _JEKeychainAccessCount
-};
+extern NSString *const _JEDebugging_UIViewController_viewDidAppear;
 
+extern NSString *const _JEDebugging_UIViewController_viewWillDisappear;
 
-@interface JEKeychain : NSObject
-
-+ (NSString *)defaultService;
-+ (void)setDefaultService:(NSString *)defaultService;
-
-+ (NSString *)defaultAccessGroup;
-+ (void)setDefaultAccessGroup:(NSString *)defaultAccessGroup;
-
-+ (JEKeychainAccess)defaultAccessType;
-+ (void)setDefaultAccessType:(JEKeychainAccess)defaultAccessType;
-
-+ (NSString *)stringForKey:(NSString *)key;
-+ (NSString *)stringForKey:(NSString *)key
-             inAccessGroup:(NSString *)accessGroup
-                     error:(NSError *__autoreleasing *)error;
-+ (BOOL)setString:(NSString *)string
-           forKey:(NSString *)key;
-+ (BOOL)setString:(NSString *)string
-           forKey:(NSString *)key
-    inAccessGroup:(NSString *)accessGroup
-            error:(NSError *__autoreleasing *)error;
-
+@interface UIViewController (JEDebugging)
 
 @end

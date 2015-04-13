@@ -37,4 +37,12 @@
  */
 - (void)removeKeyboardObserver;
 
+/*! Scrolls the receiver to the top.
+ */
+- (void)scrollToTopAnimated:(BOOL)animated;
+
+/*! Scrolls the receiver to the bottom.
+ */
+- (void)scrollToBottomAnimated:(BOOL)animated;
+
 @end

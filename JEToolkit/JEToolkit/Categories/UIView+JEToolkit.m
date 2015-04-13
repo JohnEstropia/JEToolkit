@@ -24,11 +24,14 @@
 //
 
 #import "UIView+JEToolkit.h"
-
 #import "NSObject+JEToolkit.h"
 #import "UINib+JEToolkit.h"
 
+#if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
+#else
+#define JEAssertParameter   NSCParameterAssert
+#endif
 
 
 @implementation UIView (JEToolkit)
@@ -209,7 +212,7 @@
 
 + (instancetype)viewFromNib {
     
-    NSString *className = [self className];
+    NSString *className = [self classNameInAppModule];
     if(![UINib nibWithNameExists:className]) {
         
         return nil;
@@ -271,5 +274,18 @@
     return [self.superview firstSuperviewWithClass:viewClass];
 }
 
+- (id)findViewController {
+    
+    id nextResponder = [self nextResponder];
+    if ([nextResponder isKindOfClass:[UIViewController class]]) {
+        
+        return nextResponder;
+    }
+    if ([nextResponder isKindOfClass:[UIView class]]) {
+        
+        return [(UIView *)nextResponder findViewController];
+    }
+    return nil;
+}
 
 @end

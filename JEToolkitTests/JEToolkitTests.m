@@ -34,6 +34,44 @@
 #import "JEToolkit.h"
 
 
+@interface JETestUserDefaults : JEUserDefaults
+
+@property (nonatomic, copy) NSString *string;
+@property (nonatomic, copy) NSNumber *number;
+@property (nonatomic, assign) NSTimeInterval timeInterval;
+@property (nonatomic, assign) CGRect rect;
+
+@end
+
+@implementation JETestUserDefaults
+
+@dynamic string;
+@dynamic number;
+@dynamic timeInterval;
+@dynamic rect;
+
+@end
+
+
+@interface JETestKeychain : JEKeychain
+
+@property (nonatomic, copy) NSString *string;
+@property (nonatomic, copy) NSNumber *number;
+@property (nonatomic, assign) NSTimeInterval timeInterval;
+@property (nonatomic, assign) CGRect rect;
+
+@end
+
+@implementation JETestKeychain
+
+@dynamic string;
+@dynamic number;
+@dynamic timeInterval;
+@dynamic rect;
+
+@end
+
+
 @interface JEToolkitTests : XCTestCase
 
 @property (nonatomic, unsafe_unretained) id testUnsafe;
@@ -356,7 +394,6 @@
     
     JEDump([UIColor blueColor]);
     JEDump([UIColor redColor]);
-    JEDebugBreak();
     JEDump([UIColor cyanColor]);
     JEDump([UIColor whiteColor]);
     JEDump([UIColor clearColor]);
@@ -379,7 +416,6 @@
     
     NSObject *__autoreleasing weakObject;
     [weakValue getValue:&weakObject];
-    JEDebugBreakIf(!weakObject);
     JEDump(weakObject);
 }
 
@@ -442,6 +478,112 @@ JESynthesize(weak, id, synthesizedWeak, setSynthesizedWeak);
     JEDump(factorial(3));
     JEDump(factorial(4));
     JEDump(factorial(5));
+}
+
+- (void)testUserDefaultSettings {
+    
+    JETestUserDefaults *userDefaults = [[JETestUserDefaults alloc] init];
+    XCTAssert(userDefaults == [[JETestUserDefaults alloc] init]);
+    
+    NSString *defaultStringValue = @"AAAAA";
+    [userDefaults proxyForDefaultValues].string = defaultStringValue;
+    
+    XCTAssert([userDefaults.string isEqual:defaultStringValue]);
+    XCTAssert([[[NSUserDefaults standardUserDefaults] objectForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, string)]] isEqual:defaultStringValue]);
+    
+    JEDump(userDefaults);
+    
+    NSString *string = @"String1";
+    userDefaults.string = string;
+    XCTAssert([userDefaults.string isEqual:string]);
+    XCTAssert([[[NSUserDefaults standardUserDefaults] objectForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, string)]] isEqual:string]);
+    
+    NSNumber *number = @12345;
+    userDefaults.number = number;
+    XCTAssert([userDefaults.number isEqual:number]);
+    XCTAssert([[[NSUserDefaults standardUserDefaults] objectForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, number)]] isEqual:number]);
+    
+    NSTimeInterval timeInterval = 123.0;
+    userDefaults.timeInterval = timeInterval;
+    XCTAssert(userDefaults.timeInterval == timeInterval);
+    XCTAssert([[NSUserDefaults standardUserDefaults] doubleForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, timeInterval)]] == timeInterval);
+    
+    CGRect rect = CGRectMake(100, 200, 300, 400);
+    userDefaults.rect = rect;
+    XCTAssert(CGRectEqualToRect(userDefaults.rect, rect));
+    XCTAssert(CGRectEqualToRect(CGRectFromString([[NSUserDefaults standardUserDefaults] stringForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, rect)]]), rect));
+    
+    userDefaults.string = nil;
+    userDefaults.number = nil;
+    userDefaults.timeInterval = 0;
+    userDefaults.rect = CGRectZero;
+    
+    XCTAssert([userDefaults.string isEqual:defaultStringValue]);
+    XCTAssert([[[NSUserDefaults standardUserDefaults] objectForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, string)]] isEqual:defaultStringValue]);
+    
+    [userDefaults proxyForDefaultValues].string = nil;
+    
+    XCTAssert(userDefaults.string == nil);
+    XCTAssert([[NSUserDefaults standardUserDefaults] objectForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, string)]] == nil);
+    
+    [userDefaults synchronize];
+}
+
+- (void)testUserDefaultSuiteSettings {
+    
+    NSString *const suiteName = @"TestSuite";
+    JETestUserDefaults *userDefaults = [[JETestUserDefaults alloc] initWithSuiteName:suiteName];
+    XCTAssert(userDefaults == [[JETestUserDefaults alloc] initWithSuiteName:suiteName]);
+    
+    JEDump(userDefaults);
+    
+    NSString *string = @"String1";
+    userDefaults.string = string;
+    XCTAssert([userDefaults.string isEqual:string]);
+    XCTAssert([[[[NSUserDefaults alloc] initWithSuiteName:suiteName] objectForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, string)]] isEqual:string]);
+    
+    NSNumber *number = @12345;
+    userDefaults.number = number;
+    XCTAssert([userDefaults.number isEqual:number]);
+    XCTAssert([[[[NSUserDefaults alloc] initWithSuiteName:suiteName] objectForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, number)]] isEqual:number]);
+    
+    NSTimeInterval timeInterval = 123.0;
+    userDefaults.timeInterval = timeInterval;
+    XCTAssert(userDefaults.timeInterval == timeInterval);
+    XCTAssert([[[NSUserDefaults alloc] initWithSuiteName:suiteName] doubleForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, timeInterval)]] == timeInterval);
+    
+    CGRect rect = CGRectMake(100, 200, 300, 400);
+    userDefaults.rect = rect;
+    XCTAssert(CGRectEqualToRect(userDefaults.rect, rect));
+    XCTAssert(CGRectEqualToRect(CGRectFromString([[[NSUserDefaults alloc] initWithSuiteName:suiteName] stringForKey:[userDefaults userDefaultsKeyForProperty:JEKeypath(JETestUserDefaults *, rect)]]), rect));
+    
+    userDefaults.string = nil;
+    userDefaults.number = nil;
+    userDefaults.timeInterval = 0;
+    userDefaults.rect = CGRectZero;
+    [userDefaults synchronize];
+}
+
+- (void)testKeychainSettings {
+    
+    JETestKeychain *keychain = [[JETestKeychain alloc] init];
+    XCTAssert(keychain == [[JETestKeychain alloc] init]);
+    
+    NSString *string = @"String1";
+    keychain.string = string;
+    XCTAssert([keychain.string isEqual:string]);
+    
+    NSNumber *number = @12345;
+    keychain.number = number;
+    XCTAssert([keychain.number isEqual:number]);
+    
+    NSTimeInterval timeInterval = 123.0;
+    keychain.timeInterval = timeInterval;
+    XCTAssert(keychain.timeInterval == timeInterval);
+    
+    CGRect rect = CGRectMake(100, 200, 300, 400);
+    keychain.rect = rect;
+    XCTAssert(CGRectEqualToRect(keychain.rect, rect));
 }
 
 

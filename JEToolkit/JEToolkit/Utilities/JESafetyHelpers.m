@@ -1,8 +1,8 @@
 //
-//  NSObject+JEDispatch.m
+//  JESafetyHelpers.m
 //  JEToolkit
 //
-//  Copyright (c) 2014 John Rommel Estropia
+//  Copyright (c) 2013 John Rommel Estropia
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,13 +23,30 @@
 //  SOFTWARE.
 //
 
-#import "NSObject+JEDispatch.h"
+#import "JESafetyHelpers.h"
 
-#import "JESynthesize.h"
+#if __has_include("JEDebugging.h")
+#import "JEDebugging.h"
+#else
+#define JEAssert            NSCAssert
+#endif
 
 
-@implementation NSObject (JEDispatch)
+NSString *JEL10n(NSString *keyString) {
+    
+    NSString *localizedString = NSLocalizedString(keyString, nil);
+    JEAssert(keyString != localizedString,
+             @"\"%@\" not found in Localizable.strings",
+             keyString);
+    return localizedString;
+}
 
-JESynthesize(strong, NSUUID *, dispatchTaskID, setDispatchTaskID);
-
-@end
+NSString *JEL10nFromFile(NSString *stringsFile, NSString *keyString) {
+    
+    NSString *localizedString = NSLocalizedStringFromTable(keyString, stringsFile, nil);
+    JEAssert(keyString != localizedString,
+             @"\"%@\" not found in %@.strings",
+             keyString,
+             stringsFile);
+    return localizedString;
+}

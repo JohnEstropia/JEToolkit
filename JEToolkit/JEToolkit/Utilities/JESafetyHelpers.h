@@ -23,11 +23,12 @@
 //  SOFTWARE.
 //
 
+#import <Foundation/Foundation.h>
+
 #ifndef JEToolkit_JESafetyHelpers_h
 #define JEToolkit_JESafetyHelpers_h
 
 #import "JECompilerDefines.h"
-#import "JEDebugging.h"
 
 
 #pragma mark - Key-Value Coding
@@ -48,11 +49,11 @@
 
 #else
 
-#define JEKeypath(class, property) \
+#define JEKeypath(type, property) \
     ( @#property )
 
-#define JEKeypathOperator(class, property) \
-    ( @"@" #class "." #property )
+#define JEKeypathOperator(operator, type, property) \
+    ( @"@" #operator "." #property )
 
 #endif
 
@@ -60,26 +61,11 @@
 
 #pragma mark - Localizable Strings
 
-JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *JEL10n(NSString *keyString) {
-    
-	NSString *localizedString = NSLocalizedString(keyString, nil);
-    JEAssert(keyString != localizedString,
-              @"\"%@\" not found in Localizable.strings",
-              keyString);
-    return localizedString;
-}
+JE_EXTERN
+NSString *__nonnull JEL10n(NSString *__nonnull keyString);
 
-JE_STATIC_INLINE JE_NONNULL_ALL JE_OVERLOAD
-NSString *JEL10n(NSString *keyString, NSString *stringsFile) {
-    
-	NSString *localizedString = NSLocalizedStringFromTable(keyString, stringsFile, nil);
-    JEAssert(keyString != localizedString,
-              @"\"%@\" not found in %@.strings",
-              keyString,
-              stringsFile);
-    return localizedString;
-}
+JE_EXTERN
+NSString *__nonnull JEL10nFromFile(NSString *__nonnull stringsFile, NSString *__nonnull keyString);
 
 
 

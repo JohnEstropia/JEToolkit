@@ -23,6 +23,8 @@
 //  SOFTWARE.
 //
 
+#import <CoreGraphics/CoreGraphics.h>
+
 #ifndef JEToolkit_JEFormulas_h
 #define JEToolkit_JEFormulas_h
 
@@ -62,6 +64,21 @@ JE_STATIC_INLINE JE_CONST JE_OVERLOAD
 NSUInteger JEClamp(NSUInteger min, NSUInteger value, NSUInteger max) {
     
 	return MIN(max, MAX(min, value));
+}
+
+
+#pragma mark - Comparing Values
+
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+BOOL JEEquals(float v1, float v2) {
+    
+    return (fabsf(v1 - v2) < FLT_EPSILON);
+}
+
+JE_STATIC_INLINE JE_CONST JE_OVERLOAD
+BOOL JEEquals(double v1, double v2) {
+    
+    return (fabs(v1 - v2) < DBL_EPSILON);
 }
 
 

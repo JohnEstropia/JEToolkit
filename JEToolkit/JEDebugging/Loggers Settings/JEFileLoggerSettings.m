@@ -40,7 +40,7 @@
         return nil;
     }
     
-    self.logLevelMask = (JELogLevelNotice | JELogLevelAlert);
+    self.logLevelMask = (JELogLevelNotice | JELogLevelAlert | JELogLevelFatal);
     self.logMessageHeaderMask = JELogMessageHeaderAll;
     
     self.fileLogsDirectoryURL = [[NSURL alloc]
@@ -64,6 +64,11 @@
     return copy;
 }
 
+
+#pragma mark - JEBaseLoggerSettings
+
+@dynamic logLevelMask;
+@dynamic logMessageHeaderMask;
 
 
 @end

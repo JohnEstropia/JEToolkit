@@ -29,10 +29,10 @@
 
 /*! Returns an NSError from @p errno.
  */
-+ (instancetype)errorWithLastPOSIXErrorAndUserInfo:(NSDictionary *)userInfo;
++ (nonnull instancetype)errorWithLastPOSIXErrorAndUserInfo:(nullable NSDictionary *)userInfo;
 
 /*! Returns an NSError from @p status.
  */
-+ (instancetype)errorWithOSStatus:(OSStatus)status userInfo:(NSDictionary *)userInfo;
++ (nonnull instancetype)errorWithOSStatus:(OSStatus)status userInfo:(nullable NSDictionary *)userInfo;
 
 @end

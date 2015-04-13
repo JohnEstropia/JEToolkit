@@ -23,36 +23,75 @@
 //  SOFTWARE.
 //
 
+#import <CoreGraphics/CoreGraphics.h>
+
 #ifndef JEToolkit_JEUIMetrics_h
 #define JEToolkit_JEUIMetrics_h
+
+#import "JECompilerDefines.h"
 
 
 #pragma mark - Device Metrics
 
-static const CGSize JEUIIPhone4ScreenPortraitSize = (CGSize){ .width = 320.0f, .height = 480.0f };
-static const CGSize JEUIIPhone4ScreenLandscapeSize = (CGSize){ .width = 480.0f, .height = 320.0f };
+JE_EXTERN
+const CGSize JEUIIPhone4ScreenPortraitSize;
 
-static const CGSize JEUIIPhone5ScreenPortraitSize = (CGSize){ .width = 320.0f, .height = 568.0f };
-static const CGSize JEUIIPhone5ScreenLandscapeSize = (CGSize){ .width = 568.0f, .height = 320.0f };
+JE_EXTERN
+const CGSize JEUIIPhone4ScreenLandscapeSize;
 
-static const CGSize JEUIIPadScreenPortraitSize = (CGSize){ .width = 768.0f, .height = 1024.0f };
-static const CGSize JEUIIPadScreenLandscapeSize = (CGSize){ .width = 1024.0f, .height = 768.0f };
+JE_EXTERN
+const CGSize JEUIIPhone5ScreenPortraitSize;
+
+JE_EXTERN
+const CGSize JEUIIPhone5ScreenLandscapeSize;
+
+JE_EXTERN
+const CGSize JEUIIPhone6ScreenPortraitSize;
+
+JE_EXTERN
+const CGSize JEUIIPhone6ScreenLandscapeSize;
+
+JE_EXTERN
+const CGSize JEUIIPhone6PlusScreenPortraitSize;
+
+JE_EXTERN
+const CGSize JEUIIPhone6PlusScreenLandscapeSize;
+
+JE_EXTERN
+const CGSize JEUIIPadScreenPortraitSize;
+
+JE_EXTERN
+const CGSize JEUIIPadScreenLandscapeSize;
 
 
 #pragma mark - Views
 
-static const CGFloat JEUIAdBannerViewHeight = 50.0f;
-static const CGFloat JEUIPickerViewHeight = 216.0f;
-static const CGFloat JEUITextFieldHeight = 31.0f;
-static const CGFloat JEUIToolbarHeight = 44.0f;
+JE_EXTERN
+const CGFloat JEUIAdBannerViewHeight;
 
-static const CGFloat JEUINavigationBarLandscapeHeight = 32.0f;
-static const CGFloat JEUINavigationBarPortraitHeight = 44.0f;
+JE_EXTERN
+const CGFloat JEUIPickerViewHeight;
 
-static const CGFloat JEUIStatusBarHeight = 20.0f;
-static const CGFloat JEUITableViewSeparatorWidth = 1.0f;
+JE_EXTERN
+const CGFloat JEUITextFieldHeight;
 
-static const CGFloat JEUITabBarHeight = 49.0f;
+JE_EXTERN
+const CGFloat JEUIToolbarHeight;
+
+JE_EXTERN
+const CGFloat JEUINavigationBarLandscapeHeight;
+
+JE_EXTERN
+const CGFloat JEUINavigationBarPortraitHeight;
+
+JE_EXTERN
+const CGFloat JEUIStatusBarHeight;
+
+JE_EXTERN
+const CGFloat JEUITableViewSeparatorWidth;
+
+JE_EXTERN
+const CGFloat JEUITabBarHeight;
 
 
 #endif

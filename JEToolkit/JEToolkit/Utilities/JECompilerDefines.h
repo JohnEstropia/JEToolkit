@@ -43,7 +43,14 @@
 #define JE_STATIC                   static
 #define JE_STATIC_INLINE            static inline
 #define JE_REQUIRES_NIL_TERMINATION NS_REQUIRES_NIL_TERMINATION
+#define JE_REQUIRES_SUPER           NS_REQUIRES_SUPER
 #define JE_WARN_UNUSED_RESULT       DISPATCH_WARN_RESULT
+
+
+#pragma mark - Swift support
+
+#define JE_DESIGNATED_INITIALIZER   NS_DESIGNATED_INITIALIZER
+
 
 
 

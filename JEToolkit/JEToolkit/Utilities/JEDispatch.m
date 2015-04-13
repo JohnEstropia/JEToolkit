@@ -24,10 +24,13 @@
 //
 
 #import "JEDispatch.h"
-
 #import <objc/runtime.h>
 
+#if __has_include("JEDebugging.h")
 #import "JEDebugging.h"
+#else
+#define JEAssertParameter   NSCParameterAssert
+#endif
 
 
 void JEDispatchConcurrent(void (^block)(void)) {

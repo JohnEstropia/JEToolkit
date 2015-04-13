@@ -120,6 +120,58 @@
     return image;
 }
 
+- (UIImage *)imageByTintingWithColor:(UIColor *)tintColor {
+    
+    CGSize size = self.size;
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    
+    CGRect drawRect = (CGRect){ .size = size };
+    [self drawInRect:drawRect];
+    
+    [tintColor setFill];
+    UIRectFillUsingBlendMode(drawRect, kCGBlendModeSourceAtop);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    if (!UIEdgeInsetsEqualToEdgeInsets(self.capInsets, image.capInsets)
+        || self.resizingMode != image.resizingMode) {
+        
+        image = [image
+                 resizableImageWithCapInsets:self.capInsets
+                 resizingMode:self.resizingMode];
+    }
+    
+    return image;
+}
+
+- (UIImage *)imageByFillingWithColor:(UIColor *)fillColor {
+    
+    CGSize size = self.size;
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    
+    CGRect drawRect = (CGRect){ .size = size };
+    [self drawInRect:drawRect];
+    
+    [fillColor setFill];
+    UIRectFillUsingBlendMode(drawRect, kCGBlendModeSourceIn);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    if (!UIEdgeInsetsEqualToEdgeInsets(self.capInsets, image.capInsets)
+        || self.resizingMode != image.resizingMode) {
+        
+        image = [image
+                 resizableImageWithCapInsets:self.capInsets
+                 resizingMode:self.resizingMode];
+    }
+    
+    return image;
+}
+
 - (instancetype)decodedImage {
     
     CGImageRef CGImage = self.CGImage;

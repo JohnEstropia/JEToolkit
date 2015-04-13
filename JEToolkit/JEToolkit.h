@@ -30,6 +30,8 @@
 #import "JESafetyHelpers.h"
 #import "JEFormulas.h"
 #import "JEUIMetrics.h"
+#import "JESynthesize.h"
+#import "JEDispatch.h"
 
 
 #pragma mark - Categories
@@ -39,6 +41,7 @@
 #import "NSCalendar+JEToolkit.h"
 #import "NSDate+JEToolkit.h"
 #import "NSDateFormatter+JEToolkit.h"
+#import "NSDictionary+JEToolkit.h"
 #import "NSError+JEToolkit.h"
 #import "NSIndexSet+JEToolkit.h"
 #import "NSMutableArray+JEToolkit.h"
@@ -62,13 +65,9 @@
 
 #pragma mark - Submodules
 
-#import "JESynthesize.h"
-
 #import "JEDebugging.h"
-
-#import "JEDispatch.h"
-#import "NSObject+JEDispatch.h"
-
+#import "JESettings.h"
+#import "JEUserDefaults.h"
 #import "JEKeychain.h"
 
 #import "JEOrderedDictionary.h"
