@@ -8,10 +8,10 @@ Pod::Spec.new do |s|
   s.source                  = { :git => "https://github.com/JohnEstropia/JEToolkit.git",
                                 :tag => "#{s.version}",
                                 :submodules => true }
-  s.platform                = :ios, '6.0'
+  s.platform                = :ios, '7.0'
   s.public_header_files     = "#{s.name}/*.h"
   s.source_files            = "#{s.name}/JEToolkit.h"
-  s.ios.deployment_target   = '6.0'
+  s.ios.deployment_target   = '7.0'
   s.ios.frameworks          = 'Foundation', 'MobileCoreServices', 'UIKit'
   s.requires_arc            = true
 
