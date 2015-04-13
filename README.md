@@ -5,6 +5,8 @@
 
 JEToolkit is a collection of time-saving goodies for iOS development.
 
+(I use this library in production code, so this repo is actively maintained.)
+
 #### Now with Swift 1.2 support!
 - Added Swift function counterparts to some Objective-C methods/macros that also makes sense in Swift code.
 - Evertyhing is audited for nullability (`nullable`, `nonnull`, etc).
@@ -20,7 +22,7 @@ JEToolkit is a collection of time-saving goodies for iOS development.
 Use each submodule independently (via cocoapods) or link everything as a whole package!
 
 
-## <a name="jetoolkit">JEToolkit/JEToolkit</a> module
+# <a name="jetoolkit">JEToolkit/JEToolkit</a>
 The `JEToolkit` module contains utilities that once you start using, you can never program without. They're that useful!
 
 ### Safer handling of `NSNotification`s (Objective-C and Swift)
@@ -142,7 +144,7 @@ override func viewWillDisappea(animated: Bool) {
 - and really, still a lot more!
 
 
-## <a name="jedebugging">JEToolkit/JEDebugging</a> module
+# <a name="jedebugging">JEToolkit/JEDebugging</a>
 The `JEDebugging` module is a logging framework that will surely help you and your teammates (even the server guys and your testers!)
 
 ### Main Features
@@ -175,24 +177,111 @@ By default, this view will not be created in release mode. You can expand/collap
 - Configurable settings for the console logger, the file logger, and the HUD logger.
 
 
-## <a name="jesettings">JEToolkit/JESettings</a> module
+# <a name="jesettings">JEToolkit/JESettings</a>
+The `JESettings` module provides cool base classes for managing `NSUserDefaults` and keychain data with object models.
+To create such models, subclass `JEUserDefaults` or `JEKeychain` and declare the data you want to manage as dynamic properties (`@dynamic` in Objective-C, `@NSManaged` in Swift)
+``` obj-c
+// Obj-C
+// .h
+@interface MyUserDefaults: JEUserDefaults
+    @property (nonatomic, strong) NSString *myString;
+    @property (nonatomic, assign) NSInteger myNumber;
+@end
+// .m
+@implementation MyUserDefaults
+    @dynamic myString;
+    @dynamic myNumber;
+@end
+```
+``` swift
+// Swift
+class MyUserDefaults: JEUserDefaults {
+    @NSManaged var myString: String?
+    @NSManaged var myNumber: Int
+}
+```
+
+Once your model class is set up, you can start using right away. The code below,
+``` obj-c
+// Obj-C
+MyUserDefaults *defaults = [MyUserDefaults new];
+defaults.myString = @"sample string";
+defaults.myNumber = 42;
+```
+``` swift
+// Swift
+let defaults = MyUserDefaults()
+defaults.myString = "sample string"
+defaults.myNumber = 42
+```
+saves these values to the `NSUserDefaults`:
+```
+"MyUserDefaults.myString" = "sample string"
+"MyUserDefaults.myNumber" = 42
+```
+
+Isn't that cool?
+
+### Main Features
+- Supports all dynamic properties of the following types:
+  - Objective-C
+    - All primitive integral types (`short`, `int`, `NSInteger`, `NSUInteger` `long long int`, `unsigned long long int`, etc.)
+    - All primitive boolean types (`bool`, `BOOL`)
+    - All primitive floating-point types (`float`, `double`, `CGFloat`)
+    - `NSString *`
+    - `NSNumber *`
+    - `NSDate *`
+    - `NSData *`
+    - `NSURL *`
+    - `NSUUID *`
+    - `id<NSCoding>` (Basically, anything that conforms to `NSCoding` protocol)
+    - `Class`
+    - `SEL`
+    - `CGPoint`
+    - `CGSize`
+    - `CGRect`
+    - `CGAffineTransform`
+    - `CGVector`
+    - `UIEdgeInsets`
+    - `UIOffset`
+    - `NSRange`
+  - Swift
+    - All types supported by Objective-C above
+    - All string types bridgable to `NSString` (`NSString?`, `String`, `String?`)
+    - All number types bridgable to `NSNumber` (`NSNumber?`, `Int`, `Int32`, `UInt8`, `Double`, `CGFloat` etc.)
+- By default, `JEUserDefaults` uses string keys in the format `"<class name>.<property name>"`, but you can also configure your own format by overriding `-[JEUserDefaults userDefaultsKeyForProperty:]`.
+- `JEUserDefaults` instances are created as singletons unique to each class and `suiteName`. See the header documentation for `-[JEUserDefaults init]` and `-[JEUserDefaults initWithSuiteName:]` for more details.
+- `JEUserDefaults` also lets you set default values for when the key doesn't exist in the `NSUserDefaults`. You can do this by getting a *proxy* instance with the `proxyForDefaultValues` method:
+``` obj-c
+// Obj-C
+MyUserDefaults *defaults = [MyUserDefaults new];
+
+MyUserDefaults *fallback = [defaults proxyForDefaultValues];
+fallback.myString = @"sample string";
+
+defaults.myString = nil;
+
+NSString *value = defaults.myString; // value is now "sample string"
+```
+``` swift
+// Swift
+let defaults = MyUserDefaults()
+
+let fallback = defaults.proxyForDefaultValues()
+fallback.myString = "sample string"
+
+defaults.myString = nil
+
+let value = defaults.myString // value is now "sample string"
+```
+Internally, this just saves the default values with `-[NSUserDefaults registerUserDefaults:]` ;)
+- By default, `JEKeychain` uses the app bundle identifier as `kSecAttrService`, but you can pass a preferred service name to `-[JEKeychain initWithService:accessGroup:]`.
+- By default, `JEKeychain` uses the property name as `kSecAttrAccount`, but you can also configure your own format by overriding `-[JEKeychain keychainAccountForProperty:]`.
+- `JEKeychain` allows setting access modes (such as `JEKeychainAccessAfterFirstUnlock`, etc.) per property by overriding `-[JEKeychain keychainAccessForProperty:]`.
+- If the `JEDebugging` module is included in the project, printing `JEUserDefaults` and `JEKeychain` instances using *lldb*'s `po` command will print all keys and values saved.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Installation
+# Installation
 - Requires iOS 7 SDK and above
 - Requires ARC
 
@@ -211,7 +300,7 @@ git submodule add https://github.com/JohnEstropia/JEToolkit.git <destination dir
 You can also clone the repository independent to the app **.xcodeproj** directory, then drag and drop **JEToolkit.xcodeproj** to your app project.
 
 
-## Contributions?
+# Contributions?
 
 Feel free to report any issues or send suggestions!
 日本語で連絡していただいても構いません！

@@ -7,20 +7,16 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>88EBC796-0FBA-4F51-9A46-631DE02C44A2</string>
 	<key>IDESourceControlProjectName</key>
-	<string>JEToolkitDemo</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>54450C21EDE89D5FAF7B7B353913149EF9D110C0</key>
-		<string>https://github.com/eure/couples-ios.git</string>
 		<key>6533DCA9C1C673037DD2F49A7574B681383114AB</key>
 		<string>https://github.com/JohnEstropia/JEToolkit.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>JEToolkitDemo/JEToolkitDemo.xcodeproj</string>
+	<string>JEToolkitDemo/JEToolkitDemo.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>54450C21EDE89D5FAF7B7B353913149EF9D110C0</key>
-		<string>../../../../..</string>
 		<key>6533DCA9C1C673037DD2F49A7574B681383114AB</key>
 		<string>../../..</string>
 	</dict>
@@ -32,14 +28,6 @@
 	<string>6533DCA9C1C673037DD2F49A7574B681383114AB</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>54450C21EDE89D5FAF7B7B353913149EF9D110C0</string>
-			<key>IDESourceControlWCCName</key>
-			<string>..</string>
-		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
