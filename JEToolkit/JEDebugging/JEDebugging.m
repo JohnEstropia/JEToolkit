@@ -1242,11 +1242,13 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     
     va_list arguments;
     va_start(arguments, format);
+    NSString *logMessage = [[NSString alloc] initWithFormat:format arguments:arguments];
+    va_end(arguments);
+    
     [self logLevel:level location:location logMessage:^{
         
-        return [[NSString alloc] initWithFormat:format arguments:arguments];
+        return logMessage;
     }];
-    va_end(arguments);
 }
 
 + (void)logLevel:(JELogLevelMask)level
