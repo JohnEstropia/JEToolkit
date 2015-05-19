@@ -81,32 +81,32 @@ public func JEAssertMethodOverride(fileName: String = __FILE__, lineNumber: UWor
 
 // MARK: - JELog() variants
 
-public func JELog(message: String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELog(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     JELogLevel(.Trace, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogTrace(message: String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELogTrace(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     JELogLevel(.Trace, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogNotice(message: String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELogNotice(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     JELogLevel(.Notice, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogAlert(message: String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELogAlert(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     JELogLevel(.Alert, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogFatal(message: String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELogFatal(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     JELogLevel(.Fatal, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogLevel(level: JELogLevelMask, message: String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELogLevel(level: JELogLevelMask, @autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     JEDebugging.logLevel(
         level,
@@ -114,8 +114,7 @@ public func JELogLevel(level: JELogLevelMask, message: String, fileName: String 
             fileName: fileName.lastPathComponent,
             functionName: functionName.stringValue,
             lineNumber: UInt32(lineNumber)),
-        format: "%@",
-        arguments: getVaList([message]))
+        logMessage: message)
 }
 
 
@@ -207,16 +206,10 @@ public func JEDumpLevel(level: JELogLevelMask, object: NSObject, _ label: String
             functionName: functionName.stringValue,
             lineNumber: UInt32(lineNumber)),
         label: label,
-        valueDescription: "(\(NSStringFromClass(object_getClass(object)))) \(object.loggingDescription())")
+        valueDescription: { "(\(NSStringFromClass(object_getClass(object)))) \(object.loggingDescription())" })
 }
 
 public func JEDumpLevel(level: JELogLevelMask, object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
-    
-    var description = "\(object)"
-    if description.isEmpty {
-        
-        description = "<No logging description available>"
-    }
     
     JEDebugging.dumpLevel(
         level,
@@ -225,7 +218,16 @@ public func JEDumpLevel(level: JELogLevelMask, object: AnyObject, _ label: Strin
             functionName: functionName.stringValue,
             lineNumber: UInt32(lineNumber)),
         label: label,
-        valueDescription: "(\(_stdlib_getDemangledTypeName(object))) \(description)")
+        valueDescription: {
+            
+            var description = "\(object)"
+            if description.isEmpty {
+                
+                description = "<No logging description available>"
+            }
+            return "(\(_stdlib_getDemangledTypeName(object))) \(description)"
+        }
+    )
 }
 
 public func JEDumpLevel<T>(level: JELogLevelMask, object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
@@ -237,5 +239,5 @@ public func JEDumpLevel<T>(level: JELogLevelMask, object: T, _ label: String = _
             functionName: functionName.stringValue,
             lineNumber: UInt32(lineNumber)),
         label: label,
-        valueDescription: "(\(_stdlib_getDemangledTypeName(object))) \(object)")
+        valueDescription: { "(\(_stdlib_getDemangledTypeName(object))) \(object)" })
 }

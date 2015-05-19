@@ -1116,16 +1116,19 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
      dumpLevel:level
      location:location
      label:label
-     valueDescription:(wrappedValue
-                       // Note that because of a bug(?) with NSGetSizeAndAlignment, structs and unions with bitfields cannot be wrapped in NSValue, in which case wrappedValue will be nil.
-                       ? [wrappedValue loggingDescriptionIncludeClass:NO includeAddress:NO]
-                       : @"(?) { ... }")];
+     valueDescription:^{
+         
+         return (wrappedValue
+                 // Note that because of a bug(?) with NSGetSizeAndAlignment, structs and unions with bitfields cannot be wrapped in NSValue, in which case wrappedValue will be nil.
+                 ? [wrappedValue loggingDescriptionIncludeClass:NO includeAddress:NO]
+                 : @"(?) { ... }");
+     }];
 }
 
 + (void)dumpLevel:(JELogLevelMask)level
          location:(JELogLocation)location
             label:(NSString *)label
- valueDescription:(NSString *)valueDescription {
+ valueDescription:(nonnull NSString *__nonnull(^__attribute__((noescape)))(void))valueDescription {
 
     if (![self sharedInstance].isStarted) {
         
@@ -1152,7 +1155,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
             return;
         }
         
-        NSMutableString *description = [NSMutableString stringWithString:valueDescription];
+        NSMutableString *description = [NSMutableString stringWithString:valueDescription()];
         [description indentByLevel:1];
         
         NSDictionary *headerEntries = [self
@@ -1239,14 +1242,16 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     
     va_list arguments;
     va_start(arguments, format);
-    [self logLevel:level location:location format:format arguments:arguments];
+    [self logLevel:level location:location logMessage:^{
+        
+        return [[NSString alloc] initWithFormat:format arguments:arguments];
+    }];
     va_end(arguments);
 }
 
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
-          format:(NSString *)format
-       arguments:(va_list)arguments {
+      logMessage:(nonnull NSString *__nonnull(^__attribute__((noescape)))(void))logMessage {
     
     if (![self sharedInstance].isStarted) {
         
@@ -1274,7 +1279,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
             return;
         }
         
-        NSString *formattedString = [[NSString alloc] initWithFormat:format arguments:arguments];
+        NSString *formattedString = logMessage();
         NSDictionary *headerEntries = [self
                                        headerEntriesForLocation:location
                                        withMask:(consoleLoggerSettings.logMessageHeaderMask
