@@ -285,7 +285,7 @@ typedef struct JELogLocation {
 + (void)dumpLevel:(JELogLevelMask)level
          location:(JELogLocation)location
             label:(nonnull NSString *)label
- valueDescription:(nonnull NSString *)valueDescription;
+ valueDescription:(nonnull NSString *__nonnull(^__attribute__((noescape)))(void))valueDescription;
 
 /*!
  Use the @p JELog(...) family of utilities instead of this method.
@@ -299,11 +299,7 @@ typedef struct JELogLocation {
  */
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
-          format:(nonnull NSString *)format
-JE_PRAGMA_PUSH
-JE_PRAGMA_IGNORE("-Wnullability-completeness")
-       arguments:(va_list)arguments;
-JE_PRAGMA_POP
+      logMessage:(nonnull NSString *__nonnull(^__attribute__((noescape)))(void))logMessage;
 
 
 /*!
