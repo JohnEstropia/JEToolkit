@@ -182,7 +182,7 @@
         [JEDebugging \
          logLevel:level \
          location:JELogLocationCurrent() \
-         format:(formatString), ##__VA_ARGS__]; \
+         logMessage:^{ return [[NSString alloc] initWithFormat:(formatString), ##__VA_ARGS__]; }]; \
         JE_PRAGMA_POP \
     } while(NO)
 
