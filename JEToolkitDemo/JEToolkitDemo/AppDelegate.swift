@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         JEDebugging.setHUDLoggerSettings(HUDLoggerSettings)
         
         let fileLoggerSettings = JEDebugging.copyFileLoggerSettings()
-        fileLoggerSettings.logLevelMask = (.Notice | .Alert)
+        fileLoggerSettings.logLevelMask = [.Notice, .Alert]
         JEDebugging.setFileLoggerSettings(fileLoggerSettings)
         
         // Note that this will detach previously set exception handlers, such as handlers provided by analytics frameworks or other debugging frameworks.
@@ -40,9 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         JEDebugging.start()
         
-        self.registerForNotificationsWithName(UIApplicationDidEnterBackgroundNotification) { (note) in
-            // do something...
-        }
         return true
     }
 }

@@ -28,7 +28,7 @@ import Foundation
 
 // MARK: - JEAssert() variants
 
-public func JEAssert(@autoclosure condition: () -> Bool, @autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEAssert(@autoclosure condition: () -> Bool, @autoclosure _ message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     #if DEBUG
         if !condition() {
@@ -106,7 +106,7 @@ public func JELogFatal(@autoclosure message: () -> String, fileName: String = __
     JELogLevel(.Fatal, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogLevel(level: JELogLevelMask, @autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELogLevel(level: JELogLevelMask, @autoclosure _ message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     JEDebugging.logLevel(
         level,
@@ -197,7 +197,7 @@ public func JEDumpFatal<T>(object: T, _ label: String = _JEDumpDefaultLabel, fil
     JEDumpLevel(.Fatal, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpLevel(level: JELogLevelMask, object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpLevel(level: JELogLevelMask, _ object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     JEDebugging.dumpLevel(
         level,
@@ -209,7 +209,7 @@ public func JEDumpLevel(level: JELogLevelMask, object: NSObject, _ label: String
         valueDescription: { "(\(NSStringFromClass(object_getClass(object)))) \(object.loggingDescription())" })
 }
 
-public func JEDumpLevel(level: JELogLevelMask, object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpLevel(level: JELogLevelMask, _ object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     JEDebugging.dumpLevel(
         level,
@@ -230,7 +230,7 @@ public func JEDumpLevel(level: JELogLevelMask, object: AnyObject, _ label: Strin
     )
 }
 
-public func JEDumpLevel<T>(level: JELogLevelMask, object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpLevel<T>(level: JELogLevelMask, _ object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
     
     JEDebugging.dumpLevel(
         level,
