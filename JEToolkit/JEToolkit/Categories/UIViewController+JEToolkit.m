@@ -24,6 +24,7 @@
 //
 
 #import "UIViewController+JEToolkit.h"
+#import "NSObject+JEToolkit.h"
 
 
 @implementation UIViewController (JEToolkit)
@@ -52,6 +53,47 @@
 
 
 #pragma mark - Public
+
++ (instancetype)viewControllerFromStoryboard {
+    
+    NSString *className = [self classNameInAppModule];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:className bundle:nil];
+    if(!storyboard) {
+        
+        return nil;
+    }
+    
+    UIViewController *viewController = [storyboard instantiateInitialViewController];
+    if ([viewController isKindOfClass:self]) {
+        
+        return viewController;
+    }
+    
+    viewController = [storyboard instantiateViewControllerWithIdentifier:className];
+    if ([viewController isKindOfClass:self]) {
+        
+        return viewController;
+    }
+    
+    return nil;
+}
+
++ (instancetype)viewControllerFromStoryboard:(UIStoryboard *)storyboard {
+    
+    UIViewController *viewController = [storyboard instantiateInitialViewController];
+    if ([viewController isKindOfClass:self]) {
+        
+        return viewController;
+    }
+    
+    viewController = [storyboard instantiateViewControllerWithIdentifier:[self classNameInAppModule]];
+    if ([viewController isKindOfClass:self]) {
+        
+        return viewController;
+    }
+    
+    return nil;
+}
 
 + (UIViewController *)topmostPresentedViewController {
     
