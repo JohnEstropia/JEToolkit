@@ -27,6 +27,14 @@
 
 @interface UIViewController (JEToolkit)
 
+/*! Initializes a `UIViewController` instance from a storyboard with the same name as the class name, and with a storyboard identifier same with the class name.
+ */
++ (null_unspecified instancetype)viewControllerFromStoryboard;
+
+/*! Initializes a `UIViewController` instance from a storyboard if an instance with the storyboard identifier same as the class name exists.
+ */
++ (null_unspecified instancetype)viewControllerFromStoryboard:(nonnull UIStoryboard *)storyboard;
+
 /*! Returns the recursive presentedViewController for the application
  */
 + (nullable UIViewController *)topmostPresentedViewController;
