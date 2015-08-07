@@ -285,7 +285,7 @@ typedef struct JELogLocation {
 + (void)dumpLevel:(JELogLevelMask)level
          location:(JELogLocation)location
             label:(nonnull NSString *)label
- valueDescription:(nonnull NSString *_Nonnull(^__attribute__((noescape)))(void))valueDescription;
+ valueDescription:(nonnull id _Nonnull(^__attribute__((noescape)))(void))valueDescription;
 
 /*!
  Use the @p JELog(...) family of utilities instead of this method.
@@ -299,7 +299,7 @@ typedef struct JELogLocation {
  */
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
-      logMessage:(nonnull NSString *_Nonnull(^__attribute__((noescape)))(void))logMessage;
+      logMessage:(nonnull id _Nonnull(^__attribute__((noescape)))(void))logMessage;
 
 
 /*!

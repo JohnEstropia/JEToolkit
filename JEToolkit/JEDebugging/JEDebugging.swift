@@ -81,32 +81,32 @@ public func JEAssertMethodOverride(fileName: String = __FILE__, lineNumber: Int 
 
 // MARK: - JELog() variants
 
-public func JELog(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
+public func JELog(@autoclosure(escaping) message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JELogLevel(.Trace, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogTrace(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
+public func JELogTrace(@autoclosure(escaping) message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JELogLevel(.Trace, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogNotice(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
+public func JELogNotice(@autoclosure(escaping) message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JELogLevel(.Notice, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogAlert(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
+public func JELogAlert(@autoclosure(escaping) message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JELogLevel(.Alert, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogFatal(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
+public func JELogFatal(@autoclosure(escaping) message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JELogLevel(.Fatal, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogLevel(level: JELogLevelMask, @autoclosure _ message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
+public func JELogLevel(level: JELogLevelMask, @autoclosure(escaping) _ message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JEDebugging.logLevel(
         level,
@@ -114,7 +114,7 @@ public func JELogLevel(level: JELogLevelMask, @autoclosure _ message: () -> Stri
             fileName: (fileName as NSString).lastPathComponent,
             functionName: functionName,
             lineNumber: UInt32(lineNumber)),
-        logMessage: message)
+        logMessage: { return message() })
 }
 
 

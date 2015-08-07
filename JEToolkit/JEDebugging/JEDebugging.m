@@ -1128,7 +1128,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
 + (void)dumpLevel:(JELogLevelMask)level
          location:(JELogLocation)location
             label:(NSString *)label
- valueDescription:(nonnull NSString *_Nonnull(^__attribute__((noescape)))(void))valueDescription {
+ valueDescription:(nonnull id _Nonnull(^__attribute__((noescape)))(void))valueDescription {
 
     if (![self sharedInstance].isStarted) {
         
@@ -1253,7 +1253,7 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
 
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
-      logMessage:(nonnull NSString *_Nonnull(^__attribute__((noescape)))(void))logMessage {
+      logMessage:(nonnull id _Nonnull(^__attribute__((noescape)))(void))logMessage {
     
     if (![self sharedInstance].isStarted) {
         
