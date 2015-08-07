@@ -88,9 +88,9 @@
  @param error The error if the process failed
  @return YES if the attribute was read successfully, NO otherwise.
  */
-- (BOOL)getExtendedAttribute:(NSString *__autoreleasing __nullable *__nullable)extendedAttribute
+- (BOOL)getExtendedAttribute:(NSString *__autoreleasing _Nullable *_Nullable)extendedAttribute
                       forKey:(nonnull NSString *)key
-                       error:(NSError *__autoreleasing __nullable*__nullable)error;
+                       error:(NSError *__autoreleasing _Nullable*_Nullable)error;
 
 /*! Sets an extended attribute on the file refered by the receiver. Note anything other than file system URLs will be ignored.
  @param extendedAttribute The value for the extended attribute
@@ -100,7 +100,7 @@
  */
 - (BOOL)setExtendedAttribute:(nullable NSString *)extendedAttribute
                       forKey:(nonnull NSString *)key
-                       error:(NSError *__autoreleasing __nullable *__nullable)error;
+                       error:(NSError *__autoreleasing _Nullable *_Nullable)error;
 
 
 #pragma mark - Conversion

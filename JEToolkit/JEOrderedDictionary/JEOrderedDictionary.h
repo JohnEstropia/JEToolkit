@@ -78,7 +78,7 @@
  If the block sets *stop to YES, the enumeration stops.
  @param block A block object to operate on entries in the dictionary.
  */
-- (void)enumerateIndexesAndKeysAndObjectsUsingBlock:(nonnull void (^)(NSUInteger idx, id __nonnull key, id __nonnull obj, BOOL *__nonnull stop))block;
+- (void)enumerateIndexesAndKeysAndObjectsUsingBlock:(nonnull void (^)(NSUInteger idx, id _Nonnull key, id _Nonnull obj, BOOL *_Nonnull stop))block;
 
 /*! Applies a given block object to the entries of the dictionary.
  If the block sets *stop to YES, the enumeration stops.
@@ -86,7 +86,7 @@
  @param block A block object to operate on entries in the dictionary.
  */
 - (void)enumerateIndexesAndKeysAndObjectsWithOptions:(NSEnumerationOptions)opts
-                                          usingBlock:(nonnull void (^)(NSUInteger idx, id __nonnull key, id __nonnull obj, BOOL *__nonnull stop))block;
+                                          usingBlock:(nonnull void (^)(NSUInteger idx, id _Nonnull key, id _Nonnull obj, BOOL *_Nonnull stop))block;
 
 /*! Applies a given block object to the entries of the dictionary at the specified indexes
  If the block sets *stop to YES, the enumeration stops.
@@ -96,6 +96,6 @@
  */
 - (void)enumerateIndexesAndKeysAndObjectsAtIndexes:(nonnull NSIndexSet *)indexes
                                            options:(NSEnumerationOptions)opts
-                                        usingBlock:(nonnull void (^)(NSUInteger idx, id __nonnull key, id __nonnull obj, BOOL *__nonnull stop))block;
+                                        usingBlock:(nonnull void (^)(NSUInteger idx, id _Nonnull key, id _Nonnull obj, BOOL *_Nonnull stop))block;
 
 @end

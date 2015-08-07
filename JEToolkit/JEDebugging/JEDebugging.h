@@ -192,8 +192,8 @@
 
 typedef struct JELogLocation {
 
-    const char *__nullable fileName;
-    const char *__nullable functionName;
+    const char *_Nullable fileName;
+    const char *_Nullable functionName;
     const unsigned int lineNumber;
 
 } JELogLocation;
@@ -285,7 +285,7 @@ typedef struct JELogLocation {
 + (void)dumpLevel:(JELogLevelMask)level
          location:(JELogLocation)location
             label:(nonnull NSString *)label
- valueDescription:(nonnull NSString *__nonnull(^__attribute__((noescape)))(void))valueDescription;
+ valueDescription:(nonnull NSString *_Nonnull(^__attribute__((noescape)))(void))valueDescription;
 
 /*!
  Use the @p JELog(...) family of utilities instead of this method.
@@ -299,7 +299,7 @@ typedef struct JELogLocation {
  */
 + (void)logLevel:(JELogLevelMask)level
         location:(JELogLocation)location
-      logMessage:(nonnull NSString *__nonnull(^__attribute__((noescape)))(void))logMessage;
+      logMessage:(nonnull NSString *_Nonnull(^__attribute__((noescape)))(void))logMessage;
 
 
 /*!
@@ -335,12 +335,12 @@ JE_PRAGMA_POP
  Enumerates all log files' data synchronously, starting with the most recent up to the oldest file.
  @param block The iteration block. Set the @p stop argument to @p YES to terminate the enumeration.
  */
-+ (void)enumerateFileLogDataWithBlock:(nonnull void (^)(NSString *__nonnull fileName, NSData *__nonnull data, BOOL *__nonnull stop))block;
++ (void)enumerateFileLogDataWithBlock:(nonnull void (^)(NSString *_Nonnull fileName, NSData *_Nonnull data, BOOL *_Nonnull stop))block;
 
 /*!
  Enumerates all log files' URLs synchronously, starting with the most recent up to the oldest file.
  @param block The iteration block. Set the @p stop argument to @p YES to terminate the enumeration.
  */
-+ (void)enumerateFileLogURLsWithBlock:(nonnull void (^)(NSURL *__nonnull fileURL, BOOL *__nonnull stop))block;
++ (void)enumerateFileLogURLsWithBlock:(nonnull void (^)(NSURL *_Nonnull fileURL, BOOL *_Nonnull stop))block;
 
 @end

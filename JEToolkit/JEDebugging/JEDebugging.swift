@@ -28,7 +28,7 @@ import Foundation
 
 // MARK: - JEAssert() variants
 
-public func JEAssert(@autoclosure condition: () -> Bool, @autoclosure _ message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEAssert(@autoclosure condition: () -> Bool, @autoclosure _ message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     #if DEBUG
         if !condition() {
@@ -37,8 +37,8 @@ public func JEAssert(@autoclosure condition: () -> Bool, @autoclosure _ message:
             JEDebugging.logFailureInAssertionWithMessage(
                 messageString,
                 location: JELogLocation(
-                    fileName: fileName.lastPathComponent,
-                    functionName: functionName.stringValue,
+                    fileName: (fileName as NSString).lastPathComponent,
+                    functionName: functionName,
                     lineNumber: UInt32(lineNumber)))
             NSException.raise(
                 NSInternalInconsistencyException,
@@ -48,32 +48,32 @@ public func JEAssert(@autoclosure condition: () -> Bool, @autoclosure _ message:
     #endif
 }
 
-public func JEAssertMainThread(fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEAssertMainThread(fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JEAssert(
         NSThread.isMainThread(),
         "Code expected to run on the main thread",
-        fileName: fileName,
+        fileName: (fileName as NSString).lastPathComponent,
         lineNumber: lineNumber,
         functionName: functionName)
 }
 
-public func JEAssertBackgroundThread(fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEAssertBackgroundThread(fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JEAssert(
         !NSThread.isMainThread(),
         "Code expected to run on the main thread",
-        fileName: fileName,
+        fileName: (fileName as NSString).lastPathComponent,
         lineNumber: lineNumber,
         functionName: functionName)
 }
 
-public func JEAssertMethodOverride(fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEAssertMethodOverride(fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JEAssert(
         false,
         "Required method \(functionName) override not implemented.",
-        fileName: fileName,
+        fileName: (fileName as NSString).lastPathComponent,
         lineNumber: lineNumber,
         functionName: functionName)
 }
@@ -81,38 +81,38 @@ public func JEAssertMethodOverride(fileName: String = __FILE__, lineNumber: UWor
 
 // MARK: - JELog() variants
 
-public func JELog(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELog(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JELogLevel(.Trace, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JELogLevel(.Trace, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogTrace(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELogTrace(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JELogLevel(.Trace, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JELogLevel(.Trace, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogNotice(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELogNotice(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JELogLevel(.Notice, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JELogLevel(.Notice, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogAlert(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELogAlert(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JELogLevel(.Alert, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JELogLevel(.Alert, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogFatal(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELogFatal(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JELogLevel(.Fatal, message, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JELogLevel(.Fatal, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogLevel(level: JELogLevelMask, @autoclosure _ message: () -> String, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JELogLevel(level: JELogLevelMask, @autoclosure _ message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JEDebugging.logLevel(
         level,
         location: JELogLocation(
-            fileName: fileName.lastPathComponent,
-            functionName: functionName.stringValue,
+            fileName: (fileName as NSString).lastPathComponent,
+            functionName: functionName,
             lineNumber: UInt32(lineNumber)),
         logMessage: message)
 }
@@ -122,100 +122,100 @@ public func JELogLevel(level: JELogLevelMask, @autoclosure _ message: () -> Stri
 
 private let _JEDumpDefaultLabel = "<No label>"
 
-public func JEDump(object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDump(object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Trace, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Trace, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDump(object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDump(object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Trace, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Trace, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDump<T>(object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDump<T>(object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Trace, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Trace, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpTrace(object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpTrace(object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Trace, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Trace, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpTrace(object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpTrace(object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Trace, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Trace, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpTrace<T>(object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpTrace<T>(object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Trace, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Trace, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpNotice(object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpNotice(object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Notice, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Notice, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpNotice(object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpNotice(object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Notice, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Notice, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpNotice<T>(object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpNotice<T>(object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Notice, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Notice, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpAlert(object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpAlert(object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Alert, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Alert, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpAlert(object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpAlert(object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Alert, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Alert, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpAlert<T>(object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpAlert<T>(object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Alert, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Alert, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpFatal(object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpFatal(object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Fatal, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Fatal, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpFatal(object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpFatal(object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Fatal, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Fatal, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpFatal<T>(object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpFatal<T>(object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
-    JEDumpLevel(.Fatal, object, label, fileName: fileName, lineNumber: lineNumber, functionName: functionName)
+    JEDumpLevel(.Fatal, object, label, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JEDumpLevel(level: JELogLevelMask, _ object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpLevel(level: JELogLevelMask, _ object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JEDebugging.dumpLevel(
         level,
         location: JELogLocation(
-            fileName: fileName.lastPathComponent,
-            functionName: functionName.stringValue,
+            fileName: (fileName as NSString).lastPathComponent,
+            functionName: functionName,
             lineNumber: UInt32(lineNumber)),
         label: label,
         valueDescription: { "(\(NSStringFromClass(object_getClass(object)))) \(object.loggingDescription())" })
 }
 
-public func JEDumpLevel(level: JELogLevelMask, _ object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpLevel(level: JELogLevelMask, _ object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JEDebugging.dumpLevel(
         level,
         location: JELogLocation(
-            fileName: fileName.lastPathComponent,
-            functionName: functionName.stringValue,
+            fileName: (fileName as NSString).lastPathComponent,
+            functionName: functionName,
             lineNumber: UInt32(lineNumber)),
         label: label,
         valueDescription: {
@@ -230,13 +230,13 @@ public func JEDumpLevel(level: JELogLevelMask, _ object: AnyObject, _ label: Str
     )
 }
 
-public func JEDumpLevel<T>(level: JELogLevelMask, _ object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: UWord = __LINE__, functionName: StaticString = __FUNCTION__) {
+public func JEDumpLevel<T>(level: JELogLevelMask, _ object: T, _ label: String = _JEDumpDefaultLabel, fileName: String = __FILE__, lineNumber: Int = __LINE__, functionName: String = __FUNCTION__) {
     
     JEDebugging.dumpLevel(
         level,
         location: JELogLocation(
-            fileName: fileName.lastPathComponent,
-            functionName: functionName.stringValue,
+            fileName: (fileName as NSString).lastPathComponent,
+            functionName: functionName,
             lineNumber: UInt32(lineNumber)),
         label: label,
         valueDescription: { "(\(_stdlib_getDemangledTypeName(object))) \(object)" })

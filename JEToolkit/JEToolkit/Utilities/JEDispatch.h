@@ -43,27 +43,27 @@
 /*! Dispatches a block to a concurrent global queue. Convenience method equivalent to calling dispatch_async() with dispatch_get_global_queue()
  */
 JE_EXTERN
-void JEDispatchConcurrent(dispatch_block_t __nonnull block);
+void JEDispatchConcurrent(dispatch_block_t _Nonnull block);
 
 /*! Dispatches a block to a concurrent global queue after a delay. Convenience method equivalent to calling dispatch_after() with dispatch_get_global_queue()
  */
 JE_EXTERN
-void JEDispatchConcurrentAfter(NSTimeInterval delay, dispatch_block_t __nonnull block);
+void JEDispatchConcurrentAfter(NSTimeInterval delay, dispatch_block_t _Nonnull block);
 
 /*! Dispatches a block to the main queue. Convenience method equivalent to calling dispatch_async() with dispatch_get_main_queue()
  */
 JE_EXTERN
-void JEDispatchUI(dispatch_block_t __nonnull block);
+void JEDispatchUI(dispatch_block_t _Nonnull block);
 
 /*! Dispatches a block to the main queue after a delay. Convenience method equivalent to calling dispatch_after() with dispatch_get_main_queue()
  */
 JE_EXTERN
-void JEDispatchUIAfter(NSTimeInterval delay, dispatch_block_t __nonnull block);
+void JEDispatchUIAfter(NSTimeInterval delay, dispatch_block_t _Nonnull block);
 
 /*! Dispatches a block to the main queue, or runs the block immediately if already running on the main thread.
  */
 JE_EXTERN
-void JEDispatchUIASAP(dispatch_block_t __nonnull block);
+void JEDispatchUIASAP(dispatch_block_t _Nonnull block);
 
 
 #endif

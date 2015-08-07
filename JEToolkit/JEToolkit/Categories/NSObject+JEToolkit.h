@@ -57,7 +57,7 @@
  @param block The notification block
  */
 - (void)registerForNotificationsWithName:(nonnull NSString *)notificationName
-                             targetBlock:(nonnull void (^)(NSNotification *__nonnull note))block;
+                             targetBlock:(nonnull void (^)(NSNotification *_Nonnull note))block;
 
 /*! Registers the receiver for NSNotificationCenter callbacks.
  @param notificationName The NSNotification name to observe
@@ -66,7 +66,7 @@
  */
 - (void)registerForNotificationsWithName:(nonnull NSString *)notificationName
                               fromObject:(nullable id)objectOrNil
-                             targetBlock:(nonnull void (^)(NSNotification *__nonnull note))block;
+                             targetBlock:(nonnull void (^)(NSNotification *_Nonnull note))block;
 
 /*! Registers the receiver for NSNotificationCenter callbacks.
  @param notificationName The NSNotification name to observe
@@ -77,7 +77,7 @@
 - (void)registerForNotificationsWithName:(nonnull NSString *)notificationName
                               fromObject:(nullable id)objectOrNil
                              targetQueue:(nullable NSOperationQueue *)queueOrNil
-                             targetBlock:(nonnull void (^)(NSNotification *__nonnull note))block;
+                             targetBlock:(nonnull void (^)(NSNotification *_Nonnull note))block;
 
 /*! Unregisters the receiver for NSNotificationCenter callbacks.
  @param notificationName The NSNotification name to stop observing

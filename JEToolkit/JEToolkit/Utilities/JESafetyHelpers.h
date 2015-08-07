@@ -62,10 +62,10 @@
 #pragma mark - Localizable Strings
 
 JE_EXTERN
-NSString *__nonnull JEL10n(NSString *__nonnull keyString);
+NSString *_Nonnull JEL10n(NSString *_Nonnull keyString);
 
 JE_EXTERN
-NSString *__nonnull JEL10nFromFile(NSString *__nonnull stringsFile, NSString *__nonnull keyString);
+NSString *_Nonnull JEL10nFromFile(NSString *_Nonnull stringsFile, NSString *_Nonnull keyString);
 
 
 

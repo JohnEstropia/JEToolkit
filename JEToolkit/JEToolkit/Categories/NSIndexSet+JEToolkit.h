@@ -37,6 +37,6 @@
 
 /*! Enumerates the integers and their corresponding positions in the receiver.
  */
-- (void)enumerateIntegersForIndexesUsingBlock:(nonnull void (^)(NSUInteger idx, NSUInteger integer,  BOOL *__nonnull stop))block;
+- (void)enumerateIntegersForIndexesUsingBlock:(nonnull void (^)(NSUInteger idx, NSUInteger integer,  BOOL *_Nonnull stop))block;
 
 @end
