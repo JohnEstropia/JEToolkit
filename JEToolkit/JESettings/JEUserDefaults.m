@@ -222,7 +222,13 @@
 
 - (NSString *)NSStringValueForKey:(NSString *)key {
     
-    return [self objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    id object = [self objectForKey:[self cachedUserDefaultsKeyForProperty:key]];
+    if ([object isKindOfClass:[NSData class]]) {
+        
+        return [NSKeyedUnarchiver unarchiveObjectWithData:object];
+    }
+    
+    return object;
 }
 
 - (void)setNSStringValue:(NSString *)value forKey:(NSString *)key {
