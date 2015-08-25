@@ -120,7 +120,7 @@
     return [self.scheme isEqualToString:@"data"];
 }
 
-- (NSDictionary *)queryValues {
+- (NSDictionary<NSString *, NSString *> *)queryValues {
     
     NSArray *pairs = [self.query componentsSeparatedByString:@"&"];
     NSMutableDictionary *components = [[NSMutableDictionary alloc] initWithCapacity:pairs.count];

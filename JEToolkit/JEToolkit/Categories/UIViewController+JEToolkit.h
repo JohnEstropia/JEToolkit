@@ -37,11 +37,11 @@
 
 /*! Returns the recursive presentedViewController for the application
  */
-+ (nullable UIViewController *)topmostPresentedViewController;
++ (nullable __kindof UIViewController *)topmostPresentedViewController;
 
 /*! Returns the candidate view controller for presenting a new modal controller
  */
-+ (nonnull UIViewController *)topmostViewControllerInHierarchy;
++ (nonnull __kindof UIViewController *)topmostViewControllerInHierarchy;
 
 /*! Checks if the receiver's view currently is in a window (i.e. currently in the view heirarchy)
  */
@@ -49,10 +49,10 @@
 
 /*! Returns the recursive presentedViewController of the receiver
  */
-- (nonnull UIViewController *)topmostPresentedViewController;
+- (nonnull __kindof UIViewController *)topmostPresentedViewController;
 
 /*! Returns the recursive parentViewController of the receiver
  */
-- (nonnull UIViewController *)rootParentViewController;
+- (nonnull __kindof UIViewController *)rootParentViewController;
 
 @end

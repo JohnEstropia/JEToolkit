@@ -241,7 +241,7 @@
     return nil;
 }
 
-- (id)firstSubviewWithClass:(Class)viewClass {
+- (__kindof UIView *)firstSubviewWithClass:(Class)viewClass {
     
     JEAssertParameter([viewClass isSubclassOfClass:[UIView class]]);
     
@@ -262,7 +262,7 @@
     return nil;
 }
 
-- (id)firstSuperviewWithClass:(Class)viewClass {
+- (__kindof UIView *)firstSuperviewWithClass:(Class)viewClass {
     
     JEAssertParameter([viewClass isSubclassOfClass:[UIView class]]);
     
@@ -274,7 +274,7 @@
     return [self.superview firstSuperviewWithClass:viewClass];
 }
 
-- (id)findViewController {
+- (__kindof UIView *)findViewController {
     
     id nextResponder = [self nextResponder];
     if ([nextResponder isKindOfClass:[UIViewController class]]) {

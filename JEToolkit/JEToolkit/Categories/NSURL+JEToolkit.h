@@ -77,7 +77,7 @@
 
 /*! Returns the URL query parameters as a key-value dictionary
  */
-- (nonnull NSDictionary *)queryValues;
+- (nonnull NSDictionary<NSString *, NSString *> *)queryValues;
 
 
 #pragma mark - Extended Attributes

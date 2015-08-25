@@ -101,14 +101,14 @@
 
 /*! Returns the first subview that is a subclass of class. Searches recursively, and may return the receiver itself.
  */
-- (nullable id)firstSubviewWithClass:(nonnull Class)viewClass;
+- (nullable __kindof UIView *)firstSubviewWithClass:(nonnull Class)viewClass;
 
 /*! Returns the first superview that is a subclass of class. Searches recursively, and may return the receiver itself.
  */
-- (nullable id)firstSuperviewWithClass:(nonnull Class)viewClass;
+- (nullable __kindof UIView *)firstSuperviewWithClass:(nonnull Class)viewClass;
 
 /*! Returns the UIViewController owning the receiver's view tree if it exists
  */
-- (nullable id)findViewController;
+- (nullable __kindof UIView *)findViewController;
 
 @end
