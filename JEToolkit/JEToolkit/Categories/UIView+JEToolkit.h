@@ -109,6 +109,6 @@
 
 /*! Returns the UIViewController owning the receiver's view tree if it exists
  */
-- (nullable __kindof UIView *)findViewController;
+- (nullable __kindof UIViewController *)findViewController;
 
 @end
