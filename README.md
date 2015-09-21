@@ -7,7 +7,7 @@ JEToolkit is a collection of time-saving goodies for iOS development.
 
 (I use this library in production code, so this repo is actively maintained.)
 
-#### Now with Swift 1.2 support!
+#### Now with Swift 2.0 support!
 - Added Swift function counterparts to some Objective-C methods/macros that also makes sense in Swift code.
 - Evertyhing is audited for nullability (`nullable`, `nonnull`, etc).
 - Objective-C-only projects will still benefit from all available features!
@@ -287,7 +287,7 @@ Internally, this just saves the default values with `-[NSUserDefaults registerUs
 
 ### Install via Cocoapods (Objective-C only)
 ```
-pod 'JEToolkit', '~> 2.0'
+pod 'JEToolkit', '~> 2.1'
 ```
 Unfortunately, Cocoapod's Swift support requires the library to be compiled as a Framework, which isn't supported on iOS 7.
 Thus, Swift files were intendedly not included in JEToolkit's podspec so that Objective-C-only projects can still use JEToolkit as a static library, and without requiring the Swift runtime.
