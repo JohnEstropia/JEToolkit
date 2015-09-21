@@ -274,7 +274,7 @@
     return [self.superview firstSuperviewWithClass:viewClass];
 }
 
-- (__kindof UIView *)findViewController {
+- (__kindof UIViewController *)findViewController {
     
     id nextResponder = [self nextResponder];
     if ([nextResponder isKindOfClass:[UIViewController class]]) {
