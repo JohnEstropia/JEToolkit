@@ -24,6 +24,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface NSObject (JEToolkit)
 
@@ -115,5 +116,9 @@
  */
 @property (nonatomic, strong, nullable) NSUUID *dispatchTaskID;
 
+
+#pragma mark - Internal
+
++ (nonnull instancetype)je_appearanceWhenContainedIn:(nonnull NSArray<Class <UIAppearanceContainer>> *)containerTypes;
 
 @end

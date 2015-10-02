@@ -291,4 +291,24 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
 JESynthesize(strong, NSUUID *, dispatchTaskID, setDispatchTaskID);
 
 
++ (instancetype)je_appearanceWhenContainedIn:(NSArray<Class <UIAppearanceContainer>> *)containerTypes {
+    
+    NSUInteger count = containerTypes.count;
+    JEAssert(count <= 10,
+             @"UIAppearance.appearanceWhenContainedIn() support for Swift on iOS 8 and below only supports up to 10 containers in the array.");
+    
+    return [(id<UIAppearance>)self appearanceWhenContainedIn:
+            count > 0 ? containerTypes[0] : nil,
+            count > 1 ? containerTypes[1] : nil,
+            count > 2 ? containerTypes[2] : nil,
+            count > 3 ? containerTypes[3] : nil,
+            count > 4 ? containerTypes[4] : nil,
+            count > 5 ? containerTypes[5] : nil,
+            count > 6 ? containerTypes[6] : nil,
+            count > 7 ? containerTypes[7] : nil,
+            count > 8 ? containerTypes[8] : nil,
+            count > 9 ? containerTypes[9] : nil,
+            nil];
+}
+
 @end
