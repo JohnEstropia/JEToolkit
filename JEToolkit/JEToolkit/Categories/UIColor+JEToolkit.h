@@ -47,6 +47,12 @@
  */
 + (nonnull UIColor *)colorWithInt:(NSUInteger)RGBInt alpha:(CGFloat)alpha;
 
+/*! Creates a pattern color from an image name.
+ @param patternName The image name for the pattern
+ @return a pattern color from the image name
+ */
++ (nullable UIColor *)colorWithPatternNamed:(nonnull NSString *)patternName;
+
 /*! Creates a color from an array of float color components.
  @param components The array of float color components. Accepts 1 to 4 components.
  @return a color from the color components

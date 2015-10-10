@@ -110,6 +110,11 @@
             alpha:alpha];
 }
 
++ (UIColor *)colorWithPatternNamed:(NSString *)patternName {
+    
+    return [UIColor colorWithPatternImage:[UIImage imageNamed:patternName]];
+}
+
 + (UIColor *)colorWithComponents:(NSArray *)components {
     
     JEAssertParameter([components isKindOfClass:[NSArray class]]);

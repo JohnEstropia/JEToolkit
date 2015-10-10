@@ -129,7 +129,7 @@
 		B5C8D6811A787BBB0007C5DF /* UICollectionView+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D6801A787BBB0007C5DF /* UICollectionView+JEToolkit.swift */; };
 		B5C8D6831A7883190007C5DF /* NSDate+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D6821A7883190007C5DF /* NSDate+JEToolkit.swift */; };
 		B5C8D6851A78846B0007C5DF /* UIView+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D6841A78846B0007C5DF /* UIView+JEToolkit.swift */; };
-		B5CD37851BBE6BF1007FCF55 /* UIAppearance+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD37841BBE6BF1007FCF55 /* UIAppearance+JEToolkit.swift */; settings = {ASSET_TAGS = (); }; };
+		B5CD37851BBE6BF1007FCF55 /* UIAppearance+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CD37841BBE6BF1007FCF55 /* UIAppearance+JEToolkit.swift */; };
 		B5E2D8531A2FF29600658696 /* NSDictionary+JEToolkit.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E2D8511A2FF29600658696 /* NSDictionary+JEToolkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B5E2D8541A2FF29600658696 /* NSDictionary+JEToolkit.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E2D8521A2FF29600658696 /* NSDictionary+JEToolkit.m */; };
 		B5F5399A1A18536000EC763B /* JESettings.h in Headers */ = {isa = PBXBuildFile; fileRef = B5F539981A18536000EC763B /* JESettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -702,6 +702,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = JE;
+				LastSwiftMigration = 0710;
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "John Rommel Estropia";
