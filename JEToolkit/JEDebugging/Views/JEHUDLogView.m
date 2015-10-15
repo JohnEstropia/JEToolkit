@@ -758,10 +758,11 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
                                      >= truncf(tableView.contentSize.height - CGRectGetHeight(scrollBounds))));
     [tableView reloadData];
     
-    if (shouldScrollToBottom) {
+    NSUInteger numberOfLogEntries = [self.displayedLogEntries count];
+    if (shouldScrollToBottom && numberOfLogEntries > 0) {
         
         [tableView
-         scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([self.displayedLogEntries count] - 1) inSection:0]
+         scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:(numberOfLogEntries - 1) inSection:0]
          atScrollPosition:UITableViewScrollPositionBottom
          animated:NO];
     }
