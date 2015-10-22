@@ -28,13 +28,11 @@ import UIKit
 
 public extension UIAppearance where Self: NSObject {
     
-    @nonobjc
     public static func appearanceWhenContainedIn(containerTypes: AnyObject.Type...) -> Self {
         
         return self.appearanceWhenContainedIn(containerTypes)
     }
     
-    @nonobjc
     public static func appearanceWhenContainedIn(containerTypes: [AnyObject.Type]) -> Self {
         
         if #available(iOS 9.0, *) {
