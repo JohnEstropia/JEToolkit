@@ -34,7 +34,7 @@
  */
 + (nonnull NSCalendar *)cachedLocalizedCalendar JE_CONST;
 
-/*! Create and caches the NSCalendar created with NSGregorianCalendar identifier.
+/*! Create and caches the NSCalendar created with NSCalendarIdentifierGregorian identifier.
  */
 + (nonnull NSCalendar *)gregorianCalendar JE_CONST;
 
