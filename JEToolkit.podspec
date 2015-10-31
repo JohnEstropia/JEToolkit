@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                    = "JEToolkit"
-  s.version                 = "2.1.1"
+  s.version                 = "3.0.0"
   s.summary                 = "iOS Utilities"
   s.homepage                = "https://github.com/JohnEstropia/JEToolkit"
   s.license                 = 'MIT'
@@ -8,20 +8,20 @@ Pod::Spec.new do |s|
   s.source                  = { :git => "https://github.com/JohnEstropia/JEToolkit.git",
                                 :tag => "#{s.version}",
                                 :submodules => true }
-  s.platform                = :ios, '7.0'
+  s.platform                = :ios, '8.0'
   s.public_header_files     = "#{s.name}/*.h"
   s.source_files            = "#{s.name}/JEToolkit.h"
-  s.ios.deployment_target   = '7.0'
+  s.ios.deployment_target   = '8.0'
   s.ios.frameworks          = 'Foundation', 'MobileCoreServices', 'UIKit'
   s.requires_arc            = true
 
   s.subspec "JEToolkit" do |ss|
-    ss.source_files         = "#{s.name}/JEToolkit/**/*.{h,m,c}"
+    ss.source_files         = "#{s.name}/JEToolkit/**/*.{h,m,c,swift}"
     ss.ios.frameworks       = 'Foundation', 'MobileCoreServices', 'UIKit'
   end
 
   s.subspec "JEDebugging" do |ss|
-    ss.source_files         = "#{s.name}/JEDebugging/**/*.{h,m,c}"
+    ss.source_files         = "#{s.name}/JEDebugging/**/*.{h,m,c,swift}"
     ss.ios.frameworks       = 'Foundation', 'UIKit', 'MessageUI'
     ss.dependency "#{s.name}/JEToolkit"
     end
