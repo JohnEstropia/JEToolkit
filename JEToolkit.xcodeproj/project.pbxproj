@@ -123,7 +123,7 @@
 		B55AB0811A864FE9008DFAB7 /* JESynthesize.h in Headers */ = {isa = PBXBuildFile; fileRef = B55AB0771A864FE9008DFAB7 /* JESynthesize.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B55AB0821A864FE9008DFAB7 /* JEUIMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = B55AB0781A864FE9008DFAB7 /* JEUIMetrics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B55AB0831A864FE9008DFAB7 /* JEUIMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = B55AB0791A864FE9008DFAB7 /* JEUIMetrics.m */; };
-		B57078B61A504327007E33F2 /* UIViewController+JEDebugging.h in Headers */ = {isa = PBXBuildFile; fileRef = B57078B41A504327007E33F2 /* UIViewController+JEDebugging.h */; };
+		B57078B61A504327007E33F2 /* UIViewController+JEDebugging.h in Headers */ = {isa = PBXBuildFile; fileRef = B57078B41A504327007E33F2 /* UIViewController+JEDebugging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B57078B71A504327007E33F2 /* UIViewController+JEDebugging.m in Sources */ = {isa = PBXBuildFile; fileRef = B57078B51A504327007E33F2 /* UIViewController+JEDebugging.m */; };
 		B5C8D67B1A7877470007C5DF /* UITableView+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D67A1A7877470007C5DF /* UITableView+JEToolkit.swift */; };
 		B5C8D6811A787BBB0007C5DF /* UICollectionView+JEToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C8D6801A787BBB0007C5DF /* UICollectionView+JEToolkit.swift */; };
