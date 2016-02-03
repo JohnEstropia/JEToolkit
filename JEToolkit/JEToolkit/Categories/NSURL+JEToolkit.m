@@ -127,12 +127,19 @@
     for (NSString *keyValueString in pairs) {
         
         NSArray *keyValueArray = [keyValueString componentsSeparatedByString:@"="];
-        if (keyValueArray.count != 2)  {
-            
-            continue;
+        switch (keyValueArray.count) {
+                
+            case 1:
+                components[[keyValueArray[0] URLDecodedString]] = @"";
+                break;
+                
+            case 2:
+                components[[keyValueArray[0] URLDecodedString]] = [keyValueArray[1] URLDecodedString];
+                break;
+                
+            default:
+                break;
         }
-        
-        components[[keyValueArray[0] URLDecodedString]] = [keyValueArray[1] URLDecodedString];
     }
     return [NSDictionary dictionaryWithDictionary:components];
 }
