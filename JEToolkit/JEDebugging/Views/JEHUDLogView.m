@@ -277,11 +277,12 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     self.resizeButton = resizeButton;
     
     
+    id application = [NSClassFromString(@"UIApplication") sharedApplication];
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(applicationDidChangeStatusBarOrientation:)
      name:UIApplicationDidChangeStatusBarOrientationNotification
-     object:[UIApplication sharedApplication]];
+     object:application];
     [self applicationDidChangeStatusBarOrientation:nil];
     
     
@@ -295,10 +296,11 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     
     [_displayLink invalidate];
     
+    id application = [NSClassFromString(@"UIApplication") sharedApplication];
     [[NSNotificationCenter defaultCenter]
      removeObserver:self
      name:UIApplicationDidChangeStatusBarOrientationNotification
-     object:[UIApplication sharedApplication]];
+     object:application];
 }
 
 
@@ -593,9 +595,10 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
         return;
     }
     
+    id application = [NSClassFromString(@"UIApplication") sharedApplication];
     CGAffineTransform transform = CGAffineTransformIdentity;
     CGRect bounds = [UIScreen mainScreen].bounds;
-    switch ([UIApplication sharedApplication].statusBarOrientation)
+    switch ([application statusBarOrientation])
     {
         case UIInterfaceOrientationPortraitUpsideDown:
             transform = CGAffineTransformMakeRotation(M_PI);

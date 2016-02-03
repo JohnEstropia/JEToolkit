@@ -126,6 +126,12 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     _HUDLoggerSettings = [[JEHUDLoggerSettings alloc] init];
     _fileLoggerSettings = [[JEFileLoggerSettings alloc] init];
     
+    id application = [NSClassFromString(@"UIApplication") sharedApplication];
+    if (!application) {
+        
+        return self;
+    }
+    
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center
      addObserver:self
@@ -158,7 +164,12 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
 
 - (void)dealloc {
     
-    [[UIApplication sharedApplication]
+    id application = [NSClassFromString(@"UIApplication") sharedApplication];
+    if (!application) {
+        
+        return;
+    }
+    [application
      removeObserver:self
      forKeyPath:JEKeypath(UIApplication *, keyWindow)
      context:NULL];
@@ -802,8 +813,9 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
     NSCAssert([NSThread isMainThread],
               @"%@ called on the wrong queue.", NSStringFromSelector(_cmd));
     
+    id application = [NSClassFromString(@"UIApplication") sharedApplication];
     JEHUDLogView *view = self.HUDLogView;
-    UIWindow *topmostWindow = [[UIApplication sharedApplication].windows lastObject];
+    UIWindow *topmostWindow = [[application windows] lastObject];
     if (!view) {
         
         view = [[JEHUDLogView alloc]
@@ -877,7 +889,12 @@ void _JEDebuggingUncaughtExceptionHandler(NSException *exception) {
             return;
         }
         
-        if (view.window == [[UIApplication sharedApplication].windows lastObject]) {
+        id application = [NSClassFromString(@"UIApplication") sharedApplication];
+        if (!application) {
+            
+            return;
+        }
+        if (view.window == [[application windows] lastObject]) {
             
             return;
         }
