@@ -2,3 +2,5 @@ JEToolkit.xcodeproj/project.xcworkspace/xcuserdata
 JEToolkit.xcodeproj/xcuserdata
 JEToolkitDemo/JEToolkitDemo.xcodeproj/project.xcworkspace/xcuserdata
 JEToolkitDemo/JEToolkitDemo.xcodeproj/xcuserdata
+.DS_Store
+Build/

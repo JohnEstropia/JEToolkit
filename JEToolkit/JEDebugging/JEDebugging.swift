@@ -225,7 +225,7 @@ public func JEDumpLevel(level: JELogLevelMask, _ object: AnyObject, _ label: Str
                 
                 description = "<No logging description available>"
             }
-            return "(\(_stdlib_getDemangledTypeName(object))) \(description)"
+            return "(\(String(reflecting: object.dynamicType)) \(description)"
         }
     )
 }
@@ -239,5 +239,5 @@ public func JEDumpLevel<T>(level: JELogLevelMask, _ object: T, _ label: String =
             functionName: functionName,
             lineNumber: UInt32(lineNumber)),
         label: label,
-        valueDescription: { "(\(_stdlib_getDemangledTypeName(object))) \(object)" })
+        valueDescription: { "(\(String(reflecting: object.dynamicType))) \(object)" })
 }
