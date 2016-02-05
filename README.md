@@ -285,13 +285,20 @@ Internally, this just saves the default values with `-[NSUserDefaults registerUs
 - Requires iOS 7 SDK and above
 - Requires ARC
 
-### Install via Cocoapods (Objective-C only)
+### Install via Cocoapods
+In your `Podfile`, add:
 ```
-pod 'JEToolkit', '~> 2.1'
+pod 'JEToolkit'
 ```
-Unfortunately, Cocoapod's Swift support requires the library to be compiled as a Framework, which isn't supported on iOS 7.
-Thus, Swift files were intendedly not included in JEToolkit's podspec so that Objective-C-only projects can still use JEToolkit as a static library, and without requiring the Swift runtime.
-To use with Swift, install as a submodule.
+and run `pod install`
+
+### Install via Carthage
+In your `Cartfile`, add:
+```
+github "JohnEstropia/JEToolkit"
+```
+and run `carthage update`
+
 ### Install manually
 The recommended way to add manually is to install as a git submodule.
 ```
