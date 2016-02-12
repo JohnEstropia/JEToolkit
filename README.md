@@ -285,7 +285,7 @@ Internally, this just saves the default values with `-[NSUserDefaults registerUs
 - Requires iOS 7 SDK and above
 - Requires ARC
 
-### Install via Cocoapods
+### Install via CocoaPods
 In your `Podfile`, add:
 ```
 pod 'JEToolkit'
