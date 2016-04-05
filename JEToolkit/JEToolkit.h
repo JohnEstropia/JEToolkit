@@ -66,6 +66,7 @@
 #pragma mark - Submodules
 
 #import "JEDebugging.h"
+#import "UIViewController+JEDebugging.h"
 #import "JESettings.h"
 #import "JEUserDefaults.h"
 #import "JEKeychain.h"
