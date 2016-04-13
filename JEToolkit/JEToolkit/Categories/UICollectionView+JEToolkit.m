@@ -181,4 +181,32 @@
     return (supplementaryView ?: [[supplementaryViewClass alloc] initWithFrame:CGRectZero]);
 }
 
+- (BOOL)selectItemAtIndexPathIfValid:(NSIndexPath *)indexPath
+                            animated:(BOOL)animated
+                      scrollPosition:(UICollectionViewScrollPosition)scrollPosition {
+    
+    if (indexPath != nil
+        && indexPath.section < [self numberOfSections]
+        && indexPath.item < [self numberOfItemsInSection:indexPath.section]) {
+        
+        [self selectItemAtIndexPath:indexPath animated:animated scrollPosition:scrollPosition];
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)scrollToIndexPathIfValid:(NSIndexPath *)indexPath
+                            animated:(BOOL)animated
+                      scrollPosition:(UICollectionViewScrollPosition)scrollPosition {
+    
+    if (indexPath != nil
+        && indexPath.section < [self numberOfSections]
+        && indexPath.item < [self numberOfItemsInSection:indexPath.section]) {
+        
+        [self scrollToItemAtIndexPath:indexPath atScrollPosition:scrollPosition animated:animated];
+        return YES;
+    }
+    return NO;
+}
+
 @end

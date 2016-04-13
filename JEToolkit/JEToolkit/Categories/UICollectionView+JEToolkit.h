@@ -90,4 +90,25 @@
                                          ofKind:(nonnull NSString *)supplementaryViewKind
                                   subIdentifier:(nullable NSString *)subIdentifier
                                    forIndexPath:(nonnull NSIndexPath *)indexPath;
+
+/*! Selects the cell at the specified indexPath only if is is within the receiver's indexPath range.
+ @param indexPath the index path for the cell to select
+ @param animated specifies if the selection should be animated
+ @param scrollPosition indicates how to scroll an item into the visible portion of the collection view
+ @return YES if the indexPath is within the receiver's indexPath range, NO otherwise
+ */
+- (BOOL)selectItemAtIndexPathIfValid:(nullable NSIndexPath *)indexPath
+                            animated:(BOOL)animated
+                      scrollPosition:(UICollectionViewScrollPosition)scrollPosition;
+
+/*! Scrolls to the cell at the specified indexPath only if is is within the receiver's indexPath range.
+ @param indexPath the index path for the cell to scroll to
+ @param animated specifies if the selection should be animated
+ @param scrollPosition indicates how to scroll an item into the visible portion of the collection view
+ @return YES if the indexPath is within the receiver's indexPath range, NO otherwise
+ */
+- (BOOL)scrollToIndexPathIfValid:(nullable NSIndexPath *)indexPath
+                        animated:(BOOL)animated
+                  scrollPosition:(UICollectionViewScrollPosition)scrollPosition;
+
 @end
