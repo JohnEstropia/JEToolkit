@@ -42,6 +42,10 @@
  */
 + (nonnull NSString *)classNameInAppModule;
 
+/*! Returns the non-qualified class name relative to the main bundle. For example, for class name "AnyModule.MyClass", this method always returns the last name "MyClass".
+ */
++ (nonnull NSString *)classNameWithoutNamespace;
+
 /*! Returns the iPhone or iPad-specific subclass for the receiver if they exist. Device-specific subclass names are expected to have either the suffix "_iPad" or "_iPhone".
  */
 + (nonnull Class)classForIdiom;

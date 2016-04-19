@@ -48,7 +48,7 @@
     
     JEAssertParameter([collectionViewCellClass isSubclassOfClass:[UICollectionViewCell class]]);
     
-    NSString *className = [collectionViewCellClass classNameInAppModule];
+    NSString *className = [collectionViewCellClass classNameWithoutNamespace];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -84,7 +84,7 @@
     JEAssertParameter([supplementaryViewClass isSubclassOfClass:[UICollectionReusableView class]]);
     JEAssertParameter(supplementaryViewKind != nil);
     
-    NSString *className = [supplementaryViewClass classNameInAppModule];
+    NSString *className = [supplementaryViewClass classNameWithoutNamespace];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -123,7 +123,7 @@
     JEAssertParameter([collectionViewCellClass isSubclassOfClass:[UICollectionViewCell class]]);
     JEAssertParameter(indexPath != nil);
     
-    NSString *className = [collectionViewCellClass classNameInAppModule];
+    NSString *className = [collectionViewCellClass classNameWithoutNamespace];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -161,7 +161,7 @@
     JEAssertParameter([supplementaryViewClass isSubclassOfClass:[UICollectionReusableView class]]);
     JEAssertParameter(supplementaryViewKind != nil);
     
-    NSString *className = [supplementaryViewClass classNameInAppModule];
+    NSString *className = [supplementaryViewClass classNameWithoutNamespace];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         

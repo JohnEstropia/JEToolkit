@@ -56,7 +56,7 @@
 
 + (instancetype)viewControllerFromStoryboard {
     
-    NSString *className = [self classNameInAppModule];
+    NSString *className = [self classNameWithoutNamespace];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:className bundle:nil];
     if(!storyboard) {
         
@@ -86,7 +86,7 @@
         return viewController;
     }
     
-    viewController = [storyboard instantiateViewControllerWithIdentifier:[self classNameInAppModule]];
+    viewController = [storyboard instantiateViewControllerWithIdentifier:[self classNameWithoutNamespace]];
     if ([viewController isKindOfClass:self]) {
         
         return viewController;
