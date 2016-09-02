@@ -95,6 +95,16 @@
     return nil;
 }
 
++ (instancetype)viewControllerFromStoryboardNamed:(NSString *)storyboardName {
+    
+    return [self viewControllerFromStoryboardNamed:storyboardName inBundle:nil];
+}
+
++ (instancetype)viewControllerFromStoryboardNamed:(NSString *)storyboardName inBundle:(NSBundle *)bundle {
+    
+    return [self viewControllerFromStoryboard:[UIStoryboard storyboardWithName:storyboardName bundle:bundle]];
+}
+
 + (UIViewController *)topmostPresentedViewController {
     
     UIApplication *application = [UIApplication sharedApplication];
