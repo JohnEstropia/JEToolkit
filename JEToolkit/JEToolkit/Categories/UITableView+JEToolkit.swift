@@ -31,11 +31,11 @@ public extension UITableView {
     @param tableViewCellClass the UITableViewCell class name
     @param indexPath the index path for the cell to dequeue
     */
-    public func dequeueReusableCellWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, forIndexPath indexPath: NSIndexPath?) -> T {
+    public func dequeueReusableCellWithClass<T: UITableViewCell>(_ tableViewCellClass: T.Type, forIndexPath indexPath: IndexPath?) -> T {
         
-        return self.dequeueReusableCellWithClass(
-            tableViewCellClass as AnyClass,
-            forIndexPath: indexPath) as! T
+        return self.dequeueReusableCell(
+            with: tableViewCellClass as AnyClass,
+            for: indexPath) as! T
     }
     
     /*! Dequeues a UITableViewCell from the receiver. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
@@ -43,41 +43,41 @@ public extension UITableView {
     @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
     @param indexPath the index path for the cell to dequeue
     */
-    public func dequeueReusableCellWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, subIdentifier: String, forIndexPath indexPath: NSIndexPath?) -> T {
+    public func dequeueReusableCellWithClass<T: UITableViewCell>(_ tableViewCellClass: T.Type, subIdentifier: String, forIndexPath indexPath: IndexPath?) -> T {
         
-        return self.dequeueReusableCellWithClass(
-            tableViewCellClass as AnyClass,
+        return self.dequeueReusableCell(
+            with: tableViewCellClass as AnyClass,
             subIdentifier: subIdentifier,
-            forIndexPath: indexPath) as! T
+            for: indexPath) as! T
     }
     
     /*! Dequeues a UITableViewHeaderFooterView from the receiver. Requires the UITableViewHeaderFooterView nib file and reuseIdentifier to both be set to the class name.
     @param headerFooterViewClass the UITableViewHeaderFooterView class name
     */
-    public func dequeueReusableHeaderFooterViewWithClass<T: UITableViewHeaderFooterView>(headerFooterViewClass: T.Type) -> T {
+    public func dequeueReusableHeaderFooterViewWithClass<T: UITableViewHeaderFooterView>(_ headerFooterViewClass: T.Type) -> T {
         
-        return self.dequeueReusableHeaderFooterViewWithClass(
-            headerFooterViewClass as AnyClass) as! T
+        return self.dequeueReusableHeaderFooterView(
+            with: headerFooterViewClass as AnyClass) as! T
     }
     
     /*! Dequeues a UITableViewHeaderFooterView from the receiver. Requires the UITableViewHeaderFooterView nib file and reuseIdentifier to both be set to the class name.
     @param headerFooterViewClass the UITableViewHeaderFooterView class name
     @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
     */
-    public func dequeueReusableHeaderFooterViewWithClass<T: UITableViewHeaderFooterView>(headerFooterViewClass: T.Type, subIdentifier: String) -> T {
+    public func dequeueReusableHeaderFooterViewWithClass<T: UITableViewHeaderFooterView>(_ headerFooterViewClass: T.Type, subIdentifier: String) -> T {
         
-        return self.dequeueReusableHeaderFooterViewWithClass(
-            headerFooterViewClass as AnyClass,
+        return self.dequeueReusableHeaderFooterView(
+            with: headerFooterViewClass as AnyClass,
             subIdentifier: subIdentifier) as! T
     }
     
     /*! Returns a shared UITableViewCell instance of the specified type. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
     @param tableViewCellClass the UITableViewCell class name
     */
-    public func cellForQueryingHeightWithClass<T: UITableViewCell>(tableViewCellClass: T.Type) -> T {
+    public func cellForQueryingHeightWithClass<T: UITableViewCell>(_ tableViewCellClass: T.Type) -> T {
         
-        return self.cellForQueryingHeightWithClass(
-            tableViewCellClass as AnyClass,
+        return self.cellForQueryingHeight(
+            with: tableViewCellClass as AnyClass,
             subIdentifier: nil,
             setupBlock: nil) as! T
     }
@@ -86,14 +86,14 @@ public extension UITableView {
     @param tableViewCellClass the UITableViewCell class name
     @param setupBlock a block to perform before the cell calls -layoutIfNeeded
     */
-    public func cellForQueryingHeightWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, setupBlock: ((cell: T) -> Void)?) -> T {
+    public func cellForQueryingHeightWithClass<T: UITableViewCell>(_ tableViewCellClass: T.Type, setupBlock: ((_ cell: T) -> Void)?) -> T {
         
-        return self.cellForQueryingHeightWithClass(
-            tableViewCellClass as AnyClass,
+        return self.cellForQueryingHeight(
+            with: tableViewCellClass as AnyClass,
             subIdentifier: nil,
             setupBlock: { cell in
                 
-                setupBlock?(cell: cell as! T)
+                setupBlock?(cell as! T)
             }
         ) as! T
     }
@@ -102,10 +102,10 @@ public extension UITableView {
     @param tableViewCellClass the UITableViewCell class name
     @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
     */
-    public func cellForQueryingHeightWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, subIdentifier: String) -> T {
+    public func cellForQueryingHeightWithClass<T: UITableViewCell>(_ tableViewCellClass: T.Type, subIdentifier: String) -> T {
         
-        return self.cellForQueryingHeightWithClass(
-            tableViewCellClass as AnyClass,
+        return self.cellForQueryingHeight(
+            with: tableViewCellClass as AnyClass,
             subIdentifier: subIdentifier,
             setupBlock: nil) as! T
     }
@@ -114,14 +114,14 @@ public extension UITableView {
     @param tableViewCellClass the UITableViewCell class name
     @param setupBlock a block to perform before the cell calls -layoutIfNeeded
     */
-    public func cellForQueryingHeightWithClass<T: UITableViewCell>(tableViewCellClass: T.Type, subIdentifier: String, setupBlock: ((cell: T) -> Void)?) -> T {
+    public func cellForQueryingHeightWithClass<T: UITableViewCell>(_ tableViewCellClass: T.Type, subIdentifier: String, setupBlock: ((_ cell: T) -> Void)?) -> T {
         
-        return self.cellForQueryingHeightWithClass(
-            tableViewCellClass as AnyClass,
+        return self.cellForQueryingHeight(
+            with: tableViewCellClass as AnyClass,
             subIdentifier: subIdentifier,
             setupBlock: { cell in
                 
-                setupBlock?(cell: cell as! T)
+                setupBlock?(cell as! T)
             }
         ) as! T
     }

@@ -31,11 +31,11 @@ public extension UICollectionView {
     @param collectionViewCellClass the UICollectionViewCell class name
     @param indexPath the index path for the cell to dequeue
     */
-    public func dequeueReusableCellWithClass<T: UICollectionViewCell>(collectionViewClass: T.Type, forIndexPath indexPath: NSIndexPath) -> T {
+    public func dequeueReusableCellWithClass<T: UICollectionViewCell>(_ collectionViewClass: T.Type, forIndexPath indexPath: IndexPath) -> T {
         
-        return self.dequeueReusableCellWithClass(
-            collectionViewClass as AnyClass,
-            forIndexPath: indexPath) as! T
+        return self.dequeueReusableCell(
+            with: collectionViewClass as AnyClass,
+            for: indexPath) as! T
     }
     
     /*! Dequeues a UICollectionViewCell from the receiver. Requires the UICollectionViewCell nib file and reuseIdentifier to both be set to the class name.
@@ -43,12 +43,12 @@ public extension UICollectionView {
     @param subIdentifier a suffix for the reuseIdentifier appended to the UICollectionViewCell class name.
     @param indexPath the index path for the cell to dequeue
     */
-    public func dequeueReusableCellWithClass<T: UICollectionViewCell>(collectionViewClass: T.Type, subIdentifier: String, forIndexPath indexPath: NSIndexPath) -> T {
+    public func dequeueReusableCellWithClass<T: UICollectionViewCell>(_ collectionViewClass: T.Type, subIdentifier: String, forIndexPath indexPath: IndexPath) -> T {
         
-        return self.dequeueReusableCellWithClass(
-            collectionViewClass as AnyClass,
+        return self.dequeueReusableCell(
+            with: collectionViewClass as AnyClass,
             subIdentifier: subIdentifier,
-            forIndexPath: indexPath) as! T
+            for: indexPath) as! T
     }
     
     /*! Dequeues a UICollectionReusableView from the receiver. Requires the UICollectionReusableView nib file and reuseIdentifier to both be set to the class name.
@@ -56,12 +56,12 @@ public extension UICollectionView {
     @param supplementaryViewKind the UICollectionReusableView kind string
     @param indexPath the index path for the cell to dequeue
     */
-    public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, forIndexPath indexPath: NSIndexPath) -> T {
+    public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(_ supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, forIndexPath indexPath: IndexPath) -> T {
         
-        return self.dequeueSupplementaryViewWithClass(
-            supplementaryViewClass as AnyClass,
+        return self.dequeueSupplementaryView(
+            with: supplementaryViewClass as AnyClass,
             ofKind: supplementaryViewKind,
-            forIndexPath: indexPath) as! T
+            for: indexPath) as! T
     }
     
     /*! Dequeues a UICollectionReusableView from the receiver. Requires the UICollectionReusableView nib file and reuseIdentifier to both be set to the class name.
@@ -70,12 +70,12 @@ public extension UICollectionView {
     @param subIdentifier a suffix for the reuseIdentifier appended to the UICollectionReusableView class name.
     @param indexPath the index path for the cell to dequeue
     */
-    public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, subIdentifier: String, forIndexPath indexPath: NSIndexPath) -> T {
+    public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(_ supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, subIdentifier: String, forIndexPath indexPath: IndexPath) -> T {
         
-        return self.dequeueSupplementaryViewWithClass(
-            supplementaryViewClass as AnyClass,
+        return self.dequeueSupplementaryView(
+            with: supplementaryViewClass as AnyClass,
             ofKind: supplementaryViewKind,
             subIdentifier: subIdentifier,
-            forIndexPath: indexPath) as! T
+            for: indexPath) as! T
     }
 }

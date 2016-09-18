@@ -28,17 +28,17 @@ import UIKit
 
 public extension UIAppearance where Self: NSObject {
     
-    public static func appearanceWhenContainedIn(containerTypes: AnyObject.Type...) -> Self {
+    public static func appearanceWhenContainedIn(_ containerTypes: AnyObject.Type...) -> Self {
         
         return self.appearanceWhenContainedIn(containerTypes)
     }
     
-    public static func appearanceWhenContainedIn(containerTypes: [AnyObject.Type]) -> Self {
+    public static func appearanceWhenContainedIn(_ containerTypes: [AnyObject.Type]) -> Self {
         
         if #available(iOS 9.0, *) {
             
-            return self.appearanceWhenContainedInInstancesOfClasses(containerTypes)
+            return self.appearance(whenContainedInInstancesOf: containerTypes as! [UIAppearanceContainer.Type])
         }
-        return self.je_appearanceWhenContainedIn(containerTypes)
+        return self.je_appearanceWhenContained(in: containerTypes as! [UIAppearanceContainer.Type])
     }
 }
