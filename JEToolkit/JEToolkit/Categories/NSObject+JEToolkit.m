@@ -137,7 +137,7 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
 
 + (NSString *)classNameInAppModule {
     
-    return [self classNameInNameSpace:[NSString applicationName]];
+    return [self classNameInNameSpace:NSStringFromClass(self)];
 }
 
 + (Class)classForIdiom {

@@ -57,7 +57,7 @@
 + (instancetype)viewControllerFromStoryboard {
     
     NSString *className = [self classNameInAppModule];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:className bundle:nil];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:className bundle:[NSBundle bundleForClass:self]];
     if(!storyboard) {
         
         return nil;
