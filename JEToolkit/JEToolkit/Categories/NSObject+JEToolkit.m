@@ -140,6 +140,11 @@ JESynthesize(strong, NSMutableDictionary *, _je_notificationObservers, _je_setNo
     return [self classNameInNameSpace:[NSString applicationName]];
 }
 
++ (NSString *)classNameWithoutNamespace {
+    
+    return [[self fullyQualifiedClassName] componentsSeparatedByString:@"."].lastObject;
+}
+
 + (Class)classForIdiom {
     
     static NSString *idiom;

@@ -56,7 +56,7 @@
 
 + (instancetype)viewControllerFromStoryboard {
     
-    NSString *className = [self classNameInAppModule];
+    NSString *className = [self classNameWithoutNamespace];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:className bundle:nil];
     if(!storyboard) {
         
@@ -86,13 +86,23 @@
         return viewController;
     }
     
-    viewController = [storyboard instantiateViewControllerWithIdentifier:[self classNameInAppModule]];
+    viewController = [storyboard instantiateViewControllerWithIdentifier:[self classNameWithoutNamespace]];
     if ([viewController isKindOfClass:self]) {
         
         return viewController;
     }
     
     return nil;
+}
+
++ (instancetype)viewControllerFromStoryboardNamed:(NSString *)storyboardName {
+    
+    return [self viewControllerFromStoryboardNamed:storyboardName inBundle:nil];
+}
+
++ (instancetype)viewControllerFromStoryboardNamed:(NSString *)storyboardName inBundle:(NSBundle *)bundle {
+    
+    return [self viewControllerFromStoryboard:[UIStoryboard storyboardWithName:storyboardName bundle:bundle]];
 }
 
 + (UIViewController *)topmostPresentedViewController {

@@ -212,7 +212,7 @@
 
 + (instancetype)viewFromNib {
     
-    NSString *className = [self classNameInAppModule];
+    NSString *className = [self classNameWithoutNamespace];
     if(![UINib nibWithNameExists:className]) {
         
         return nil;

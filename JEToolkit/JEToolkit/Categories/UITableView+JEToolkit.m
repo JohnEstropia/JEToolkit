@@ -56,7 +56,7 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
     
     JEAssertParameter([tableViewCellClass isSubclassOfClass:[UITableViewCell class]]);
     
-    NSString *className = [tableViewCellClass classNameInAppModule];
+    NSString *className = [tableViewCellClass classNameWithoutNamespace];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -87,7 +87,7 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
     
     JEAssertParameter([headerFooterViewClass isSubclassOfClass:[UITableViewHeaderFooterView class]]);
     
-    NSString *className = [headerFooterViewClass classNameInAppModule];
+    NSString *className = [headerFooterViewClass classNameWithoutNamespace];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -123,7 +123,7 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
     
     JEAssertParameter([tableViewCellClass isSubclassOfClass:[UITableViewCell class]]);
     
-    NSString *className = [tableViewCellClass classNameInAppModule];
+    NSString *className = [tableViewCellClass classNameWithoutNamespace];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -155,7 +155,7 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
     
     JEAssertParameter([headerFooterViewClass isSubclassOfClass:[UITableViewHeaderFooterView class]]);
     
-    NSString *className = [headerFooterViewClass classNameInAppModule];
+    NSString *className = [headerFooterViewClass classNameWithoutNamespace];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -196,7 +196,7 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
     
     JEAssertParameter([tableViewCellClass isSubclassOfClass:[UITableViewCell class]]);
     
-    NSString *className = [tableViewCellClass classNameInAppModule];
+    NSString *className = [tableViewCellClass classNameWithoutNamespace];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         
@@ -257,7 +257,7 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
     
     JEAssertParameter([headerFooterViewClass isSubclassOfClass:[UITableViewHeaderFooterView class]]);
     
-    NSString *className = [headerFooterViewClass classNameInAppModule];
+    NSString *className = [headerFooterViewClass classNameWithoutNamespace];
     NSString *reuseIdentifier = className;
     if (subIdentifier) {
         

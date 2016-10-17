@@ -35,6 +35,14 @@
  */
 + (null_unspecified instancetype)viewControllerFromStoryboard:(nonnull UIStoryboard *)storyboard;
 
+/*! Initializes a `UIViewController` instance from a storyboard if an instance with the storyboard identifier same as the class name exists.
+ */
++ (null_unspecified instancetype)viewControllerFromStoryboardNamed:(nonnull NSString *)storyboardName;
+
+/*! Initializes a `UIViewController` instance from a storyboard if an instance with the storyboard identifier same as the class name exists.
+ */
++ (null_unspecified instancetype)viewControllerFromStoryboardNamed:(nonnull NSString *)storyboardName inBundle:(nullable NSBundle *)bundle;
+
 /*! Returns the recursive presentedViewController for the application
  */
 + (nullable __kindof UIViewController *)topmostPresentedViewController;
