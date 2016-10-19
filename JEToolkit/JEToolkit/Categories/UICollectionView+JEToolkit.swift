@@ -31,7 +31,7 @@ public extension UICollectionView {
     @param collectionViewCellClass the UICollectionViewCell class name
     @param indexPath the index path for the cell to dequeue
     */
-    public func dequeueReusableCellWithClass<T: UICollectionViewCell>(_ collectionViewClass: T.Type, forIndexPath indexPath: IndexPath) -> T {
+    public func dequeueCell<T: UICollectionViewCell>(as collectionViewClass: T.Type, for indexPath: IndexPath) -> T {
         
         return self.dequeueReusableCell(
             with: collectionViewClass as AnyClass,
@@ -43,7 +43,7 @@ public extension UICollectionView {
     @param subIdentifier a suffix for the reuseIdentifier appended to the UICollectionViewCell class name.
     @param indexPath the index path for the cell to dequeue
     */
-    public func dequeueReusableCellWithClass<T: UICollectionViewCell>(_ collectionViewClass: T.Type, subIdentifier: String, forIndexPath indexPath: IndexPath) -> T {
+    public func dequeueCell<T: UICollectionViewCell>(as collectionViewClass: T.Type, subIdentifier: String, for indexPath: IndexPath) -> T {
         
         return self.dequeueReusableCell(
             with: collectionViewClass as AnyClass,
@@ -56,7 +56,7 @@ public extension UICollectionView {
     @param supplementaryViewKind the UICollectionReusableView kind string
     @param indexPath the index path for the cell to dequeue
     */
-    public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(_ supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, forIndexPath indexPath: IndexPath) -> T {
+    public func dequeueSupplementaryView<T: UICollectionReusableView>(as supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, for indexPath: IndexPath) -> T {
         
         return self.dequeueSupplementaryView(
             with: supplementaryViewClass as AnyClass,
@@ -70,12 +70,39 @@ public extension UICollectionView {
     @param subIdentifier a suffix for the reuseIdentifier appended to the UICollectionReusableView class name.
     @param indexPath the index path for the cell to dequeue
     */
-    public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(_ supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, subIdentifier: String, forIndexPath indexPath: IndexPath) -> T {
+    public func dequeueSupplementaryView<T: UICollectionReusableView>(as supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, subIdentifier: String, for indexPath: IndexPath) -> T {
         
         return self.dequeueSupplementaryView(
             with: supplementaryViewClass as AnyClass,
             ofKind: supplementaryViewKind,
             subIdentifier: subIdentifier,
             for: indexPath) as! T
+    }
+        
+        
+    // MARK: Deprecated
+    
+    @available(*, obsoleted: 3.2.0, renamed: "dequeueCell(as:for:)")
+    public func dequeueReusableCellWithClass<T: UICollectionViewCell>(_ collectionViewClass: T.Type, forIndexPath indexPath: IndexPath) -> T {
+        
+        fatalError()
+    }
+    
+    @available(*, obsoleted: 3.2.0, renamed: "dequeueCell(as:subIdentifier:for:)")
+    public func dequeueReusableCellWithClass<T: UICollectionViewCell>(_ collectionViewClass: T.Type, subIdentifier: String, forIndexPath indexPath: IndexPath) -> T {
+        
+        fatalError()
+    }
+    
+    @available(*, obsoleted: 3.2.0, renamed: "dequeueSupplementaryView(as:ofKind:for:)")
+    public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(_ supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, forIndexPath indexPath: IndexPath) -> T {
+        
+        fatalError()
+    }
+    
+    @available(*, obsoleted: 3.2.0, renamed: "dequeueSupplementaryView(as:ofKind:subIdentifier:for:)")
+    public func dequeueSupplementaryViewWithClass<T: UICollectionReusableView>(_ supplementaryViewClass: T.Type, ofKind supplementaryViewKind: String, subIdentifier: String, forIndexPath indexPath: IndexPath) -> T {
+        
+        fatalError()
     }
 }
