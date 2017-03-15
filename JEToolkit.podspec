@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                    = "JEToolkit"
-  s.version                 = "3.2.1"
+  s.version                 = "3.2.2"
   s.summary                 = "iOS Utilities"
   s.homepage                = "https://github.com/JohnEstropia/JEToolkit"
   s.license                 = 'MIT'

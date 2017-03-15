@@ -48,11 +48,11 @@
 
 /*! Returns the recursive presentedViewController for the application
  */
-+ (nullable __kindof UIViewController *)topmostPresentedViewController;
++ (nullable __kindof UIViewController *)topmostPresentedViewController JE_EXTENSION_UNAVAILABLE;
 
 /*! Returns the candidate view controller for presenting a new modal controller
  */
-+ (nonnull __kindof UIViewController *)topmostViewControllerInHierarchy;
++ (nonnull __kindof UIViewController *)topmostViewControllerInHierarchy JE_EXTENSION_UNAVAILABLE;
 
 /*! Checks if the receiver's view currently is in a window (i.e. currently in the view heirarchy)
  */
@@ -60,10 +60,10 @@
 
 /*! Returns the recursive presentedViewController of the receiver
  */
-- (nonnull __kindof UIViewController *)topmostPresentedViewController JE_EXTENSION_UNAVAILABLE;
+- (nonnull __kindof UIViewController *)topmostPresentedViewController;
 
 /*! Returns the recursive parentViewController of the receiver
  */
-- (nonnull __kindof UIViewController *)rootParentViewController JE_EXTENSION_UNAVAILABLE;
+- (nonnull __kindof UIViewController *)rootParentViewController;
 
 @end

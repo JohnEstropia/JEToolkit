@@ -105,14 +105,14 @@
     return [self viewControllerFromStoryboard:[UIStoryboard storyboardWithName:storyboardName bundle:bundle]];
 }
 
-+ (UIViewController *)topmostPresentedViewController {
++ (UIViewController *)topmostPresentedViewController JE_EXTENSION_UNAVAILABLE {
     
     UIApplication *application = [UIApplication sharedApplication];
     UIViewController *rootViewController = (((NSObject<UIApplicationDelegate> *)application.delegate).window.rootViewController ?: application.keyWindow.rootViewController);
     return [rootViewController topmostPresentedViewController];
 }
 
-+ (UIViewController *)topmostViewControllerInHierarchy {
++ (UIViewController *)topmostViewControllerInHierarchy JE_EXTENSION_UNAVAILABLE {
     
     UIApplication *application = [UIApplication sharedApplication];
     UIViewController *rootViewController = (((NSObject<UIApplicationDelegate> *)application.delegate).window.rootViewController ?: application.keyWindow.rootViewController);
@@ -124,7 +124,7 @@
     return ([self isViewLoaded] && self.view.window != nil);
 }
 
-- (UIViewController *)topmostPresentedViewController JE_EXTENSION_UNAVAILABLE {
+- (UIViewController *)topmostPresentedViewController {
     
     UIViewController *presentedViewController = self.presentedViewController;
     if (presentedViewController) {
@@ -134,7 +134,7 @@
     return self;
 }
 
-- (UIViewController *)rootParentViewController JE_EXTENSION_UNAVAILABLE {
+- (UIViewController *)rootParentViewController {
     
     UIViewController *parentViewController = self.parentViewController;
     if (parentViewController) {
