@@ -25,6 +25,9 @@
 
 #import <UIKit/UIKit.h>
 
+#import "JECompilerDefines.h"
+
+
 @interface UIViewController (JEToolkit)
 
 /*! Initializes a `UIViewController` instance from a storyboard with the same name as the class name, and with a storyboard identifier same with the class name.
@@ -57,10 +60,10 @@
 
 /*! Returns the recursive presentedViewController of the receiver
  */
-- (nonnull __kindof UIViewController *)topmostPresentedViewController;
+- (nonnull __kindof UIViewController *)topmostPresentedViewController JE_EXTENSION_UNAVAILABLE;
 
 /*! Returns the recursive parentViewController of the receiver
  */
-- (nonnull __kindof UIViewController *)rootParentViewController;
+- (nonnull __kindof UIViewController *)rootParentViewController JE_EXTENSION_UNAVAILABLE;
 
 @end

@@ -63,7 +63,7 @@
 	return image;
 }
 
-+ (UIImage *)screenshot {
++ (UIImage *)screenshot JE_EXTENSION_UNAVAILABLE {
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     CGSize imageSize = [UIScreen mainScreen].bounds.size;

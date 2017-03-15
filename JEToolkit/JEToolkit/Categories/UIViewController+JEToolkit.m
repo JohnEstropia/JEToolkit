@@ -124,7 +124,7 @@
     return ([self isViewLoaded] && self.view.window != nil);
 }
 
-- (UIViewController *)topmostPresentedViewController {
+- (UIViewController *)topmostPresentedViewController JE_EXTENSION_UNAVAILABLE {
     
     UIViewController *presentedViewController = self.presentedViewController;
     if (presentedViewController) {
@@ -134,7 +134,7 @@
     return self;
 }
 
-- (UIViewController *)rootParentViewController {
+- (UIViewController *)rootParentViewController JE_EXTENSION_UNAVAILABLE {
     
     UIViewController *parentViewController = self.parentViewController;
     if (parentViewController) {

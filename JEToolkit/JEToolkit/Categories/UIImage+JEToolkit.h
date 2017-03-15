@@ -25,6 +25,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "JECompilerDefines.h"
+
 
 @interface UIImage (JEToolkit)
 
@@ -40,7 +42,7 @@
 
 /*! Takes a screenshot
  */
-+ (nullable UIImage *)screenshot;
++ (nullable UIImage *)screenshot JE_EXTENSION_UNAVAILABLE;
 
 /*! Creates a UIImage filled with the specified color
  @param color The color to fill the image
