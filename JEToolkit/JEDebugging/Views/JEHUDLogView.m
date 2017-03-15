@@ -207,10 +207,17 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     [reportButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [reportButton setTitleColor:[UIColor colorWithWhite:0.6f alpha:1.0f] forState:UIControlStateHighlighted];
     [reportButton setTitle:@"✉️" forState:UIControlStateNormal];
-    [reportButton
-     addTarget:self
-     action:@selector(reportButtonTouchUpInside:)
-     forControlEvents:UIControlEventTouchUpInside];
+    if ([NSClassFromString(@"UIApplication") sharedApplication]) {
+        
+        [reportButton
+         addTarget:self
+         action:@selector(reportButtonTouchUpInside:)
+         forControlEvents:UIControlEventTouchUpInside];
+    }
+    else {
+        
+        reportButton.enabled = NO;
+    }
     [menuView addSubview:reportButton];
     self.reportButton = reportButton;
     
@@ -517,7 +524,7 @@ static const NSTimeInterval JEHUDLogFrameCoalescingInterval = 0.5;
     [self layoutConsoleView];
 }
 
-- (void)reportButtonTouchUpInside:(UIButton *)sender {
+- (void)reportButtonTouchUpInside:(UIButton *)sender JE_EXTENSION_UNAVAILABLE {
     
     UIActivityViewController *previousController = self.activityController;
     if (previousController) {

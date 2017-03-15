@@ -28,6 +28,6 @@
 /*!
  The HUD log view. Used internally by JEDebugging.
  */
-@interface JEHUDLogView : UIView
+@interface JEHUDLogView : UIView 
 
 @end
