@@ -90,7 +90,7 @@
 
 /*! Applies a given block object to the entries of the dictionary at the specified indexes
  If the block sets *stop to YES, the enumeration stops.
- @param opts The indexes of the objects over which to enumerate.
+ @param indexes The indexes of the objects over which to enumerate.
  @param opts Enumeration options.
  @param block A block object to operate on entries in the dictionary.
  */
