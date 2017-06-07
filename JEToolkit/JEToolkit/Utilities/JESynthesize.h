@@ -45,7 +45,7 @@
         /* If assign/unsafe_unretained semantics are set, then we treat the object as a value. This if/else (and actually all the pointer voodoo we're doing) will be optimized out by the compiler. */ \
         if (@encode(type)[0] == '@') { \
             if (_JEAssociationCompilerFlag_##ownership == _JEAssociationCompilerFlag_weak) { \
-                id JE_PRECISE_LIFETIME __strong _je_object = [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) weakObjectValue]; \
+                id JE_PRECISE_LIFETIME __strong _je_object = [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) je_weakObjectValue]; \
                 const void *_je_objectPointer = &_je_object; \
                 /* We will never reach here if the type is not an id, so we just ignore warnings. */ \
                 JE_PRAGMA_PUSH \
@@ -84,7 +84,7 @@
                 const void *_je_objectPointer = &getter; \
                 objc_setAssociatedObject(self, \
                                          _JESynthesizeKey_##getter, \
-                                         [NSValue valueWithWeakObject:*(id __strong *)_je_objectPointer], \
+                                         [NSValue je_valueWithWeakObject:*(id __strong *)_je_objectPointer], \
                                          OBJC_ASSOCIATION_RETAIN_NONATOMIC); \
             } \
             else { \
@@ -158,7 +158,7 @@
 #define _JESynthesize_get_copy      _JESynthesize_get_unsafe_unretained
 
 #define _JESynthesize_get_weak(type, getter) \
-    [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) weakObjectValue]
+    [(NSValue *)objc_getAssociatedObject(self, _JESynthesizeKey_##getter) je_weakObjectValue]
 
 #define _JESynthesize_set_assign(type, getter) \
     objc_setAssociatedObject(self, \
@@ -189,7 +189,7 @@
 #define _JESynthesize_set_weak(type, getter) \
     objc_setAssociatedObject(self, \
                              _JESynthesizeKey_##getter, \
-                             [NSValue valueWithWeakObject:getter], \
+                             [NSValue je_valueWithWeakObject:getter], \
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
 

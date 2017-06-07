@@ -406,9 +406,9 @@
     }];
     
     NSObject *strongObject = [NSObject new];
-    NSValue *weakValue = [NSValue valueWithWeakObject:strongObject];
+    NSValue *weakValue = [NSValue je_valueWithWeakObject:strongObject];
     NSValue *weakValue2 = [NSValue valueWithNonretainedObject:strongObject];
-    JEDump([weakValue weakObjectValue]);
+    JEDump([weakValue je_weakObjectValue]);
     JEDump([weakValue2 nonretainedObjectValue]);
     JEDump([weakValue objCType]);
     JEDump([weakValue2 objCType]);
