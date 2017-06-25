@@ -120,7 +120,7 @@ public func JELogLevel(_ level: JELogLevelMask, _ message: @autoclosure @escapin
 
 // MARK: - JEDump() variants
 
-private let _JEDumpDefaultLabel = "<No label>"
+public let _JEDumpDefaultLabel = "<No label>"
 
 public func JEDump(_ object: NSObject, _ label: String = _JEDumpDefaultLabel, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
     
@@ -206,7 +206,7 @@ public func JEDumpLevel(_ level: JELogLevelMask, _ object: NSObject, _ label: St
             functionName: functionName,
             lineNumber: UInt32(lineNumber)),
         label: label,
-        valueDescription: { "(\(NSStringFromClass(object_getClass(object)))) \(object.loggingDescription())" })
+        valueDescription: { "(\(NSStringFromClass(object_getClass(object)!))) \(object.loggingDescription())" })
 }
 
 public func JEDumpLevel(_ level: JELogLevelMask, _ object: AnyObject, _ label: String = _JEDumpDefaultLabel, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
