@@ -107,4 +107,32 @@
                                subIdentifier:(nullable NSString *)subIdentifier
                                   setupBlock:(nullable void (^)(id _Nonnull cell))setupBlock;
 
+/*! Returns a static UITableViewCell instance of the specified type that is shared among all tableVIew instances. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ */
+- (nonnull id)staticCellForQueryingHeightWithClass:(null_unspecified Class)tableViewCellClass;
+
+/*! Returns a static UITableViewCell instance of the specified type that is shared among all tableVIew instances. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ @param setupBlock a block to perform before the cell calls -layoutIfNeeded
+ */
+- (nonnull id)staticCellForQueryingHeightWithClass:(null_unspecified Class)tableViewCellClass
+                                        setupBlock:(nullable void (^)(id _Nonnull cell))setupBlock;
+
+/*! Returns a static UITableViewCell instance of the specified type that is shared among all tableVIew instances. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
+ */
+- (nonnull id)staticCellForQueryingHeightWithClass:(null_unspecified Class)tableViewCellClass
+                                     subIdentifier:(nullable NSString *)subIdentifier;
+
+/*! Returns a static UITableViewCell instance of the specified type that is shared among all tableVIew instances. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+ @param tableViewCellClass the UITableViewCell class name
+ @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
+ @param setupBlock a block to perform before the cell calls -layoutIfNeeded
+ */
+- (nonnull id)staticCellForQueryingHeightWithClass:(null_unspecified Class)tableViewCellClass
+                                     subIdentifier:(nullable NSString *)subIdentifier
+                                        setupBlock:(nullable void (^)(id _Nonnull cell))setupBlock;
+
 @end

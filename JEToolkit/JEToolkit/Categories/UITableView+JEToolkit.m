@@ -247,6 +247,80 @@ JESynthesize(strong, NSCache *, headerFooterViewHeightQueryingCache, setHeaderFo
     return cell;
 }
 
+- (id)staticCellForQueryingHeightWithClass:(Class)tableViewCellClass {
+    
+    return [self staticCellForQueryingHeightWithClass:tableViewCellClass subIdentifier:nil setupBlock:nil];
+}
+
+- (id)staticCellForQueryingHeightWithClass:(Class)tableViewCellClass
+                          setupBlock:(void (^)(id cell))setupBlock {
+    
+    return [self staticCellForQueryingHeightWithClass:tableViewCellClass subIdentifier:nil setupBlock:setupBlock];
+}
+
+- (id)staticCellForQueryingHeightWithClass:(Class)tableViewCellClass
+                       subIdentifier:(NSString *)subIdentifier {
+    
+    return [self staticCellForQueryingHeightWithClass:tableViewCellClass subIdentifier:subIdentifier setupBlock:nil];
+}
+
+- (id)staticCellForQueryingHeightWithClass:(Class)tableViewCellClass
+                       subIdentifier:(NSString *)subIdentifier
+                          setupBlock:(void (^)(id cell))setupBlock {
+    
+    JEAssertParameter([tableViewCellClass isSubclassOfClass:[UITableViewCell class]]);
+    
+    NSString *className = [tableViewCellClass classNameInAppModule];
+    NSString *reuseIdentifier = className;
+    if (subIdentifier) {
+        
+        reuseIdentifier = [className stringByAppendingString:subIdentifier];
+    }
+    
+    static NSCache *cache;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        cache = [NSCache new];
+    });
+    
+    UITableViewCell *cell = [cache objectForKey:reuseIdentifier];
+    if (!cell) {
+        
+        cell = [self
+                dequeueReusableCellWithClass:tableViewCellClass
+                subIdentifier:subIdentifier
+                forIndexPath:nil];
+        if (cell) {
+            
+            [cache setObject:cell forKey:reuseIdentifier];
+        }
+    }
+    
+    CGRect cellFrame = cell.frame;
+    if (self.style == UITableViewStyleGrouped
+        && ![self respondsToSelector:@selector(separatorInset)]) {
+        
+        cellFrame.size.width = (CGRectGetWidth(self.bounds)
+                                - (2.0f * 20.0f)); // margin = 20pt
+    }
+    else {
+        
+        cellFrame.size.width = CGRectGetWidth(self.bounds);
+    }
+    cell.frame = cellFrame;
+    
+    if (setupBlock) {
+        
+        setupBlock(cell);
+    }
+    
+    [cell setNeedsLayout];
+    [cell layoutIfNeeded];
+    
+    return cell;
+}
+
 - (id)headerFooterViewForQueryingHeightWithClass:(Class)headerFooterViewClass {
     
     return [self headerFooterViewForQueryingHeightWithClass:headerFooterViewClass subIdentifier:nil];

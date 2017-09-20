@@ -126,6 +126,61 @@ public extension UITableView {
             ) as! T
     }
     
+    /*! Returns a static UITableViewCell instance of the specified type that is shared among all tableVIew instances. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+     @param tableViewCellClass the UITableViewCell class name
+     */
+    public func staticCellForQueryingHeight<T: UITableViewCell>(as tableViewCellClass: T.Type) -> T {
+        
+        return self.staticCellForQueryingHeight(
+            with: tableViewCellClass as AnyClass,
+            subIdentifier: nil,
+            setupBlock: nil) as! T
+    }
+    
+    /*! Returns a static UITableViewCell instance of the specified type that is shared among all tableVIew instances. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+     @param tableViewCellClass the UITableViewCell class name
+     @param setup a block to perform before the cell calls -layoutIfNeeded
+     */
+    public func staticCellForQueryingHeight<T: UITableViewCell>(as tableViewCellClass: T.Type, setup: ((_ cell: T) -> Void)?) -> T {
+        
+        return self.staticCellForQueryingHeight(
+            with: tableViewCellClass as AnyClass,
+            subIdentifier: nil,
+            setupBlock: { cell in
+                
+                setup?(cell as! T)
+            }
+        ) as! T
+    }
+    
+    /*! Returns a static UITableViewCell instance of the specified type that is shared among all tableVIew instances. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+     @param tableViewCellClass the UITableViewCell class name
+     @param subIdentifier a suffix for the reuseIdentifier appended to the UITableViewCell class name.
+     */
+    public func staticCellForQueryingHeight<T: UITableViewCell>(as tableViewCellClass: T.Type, subIdentifier: String) -> T {
+        
+        return self.staticCellForQueryingHeight(
+            with: tableViewCellClass as AnyClass,
+            subIdentifier: subIdentifier,
+            setupBlock: nil) as! T
+    }
+    
+    /*! Returns a static UITableViewCell instance of the specified type that is shared among all tableVIew instances. Typically called from -tableView:heightForRowAtIndexPath: to compute cell height with -sizeThatFits: or -systemLayoutSizeFittingSize:. Requires the UITableViewCell nib file and reuseIdentifier to both be set to the class name.
+     @param tableViewCellClass the UITableViewCell class name
+     @param setup a block to perform before the cell calls -layoutIfNeeded
+     */
+    public func staticCellForQueryingHeight<T: UITableViewCell>(as tableViewCellClass: T.Type, subIdentifier: String, setup: ((_ cell: T) -> Void)?) -> T {
+        
+        return self.staticCellForQueryingHeight(
+            with: tableViewCellClass as AnyClass,
+            subIdentifier: subIdentifier,
+            setupBlock: { cell in
+                
+                setup?(cell as! T)
+            }
+        ) as! T
+    }
+    
     
     // MARK: Deprecated
     

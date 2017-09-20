@@ -81,27 +81,27 @@ public func JEAssertMethodOverride(_ fileName: String = #file, lineNumber: Int =
 
 // MARK: - JELog() variants
 
-public func JELog( _ message: @autoclosure @escaping () -> String, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
+public func JELog(_ message: @autoclosure @escaping () -> String, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
     
     JELogLevel(.trace, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogTrace( _ message: @autoclosure @escaping () -> String, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
+public func JELogTrace(_ message: @autoclosure @escaping () -> String, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
     
     JELogLevel(.trace, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogNotice( _ message: @autoclosure @escaping () -> String, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
+public func JELogNotice(_ message: @autoclosure @escaping () -> String, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
     
     JELogLevel(.notice, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogAlert( _ message: @autoclosure @escaping () -> String, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
+public func JELogAlert(_ message: @autoclosure @escaping () -> String, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
     
     JELogLevel(.alert, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
 
-public func JELogFatal( _ message: @autoclosure @escaping () -> String, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
+public func JELogFatal(_ message: @autoclosure @escaping () -> String, fileName: String = #file, lineNumber: Int = #line, functionName: String = #function) {
     
     JELogLevel(.fatal, message, fileName: (fileName as NSString).lastPathComponent, lineNumber: lineNumber, functionName: functionName)
 }
