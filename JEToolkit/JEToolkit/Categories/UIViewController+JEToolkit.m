@@ -29,29 +29,6 @@
 
 @implementation UIViewController (JEToolkit)
 
-#pragma mark - Private
-
-- (UIViewController *)topmostViewControllerInHierarchy {
-    
-    UIViewController *presentedViewController = self.presentedViewController;
-    if (presentedViewController) {
-        
-        return [presentedViewController topmostViewControllerInHierarchy];
-    }
-    
-    if ([self isKindOfClass:[UITabBarController class]]) {
-        
-        return [((UITabBarController *)self).selectedViewController topmostViewControllerInHierarchy];
-    }
-    if ([self isKindOfClass:[UINavigationController class]]) {
-        
-        return [((UINavigationController *)self).topViewController topmostViewControllerInHierarchy];
-    }
-    
-    return self;
-}
-
-
 #pragma mark - Public
 
 + (instancetype)viewControllerFromStoryboard {
@@ -131,6 +108,26 @@
         
         return [presentedViewController topmostPresentedViewController];
     }
+    return self;
+}
+
+- (UIViewController *)topmostViewControllerInHierarchy {
+
+    UIViewController *presentedViewController = self.presentedViewController;
+    if (presentedViewController) {
+
+        return [presentedViewController topmostViewControllerInHierarchy];
+    }
+
+    if ([self isKindOfClass:[UITabBarController class]]) {
+
+        return [((UITabBarController *)self).selectedViewController topmostViewControllerInHierarchy];
+    }
+    if ([self isKindOfClass:[UINavigationController class]]) {
+
+        return [((UINavigationController *)self).topViewController topmostViewControllerInHierarchy];
+    }
+
     return self;
 }
 

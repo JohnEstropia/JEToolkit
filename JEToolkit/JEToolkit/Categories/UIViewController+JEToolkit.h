@@ -62,6 +62,10 @@
  */
 - (nonnull __kindof UIViewController *)topmostPresentedViewController;
 
+/*! Returns the candidate view controller for presenting a new modal controller from the receiver
+ */
+- (nonnull __kindof UIViewController *)topmostViewControllerInHierarchy;
+
 /*! Returns the recursive parentViewController of the receiver
  */
 - (nonnull __kindof UIViewController *)rootParentViewController;
